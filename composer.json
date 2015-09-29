@@ -1,0 +1,17 @@
+{
+	"name": "mywish",
+    "homepage":"http://merchant.wish.com/api/documentation",
+    "description": "A PHP tool for Wish",
+    "keywords":["wish","php","sdk","merchant"],
+    "authors": [
+        {
+            "name": "yangwu",
+            "homepage": "http://wish.com"
+        }
+    ],
+    "license":"Apache-2.0",
+	"minimum-stability": "dev",
+	"require":{
+      "wish/php-sdk":"*"
+	}
+}
