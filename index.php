@@ -1,4 +1,7 @@
 <?php
+include 'Wish/WishClient.php';
+use Wish\WishClient;
+
 echo test;
 
 $access_code = $_GET['code'];
@@ -56,7 +59,7 @@ echo $access_token;
 /*
  * get the unfulfilled orders;
  * */
-$get_unfulfilled_order_url = "https://merchant.wish.com/api/v2/order/get-fulfill";
+/* $get_unfulfilled_order_url = "https://merchant.wish.com/api/v2/order/get-fulfill";
 $start = 0;
 $limit = 50;
 
@@ -75,6 +78,12 @@ $order_context = stream_context_create(array(
 $order_response = file_get_contents($get_unfulfilled_order_url, TRUE, $order_context);
 echo $order_response;
 echo "\n";
+ */
+
+//Get an array of all unfufilled orders since January 20, 2010
+$client = new WishClient($access_token,'prod');
+$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince('2010-01-20');
+print(count($unfulfilled_orders)." changed orders.\n");
 
 
 ?>
