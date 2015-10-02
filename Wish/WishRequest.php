@@ -66,7 +66,9 @@ class WishRequest{
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_USERAGENT => 'wish-php-sdk',
-      CURLOPT_HEADER  => 'true'
+      CURLOPT_HEADER  => 'true',
+      CURLOPT_SSL_VERIFYPEER => 'true',
+      CURLOPT_CAINFO => '/cert/ca.crt'  
       );
 
     if($this->method === "GET"){
