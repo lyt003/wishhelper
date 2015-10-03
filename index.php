@@ -83,7 +83,7 @@ echo "\n";
 //Get an array of all unfufilled orders since January 20, 2010
 $client = new WishClient($access_token,'prod');
 $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince('2010-01-20');
-print(count($unfulfilled_orders)." changed orders.\n");
+print("\n orders count:".count($unfulfilled_orders)." changed orders.\n");
 
 
 ?>

@@ -17,7 +17,9 @@
 namespace Wish;
 
 include 'Wish/Exception/ConnectionException.php';
+include 'Wish/WishResponse.php';
 use Wish\Exception\ConnectionException;
+use Wish\WishResponse;
 
 class WishRequest{
   const VERSION = "v2/";

@@ -16,6 +16,9 @@
  */
 namespace Wish;
 
+include 'Wish/WishPager.php';
+use Wish\WishPager;
+
 class WishResponse{
   
   private $request;

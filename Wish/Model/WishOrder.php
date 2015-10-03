@@ -17,6 +17,8 @@
 
 namespace Wish\Model;
 
+include 'Wish/Model/WishShippingDetail.php';
+
 class WishOrder{
 
   public function __construct($order){

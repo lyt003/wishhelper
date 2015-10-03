@@ -17,4 +17,6 @@
 
 namespace Wish\Exception;
 
+include 'Wish/Exception/ServiceResponseException.php';
+
 class UnauthorizedRequestException extends ServiceResponseException{}
