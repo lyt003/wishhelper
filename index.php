@@ -1,6 +1,7 @@
 <?php
 include 'Wish/WishClient.php';
 use Wish\WishClient;
+use Wish\Model\WishOrder;
 
 echo test;
 
@@ -84,6 +85,7 @@ echo "\n";
 $client = new WishClient($access_token,'prod');
 $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince('2010-01-20');
 print("\n orders count:".count($unfulfilled_orders)." changed orders.\n");
+var_dump($unfulfilled_orders);
 
 
 ?>
