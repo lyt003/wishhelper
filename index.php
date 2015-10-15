@@ -1,8 +1,10 @@
 <?php
 include 'Wish/WishClient.php';
+include 'EUB/EUBOrders.php';
 use Wish\WishClient;
 use Wish\Model\WishOrder;
 use Wish\Model\WishShippingDetail;
+use EUBOrders;
 
 echo test;
 
@@ -86,13 +88,16 @@ echo "\n";
 $client = new WishClient($access_token,'prod');
 $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince('2010-01-20');
 print("\n orders count:".count($unfulfilled_orders)." changed orders.\n");
-var_dump($unfulfilled_orders);
+//var_dump($unfulfilled_orders);
 $orders_count = count($unfulfilled_orders);
 for($i=0;i<$orders_count;$i++){
     $cur_order = $unfulfilled_orders[$i];
     echo $cur_order->sku;
     $shippingDetail = $cur_order->ShippingDetail;
-    echo $shippingDetail->phone_number;
+    if (strcmp($shippingDetail->country,'US') == 0){
+        $eub = new EUBOrders();
+        $eub->getTrackingID();
+    }
 }
 
 ?>
