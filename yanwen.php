@@ -15,10 +15,12 @@ $post_header = array('Authorization: basic MTA0OTAzOnlhbmd3dTE5ODIxMTEy','Conten
 $curl = curl_init();
 //$url = ServiceEndPoint.LoginURL.userid."/".userpsd;
 //$url = ServiceEndPoint."/Users/".userid."/GetChannels";
-$url = ServiceEndPoint."/Users/".userid."/Expresses";
+//$url = ServiceEndPoint."/Users/".userid."/Expresses";
+$url = ServiceEndPoint."/Users/".userid."/Expresses/"."RG224865656CN"."/A4LCLabel";
+
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($curl, CURLOPT_POST, true);
+//curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl,CURLOPT_HTTPHEADER, $post_header); 
 
 
@@ -57,17 +59,25 @@ $xmldata = <<<DATA
 </ExpressType>
 DATA;
 
-curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);
+//curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);
 
 $result = curl_exec($curl);
 //$decode_result = json_decode($result);
 curl_close($curl);
 //echo $url;
-$xml1 = simplexml_load_string($result);
+//$xml1 = simplexml_load_string($result);
 //echo $xml1;
 //print_r($xml1);
-var_dump($xml1);
+//var_dump($xml1);
 //print_r($result);
 //var_dump($result);
 //print $result;
 //var_dump($result);
+$filename = "label.pdf";
+$filesize = file_put_contents($filename, $result);
+header('Cache-Control: public');
+header('Content-type: application/pdf');
+header('Content-Disposition: attachment; filename="'.$filename.'"');
+header('Content-Length: '.$filesize);
+
+readfile($filename);
