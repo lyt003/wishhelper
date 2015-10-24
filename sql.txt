@@ -1,0 +1,8 @@
+create database wish;
+use wish;
+create table users(
+	userid int(11) not null auto_increment,
+	email varchar(50) not null,
+	psd   varchar(15) not null,
+	primary key(userid)
+);
