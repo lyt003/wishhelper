@@ -73,6 +73,8 @@ curl_close($curl);
 //var_dump($result);
 //print $result;
 //var_dump($result);
+//$result = iconv("gb2312", "utf-8", $result);
+//$result = mb_convert_encoding($result, "GBK","GBK,UTF-8,ASCII");
 $filename = "label.pdf";
 $filesize = file_put_contents($filename, $result);
 header('Cache-Control: public');
