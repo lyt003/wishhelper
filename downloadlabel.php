@@ -19,8 +19,8 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl,CURLOPT_HTTPHEADER, $post_header); 
 
-
-$xmldata = "<string>RG227980908CN,RG227980899CN,11581752409</string>";
+$numbers = $_POST ['labels'];
+$xmldata = '<string>' . substr ( $numbers, 0, strlen ( $numbers ) - 1 ) . '</string>';
 
 curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);
 

@@ -36,9 +36,8 @@ if (mysql_num_rows ( $result ) >= 1) {
 		$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
 		print ("\n orders count:" . count ( $unfulfilled_orders ) . " changed orders.\n") ;
 		$orders_count = count ( $unfulfilled_orders );
-		$i = 0;
-		foreach ( $unfulfilled_orders as $cur_order ) {
-			$i ++;
+		$printTrackingnumbers;
+		 foreach ( $unfulfilled_orders as $cur_order ) {
 			$shippingDetail = $cur_order->ShippingDetail;
 			if (strcmp ( $shippingDetail->country, "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
@@ -55,8 +54,8 @@ if (mysql_num_rows ( $result ) >= 1) {
 					$channel = $xml->addChild ( "Channel", "154" ); // *
 				}
 				
-				$userOrderNum = $xml->addChild ( "UserOrderNumber", "1027" . $i );
-				$sendDate = $xml->addChild ( "SendDate", $cur_order->order_time ); // *
+				$userOrderNum = $xml->addChild ( "UserOrderNumber", substr ( 10000 * microtime ( true ), 4 ) );
+				$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 				$quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
 				$packageno = $xml->addChild ( "PackageNo" );
 				$insure = $xml->addChild ( "Insure" );
@@ -101,7 +100,7 @@ if (mysql_num_rows ( $result ) >= 1) {
 				$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName" );
 				$GsHsCode = $Goods->addChild ( "HsCode" );
 				
-				$resultXML = $xml->asXML ();
+				$XMLString = $xml->asXML ();
 				
 				$curl = curl_init ();
 				$url = ServiceEndPoint . "/Users/" . userid . "/Expresses";
@@ -109,16 +108,36 @@ if (mysql_num_rows ( $result ) >= 1) {
 				curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, true );
 				curl_setopt ( $curl, CURLOPT_POST, true );
 				curl_setopt ( $curl, CURLOPT_HTTPHEADER, $post_header );
-				curl_setopt ( $curl, CURLOPT_POSTFIELDS, $resultXML );
+				curl_setopt ( $curl, CURLOPT_POSTFIELDS, $XMLString );
 				$result = curl_exec ( $curl );
 				$error = curl_error ( $curl );
 				curl_close ( $curl );
+				echo "result: " . $result . "<br/>";
+				$resultXML = simplexml_load_string ( $result );
+				var_dump ( $resultXML );
+				echo "<br/>";
+				$response = $resultXML->Response;
+				echo "response:" . $response . "<br/>";
+				$trackingnumber = $response->Epcode;
+				$success = $response->Success;
+				echo "tracking:" . $trackingnumber . "success:" . $success;
+				if (strcmp ( $success, "true" ) == 0) {
+					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
+				}
 				echo "error:" . $error;
 			}
-		}
+		} 
 	} else {
 	}
 } else {
 	echo "get null info";
 }
-		 
+?>
+<body>
+	<form action="downloadlabel.php" method="post">
+		<input type="hidden" name="labels"
+			value="<?php echo $printTrackingnumbers?>"> <input type="submit"
+			value="下载标签" />
+	</form>
+</body>
+
