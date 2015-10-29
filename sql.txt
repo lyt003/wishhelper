@@ -20,3 +20,60 @@ create table accounts(
 
 
 UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE accountid = 1;
+
+
+create table orders(
+	orderid varchar(40) not null,
+	accountid int(11) not null,
+	transactiondate varchar(20),
+	transactionid varchar(40),
+	orderstatus varchar(20),
+	sku varchar(50),
+	product varchar(200),
+	productlink varchar(200),
+	variation varchar(50),
+	price varchar(10),
+	cost varchar(10),
+	shipping varchar(10),
+	shippingcost varchar(10),
+	quantity varchar(5),
+	totalcost varchar(10),
+	shippedon varchar(10),
+	provider varchar(50),
+	tracking varchar(20),
+	shippingaddress varchar(500),
+	name varchar(50),
+	firstname varchar(30),
+	lastname varchar(30),
+	streetaddress1 varchar(300),
+	streetaddress2 varchar(300),
+	city varchar(30),
+	state varchar(30),
+	zipcode varchar(20),
+	country varchar(40),
+	lastupdated varchar(20),
+	phonenumber varchar(50),
+	countrycode varchar(10),
+	orderstate varchar(2),
+	primary key(orderid)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
