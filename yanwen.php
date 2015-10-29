@@ -14,9 +14,10 @@ $post_header = array('Authorization: basic MTA0OTAzOnlhbmd3dTE5ODIxMTEy','Conten
 
 $curl = curl_init();
 //$url = ServiceEndPoint.LoginURL.userid."/".userpsd;
-//$url = ServiceEndPoint."/Users/".userid."/GetChannels";
+$url = ServiceEndPoint."/Users/".userid."/GetChannels";
 //$url = ServiceEndPoint."/Users/".userid."/Expresses";
-$url = ServiceEndPoint."/Users/".userid."/Expresses/"."RG224865656CN"."/A4LCLabel";
+//$url = ServiceEndPoint."/Users/".userid."/Expresses/"."RG224865656CN"."/A4LCLabel";
+//$url = ServiceEndPoint."/Users/".userid."/Expresses/"."A4LCLabel";
 
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -24,7 +25,8 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl,CURLOPT_HTTPHEADER, $post_header); 
 
 
-$xmldata = <<<DATA
+$xmldata = "<string>RG227980908CN,RG227980899CN,11581752409</string>";
+/*$xmldata = <<<DATA
 <ExpressType>
 	<Epcode></Epcode>
     <Userid>104903</Userid>
@@ -49,7 +51,7 @@ $xmldata = <<<DATA
     <Quantity>1</Quantity>
     <GoodsName>
         <Userid>104903</Userid>
-        <NameCh>¶àÃ½Ìå²¥·ÅÆ÷</NameCh>
+        <NameCh>ï¿½ï¿½Ã½ï¿½å²¥ï¿½ï¿½ï¿½ï¿½</NameCh>
         <NameEn>MedialPlayer</NameEn>
         <Weight>213</Weight>
         <DeclaredValue>125</DeclaredValue>
@@ -58,6 +60,7 @@ $xmldata = <<<DATA
     </GoodsName>
 </ExpressType>
 DATA;
+*/
 
 //curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);
 
@@ -71,15 +74,22 @@ curl_close($curl);
 //var_dump($xml1);
 //print_r($result);
 //var_dump($result);
+
+$finalXML = simplexml_load_string($result);
+foreach ($finalXML as $cur => $curValue){
+	echo $curValue->getName();
+	echo $curValue;
+}
+
 //print $result;
 //var_dump($result);
 //$result = iconv("gb2312", "utf-8", $result);
 //$result = mb_convert_encoding($result, "GBK","GBK,UTF-8,ASCII");
-$filename = "label.pdf";
+/* $filename = "label.pdf";
 $filesize = file_put_contents($filename, $result);
 header('Cache-Control: public');
 header('Content-type: application/pdf');
 header('Content-Disposition: attachment; filename="'.$filename.'"');
 header('Content-Length: '.$filesize);
 
-readfile($filename);
+readfile($filename); */
