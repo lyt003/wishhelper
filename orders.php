@@ -1,7 +1,9 @@
 <?php
 header ( "Content-Type: text/html;charset=utf-8" );
 include 'Wish/WishClient.php';
+include 'mysql/dbhelper.php';
 use Wish\WishClient;
+use mysql\dbhelper;
 
 session_start ();
 const host = "localhost";
@@ -21,7 +23,7 @@ $post_header = array (
 
 $email = $_SESSION ['email'];
 echo "email" . $email;
-$result = mysql_query ( "select clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
+$result = mysql_query ( "select accountid, clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
 if (mysql_num_rows ( $result ) >= 1) {
 	echo "get user info";
 	$rows = mysql_fetch_array ( $result );
@@ -29,6 +31,7 @@ if (mysql_num_rows ( $result ) >= 1) {
 	$clientsecret = $rows ['clientsecret'];
 	$token = $rows ['token'];
 	$refresh_token = $rows ['refresh_token'];
+	$accountid = $rows['accountid'];
 	echo "clientid" . $clientid . $clientsecret;
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
@@ -37,8 +40,40 @@ if (mysql_num_rows ( $result ) >= 1) {
 		print ("\n orders count:" . count ( $unfulfilled_orders ) . " changed orders.\n") ;
 		$orders_count = count ( $unfulfilled_orders );
 		$printTrackingnumbers;
-		 foreach ( $unfulfilled_orders as $cur_order ) {
+		foreach ( $unfulfilled_orders as $cur_order ) {
 			$shippingDetail = $cur_order->ShippingDetail;
+			$orderarray = array();
+			$orderarray['orderid'] = $cur_order->order_id;
+			$orderarray['accountid'] = $accountid;
+			$orderarray['ordertime'] = $cur_order->order_time;
+			$orderarray['transactionid'] = $cur_order->transaction_id;
+			$orderarray['orderstate'] = $cur_order->state;
+			$orderarray['sku'] = $cur_order->sku;
+			$orderarray['productname'] = $cur_order->product_name;
+			$orderarray['productimage'] = $cur_order->product_image_url;
+			$orderarray['color'] = $cur_order->color;
+			$orderarray['size'] = $cur_order->size;
+			$orderarray['price'] = $cur_order->price;
+			$orderarray['cost'] = $cur_order->cost;
+			$orderarray['shipping'] = $cur_order->shipping;
+			$orderarray['shippingcost'] = $cur_order->shipping_cost;
+			$orderarray['quantity'] = $cur_order->quantity;
+			$orderarray['totalcost'] = $cur_order->order_total;
+			$orderarray['provider'] = '';
+			$orderarray['tracking'] = '';
+			$orderarray['name'] = $shippingDetail->name;
+			$orderarray['streetaddress1'] = $shippingDetail->street_address1;
+			$orderarray['streetaddress2'] = $shippingDetail->street_address2;
+			$orderarray['city'] = $shippingDetail->city;
+			$orderarray['state'] = $shippingDetail->state;
+			$orderarray['zipcode'] = $shippingDetail->zipcode;
+			$orderarray['phonenumber'] = $shippingDetail->phone_number;
+			$orderarray['countrycode'] = $shippingDetail->country;
+			$orderarray['orderstatus'] = '0';// 0: new order;   1: applied tracking number;  2: has download label;   3:  has uploaded tracking number;
+			
+			$dbhelper = new dbhelper();
+			$insertResult = $dbhelper->insertOrder($orderarray);
+			echo "insert:".$insertResult;
 			if (strcmp ( $shippingDetail->country, "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
 				
