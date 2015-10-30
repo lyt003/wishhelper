@@ -31,7 +31,7 @@ if (mysql_num_rows ( $result ) >= 1) {
 	$clientsecret = $rows ['clientsecret'];
 	$token = $rows ['token'];
 	$refresh_token = $rows ['refresh_token'];
-	$accountid = $rows['accountid'];
+	$accountid = $rows ['accountid'];
 	echo "clientid" . $clientid . $clientsecret;
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
@@ -42,38 +42,36 @@ if (mysql_num_rows ( $result ) >= 1) {
 		$printTrackingnumbers;
 		foreach ( $unfulfilled_orders as $cur_order ) {
 			$shippingDetail = $cur_order->ShippingDetail;
-			$orderarray = array();
-			$orderarray['orderid'] = $cur_order->order_id;
-			$orderarray['accountid'] = $accountid;
-			$orderarray['ordertime'] = $cur_order->order_time;
-			$orderarray['transactionid'] = $cur_order->transaction_id;
-			$orderarray['orderstate'] = $cur_order->state;
-			$orderarray['sku'] = $cur_order->sku;
-			$orderarray['productname'] = $cur_order->product_name;
-			$orderarray['productimage'] = $cur_order->product_image_url;
-			$orderarray['color'] = $cur_order->color;
-			$orderarray['size'] = $cur_order->size;
-			$orderarray['price'] = $cur_order->price;
-			$orderarray['cost'] = $cur_order->cost;
-			$orderarray['shipping'] = $cur_order->shipping;
-			$orderarray['shippingcost'] = $cur_order->shipping_cost;
-			$orderarray['quantity'] = $cur_order->quantity;
-			$orderarray['totalcost'] = $cur_order->order_total;
-			$orderarray['provider'] = '';
-			$orderarray['tracking'] = '';
-			$orderarray['name'] = $shippingDetail->name;
-			$orderarray['streetaddress1'] = $shippingDetail->street_address1;
-			$orderarray['streetaddress2'] = $shippingDetail->street_address2;
-			$orderarray['city'] = $shippingDetail->city;
-			$orderarray['state'] = $shippingDetail->state;
-			$orderarray['zipcode'] = $shippingDetail->zipcode;
-			$orderarray['phonenumber'] = $shippingDetail->phone_number;
-			$orderarray['countrycode'] = $shippingDetail->country;
-			$orderarray['orderstatus'] = '0';// 0: new order;   1: applied tracking number;  2: has download label;   3:  has uploaded tracking number;
+			$orderarray = array ();
+			$orderarray ['orderid'] = $cur_order->order_id;
+			$orderarray ['accountid'] = $accountid;
+			$orderarray ['ordertime'] = $cur_order->order_time;
+			$orderarray ['transactionid'] = $cur_order->transaction_id;
+			$orderarray ['orderstate'] = $cur_order->state;
+			$orderarray ['sku'] = $cur_order->sku;
+			$orderarray ['productname'] = str_replace ( "'", " ", $cur_order->product_name ); // remove the ' in the sql;
+			$orderarray ['productimage'] = $cur_order->product_image_url;
+			$orderarray ['color'] = $cur_order->color;
+			$orderarray ['size'] = $cur_order->size;
+			$orderarray ['price'] = $cur_order->price;
+			$orderarray ['cost'] = $cur_order->cost;
+			$orderarray ['shipping'] = $cur_order->shipping;
+			$orderarray ['shippingcost'] = $cur_order->shipping_cost;
+			$orderarray ['quantity'] = $cur_order->quantity;
+			$orderarray ['totalcost'] = $cur_order->order_total;
+			$orderarray ['provider'] = '';
+			$orderarray ['tracking'] = '';
+			$orderarray ['name'] = $shippingDetail->name;
+			$orderarray ['streetaddress1'] = $shippingDetail->street_address1;
+			$orderarray ['streetaddress2'] = $shippingDetail->street_address2;
+			$orderarray ['city'] = $shippingDetail->city;
+			$orderarray ['state'] = $shippingDetail->state;
+			$orderarray ['zipcode'] = $shippingDetail->zipcode;
+			$orderarray ['phonenumber'] = $shippingDetail->phone_number;
+			$orderarray ['countrycode'] = $shippingDetail->country;
 			
-			$dbhelper = new dbhelper();
-			$insertResult = $dbhelper->insertOrder($orderarray);
-			echo "insert:".$insertResult;
+			$dbhelper = new dbhelper ();
+			
 			if (strcmp ( $shippingDetail->country, "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
 				
@@ -85,8 +83,10 @@ if (mysql_num_rows ( $result ) >= 1) {
 				$intPrice = intval ( $orderPrice );
 				if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 6) {
 					$channel = $xml->addChild ( "Channel", "105" ); // *
+					$orderarray ['provider'] = "YanWen";
 				} else {
 					$channel = $xml->addChild ( "Channel", "154" ); // *
+					$orderarray ['provider'] = "ChinaAirPost";
 				}
 				
 				$userOrderNum = $xml->addChild ( "UserOrderNumber", substr ( 10000 * microtime ( true ), 4 ) );
@@ -117,16 +117,16 @@ if (mysql_num_rows ( $result ) >= 1) {
 				$gsName = $cur_order->product_name;
 				if (strpos ( $gsName, "earring" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", "earring" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else if (strpos ( $gsName, "wear" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "内裤" ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", "underwear" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "underwear: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else if (strpos ( $gsName, "cami" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "吊带" ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", "camisole" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "camisole: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else {
 					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", "earring" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				}
 				
 				$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
@@ -160,8 +160,15 @@ if (mysql_num_rows ( $result ) >= 1) {
 					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
 				}
 				echo "error:" . $error;
+				
+				$orderarray ['orderstatus'] = '1'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
+				$orderarray ['tracking'] = $trackingnumber;
+			} else {
+				$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 			}
-		} 
+			$insertResult = $dbhelper->insertOrder ( $orderarray );
+			echo "insert: " . $insertResult;
+		}
 	} else {
 	}
 } else {
@@ -173,6 +180,12 @@ if (mysql_num_rows ( $result ) >= 1) {
 		<input type="hidden" name="labels"
 			value="<?php echo $printTrackingnumbers?>"> <input type="submit"
 			value="下载标签" />
+	</form>
+
+	<form action="uploadTracking.php" method="post">
+		<input type="hidden" name="accountid" value="<?php echo $accountid?>">
+		<input type="hidden" name="token" value="<?php echo $token?>"> <input
+			type="submit" value="上传订单号" />
 	</form>
 </body>
 

@@ -12,7 +12,7 @@ const ApiToken = "MTA0OTAzOnlhbmd3dTE5ODIxMTEy";
 $post_header = array('Authorization: basic MTA0OTAzOnlhbmd3dTE5ODIxMTEy','Content-Type: text/xml; charset=utf-8');
 
 $curl = curl_init();
-$url = ServiceEndPoint."/Users/".userid."/Expresses/"."A4LLabel";
+$url = ServiceEndPoint."/Users/".userid."/Expresses/"."A4LCLabel";
 
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
