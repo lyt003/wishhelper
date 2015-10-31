@@ -8,9 +8,17 @@ class dbhelper {
 	const psd = "yangwu";
 	private $db;
 	public function __construct() {
-		$db = mysql_connect ( host, user, psd );
-		mysql_select_db ( 'wish' );
+		echo "dbhelper create";
+		$db = mysql_connect ( host, user, psd, true );
+		if (! $db) {
+			echo "connection failed";
+		}
+		mysql_select_db ( 'wish', $db );
 		mysql_query ( "set names 'UTF8'" );
+	}
+	public function getUserToken($email) {
+		$result = mysql_query ( "select accountid, clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
+		return $result;
 	}
 	public function insertOrder($orderarray) {
 		$insert_sql = "insert into orders (orderid,accountid,ordertime,transactionid,orderstate,
@@ -23,7 +31,7 @@ class dbhelper {
 	public function getOrdersNotUploadTracking($accountid) {
 		$query_sql = "SELECT orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '1'";
 		echo $query_sql;
-		$result = mysql_query ( $query_sql, $db );
+		$result = mysql_query ( $query_sql );
 		var_dump ( $result );
 		echo "result:" . $result . "<br/>";
 		if (! $result) {
