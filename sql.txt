@@ -17,7 +17,8 @@ create table accounts(
 	primary key(accountid)
 );
 
-
+insert into accounts (userid,clientid,clientsecret) values ("1","5635840527b83e0ff42704d4","aaa9745849b04045a0bdc5d2e97650e9");
+insert into accounts (userid,clientid,clientsecret) values ("1","5635a9dfc8274510109c0840","15a7c00f3e194a1c9ea14f1e525b13e7");
 
 UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE accountid = 1;
 

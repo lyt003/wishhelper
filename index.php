@@ -1,19 +1,31 @@
 <?php
+//RECEIVE the param info 'code'  https://merchant.wish.com/oauth/authorize?client_id=55f8363cbce30916c8d92a0e that get the authorization.
+
 include 'Wish/WishClient.php';
 include 'EUB/EUBOrders.php';
 use Wish\WishClient;
 use Wish\Model\WishOrder;
 use Wish\Model\WishShippingDetail;
-use EUBOrders;
+use EUB\EUBOrders;
 
 echo test;
 
 $access_code = $_GET['code'];
 echo $access_code;
 
+//healthyunderwear
+//$client_id = urlencode('55f8363cbce30916c8d92a0e');
+//$client_secret = urlencode('aa9b618b09444410a0752968891c8542');
 
-$client_id = urlencode('55f8363cbce30916c8d92a0e');
-$client_secret = urlencode('aa9b618b09444410a0752968891c8542');
+//yang
+//$client_id = urlencode('5635840527b83e0ff42704d4');
+//$client_secret = urlencode('aaa9745849b04045a0bdc5d2e97650e9');
+
+
+//deng
+$client_id = urlencode('5635a9dfc8274510109c0840');
+$client_secret = urlencode('15a7c00f3e194a1c9ea14f1e525b13e7');
+
 
 $code = $access_code;
 

@@ -11,7 +11,6 @@ const host = "localhost";
 const user = "root";
 const psd = "yangwu";
 const userid = "104903";
-
 const ServiceEndPoint = "http://online.yw56.com.cn/service";
 
 $post_header = array (
@@ -24,9 +23,9 @@ echo "email" . $email;
 $dbhelper = new dbhelper ();
 $result = $dbhelper->getUserToken ( $email );
 
-if (mysql_num_rows ( $result ) >= 1) {
+while ( $rows = mysql_fetch_array ( $result ) ) {
 	echo "get user info";
-	$rows = mysql_fetch_array ( $result );
+	// $rows = mysql_fetch_array ( $result );
 	$clientid = $rows ['clientid'];
 	$clientsecret = $rows ['clientsecret'];
 	$token = $rows ['token'];
@@ -35,26 +34,6 @@ if (mysql_num_rows ( $result ) >= 1) {
 	echo "clientid" . $clientid . $clientsecret;
 	
 	$client = new WishClient ( $token, 'prod' );
-	
-	/*$result2 = $dbhelper->getOrdersNotUploadTracking ( $accountid );
-	echo "result2:" . $result2;
-	
-	while ( $row = mysql_fetch_array ( $result2 ) ) {
-		$orderid = $row ['orderid'];
-		$tracking = $row ['tracking'];
-		$provider = $row ['provider'];
-		echo "orderid:" . $orderid;
-		
-		try {
-			// Generate your own tracking information here:"
-			$tracker = new WishTracker ( $provider, $tracking, 'Thanks for buying,welcome next time!' );
-			// Fulfill the order using the tracking information
-			$fulResult = $client->fulfillOrderById ( $orderid, $tracker );
-			echo 'Order ' . $order->order_id . 'fulfilled: ' . $fulResult;
-		} catch ( OrderAlreadyFulfilledException $e ) {
-			print 'Order ' . $order->order_id . " already fulfilled.\n";
-		}
-	}*/
 	
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
@@ -145,6 +124,9 @@ if (mysql_num_rows ( $result ) >= 1) {
 				} else if (strpos ( $gsName, "cami" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "吊带" ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", "camisole: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
+				} else if (strpos ( $gsName, "sticker" ) != false) {
+					$gsNameCh = $Goods->addChild ( "NameCh", "墙贴" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "sticker: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else {
 					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
@@ -186,7 +168,7 @@ if (mysql_num_rows ( $result ) >= 1) {
 				
 				$tracker = new WishTracker ( $orderarray ['provider'], $orderarray ['tracking'], 'Thanks for buying,welcome next time!' );
 				// Fulfill the order using the tracking information
-				$fulResult = $client->fulfillOrderById ( $orderarray ['orderid'], $tracker,$access );
+				$fulResult = $client->fulfillOrderById ( $orderarray ['orderid'], $tracker, $access );
 				
 				// orderstatus: 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 				if ($fulResult) {
@@ -202,8 +184,6 @@ if (mysql_num_rows ( $result ) >= 1) {
 		}
 	} else {
 	}
-} else {
-	echo "get null info";
 }
 ?>
 <body>
