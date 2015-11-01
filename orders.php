@@ -128,8 +128,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "墙贴" ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", "sticker: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else {
-					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
+					$gsNameCh = $Goods->addChild ( "NameCh", "衣服" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				}
 				
 				$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
