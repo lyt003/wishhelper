@@ -28,12 +28,27 @@ class dbhelper {
 		
 		return mysql_query ( $insert_sql );
 	}
+	public function updateOrder($orderarray) {
+		$update_sql = "UPDATE orders set provider = '" . $orderarray ['provider'] . "', tracking = '" . $orderarray ['tracking'] . "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and orderid='" . $orderarray ['orderid'] . "'";
+		echo $update_sql . "<br.>";
+		return mysql_query ( $update_sql );
+	}
 	public function getOrdersNotUploadTracking($accountid) {
-		$query_sql = "SELECT orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '1'";
-		echo $query_sql;
+		return $this->getOrders ( $accountid, '1' );
+	}
+	public function getOrdersNoTracking($accountid) {
+		return $this->getOrders ( $accountid, '0' );
+	}
+	/**
+	 *
+	 * @param
+	 *        	accountid
+	 *        	orderstatus
+	 */
+	private function getOrders($accountid, $orderstatus) {
+		$query_sql = "SELECT orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
 		$result = mysql_query ( $query_sql );
 		var_dump ( $result );
-		echo "result:" . $result . "<br/>";
 		if (! $result) {
 			echo "error:" . mysql_error ();
 		}

@@ -12,6 +12,7 @@ const user = "root";
 const psd = "yangwu";
 const userid = "104903";
 const ServiceEndPoint = "http://online.yw56.com.cn/service";
+const NoteToCustomers = 'Thanks for buying,welcome next time!';
 
 $post_header = array (
 		'Authorization: basic MTA0OTAzOnlhbmd3dTE5ODIxMTEy',
@@ -19,27 +20,38 @@ $post_header = array (
 );
 
 $email = $_SESSION ['email'];
-echo "email" . $email;
 $dbhelper = new dbhelper ();
 $result = $dbhelper->getUserToken ( $email );
 
 while ( $rows = mysql_fetch_array ( $result ) ) {
-	echo "get user info";
-	// $rows = mysql_fetch_array ( $result );
 	$clientid = $rows ['clientid'];
 	$clientsecret = $rows ['clientsecret'];
 	$token = $rows ['token'];
 	$refresh_token = $rows ['refresh_token'];
 	$accountid = $rows ['accountid'];
-	echo "clientid" . $clientid . $clientsecret;
-	
+	echo "get clientid of accountid:" . $accountid . ", the client id is: " . $clientid . $clientsecret;
 	$client = new WishClient ( $token, 'prod' );
+	
+	// First, get the orders from db that didn't fulfilled tracking number to wish.
+	// and then get the unfulfilled orders from wish.
+	$ordersNotUpload = $dbhelper->getOrdersNotUploadTracking ( $accountid );
+	echo "<br/>get the orders that not upload: " . $ordersNotUpload . "<br/>";
+	while ( $orderUpload = mysql_fetch_array ( $ordersNotUpload ) ) {
+		$tracker = new WishTracker ( $orderUpload ['provider'], $orderUpload ['tracking'], NoteToCustomers );
+		$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
+		
+		// orderstatus: 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
+		if ($fulResult) {
+			$orderUpload ['orderstatus'] = '3';
+			$orderUpload ['accountid'] = $accountid;
+			$updateResult = $dbhelper->updateOrder ( $orderUpload );
+		}
+	}
 	
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
-		
 		$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-		print ("\n orders count:" . count ( $unfulfilled_orders ) . " changed orders.\n") ;
+		echo "\n get orders count:" . count ( $unfulfilled_orders ) . "<br/>";
 		$orders_count = count ( $unfulfilled_orders );
 		$printTrackingnumbers;
 		foreach ( $unfulfilled_orders as $cur_order ) {
@@ -72,6 +84,10 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			$orderarray ['phonenumber'] = $shippingDetail->phone_number;
 			$orderarray ['countrycode'] = $shippingDetail->country;
 			
+			$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
+			$insertResult = $dbhelper->insertOrder ( $orderarray );
+			echo "insert: " . $insertResult;
+			
 			if (strcmp ( $shippingDetail->country, "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
 				
@@ -99,7 +115,6 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				$Receiver = $xml->addChild ( "Receiver" );
 				$RcUserid = $Receiver->addChild ( "Userid", userid ); // *
 				$RcName = $Receiver->addChild ( "Name", $shippingDetail->name ); // *
-				echo "RcName: " . $shippingDetail->name;
 				$RcPhone = $Receiver->addChild ( "Phone", $shippingDetail->phone_number );
 				$RcMobile = $Receiver->addChild ( "Mobile" );
 				$RcEmail = $Receiver->addChild ( "Email" );
@@ -115,7 +130,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				$gsUserid = $Goods->addChild ( "Userid", userid ); // *
 				
 				$gsName = $cur_order->product_name;
-				if (strpos ( $gsName, "earring" ) != false) {
+				if (strpos ( $gsName, "ear" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else if (strpos ( $gsName, "wear" ) != false) {
@@ -150,37 +165,23 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				$result = curl_exec ( $curl );
 				$error = curl_error ( $curl );
 				curl_close ( $curl );
-				echo "result: " . $result . "<br/>";
 				$resultXML = simplexml_load_string ( $result );
 				var_dump ( $resultXML );
-				echo "<br/>";
 				$response = $resultXML->Response;
-				echo "response:" . $response . "<br/>";
 				$trackingnumber = $response->Epcode;
 				$success = $response->Success;
 				echo "tracking:" . $trackingnumber . "success:" . $success;
 				if (strcmp ( $success, "true" ) == 0) {
 					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
 				}
-				echo "error:" . $error;
+				if (! empty ( $error ))
+					echo "error:" . $error;
 				
 				$orderarray ['tracking'] = $trackingnumber;
+				$orderarray ['orderstatus'] = '1';
 				
-				$tracker = new WishTracker ( $orderarray ['provider'], $orderarray ['tracking'], 'Thanks for buying,welcome next time!' );
-				// Fulfill the order using the tracking information
-				$fulResult = $client->fulfillOrderById ( $orderarray ['orderid'], $tracker, $access );
-				
-				// orderstatus: 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
-				if ($fulResult) {
-					$orderarray ['orderstatus'] = '3';
-				} else {
-					$orderarray ['orderstatus'] = '1';
-				}
-			} else {
-				$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
+				$dbhelper->updateOrder ( $orderarray );
 			}
-			$insertResult = $dbhelper->insertOrder ( $orderarray );
-			echo "insert: " . $insertResult;
 		}
 	} else {
 	}
