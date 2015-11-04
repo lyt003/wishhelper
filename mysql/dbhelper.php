@@ -46,7 +46,16 @@ class dbhelper {
 	 *        	orderstatus
 	 */
 	private function getOrders($accountid, $orderstatus) {
-		$query_sql = "SELECT orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
+		$query_sql;
+		if (strcmp ( $orderstatus, '1' ) == 0) {
+			$query_sql = "SELECT orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
+		} else if (strcmp ( $orderstatus, '0' ) == 0) {
+			$query_sql = "SELECT orderid,accountid,ordertime,transactionid,orderstate,
+		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
+		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
+		city,state,zipcode,phonenumber,countrycode,orderstatus FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
+		}
+		
 		$result = mysql_query ( $query_sql );
 		var_dump ( $result );
 		if (! $result) {
