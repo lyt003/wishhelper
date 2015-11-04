@@ -131,7 +131,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				$gsUserid = $Goods->addChild ( "Userid", userid ); // *
 				
 				$gsName = $cur_order->product_name;
-				if (strpos ( $gsName, "ear" ) != false) {
+				if (strpos ( $gsName, "earring" ) != false) {
 					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $cur_order->sku . "-" . $cur_order->color . "-" . $cur_order->size ); // *
 				} else if (strpos ( $gsName, "wear" ) != false) {
