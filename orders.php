@@ -22,6 +22,7 @@ $post_header = array (
 $email = $_SESSION ['email'];
 $dbhelper = new dbhelper ();
 $result = $dbhelper->getUserToken ( $email );
+echo "get the result of usertoken : ".mysql_num_rows($result)."<br/>";
 
 while ( $rows = mysql_fetch_array ( $result ) ) {
 	$clientid = $rows ['clientid'];

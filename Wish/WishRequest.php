@@ -87,6 +87,7 @@ class WishRequest {
 		if ($error) {
 			echo "<br/>connection exception, " . $error_message . ".sleep 10s and then go on<br/>";
 			sleep ( 10 );
+			$this->execute();
 			// throw new ConnectionException($error_message);
 		}
 		$httpStatus = curl_getinfo ( $curl, CURLINFO_HTTP_CODE );
