@@ -21,11 +21,12 @@ class dbhelper {
 		return $result;
 	}
 	public function insertOrder($orderarray) {
-		$insert_sql = "insert into orders (orderid,accountid,ordertime,transactionid,orderstate,
+		$insert_sql = 'insert into orders (orderid,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
-		city,state,zipcode,phonenumber,countrycode,orderstatus) values('" . $orderarray ['orderid'] . "','" . $orderarray ['accountid'] . "','" . $orderarray ['ordertime'] . "','" . $orderarray ['transactionid'] . "','" . $orderarray ['orderstate'] . "','" . $orderarray ['sku'] . "','" . $orderarray ['productname'] . "','" . $orderarray ['productimage'] . "','" . $orderarray ['color'] . "','" . $orderarray ['size'] . "','" . $orderarray ['price'] . "','" . $orderarray ['cost'] . "','" . $orderarray ['shipping'] . "','" . $orderarray ['shippingcost'] . "','" . $orderarray ['quantity'] . "','" . $orderarray ['totalcost'] . "','" . $orderarray ['provider'] . "','" . $orderarray ['tracking'] . "','" . $orderarray ['name'] . "','" . $orderarray ['streetaddress1'] . "','" . $orderarray ['streetaddress2'] . "','" . $orderarray ['city'] . "','" . $orderarray ['state'] . "','" . $orderarray ['zipcode'] . "','" . $orderarray ['phonenumber'] . "','" . $orderarray ['countrycode'] . "','" . $orderarray ['orderstatus'] . "')";
+		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '","' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . $orderarray ['sku'] . '","' . $orderarray ['productname'] . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
 		
+		echo "insert sql:".$insert_sql."<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function updateOrder($orderarray) {

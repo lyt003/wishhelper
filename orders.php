@@ -63,7 +63,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			$orderarray ['transactionid'] = $cur_order->transaction_id;
 			$orderarray ['orderstate'] = $cur_order->state;
 			$orderarray ['sku'] = $cur_order->sku;
-			$orderarray ['productname'] = str_replace ( "'", " ", $cur_order->product_name ); // remove the ' in the sql;
+			$orderarray ['productname'] = str_replace ( "\"", "''", $cur_order->product_name ); // use '' replace the " in the sql;
 			$orderarray ['productimage'] = $cur_order->product_image_url;
 			$orderarray ['color'] = $cur_order->color;
 			$orderarray ['size'] = $cur_order->size;
@@ -76,8 +76,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			$orderarray ['provider'] = '';
 			$orderarray ['tracking'] = '';
 			$orderarray ['name'] = $shippingDetail->name;
-			$orderarray ['streetaddress1'] = $shippingDetail->street_address1;
-			$orderarray ['streetaddress2'] = $shippingDetail->street_address2;
+			$orderarray ['streetaddress1'] = str_replace ( "\"", "''", $shippingDetail->street_address1);
+			$orderarray ['streetaddress2'] = str_replace ( "\"", "''", $shippingDetail->street_address2);
 			$orderarray ['city'] = $shippingDetail->city;
 			$orderarray ['state'] = $shippingDetail->state;
 			$orderarray ['zipcode'] = $shippingDetail->zipcode;
@@ -86,9 +86,10 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			
 			$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 			
+			echo "<br/> countrycode  = ".$orderarray['countrycode'];
 			if (strcmp ( $orderarray ['countrycode'], "US" ) != 0) {
 				$insertResult = $dbhelper->insertOrder ( $orderarray );
-				echo "insert: " . $insertResult;
+				echo "insert: " . $insertResult."<br/>";
 			}
 		}
 	}
