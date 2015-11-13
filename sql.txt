@@ -25,6 +25,7 @@ UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE ac
 
 create table orders(
 	orderid varchar(40) not null,
+	orderNum int(2),
 	accountid int(11) not null,
 	ordertime varchar(20),
 	transactionid varchar(40),
@@ -52,9 +53,7 @@ create table orders(
 	countrycode varchar(10),
 	orderstatus varchar(2),
 	primary key(orderid)
-);
-
-
+) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_general_ci;
 
 
 
