@@ -1,29 +1,35 @@
 <?php
 session_start ();
-echo "start";
 $email = $_POST ['email'];
 $psd = $_POST ['password'];
-echo "values:" . $email . $psd;
 if (isset ( $_SESSION ['userid'] )) {
 	$next_url = "orders.php";
 	header ( 'Location: ' . $next_url );
 } else {
 	$email = $_POST ['email'];
 	$psd = $_POST ['password'];
-	echo $email . $psd;
 	if (! empty ( $email ) && ! empty ( $psd )) {
+	    // online:
+	    $dbhost = "bdm195587474.my3w.com";
+	    
+	    $dbuser = "bdm195587474";
+	    
+	    $dbpsd = "yangwu19821112";
+	    
+	    $dbname = "bdm195587474_db";
+	    
+	    /*
+		$dbhost = "localhost";
+		$dbuser = "root";
+		$dbpsd = "yangwu";
+		$dbname = "wish";*/
 		
-		$host = "localhost";
-		$user = "root";
-		$psd = "yangwu";
-		$db = mysql_connect ( $host, $user, $psd );
-		mysql_select_db ( 'wish' );
+		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd );
+		mysql_select_db ( $dbname );
 		mysql_query ( "set names 'utf-8'" );
 		
 		$query = "select userid from users where email = '".$email."' and psd = '".$psd."'";
-		echo $query;
 		$result = mysql_query ( $query );
-		echo $result;
 		if (mysql_num_rows($result) == 1) {
 			$row = mysqli_fetch_array ( $result );
 			$_SESSION ['userid'] = $row ['userid'];
@@ -83,7 +89,7 @@ if (isset ( $_SESSION ['userid'] )) {
 								placeholder="邮箱地址" />
 						</div>
 						<div>
-							<input value="yangwu19821112" id="password-box" type="password" name="password"
+							<input value="yangwu" id="password-box" type="password" name="password"
 								class="login-input input-block-level" required="true"
 								placeholder="密码" />
 						</div>

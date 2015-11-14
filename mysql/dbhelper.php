@@ -3,9 +3,24 @@
 namespace mysql;
 
 class dbhelper {
-	const host = "localhost";
+    
+    // online:
+    const host = "bdm195587474.my3w.com";
+    
+    const user = "bdm195587474";
+    
+    const psd = "yangwu19821112";
+    
+    const dbname = "bdm195587474_db";
+    
+    
+    
+    
+	/*const host = "localhost";
 	const user = "root";
 	const psd = "yangwu";
+	const dbname = "wish";/*
+	
 	private $db;
 	public function __construct() {
 		echo "dbhelper create";
@@ -13,7 +28,7 @@ class dbhelper {
 		if (! $db) {
 			echo "connection failed";
 		}
-		mysql_select_db ( 'wish', $db );
+		mysql_select_db ( dbname, $db );
 		mysql_query ( "set names 'UTF8'" );
 	}
 	public function getUserToken($email) {
