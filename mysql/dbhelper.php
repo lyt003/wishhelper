@@ -19,16 +19,16 @@ class dbhelper {
 	/*const host = "localhost";
 	const user = "root";
 	const psd = "yangwu";
-	const dbname = "wish";/*
+	const dbname = "wish";*/
 	
 	private $db;
 	public function __construct() {
 		echo "dbhelper create";
-		$db = mysql_connect ( host, user, psd, true );
+		$db = mysql_connect (host,user,psd, true );
 		if (! $db) {
 			echo "connection failed";
 		}
-		mysql_select_db ( dbname, $db );
+		mysql_select_db ("bdm195587474_db");
 		mysql_query ( "set names 'UTF8'" );
 	}
 	public function getUserToken($email) {
