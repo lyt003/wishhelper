@@ -24,7 +24,7 @@ class dbhelper {
 	private $db;
 	public function __construct() {
 		echo "dbhelper create";
-		$db = mysql_connect (host,user,psd, true );
+		$db = mysql_connect ("bdm195587474.my3w.com","bdm195587474","yangwu19821112", true );
 		if (! $db) {
 			echo "connection failed";
 		}

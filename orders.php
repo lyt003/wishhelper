@@ -7,9 +7,6 @@ use mysql\dbhelper;
 use Wish\Model\WishTracker;
 
 session_start ();
-const host = "localhost";
-const user = "root";
-const psd = "yangwu";
 const userid = "104903";
 const ServiceEndPoint = "http://online.yw56.com.cn/service";
 const NoteToCustomers = 'Thanks for buying,welcome next time!';
@@ -83,10 +80,20 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			
 			$orderarray ['orderstate'] = $cur_order->state;
 			$orderarray ['sku'] = $cur_order->sku;
-			$orderarray ['productname'] = str_replace ( "\"", "''", $cur_order->product_name ); // use '' replace the " in the sql;
+			$orderarray ['productname'] = str_replace ( '"', "''", $cur_order->product_name ); // use '' replace the " in the sql;
 			$orderarray ['productimage'] = $cur_order->product_image_url;
-			$orderarray ['color'] = $cur_order->color;
-			$orderarray ['size'] = $cur_order->size;
+			if(!empty($cur_order->color)){
+			    $orderarray ['color'] = $cur_order->color;
+			}else {
+			    $orderarray ['color'] = "";
+			}
+			 
+			if(!empty($cur_order->size)){
+			    $orderarray ['size'] = $cur_order->size;
+			}else{
+			    $orderarray ['size'] = "";
+			}
+			 
 			$orderarray ['price'] = $cur_order->price;
 			$orderarray ['cost'] = $cur_order->cost;
 			$orderarray ['shipping'] = $cur_order->shipping;
@@ -96,10 +103,20 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			$orderarray ['provider'] = '';
 			$orderarray ['tracking'] = '';
 			$orderarray ['name'] = $shippingDetail->name;
-			$orderarray ['streetaddress1'] = str_replace ( "\"", "''", $shippingDetail->street_address1);
-			$orderarray ['streetaddress2'] = str_replace ( "\"", "''", $shippingDetail->street_address2);
+			$orderarray ['streetaddress1'] = str_replace ( '"', "''", $shippingDetail->street_address1);
+			if(!empty($shippingDetail->street_address2)){
+			    $orderarray ['streetaddress2'] = str_replace ( '"', "''", $shippingDetail->street_address2);
+			}else{
+			    $orderarray ['streetaddress2'] = "";
+			}
+			 
 			$orderarray ['city'] = $shippingDetail->city;
-			$orderarray ['state'] = $shippingDetail->state;
+			if(!empty($shippingDetail->state)){
+			    $orderarray ['state'] = $shippingDetail->state;
+			}else{
+			    $orderarray ['state'] = "";
+			}
+			 $orderarray ['state'] = $shippingDetail->state;
 			$orderarray ['zipcode'] = $shippingDetail->zipcode;
 			$orderarray ['phonenumber'] = $shippingDetail->phone_number;
 			$orderarray ['countrycode'] = $shippingDetail->country;
