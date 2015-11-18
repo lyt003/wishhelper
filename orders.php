@@ -165,7 +165,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			        }  
 			    } 
 			    
-			    $userOrderNum = $xml->addChild ( "UserOrderNumber", substr ( 10000 * microtime ( true ), 4 ) );
+			    $userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid."_".substr ( 10000 * microtime ( true ), 8 ) );
 			    $sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 			    $quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
 			    $packageno = $xml->addChild ( "PackageNo" );

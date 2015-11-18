@@ -66,10 +66,10 @@ class dbhelper {
 		if (strcmp ( $orderstatus, '1' ) == 0) {
 			$query_sql = "SELECT transactionid,orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
 		} else if (strcmp ( $orderstatus, '0' ) == 0) {
-			$query_sql = "SELECT orderid,accountid,ordertime,transactionid,orderstate,
+			$query_sql = "SELECT orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
-		city,state,zipcode,phonenumber,countrycode,orderstatus FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
+		city,state,zipcode,phonenumber,countrycode,orderstatus FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "' order by transactionid, orderNum desc";
 		}
 		
 		$result = mysql_query ( $query_sql );
