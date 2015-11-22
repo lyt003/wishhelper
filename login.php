@@ -10,19 +10,19 @@ if (isset ( $_SESSION ['userid'] )) {
 	$psd = $_POST ['password'];
 	if (! empty ( $email ) && ! empty ( $psd )) {
 	    // online:
-	    $dbhost = "bdm195587474.my3w.com";
+	    /*$dbhost = "bdm195587474.my3w.com";
 	    
 	    $dbuser = "bdm195587474";
 	    
 	    $dbpsd = "yangwu19821112";
 	    
-	    $dbname = "bdm195587474_db";
+	    $dbname = "bdm195587474_db";*/
 	    
-	    /*
+	    
 		$dbhost = "localhost";
 		$dbuser = "root";
 		$dbpsd = "yangwu";
-		$dbname = "wish";*/
+		$dbname = "wish";
 		
 		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd );
 		mysql_select_db ( $dbname );

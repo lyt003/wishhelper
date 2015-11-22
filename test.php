@@ -1,4 +1,5 @@
 <?php
+phpinfo();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime(true). "<br/>";

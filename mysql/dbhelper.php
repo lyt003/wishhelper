@@ -4,31 +4,28 @@ namespace mysql;
 
 class dbhelper {
     
-    // online:
-    const host = "bdm195587474.my3w.com";
-    
-    const user = "bdm195587474";
-    
-    const psd = "yangwu19821112";
-    
-    const dbname = "bdm195587474_db";
-    
-    
-    
-    
-	/*const host = "localhost";
-	const user = "root";
-	const psd = "yangwu";
-	const dbname = "wish";*/
-	
 	private $db;
 	public function __construct() {
-		echo "dbhelper create";
-		$db = mysql_connect ("bdm195587474.my3w.com","bdm195587474","yangwu19821112", true );
+
+	    // online:
+	    /*$dbhost = "bdm195587474.my3w.com";
+	    
+	    $dbuser = "bdm195587474";
+	    
+	    $dbpsd = "yangwu19821112";
+	    
+	    $dbname = "bdm195587474_db";*/
+	    
+	    $dbhost = "localhost";
+	    $dbuser = "root";
+	    $dbpsd = "yangwu";
+	    $dbname = "wish";
+	    echo "dbhelper create";
+		$db = mysql_connect ($dbhost,$dbuser,$dbpsd, true );
 		if (! $db) {
 			echo "connection failed";
 		}
-		mysql_select_db ("bdm195587474_db");
+		mysql_select_db ($dbname);
 		mysql_query ( "set names 'UTF8'" );
 	}
 	public function getUserToken($email) {
