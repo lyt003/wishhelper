@@ -1,0 +1,32 @@
+鼠标先在要进行列编辑的起点点击，再同时按shift+alt不放，鼠标在要进行列编辑的结尾区域点击。
+
+
+SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
+
+
+|565103b7e960d03245911730|565101cfc241dc1bee155174| | |Jennie M McAllister
+|565114131f353d3239adf647|5651103fca492c1c396b0fc0| | |Chris lee
+|56512cd3bf3c953237045663|56512cd3f7a29118aead6299| | |Tu Q. Trac
+|56513064e2176a32327ee03a|56513064803bb0182c85478b| | |Amro Altahtamouni
+|56513fbe0b98e03237c7baef|56513fbef1fe24182b25cb29| | |Tiffany Jones
+|56513fd2d43d6f31fb8776aa|56513fd12a6abf18ae6672a8| | |Anny Torres
+|5651430350fe62322c7b6829|565143029a469a18a44ea8d1| | |Nikki M Manuel
+|5651513a45f1a532233287c3|5651513a66df6e18bc74aa4a| | |Diana DeGeurin
+
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
+update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
+update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
+update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
+
+
+
+
+update orders set orderstatus = '1' where countrycode = 'US' and accountid = '1';
+SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';

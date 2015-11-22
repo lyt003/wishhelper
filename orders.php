@@ -20,16 +20,27 @@ $email = $_SESSION ['email'];
 $dbhelper = new dbhelper ();
 $result = $dbhelper->getUserToken ( $email );
 echo "get the result of usertoken : " . mysql_num_rows ( $result ) . "<br/>";
+
+$accounts = array();
+$i = 0;
+while ($rows = mysql_fetch_array($result)){
+    $accounts['clientid'.$i] =  $rows ['clientid'];
+    $accounts['clientsecret'.$i] =  $rows ['clientsecret'];
+    $accounts['token'.$i] =  $rows ['token'];
+    $accounts['refresh_token'.$i] =  $rows ['refresh_token'];
+    $accounts['accountid'.$i] =  $rows ['accountid'];
+    $i++;
+}
+
 $printTrackingnumbers;
-while ( $rows = mysql_fetch_array ( $result ) ) {
-	$clientid = $rows ['clientid'];
-	$clientsecret = $rows ['clientsecret'];
-	$token = $rows ['token'];
-	$refresh_token = $rows ['refresh_token'];
-	$accountid = $rows ['accountid'];
+for($count =0;$count<$i;$count++ ){
+	$clientid = $accounts['clientid'.$count];
+	$clientsecret = $accounts['clientsecret'.$count];
+	$token = $accounts['token'.$count];
+	$refresh_token = $accounts['refresh_token'.$count];
+	$accountid = $accounts['accountid'.$count];
 	echo "get clientid of accountid:" . $accountid . ", the client id is: " . $clientid . $clientsecret;
 	$client = new WishClient ( $token, 'prod' );
-	
 	
 	$preTransactionid = "";
 	$preOrderNum = 0;
@@ -124,10 +135,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 			
 			echo "<br/> countrycode  = ".$orderarray['countrycode'];
-			if (strcmp ( $orderarray ['countrycode'], "US" ) != 0) {
-				$insertResult = $dbhelper->insertOrder ( $orderarray );
-				echo "insert: " . $insertResult."<br/>";
-			}
+			$insertResult = $dbhelper->insertOrder ( $orderarray );
+			echo "insert: " . $insertResult."<br/>";
 		}
 	}
 	
