@@ -266,5 +266,6 @@ for($count =0;$count<$i;$count++ ){
 		<input type="hidden" name="token" value="<?php echo $token?>"> <input
 			type="submit" value="上传订单号" />
 	</form>
+	<a href="EUBExcel.php">下载美国订单</a>
 </body>
 
