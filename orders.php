@@ -127,7 +127,6 @@ for($count =0;$count<$i;$count++ ){
 			}else{
 			    $orderarray ['state'] = "";
 			}
-			 $orderarray ['state'] = $shippingDetail->state;
 			$orderarray ['zipcode'] = $shippingDetail->zipcode;
 			$orderarray ['phonenumber'] = $shippingDetail->phone_number;
 			$orderarray ['countrycode'] = $shippingDetail->country;
