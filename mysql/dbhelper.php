@@ -8,18 +8,18 @@ class dbhelper {
 	public function __construct() {
 
 	    // online:
-	    /*$dbhost = "bdm195587474.my3w.com";
+	    $dbhost = "bdm195587474.my3w.com";
 	    
 	    $dbuser = "bdm195587474";
 	    
 	    $dbpsd = "yangwu19821112";
 	    
-	    $dbname = "bdm195587474_db";*/
+	    $dbname = "bdm195587474_db";
 	    
-	    $dbhost = "localhost";
+	    /* $dbhost = "localhost";
 	    $dbuser = "root";
 	    $dbpsd = "yangwu";
-	    $dbname = "wish";
+	    $dbname = "wish"; */
 	    echo "dbhelper create";
 		$db = mysql_connect ($dbhost,$dbuser,$dbpsd, true );
 		if (! $db) {
