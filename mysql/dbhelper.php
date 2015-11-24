@@ -77,7 +77,7 @@ class dbhelper {
 		return $result;
 	}
 	public function getUSOrders() {
-		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '3'";
+		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0'";
 		return mysql_query ( $USOrderSql );
 	}
 	function __destruct() {
