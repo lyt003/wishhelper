@@ -21,31 +21,30 @@ $dbhelper = new dbhelper ();
 $result = $dbhelper->getUserToken ( $email );
 echo "get the result of usertoken : " . mysql_num_rows ( $result ) . "<br/>";
 
-$accounts = array();
+$accounts = array ();
 $i = 0;
-while ($rows = mysql_fetch_array($result)){
-    $accounts['clientid'.$i] =  $rows ['clientid'];
-    $accounts['clientsecret'.$i] =  $rows ['clientsecret'];
-    $accounts['token'.$i] =  $rows ['token'];
-    $accounts['refresh_token'.$i] =  $rows ['refresh_token'];
-    $accounts['accountid'.$i] =  $rows ['accountid'];
-    $i++;
+while ( $rows = mysql_fetch_array ( $result ) ) {
+	$accounts ['clientid' . $i] = $rows ['clientid'];
+	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+	$accounts ['token' . $i] = $rows ['token'];
+	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+	$accounts ['accountid' . $i] = $rows ['accountid'];
+	$i ++;
 }
 
 $printTrackingnumbers;
-for($count =0;$count<$i;$count++ ){
-	$clientid = $accounts['clientid'.$count];
-	$clientsecret = $accounts['clientsecret'.$count];
-	$token = $accounts['token'.$count];
-	$refresh_token = $accounts['refresh_token'.$count];
-	$accountid = $accounts['accountid'.$count];
+for($count = 0; $count < $i; $count ++) {
+	$clientid = $accounts ['clientid' . $count];
+	$clientsecret = $accounts ['clientsecret' . $count];
+	$token = $accounts ['token' . $count];
+	$refresh_token = $accounts ['refresh_token' . $count];
+	$accountid = $accounts ['accountid' . $count];
 	echo "get clientid of accountid:" . $accountid . ", the client id is: " . $clientid . $clientsecret;
 	$client = new WishClient ( $token, 'prod' );
 	
 	$preTransactionid = "";
 	$preOrderNum = 0;
 	$preGoodsNameEn = "";
-	
 	
 	// First, get the orders from db that didn't fulfilled tracking number to wish.
 	// and then get the unfulfilled orders from wish.
@@ -75,16 +74,14 @@ for($count =0;$count<$i;$count++ ){
 			$orderarray ['transactionid'] = $cur_order->transaction_id;
 			$orderarray ['orderid'] = $cur_order->order_id;
 			
-			
-			if(strcmp($cur_order->transaction_id,$preTransactionid) == 0){//there are more than one orders in a transaction.
-			    $preOrderNum = $preOrderNum + 1;
-			    $orderarray ['orderNum'] = $preOrderNum;
-			}else{
-			    $orderarray ['orderNum'] = 0;
-			    $preTransactionid = $cur_order->transaction_id;
-			    $preOrderNum = 0;
+			if (strcmp ( $cur_order->transaction_id, $preTransactionid ) == 0) { // there are more than one orders in a transaction.
+				$preOrderNum = $preOrderNum + 1;
+				$orderarray ['orderNum'] = $preOrderNum;
+			} else {
+				$orderarray ['orderNum'] = 0;
+				$preTransactionid = $cur_order->transaction_id;
+				$preOrderNum = 0;
 			}
-			
 			
 			$orderarray ['accountid'] = $accountid;
 			$orderarray ['ordertime'] = $cur_order->order_time;
@@ -93,18 +90,18 @@ for($count =0;$count<$i;$count++ ){
 			$orderarray ['sku'] = $cur_order->sku;
 			$orderarray ['productname'] = str_replace ( '"', "''", $cur_order->product_name ); // use '' replace the " in the sql;
 			$orderarray ['productimage'] = $cur_order->product_image_url;
-			if(!empty($cur_order->color)){
-			    $orderarray ['color'] = $cur_order->color;
-			}else {
-			    $orderarray ['color'] = "";
+			if (! empty ( $cur_order->color )) {
+				$orderarray ['color'] = $cur_order->color;
+			} else {
+				$orderarray ['color'] = "";
 			}
-			 
-			if(!empty($cur_order->size)){
-			    $orderarray ['size'] = $cur_order->size;
-			}else{
-			    $orderarray ['size'] = "";
+			
+			if (! empty ( $cur_order->size )) {
+				$orderarray ['size'] = $cur_order->size;
+			} else {
+				$orderarray ['size'] = "";
 			}
-			 
+			
 			$orderarray ['price'] = $cur_order->price;
 			$orderarray ['cost'] = $cur_order->cost;
 			$orderarray ['shipping'] = $cur_order->shipping;
@@ -114,18 +111,18 @@ for($count =0;$count<$i;$count++ ){
 			$orderarray ['provider'] = '';
 			$orderarray ['tracking'] = '';
 			$orderarray ['name'] = $shippingDetail->name;
-			$orderarray ['streetaddress1'] = str_replace ( '"', "''", $shippingDetail->street_address1);
-			if(!empty($shippingDetail->street_address2)){
-			    $orderarray ['streetaddress2'] = str_replace ( '"', "''", $shippingDetail->street_address2);
-			}else{
-			    $orderarray ['streetaddress2'] = "";
+			$orderarray ['streetaddress1'] = str_replace ( '"', "''", $shippingDetail->street_address1 );
+			if (! empty ( $shippingDetail->street_address2 )) {
+				$orderarray ['streetaddress2'] = str_replace ( '"', "''", $shippingDetail->street_address2 );
+			} else {
+				$orderarray ['streetaddress2'] = "";
 			}
-			 
+			
 			$orderarray ['city'] = $shippingDetail->city;
-			if(!empty($shippingDetail->state)){
-			    $orderarray ['state'] = $shippingDetail->state;
-			}else{
-			    $orderarray ['state'] = "";
+			if (! empty ( $shippingDetail->state )) {
+				$orderarray ['state'] = $shippingDetail->state;
+			} else {
+				$orderarray ['state'] = "";
 			}
 			$orderarray ['zipcode'] = $shippingDetail->zipcode;
 			$orderarray ['phonenumber'] = $shippingDetail->phone_number;
@@ -133,9 +130,9 @@ for($count =0;$count<$i;$count++ ){
 			
 			$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 			
-			echo "<br/> countrycode  = ".$orderarray['countrycode'];
+			echo "<br/> countrycode  = " . $orderarray ['countrycode'];
 			$insertResult = $dbhelper->insertOrder ( $orderarray );
-			echo "insert: " . $insertResult."<br/>";
+			echo "insert: " . $insertResult . "<br/>";
 		}
 	}
 	
@@ -155,100 +152,102 @@ for($count =0;$count<$i;$count++ ){
 			$orderQuantity = $orderNoTracking ['quantity'];
 			$intPrice = intval ( $orderPrice );
 			
-			if($orderNoTracking['orderNum'] != 0 && strcmp($orderNoTracking['transactionid'], $preTransactionid) == 0){
-			    $preGoodsNameEn = $preGoodsNameEn. $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'];
-			}else{
-			    $preGoodsNameEn = "";
-			    if(strcmp($preGoodsNameEn, "")!=0 && strcmp($orderNoTracking['transactionid'], $preTransactionid) == 0){
-			        $channel = $xml->addChild ( "Channel", "154" ); // *
-			        $orderNoTracking ['provider'] = "ChinaAirPost";
-			    }else{
-			        $preTransactionid = $orderNoTracking['transactionid'];
-			        if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 6) {
-			            $channel = $xml->addChild ( "Channel", "105" ); // *
-			            $orderNoTracking ['provider'] = "YanWen";
-			        } else {
-			            $channel = $xml->addChild ( "Channel", "154" ); // *
-			            $orderNoTracking ['provider'] = "ChinaAirPost";
-			        }  
-			    } 
-			    
-			    $userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid."_".substr ( 10000 * microtime ( true ), 8 ) );
-			    $sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
-			    $quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
-			    $packageno = $xml->addChild ( "PackageNo" );
-			    $insure = $xml->addChild ( "Insure" );
-			    $memo = $xml->addChild ( "Memo" );
-			    	
-			    $Receiver = $xml->addChild ( "Receiver" );
-			    $RcUserid = $Receiver->addChild ( "Userid", userid ); // *
-			    $RcName = $Receiver->addChild ( "Name", $orderNoTracking ['name'] ); // *
-			    $RcPhone = $Receiver->addChild ( "Phone", $orderNoTracking ['phonenumber'] );
-			    $RcMobile = $Receiver->addChild ( "Mobile" );
-			    $RcEmail = $Receiver->addChild ( "Email" );
-			    $RcCompany = $Receiver->addChild ( "Company" );
-			    $RcCountry = $Receiver->addChild ( "Country", $orderNoTracking ['countrycode'] );
-			    $RcPostcode = $Receiver->addChild ( "Postcode", $orderNoTracking ['zipcode'] ); // *
-			    $RcState = $Receiver->addChild ( "State", $orderNoTracking ['state'] ); // *
-			    $RcCity = $Receiver->addChild ( "City", $orderNoTracking ['city'] ); // *
-			    $RcAddress1 = $Receiver->addChild ( "Address1", $orderNoTracking ['streetaddress1'] ); // *
-			    $RcAddress2 = $Receiver->addChild ( "Address2", $orderNoTracking ['streetaddress2'] );
-			    	
-			    $Goods = $xml->addChild ( "GoodsName" );
-			    $gsUserid = $Goods->addChild ( "Userid", userid ); // *
-			    	
-			    $gsName = $orderNoTracking ['productname'];
-			    if (stripos ( $gsName, "earring" ) != false) {
-			        $gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
-			        $gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] ); // *
-			    } else if (stripos ( $gsName, "wear" ) != false) {
-			        $gsNameCh = $Goods->addChild ( "NameCh", "内裤" ); // *
-			        $gsNameEn = $Goods->addChild ( "NameEn", "underwear: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] ); // *
-			    } else if (stripos ( $gsName, "cami" ) != false) {
-			        $gsNameCh = $Goods->addChild ( "NameCh", "吊带" ); // *
-			        $gsNameEn = $Goods->addChild ( "NameEn", "camisole: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] ); // *
-			    } else if (stripos ( $gsName, "sticker" ) != false) {
-			        $gsNameCh = $Goods->addChild ( "NameCh", "墙贴" ); // *
-			        $gsNameEn = $Goods->addChild ( "NameEn", "sticker: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] ); // *
-			    } else {
-			        $gsNameCh = $Goods->addChild ( "NameCh", "衣服" ); // *
-			        $gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] ); // *;
-			    }
-			    	
-			    $gsWeight = $Goods->addChild ( "Weight", "100" ); // *
-			    $gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
-			    $gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
-			    $gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName" );
-			    $GsHsCode = $Goods->addChild ( "HsCode" );
-			    	
-			    $XMLString = $xml->asXML ();
-			    	
-			    $curl = curl_init ();
-			    $url = ServiceEndPoint . "/Users/" . userid . "/Expresses";
-			    curl_setopt ( $curl, CURLOPT_URL, $url );
-			    curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, true );
-			    curl_setopt ( $curl, CURLOPT_POST, true );
-			    curl_setopt ( $curl, CURLOPT_HTTPHEADER, $post_header );
-			    curl_setopt ( $curl, CURLOPT_POSTFIELDS, $XMLString );
-			    $result = curl_exec ( $curl );
-			    $error = curl_error ( $curl );
-			    curl_close ( $curl );
-			    $resultXML = simplexml_load_string ( $result );
-			    var_dump ( $resultXML );
-			    $response = $resultXML->Response;
-			    $trackingnumber = $response->Epcode;
-			    $success = $response->Success;
-			    echo "tracking:" . $trackingnumber . "success:" . $success;
-			    if (strcmp ( $success, "true" ) == 0) {
-			        $printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
-			    }
-			    if (! empty ( $error ))
-			        echo "error:" . $error;
-			    	
-			    $orderNoTracking ['tracking'] = $trackingnumber;
-			    $orderNoTracking ['orderstatus'] = '1';
-			    	
-			    $dbhelper->updateOrder ( $orderNoTracking );
+			if ($orderNoTracking ['orderNum'] != 0) {
+				$preGoodsNameEn = $preGoodsNameEn . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity;
+				$preTransactionid = $orderNoTracking ['transactionid'];
+			} else {
+				if (strcmp ( $preGoodsNameEn, "" ) != 0 && strcmp ( $orderNoTracking ['transactionid'], $preTransactionid ) == 0) {
+					$channel = $xml->addChild ( "Channel", "154" ); // *
+					$orderNoTracking ['provider'] = "ChinaAirPost";
+				} else {
+					$preTransactionid = $orderNoTracking ['transactionid'];
+					if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 6) {
+						$channel = $xml->addChild ( "Channel", "105" ); // *
+						$orderNoTracking ['provider'] = "YanWen";
+					} else {
+						$channel = $xml->addChild ( "Channel", "154" ); // *
+						$orderNoTracking ['provider'] = "ChinaAirPost";
+					}
+				}
+				
+				$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 8 ) );
+				$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
+				$quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
+				$packageno = $xml->addChild ( "PackageNo" );
+				$insure = $xml->addChild ( "Insure" );
+				$memo = $xml->addChild ( "Memo" );
+				
+				$Receiver = $xml->addChild ( "Receiver" );
+				$RcUserid = $Receiver->addChild ( "Userid", userid ); // *
+				$RcName = $Receiver->addChild ( "Name", $orderNoTracking ['name'] ); // *
+				$RcPhone = $Receiver->addChild ( "Phone", $orderNoTracking ['phonenumber'] );
+				$RcMobile = $Receiver->addChild ( "Mobile" );
+				$RcEmail = $Receiver->addChild ( "Email" );
+				$RcCompany = $Receiver->addChild ( "Company" );
+				$RcCountry = $Receiver->addChild ( "Country", $orderNoTracking ['countrycode'] );
+				$RcPostcode = $Receiver->addChild ( "Postcode", $orderNoTracking ['zipcode'] ); // *
+				$RcState = $Receiver->addChild ( "State", $orderNoTracking ['state'] ); // *
+				$RcCity = $Receiver->addChild ( "City", $orderNoTracking ['city'] ); // *
+				$RcAddress1 = $Receiver->addChild ( "Address1", $orderNoTracking ['streetaddress1'] ); // *
+				$RcAddress2 = $Receiver->addChild ( "Address2", $orderNoTracking ['streetaddress2'] );
+				
+				$Goods = $xml->addChild ( "GoodsName" );
+				$gsUserid = $Goods->addChild ( "Userid", userid ); // *
+				
+				$gsName = $orderNoTracking ['productname'];
+				if (stripos ( $gsName, "earring" ) != false) {
+					$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
+				} else if (stripos ( $gsName, "wear" ) != false) {
+					$gsNameCh = $Goods->addChild ( "NameCh", "内裤" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "underwear: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
+				} else if (stripos ( $gsName, "cami" ) != false) {
+					$gsNameCh = $Goods->addChild ( "NameCh", "吊带" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "camisole: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
+				} else if (stripos ( $gsName, "sticker" ) != false) {
+					$gsNameCh = $Goods->addChild ( "NameCh", "墙贴" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "sticker: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
+				} else {
+					$gsNameCh = $Goods->addChild ( "NameCh", "衣服" ); // *
+					$gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *;
+				}
+				
+				$preGoodsNameEn = "";
+				
+				$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
+				$gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
+				$gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
+				$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName" );
+				$GsHsCode = $Goods->addChild ( "HsCode" );
+				
+				$XMLString = $xml->asXML ();
+				
+				$curl = curl_init ();
+				$url = ServiceEndPoint . "/Users/" . userid . "/Expresses";
+				curl_setopt ( $curl, CURLOPT_URL, $url );
+				curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, true );
+				curl_setopt ( $curl, CURLOPT_POST, true );
+				curl_setopt ( $curl, CURLOPT_HTTPHEADER, $post_header );
+				curl_setopt ( $curl, CURLOPT_POSTFIELDS, $XMLString );
+				$result = curl_exec ( $curl );
+				$error = curl_error ( $curl );
+				curl_close ( $curl );
+				$resultXML = simplexml_load_string ( $result );
+				var_dump ( $resultXML );
+				$response = $resultXML->Response;
+				$trackingnumber = $response->Epcode;
+				$success = $response->Success;
+				echo "tracking:" . $trackingnumber . "success:" . $success;
+				if (strcmp ( $success, "true" ) == 0) {
+					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
+				}
+				if (! empty ( $error ))
+					echo "error:" . $error;
+				
+				$orderNoTracking ['tracking'] = $trackingnumber;
+				$orderNoTracking ['orderstatus'] = '1';
+				
+				$dbhelper->updateOrder ( $orderNoTracking );
 			}
 		}
 	}
