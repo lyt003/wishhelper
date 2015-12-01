@@ -5,6 +5,8 @@ include 'mysql/dbhelper.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
+use Wish\WishResponse;
 
 session_start ();
 const userid = "104903";
@@ -64,7 +66,30 @@ for($count = 0; $count < $i; $count ++) {
 	
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
-		$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+		try {
+		    $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+		} catch (ServiceResponseException $e) {
+            if ($e->getStatusCode() == 1015) {
+                $response = $client->refreshToken($clientid, $clientsecret, $refresh_token);
+                echo "<br/>errorMessage:" . $response->getMessage();
+                $values = $response->getResponse()->{'data'};
+                $newToken = '0';
+                $newRefresh_token = '0';
+                foreach ($values as $k => $v) {
+                    echo 'key  ' . $k . '  value:' . $v;
+                    if ($k == 'access_token') {
+                        $newToken = $v;
+                    }
+                    if ($k == 'refresh_token') {
+                        $newRefresh_token = $v;
+                    }
+                }
+                echo "<br/>newToken = ".$newToken.$newRefresh_token;
+                $dbhelper->updateUserToken($accountid, $newToken, $newRefresh_token);
+                $client = new WishClient ( $newToken, 'prod' );
+                $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+            }
+        }
 		echo "\n get orders count:" . count ( $unfulfilled_orders ) . "<br/>";
 		$orders_count = count ( $unfulfilled_orders );
 		

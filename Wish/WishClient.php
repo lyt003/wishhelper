@@ -48,7 +48,13 @@ class WishClient{
     $this->session = new WishSession($api_key,$session_type,$merchant_id);
 
   }
-
+  
+  public function refreshToken($clientid,$clientsecret, $refresh_token){
+      $params = array('client_id'=>$clientid,'client_secret'=>$clientsecret,'refresh_token'=>$refresh_token,'grant_type'=>'refresh_token');
+      $response = $this->getResponse('POST', 'oauth/refresh_token',$params);
+      return $response;
+  }
+  
   public function getResponse($type,$path,$params=array()){
 
     $request = new WishRequest($this->session,$type,$path,$params);
@@ -67,6 +73,11 @@ class WishClient{
       throw new OrderAlreadyFulfilledException("Order has been fulfilled",
         $request,
         $response);
+    }
+    if($response->getStatusCode()==1015){
+        throw new ServiceResponseException("Your access token has expired",
+            $request,
+            $response);
     }
     if($response->getStatusCode()!=0){
       throw new ServiceResponseException("Unknown error",

@@ -32,6 +32,12 @@ class dbhelper {
 		$result = mysql_query ( "select accountid, clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
 		return $result;
 	}
+	
+	public function updateUserToken($accountid,$newToken,$newRefreshToken){
+	    $updateTokenSql = "update accounts set token = '".$newToken."',refresh_token='".$newRefreshToken."' where accountid = '".$accountid."'";
+	    echo "<br/> update result ".$updateTokenSql;
+	    return mysql_query($updateTokenSql);
+	}
 	public function insertOrder($orderarray) {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
