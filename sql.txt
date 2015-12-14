@@ -1,62 +1,90 @@
 create database wish;
 use wish;
-create table users(
-	userid int(11) not null auto_increment,
-	email varchar(50) not null,
-	psd   varchar(15) not null,
-	primary key(userid)
-);
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE TABLE `users` (
+  `userid` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) NOT NULL,
+  `psd` varchar(15) NOT NULL,
+  PRIMARY KEY (`userid`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `accounts` (
+  `accountid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `clientid` varchar(50) NOT NULL,
+  `clientsecret` varchar(50) NOT NULL,
+  `token` varchar(50) DEFAULT NULL,
+  `refresh_token` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`accountid`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `orders` (
+  `orderid` varchar(40) NOT NULL,
+  `orderNum` int(2) DEFAULT NULL,
+  `accountid` int(11) NOT NULL,
+  `ordertime` varchar(20) DEFAULT NULL,
+  `transactionid` varchar(40) DEFAULT NULL,
+  `orderstate` varchar(20) DEFAULT NULL,
+  `sku` varchar(50) DEFAULT NULL,
+  `productname` varchar(200) DEFAULT NULL,
+  `productimage` varchar(200) DEFAULT NULL,
+  `color` varchar(20) DEFAULT NULL,
+  `size` varchar(10) DEFAULT NULL,
+  `price` varchar(10) DEFAULT NULL,
+  `cost` varchar(10) DEFAULT NULL,
+  `shipping` varchar(10) DEFAULT NULL,
+  `shippingcost` varchar(10) DEFAULT NULL,
+  `quantity` varchar(5) DEFAULT NULL,
+  `totalcost` varchar(10) DEFAULT NULL,
+  `provider` varchar(50) DEFAULT NULL,
+  `tracking` varchar(20) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `streetaddress1` varchar(300) DEFAULT NULL,
+  `streetaddress2` varchar(300) DEFAULT NULL,
+  `city` varchar(30) DEFAULT NULL,
+  `state` varchar(30) DEFAULT NULL,
+  `zipcode` varchar(20) DEFAULT NULL,
+  `phonenumber` varchar(50) DEFAULT NULL,
+  `countrycode` varchar(10) DEFAULT NULL,
+  `orderstatus` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`orderid`)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS  `products`;
+CREATE TABLE `products` (
+	`parent_sku` varchar(50) NOT NULL,
+  	`sku` varchar(50) NOT NULL,
+  	`name` varchar(200) NOT NULL,
+    `description` varchar(10000) NOT NULL,
+    `tags` varchar(2000) NOT NULL,
+    `main_image` varchar(200) NOT NULL,
+    `extra_images` varchar(2000),
+    `color` varchar(20),
+    `size` varchar(10),
+    `price` varchar(10) NOT NULL,
+    `quantity` int(5) NOT NULL,
+    `shipping` varchar(10) NOT NULL,
+    `shipping_time` varchar(20) NOT NULL,
+    `MSRP` varchar(10),
+    `brand` varchar(10),
+    `UPC` varchar(50),
+    `landingPageURL` varchar(500),
+  PRIMARY KEY (`sku`)
+)  DEFAULT CHARSET=utf8;
+
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");
-create table accounts(
-	accountid int(11) not null auto_increment,
-	userid int(11) not null,
-	clientid varchar(50) not null,
-	clientsecret varchar(50) not null,
-	token varchar(50),
-	refresh_token varchar(50),
-	primary key(accountid)
-);
 
 insert into accounts (userid,clientid,clientsecret) values ("1","5635840527b83e0ff42704d4","aaa9745849b04045a0bdc5d2e97650e9");
 insert into accounts (userid,clientid,clientsecret) values ("1","5635a9dfc8274510109c0840","15a7c00f3e194a1c9ea14f1e525b13e7");
 
 UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE accountid = 1;
-
-
-create table orders(
-	orderid varchar(40) not null,
-	orderNum int(2),
-	accountid int(11) not null,
-	ordertime varchar(20),
-	transactionid varchar(40),
-	orderstate varchar(20),
-	sku varchar(50),
-	productname varchar(200),
-	productimage varchar(200),
-	color varchar(20),
-	size varchar(10),
-	price varchar(10),
-	cost varchar(10),
-	shipping varchar(10),
-	shippingcost varchar(10),
-	quantity varchar(5),
-	totalcost varchar(10),
-	provider varchar(50),
-	tracking varchar(20),
-	name varchar(50),
-	streetaddress1 varchar(300),
-	streetaddress2 varchar(300),
-	city varchar(30),
-	state varchar(30),
-	zipcode varchar(20),
-	phonenumber varchar(50),
-	countrycode varchar(10),
-	orderstatus varchar(2),
-	primary key(orderid)
-) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_general_ci;
-
-
-
 
 
 

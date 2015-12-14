@@ -1,5 +1,6 @@
 <?php
 session_start ();
+$online = false;
 $email = $_POST ['email'];
 $psd = $_POST ['password'];
 if (isset ( $_SESSION ['userid'] )) {
@@ -9,20 +10,21 @@ if (isset ( $_SESSION ['userid'] )) {
 	$email = $_POST ['email'];
 	$psd = $_POST ['password'];
 	if (! empty ( $email ) && ! empty ( $psd )) {
-	    // online:
-	    $dbhost = "bdm195587474.my3w.com";
-	    
-	    $dbuser = "bdm195587474";
-	    
-	    $dbpsd = "yangwu19821112";
-	    
-	    $dbname = "bdm195587474_db";
-	    
-	    
-		/* $dbhost = "localhost";
-		$dbuser = "root";
-		$dbpsd = "yangwu";
-		$dbname = "wish"; */
+		
+		if($online){
+			$dbhost = "bdm195587474.my3w.com";
+			 
+			$dbuser = "bdm195587474";
+			 
+			$dbpsd = "yangwu19821112";
+			 
+			$dbname = "bdm195587474_db";
+		}else{
+			$dbhost = "localhost";
+			$dbuser = "root";
+			$dbpsd = "yangwu";
+			$dbname = "wish";
+		}
 		
 		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd );
 		mysql_select_db ( $dbname );

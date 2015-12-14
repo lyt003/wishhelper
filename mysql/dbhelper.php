@@ -5,22 +5,20 @@ namespace mysql;
 class dbhelper {
 	private $db;
 	public function __construct() {
+		$online = false;
 		
-		// online:
-		$dbhost = "bdm195587474.my3w.com";
+		if($online){
+			$dbhost = "bdm195587474.my3w.com";
+			$dbuser = "bdm195587474";
+			$dbpsd = "yangwu19821112";
+			$dbname = "bdm195587474_db";
+		}else{
+			$dbhost = "localhost";
+			$dbuser = "root";
+			$dbpsd = "yangwu";
+			$dbname = "wish";
+		}
 		
-		$dbuser = "bdm195587474";
-		
-		$dbpsd = "yangwu19821112";
-		
-		$dbname = "bdm195587474_db";
-		
-		/*
-		 * $dbhost = "localhost";
-		 * $dbuser = "root";
-		 * $dbpsd = "yangwu";
-		 * $dbname = "wish";
-		 */
 		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd, true );
 		if (! $db) {
 			echo "connection failed";
@@ -32,11 +30,14 @@ class dbhelper {
 		$result = mysql_query ( "select accountid, clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
 		return $result;
 	}
-	
-	public function updateUserToken($accountid,$newToken,$newRefreshToken){
-	    $updateTokenSql = "update accounts set token = '".$newToken."',refresh_token='".$newRefreshToken."' where accountid = '".$accountid."'";
-	    echo "<br/> update result ".$updateTokenSql;
-	    return mysql_query($updateTokenSql);
+	public function getAccountToken($accountid) {
+		$result = mysql_query ( "select clientid,clientsecret,token,refresh_token from accounts where accountid = '" . $accountid . "'" );
+		return $result;
+	}
+	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
+		$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
+		echo "<br/> update result " . $updateTokenSql;
+		return mysql_query ( $updateTokenSql );
 	}
 	public function insertOrder($orderarray) {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
@@ -85,6 +86,17 @@ class dbhelper {
 	public function getUSOrders() {
 		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0'";
 		return mysql_query ( $USOrderSql );
+	}
+	public function insertProduct($productarray) {
+		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
+					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . $productarray ['name'] . '","' . $productarray ['description'] . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . $productarray ['tags'] . '","' . $productarray ['UPC'] . '")';
+		
+		// echo "insert sql:" . $insert_sql . "<br/>";
+		return mysql_query ( $insert_sql );
+	}
+	public function getProducts($parentSKU) {
+		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
+		return mysql_query ( $productsSQL );
 	}
 	function __destruct() {
 		if (! empty ( $db ))
