@@ -75,6 +75,7 @@ $MSRP = $_POST ['MSRP'];
 $brand = $_POST ['Brand'];
 $UPC = $_POST ['UPC'];
 $landingPageURL = $_POST ['Landing_Page_URL'];
+$productSourceURL = $_POST['Product_Source_URL'];
 
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
 	$productarray = array ();
@@ -92,6 +93,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['shipping_time'] = $shippingTime;
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
+	$productarray['productSourceURL'] = $productSourceURL;
+	
+	if ($dbhelper == null)
+		$dbhelper = new dbhelper ();
+	$insertSourceResult = $dbhelper->insertProductSource( $productarray );
 	
 	$colorArray = explode ( "|", $colors );
 	
@@ -456,6 +462,18 @@ form.submit();
 											id="landing_page_url" type="text"
 											value="<?php echo $landingPageURL?>"
 											placeholder="可接受：http://www.amazon.com/gp/product/B008PE00DA/ref=s9_simh_gw_p193_d0_i3?ref=wish" />
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label" data-col-index="14"><span
+										class="col-name">Product Source URL</span></label>
+
+									<div class="controls input-append">
+										<input class="input-block-level" name="Product_Source_URL"
+											id="product_source_url" type="text"
+											value="<?php echo $productSourceURL?>"
+											placeholder="可接受：http://detail.1688.com/offer/xxxxx.html" />
 									</div>
 								</div>
 							</div>

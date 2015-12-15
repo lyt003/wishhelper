@@ -7,12 +7,12 @@ class dbhelper {
 	public function __construct() {
 		$online = false;
 		
-		if($online){
+		if ($online) {
 			$dbhost = "bdm195587474.my3w.com";
 			$dbuser = "bdm195587474";
 			$dbpsd = "yangwu19821112";
 			$dbname = "bdm195587474_db";
-		}else{
+		} else {
 			$dbhost = "localhost";
 			$dbuser = "root";
 			$dbpsd = "yangwu";
@@ -87,11 +87,16 @@ class dbhelper {
 		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0'";
 		return mysql_query ( $USOrderSql );
 	}
+	
+	public function insertProductSource($productarray){
+		$insertSourceSQL = 'insert into productinfo(parent_sku,source_url) values ("' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';
+		return mysql_query ( $insertSourceSQL );
+	}
+	
 	public function insertProduct($productarray) {
 		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
 					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . $productarray ['name'] . '","' . $productarray ['description'] . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . $productarray ['tags'] . '","' . $productarray ['UPC'] . '")';
 		
-		// echo "insert sql:" . $insert_sql . "<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function getProducts($parentSKU) {
