@@ -43,6 +43,7 @@ use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 session_start ();
+$accountid = null;
 
 $accountid = $_GET ['accountid'];
 if ($accountid == null)
@@ -155,6 +156,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	
 	$products = $dbhelper->getProducts ( $uniqueID );
 	$addProduct = 0;
+	$prod_res = null;
 	while ( $product = mysql_fetch_array ( $products ) ) {
 		if ($addProduct == 0) { // add product;
 			$currentProduct = array ();
@@ -200,10 +202,12 @@ if ($productName != null && $description != null && $mainImage != null && $price
 					$prod_res = $client->createProduct ( $currentProduct );
 				}
 			}
-			
+			print_r($prod_res);
 			if ($prod_res != null) {
 				echo "add product success<br/>";
 				$addProduct = 1;
+			}else{
+				echo "add product failed<br/>";
 			}
 		} else { // add product variation
 			$currentProductVar = array ();

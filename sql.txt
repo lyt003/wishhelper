@@ -74,8 +74,8 @@ CREATE TABLE `products` (
   PRIMARY KEY (`sku`)
 )  DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS  `productInfo`;
-CREATE TABLE `productInfo` (
+DROP TABLE IF EXISTS  `productinfo`;
+CREATE TABLE `productinfo` (
 	`parent_sku` varchar(50) NOT NULL,
 	`accountid` int(11),
     `source_url` varchar(500)
