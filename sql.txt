@@ -77,10 +77,19 @@ CREATE TABLE `products` (
 DROP TABLE IF EXISTS  `productInfo`;
 CREATE TABLE `productInfo` (
 	`parent_sku` varchar(50) NOT NULL,
-    `source_url` varchar(500),
-  PRIMARY KEY (`parent_sku`)
+	`accountid` int(11),
+    `source_url` varchar(500)
 )  DEFAULT CHARSET=utf8;
+ALTER TABLE `productinfo`
+  ADD PRIMARY KEY (`parent_sku`,`accountid`);
 
+INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
+('MLY_502', 2, 'http://detail.1688.com/offer/1263012741.html?spm=a2615.7691456.0.0.3cAnpj'),
+('MLY_607', 2, 'http://detail.1688.com/offer/524388271167.html?spm=a2615.7691456.0.0.OReqgx'),
+('MLY_609', 2, 'http://detail.1688.com/offer/524427120916.html?spm=a2615.7691456.0.0.QHrLMn'),
+('MLY_610', 2, 'http://detail.1688.com/offer/524418825354.html?spm=a2615.7691456.0.0.OReqgx'),
+('MLY_612', 2, 'http://detail.1688.com/offer/524417294517.html?spm=a2615.7691456.0.0.OReqgx'),
+('RYF_08883', 2, 'http://detail.1688.com/offer/41889190207.html?spm=a2615.7691456.0.0.CnIEI8');
 
 SET FOREIGN_KEY_CHECKS = 1;
 

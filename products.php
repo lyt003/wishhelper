@@ -45,6 +45,9 @@ use Wish\WishResponse;
 session_start ();
 
 $accountid = $_GET ['accountid'];
+if ($accountid == null)
+	$accountid = $_SESSION ['accountid'];
+
 $dbhelper = null;
 $client = null;
 echo "accountid " . $accountid;
@@ -55,12 +58,18 @@ if ($accountid != null) {
 		$token = $rows ['token'];
 		echo "token" . $token;
 		$client = new WishClient ( $token, 'prod' );
+		$_SESSION ['clientid'] = $rows ['clientid'];
+		$_SESSION ['clientsecret'] = $rows ['clientsecret'];
 		$_SESSION ['token'] = $token;
+		$_SESSION ['refresh_token'] = $rows ['refresh_token'];
+		$_SESSION ['accountid'] = $rows ['accountid'];
 	}
 }
 
 $productName = $_POST ['Product_Name'];
+$productName = str_replace ( '"', "''", $productName );
 $description = $_POST ['Description'];
+$description = str_replace ( '"', "''", $description );
 $tags = $_POST ['Tags'];
 $uniqueID = $_POST ['Unique_Id'];
 $mainImage = $_POST ['Main_Image'];
@@ -75,7 +84,7 @@ $MSRP = $_POST ['MSRP'];
 $brand = $_POST ['Brand'];
 $UPC = $_POST ['UPC'];
 $landingPageURL = $_POST ['Landing_Page_URL'];
-$productSourceURL = $_POST['Product_Source_URL'];
+$productSourceURL = $_POST ['Product_Source_URL'];
 
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
 	$productarray = array ();
@@ -93,11 +102,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['shipping_time'] = $shippingTime;
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
-	$productarray['productSourceURL'] = $productSourceURL;
+	$productarray ['productSourceURL'] = $productSourceURL;
 	
 	if ($dbhelper == null)
 		$dbhelper = new dbhelper ();
-	$insertSourceResult = $dbhelper->insertProductSource( $productarray );
+	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
 	
 	$colorArray = explode ( "|", $colors );
 	
@@ -167,8 +176,31 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$currentProduct ['upc'] = $product ['UPC'];
 			$currentProduct ['extra_images'] = $product ['extra_images'];
 			
-			$prod_res = $client->createProduct ( $currentProduct );
-			print_r ( $prod_res );
+			try {
+				$prod_res = $client->createProduct ( $currentProduct );
+			} catch ( ServiceResponseException $e ) {
+				if ($e->getStatusCode () == 1015) {
+					$response = $client->refreshToken ( $_SESSION ['clientid'], $_SESSION ['clientsecret'], $_SESSION ['refresh_token'] );
+					echo "<br/>errorMessage:" . $response->getMessage ();
+					$values = $response->getResponse ()->{'data'};
+					$newToken = '0';
+					$newRefresh_token = '0';
+					foreach ( $values as $k => $v ) {
+						echo 'key  ' . $k . '  value:' . $v;
+						if ($k == 'access_token') {
+							$newToken = $v;
+						}
+						if ($k == 'refresh_token') {
+							$newRefresh_token = $v;
+						}
+					}
+					echo "<br/>newToken = " . $newToken . $newRefresh_token;
+					$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+					$client = new WishClient ( $newToken, 'prod' );
+					$prod_res = $client->createProduct ( $currentProduct );
+				}
+			}
+			
 			if ($prod_res != null) {
 				echo "add product success<br/>";
 				$addProduct = 1;
@@ -464,7 +496,7 @@ form.submit();
 											placeholder="可接受：http://www.amazon.com/gp/product/B008PE00DA/ref=s9_simh_gw_p193_d0_i3?ref=wish" />
 									</div>
 								</div>
-								
+
 								<div class="control-group">
 									<label class="control-label" data-col-index="14"><span
 										class="col-name">Product Source URL</span></label>

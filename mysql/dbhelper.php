@@ -87,16 +87,15 @@ class dbhelper {
 		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0'";
 		return mysql_query ( $USOrderSql );
 	}
-	
-	public function insertProductSource($productarray){
-		$insertSourceSQL = 'insert into productinfo(parent_sku,source_url) values ("' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';
+	public function insertProductSource($accountid, $productarray) {
+		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';
+		echo "insertSourceSQL:".$insertSourceSQL."<br/>";
 		return mysql_query ( $insertSourceSQL );
 	}
-	
 	public function insertProduct($productarray) {
 		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
 					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . $productarray ['name'] . '","' . $productarray ['description'] . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . $productarray ['tags'] . '","' . $productarray ['UPC'] . '")';
-		
+		echo "insert_sql:".$insert_sql."<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function getProducts($parentSKU) {
