@@ -44,28 +44,10 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 session_start ();
 $accountid = null;
-
-$accountid = $_GET ['accountid'];
-if ($accountid == null)
-	$accountid = $_SESSION ['accountid'];
-
 $dbhelper = null;
 $client = null;
-echo "accountid " . $accountid;
-if ($accountid != null) {
-	$dbhelper = new dbhelper ();
-	$accountAcess = $dbhelper->getAccountToken ( $accountid );
-	if ($rows = mysql_fetch_array ( $accountAcess )) {
-		$token = $rows ['token'];
-		echo "token" . $token;
-		$client = new WishClient ( $token, 'prod' );
-		$_SESSION ['clientid'] = $rows ['clientid'];
-		$_SESSION ['clientsecret'] = $rows ['clientsecret'];
-		$_SESSION ['token'] = $token;
-		$_SESSION ['refresh_token'] = $rows ['refresh_token'];
-		$_SESSION ['accountid'] = $rows ['accountid'];
-	}
-}
+
+$accountid = $_GET ['accountid'];
 
 $productName = $_POST ['Product_Name'];
 $productName = str_replace ( '"', "''", $productName );
@@ -104,9 +86,17 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
 	$productarray ['productSourceURL'] = $productSourceURL;
+
+	$dbhelper = new dbhelper ();
+	$accountAcess = $dbhelper->getAccountToken ( $accountid );
+	if ($rows = mysql_fetch_array ( $accountAcess )) {
+		$token = $rows ['token'];
+		$client = new WishClient ( $token, 'prod' );
+		$clientid = $rows ['clientid'];
+		$clientsecret = $rows ['clientsecret'];
+		$refresh_token = $rows ['refresh_token'];
+	}
 	
-	if ($dbhelper == null)
-		$dbhelper = new dbhelper ();
 	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
 	
 	$colorArray = explode ( "|", $colors );
@@ -135,8 +125,6 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				}
 			}
 			
-			if ($dbhelper == null)
-				$dbhelper = new dbhelper ();
 			$insertResult = $dbhelper->insertProduct ( $productarray );
 			if ($insertResult != '1') {
 				echo "insert failed" . "<br/>";
@@ -147,12 +135,6 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$productarray ['size'] = null;
 		}
 	}
-	
-	if ($dbhelper == null)
-		$dbhelper = new dbhelper ();
-	
-	if ($client == null)
-		$client = new WishClient ( $_SESSION ['token'], 'prod' );
 	
 	$products = $dbhelper->getProducts ( $uniqueID );
 	$addProduct = 0;
@@ -182,7 +164,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				$prod_res = $client->createProduct ( $currentProduct );
 			} catch ( ServiceResponseException $e ) {
 				if ($e->getStatusCode () == 1015) {
-					$response = $client->refreshToken ( $_SESSION ['clientid'], $_SESSION ['clientsecret'], $_SESSION ['refresh_token'] );
+					$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token);
 					echo "<br/>errorMessage:" . $response->getMessage ();
 					$values = $response->getResponse ()->{'data'};
 					$newToken = '0';
@@ -202,11 +184,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 					$prod_res = $client->createProduct ( $currentProduct );
 				}
 			}
-			print_r($prod_res);
+			print_r ( $prod_res );
 			if ($prod_res != null) {
 				echo "add product success<br/>";
 				$addProduct = 1;
-			}else{
+			} else {
 				echo "add product failed<br/>";
 			}
 		} else { // add product variation
@@ -288,7 +270,7 @@ form.submit();
 	}
 </script>
 <body>
-	<form id="add_product" action="products.php" method="post">
+	<form id="add_product" action="products.php<?php echo "?accountid=".$accountid?>" method="post">
 		<div id="add-products-page" class="center">
 			<div>
 				<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
