@@ -86,7 +86,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
 	$productarray ['productSourceURL'] = $productSourceURL;
-
+	
 	$dbhelper = new dbhelper ();
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
 	if ($rows = mysql_fetch_array ( $accountAcess )) {
@@ -103,25 +103,23 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	
 	$sizeArray = explode ( "|", $sizes );
 	
-	$skus = array ();
 	foreach ( $colorArray as $color ) {
 		foreach ( $sizeArray as $size ) {
 			if ($color != null) {
 				if ($size != null) {
-					$skus [] = $uniqueID . "_" . $color . "_" . $size;
 					$productarray ['sku'] = $uniqueID . "_" . $color . "_" . $size;
 					$productarray ['color'] = $color;
 					$productarray ['size'] = $size;
 				} else {
-					$skus [] = $uniqueID . "_" . $color;
 					$productarray ['sku'] = $uniqueID . "_" . $color;
 					$productarray ['color'] = $color;
 				}
 			} else {
 				if ($size != null) {
-					$skus [] = $uniqueID . "_" . $size;
 					$productarray ['sku'] = $uniqueID . "_" . $size;
 					$productarray ['size'] = $size;
+				} else {
+					$productarray ['sku'] = $uniqueID;
 				}
 			}
 			
@@ -146,8 +144,10 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$currentProduct ['description'] = $product ['description'];
 			$currentProduct ['tags'] = $product ['tags'];
 			$currentProduct ['sku'] = $product ['sku'];
-			$currentProduct ['color'] = $product ['color'];
-			$currentProduct ['size'] = $product ['size'];
+			if ($product ['color'] != null)
+				$currentProduct ['color'] = $product ['color'];
+			if ($product ['size'] != null)
+				$currentProduct ['size'] = $product ['size'];
 			$currentProduct ['inventory'] = $product ['quantity'];
 			$currentProduct ['price'] = $product ['price'];
 			$currentProduct ['shipping'] = $product ['shipping'];
@@ -164,7 +164,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				$prod_res = $client->createProduct ( $currentProduct );
 			} catch ( ServiceResponseException $e ) {
 				if ($e->getStatusCode () == 1015) {
-					$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token);
+					$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
 					echo "<br/>errorMessage:" . $response->getMessage ();
 					$values = $response->getResponse ()->{'data'};
 					$newToken = '0';
@@ -195,8 +195,10 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$currentProductVar = array ();
 			$currentProductVar ['parent_sku'] = $product ['parent_sku'];
 			$currentProductVar ['sku'] = $product ['sku'];
-			$currentProductVar ['color'] = $product ['color'];
-			$currentProductVar ['size'] = $product ['size'];
+			if ($product ['color'] != null)
+				$currentProductVar ['color'] = $product ['color'];
+			if ($product ['size'] != null)
+				$currentProductVar ['size'] = $product ['size'];
 			$currentProductVar ['inventory'] = $product ['quantity'];
 			$currentProductVar ['price'] = $product ['price'];
 			$currentProductVar ['shipping'] = $product ['shipping'];
@@ -270,7 +272,9 @@ form.submit();
 	}
 </script>
 <body>
-	<form id="add_product" action="products.php<?php echo "?accountid=".$accountid?>" method="post">
+	<form id="add_product"
+		action="products.php<?php echo "?accountid=".$accountid?>"
+		method="post">
 		<div id="add-products-page" class="center">
 			<div>
 				<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
