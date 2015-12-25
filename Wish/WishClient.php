@@ -40,6 +40,7 @@ class WishClient{
   private $session;
   private $products;
   private $orders;
+  private $accountid;
 
   const LIMIT = 50;
 
@@ -47,6 +48,14 @@ class WishClient{
 
     $this->session = new WishSession($api_key,$session_type,$merchant_id);
 
+  }
+  
+  public function setAccountid($accountid){
+  	$this->accountid = $accountid;
+  }
+  
+  public function getAccountid(){
+  	return $this->accountid;
   }
   
   public function refreshToken($clientid,$clientsecret, $refresh_token){

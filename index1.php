@@ -1,6 +1,13 @@
+<?php 
+include 'mysql/dbhelper.php';
+use mysql\dbhelper;
+
+$dbhelper = new dbhelper ();
+
+$isRunning = $dbhelper->isScheduleRunning();
+?>
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
-
 <head>
 <meta charset="UTF-8">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
@@ -104,6 +111,10 @@
 			<a href="login.php"><div id="paragraph_center"
 					class="fr-widget fr-text fr-wf fr_paragraph_center">
 					<div class="fr-text">处理订单</div>
+				</div></a>
+			<a target="_blank" href="schedule.php?isRunning=<?php echo $isRunning?>"><div id="paragraph_center"
+					class="fr-widget fr-text fr-wf fr_paragraph_center">
+					<div class="fr-text"><?php if ($isRunning) {echo "停止定时上传服务";} else { echo "启动定时上传服务";}?></div>
 				</div></a>
 		</div>
 	</div>

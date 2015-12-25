@@ -64,3 +64,7 @@ $add = 0;
 if($add != 0){
 	echo "add = 0";
 }
+
+$curDate = date('Ymd');
+echo "curDate = ".$curDate."<br/>";
+echo date("y-m-d H:i:s",time());// H: 24小时制；   h：12小时制

@@ -100,6 +100,37 @@ class dbhelper {
 		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
 		return mysql_query ( $productsSQL );
 	}
+	public function isScheduleRunning() {
+		$sql = "select schedule_running from setting";
+		$result = mysql_query ( $sql );
+		if ($row = mysql_fetch_array ( $result )) {
+			$value = $row ['schedule_running'];
+			return ($value == 1);
+		}
+		return false;
+	}
+	public function startScheduleRunning() {
+		$this->updateScheduleRunning ( 1 );
+	}
+	public function stopScheduleRunning() {
+		$this->updateScheduleRunning ( 0 );
+	}
+	private function updateScheduleRunning($scheduleRunning) {
+		$updateSql = "update setting set schedule_running=" . $scheduleRunning;
+		return mysql_query ( $updateSql );
+	}
+	public function insertScheduleProduct($productInfo) {
+		$insertSql = 'insert into schedule_product(accountid,parent_sku,scheduledate,isfinished) values (' . $productInfo ['accountid'] . ',"' . $productInfo ['parent_sku'] . '","' . $productInfo ['scheduledate'] . '",0)';
+		return mysql_query ( $insertSql );
+	}
+	public function getScheduleProducts($curDate) {
+		$scheduleSql = 'select accountid,parent_sku from schedule_product where scheduledate = "' . $curDate . '" and isfinished = 0 order by accountid,parent_sku';
+		return mysql_query ( $scheduleSql );
+	}
+	public function updateScheduleFinished($productInfo) {
+		$updateFinished = 'update schedule_product set isfinished = 1 where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		return mysql_query ( $updateFinished );
+	}
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

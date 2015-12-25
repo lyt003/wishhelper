@@ -68,6 +68,7 @@ $brand = $_POST ['Brand'];
 $UPC = $_POST ['UPC'];
 $landingPageURL = $_POST ['Landing_Page_URL'];
 $productSourceURL = $_POST ['Product_Source_URL'];
+$scheduleDate = $_POST ['Schedule_Date'];
 
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
 	$productarray = array ();
@@ -133,82 +134,87 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$productarray ['size'] = null;
 		}
 	}
-	
-	$products = $dbhelper->getProducts ( $uniqueID );
-	$addProduct = 0;
-	$prod_res = null;
-	while ( $product = mysql_fetch_array ( $products ) ) {
-		if ($addProduct == 0) { // add product;
-			$currentProduct = array ();
-			$currentProduct ['name'] = $product ['name'];
-			$currentProduct ['description'] = $product ['description'];
-			$currentProduct ['tags'] = $product ['tags'];
-			$currentProduct ['sku'] = $product ['sku'];
-			if ($product ['color'] != null)
-				$currentProduct ['color'] = $product ['color'];
-			if ($product ['size'] != null)
-				$currentProduct ['size'] = $product ['size'];
-			$currentProduct ['inventory'] = $product ['quantity'];
-			$currentProduct ['price'] = $product ['price'];
-			$currentProduct ['shipping'] = $product ['shipping'];
-			$currentProduct ['msrp'] = $product ['MSRP'];
-			$currentProduct ['shipping_time'] = $product ['shipping_time'];
-			$currentProduct ['main_image'] = $product ['main_image'];
-			$currentProduct ['parent_sku'] = $product ['parent_sku'];
-			$currentProduct ['brand'] = $product ['brand'];
-			$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-			$currentProduct ['upc'] = $product ['UPC'];
-			$currentProduct ['extra_images'] = $product ['extra_images'];
-			
-			try {
-				$prod_res = $client->createProduct ( $currentProduct );
-			} catch ( ServiceResponseException $e ) {
-				if ($e->getStatusCode () == 1015) {
-					$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
-					echo "<br/>errorMessage:" . $response->getMessage ();
-					$values = $response->getResponse ()->{'data'};
-					$newToken = '0';
-					$newRefresh_token = '0';
-					foreach ( $values as $k => $v ) {
-						echo 'key  ' . $k . '  value:' . $v;
-						if ($k == 'access_token') {
-							$newToken = $v;
-						}
-						if ($k == 'refresh_token') {
-							$newRefresh_token = $v;
-						}
-					}
-					echo "<br/>newToken = " . $newToken . $newRefresh_token;
-					$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
-					$client = new WishClient ( $newToken, 'prod' );
+	if ($scheduleDate != null) {
+		$productarray ['accountid'] = $accountid;
+		$productarray ['scheduledate'] = $scheduleDate;
+		$dbhelper->insertScheduleProduct ( $productarray );
+	} else {
+		$products = $dbhelper->getProducts ( $uniqueID );
+		$addProduct = 0;
+		$prod_res = null;
+		while ( $product = mysql_fetch_array ( $products ) ) {
+			if ($addProduct == 0) { // add product;
+				$currentProduct = array ();
+				$currentProduct ['name'] = $product ['name'];
+				$currentProduct ['description'] = $product ['description'];
+				$currentProduct ['tags'] = $product ['tags'];
+				$currentProduct ['sku'] = $product ['sku'];
+				if ($product ['color'] != null)
+					$currentProduct ['color'] = $product ['color'];
+				if ($product ['size'] != null)
+					$currentProduct ['size'] = $product ['size'];
+				$currentProduct ['inventory'] = $product ['quantity'];
+				$currentProduct ['price'] = $product ['price'];
+				$currentProduct ['shipping'] = $product ['shipping'];
+				$currentProduct ['msrp'] = $product ['MSRP'];
+				$currentProduct ['shipping_time'] = $product ['shipping_time'];
+				$currentProduct ['main_image'] = $product ['main_image'];
+				$currentProduct ['parent_sku'] = $product ['parent_sku'];
+				$currentProduct ['brand'] = $product ['brand'];
+				$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
+				$currentProduct ['upc'] = $product ['UPC'];
+				$currentProduct ['extra_images'] = $product ['extra_images'];
+				
+				try {
 					$prod_res = $client->createProduct ( $currentProduct );
+				} catch ( ServiceResponseException $e ) {
+					if ($e->getStatusCode () == 1015) {
+						$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
+						echo "<br/>errorMessage:" . $response->getMessage ();
+						$values = $response->getResponse ()->{'data'};
+						$newToken = '0';
+						$newRefresh_token = '0';
+						foreach ( $values as $k => $v ) {
+							echo 'key  ' . $k . '  value:' . $v;
+							if ($k == 'access_token') {
+								$newToken = $v;
+							}
+							if ($k == 'refresh_token') {
+								$newRefresh_token = $v;
+							}
+						}
+						echo "<br/>newToken = " . $newToken . $newRefresh_token;
+						$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+						$client = new WishClient ( $newToken, 'prod' );
+						$prod_res = $client->createProduct ( $currentProduct );
+					}
 				}
-			}
-			print_r ( $prod_res );
-			if ($prod_res != null) {
-				echo "add product success<br/>";
-				$addProduct = 1;
-			} else {
-				echo "add product failed<br/>";
-			}
-		} else { // add product variation
-			$currentProductVar = array ();
-			$currentProductVar ['parent_sku'] = $product ['parent_sku'];
-			$currentProductVar ['sku'] = $product ['sku'];
-			if ($product ['color'] != null)
-				$currentProductVar ['color'] = $product ['color'];
-			if ($product ['size'] != null)
-				$currentProductVar ['size'] = $product ['size'];
-			$currentProductVar ['inventory'] = $product ['quantity'];
-			$currentProductVar ['price'] = $product ['price'];
-			$currentProductVar ['shipping'] = $product ['shipping'];
-			$currentProductVar ['msrp'] = $product ['MSRP'];
-			$currentProductVar ['shipping_time'] = $product ['shipping_time'];
-			$currentProductVar ['main_image'] = $product ['main_image'];
-			$prod_var = $client->createProductVariation ( $currentProductVar );
-			print_r ( $prod_var );
-			if (prod_var != null) {
-				echo "add product var success<br/>";
+				print_r ( $prod_res );
+				if ($prod_res != null) {
+					echo "add product success<br/>";
+					$addProduct = 1;
+				} else {
+					echo "add product failed<br/>";
+				}
+			} else { // add product variation
+				$currentProductVar = array ();
+				$currentProductVar ['parent_sku'] = $product ['parent_sku'];
+				$currentProductVar ['sku'] = $product ['sku'];
+				if ($product ['color'] != null)
+					$currentProductVar ['color'] = $product ['color'];
+				if ($product ['size'] != null)
+					$currentProductVar ['size'] = $product ['size'];
+				$currentProductVar ['inventory'] = $product ['quantity'];
+				$currentProductVar ['price'] = $product ['price'];
+				$currentProductVar ['shipping'] = $product ['shipping'];
+				$currentProductVar ['msrp'] = $product ['MSRP'];
+				$currentProductVar ['shipping_time'] = $product ['shipping_time'];
+				$currentProductVar ['main_image'] = $product ['main_image'];
+				$prod_var = $client->createProductVariation ( $currentProductVar );
+				print_r ( $prod_var );
+				if (prod_var != null) {
+					echo "add product var success<br/>";
+				}
 			}
 		}
 	}
@@ -499,19 +505,40 @@ form.submit();
 									</div>
 								</div>
 							</div>
-						</div>
 
-						<div id="buttons-section" class="control-group text-right">
-							<button id="clear-button" class="btn btn-large">清除</button>
-							<button id="submit-button" type="button"
-								class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
+							<div id="optional-info" class="form-horizontal">
+								<div class="section-title">
+									定时上传
+									<div id="toggle-optional" class="pull-right"></div>
+								</div>
 
-							<div id="loading-spinner" class="loading hide"></div>
+								<div id="optional-fields">
+									<div class="control-group">
+										<label class="control-label" data-col-index="12"><span
+											class="col-name">定时上传日期</span></label>
+
+										<div class="controls input-append">
+											<input class="input-block-level" name="Schedule_Date"
+												id="Schedule_Date" type="text"
+												value="<?php echo $scheduleDate?>"
+												placeholder="可接受：20151225; 为空则立即上传" />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div id="buttons-section" class="control-group text-right">
+								<button id="clear-button" class="btn btn-large">清除</button>
+								<button id="submit-button" type="button"
+									class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
+
+								<div id="loading-spinner" class="loading hide"></div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+	
 	</form>
 </body>
 </html>

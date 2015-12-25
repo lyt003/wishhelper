@@ -94,6 +94,21 @@ INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 
 
+CREATE TABLE `schedule_product` (
+	`accountid` int(11) NOT NULL,
+	`parent_sku` varchar(50) NOT NULL,
+	`scheduledate` varchar(10) NOT NULL,
+	`isfinished` int(1)
+) DEFAULT CHARSET=utf8;
+ALTER TABLE `schedule_product`
+ADD PRIMARY KEY (`parent_sku`,`accountid`);
+
+CREATE TABLE `setting`(
+	`schedule_running` int(1)
+) DEFAULT CHARSET=utf8;
+insert into setting(schedule_running) values(0);
+
+
 
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");
 
