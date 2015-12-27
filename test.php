@@ -108,3 +108,10 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 }
 
 echo "the last, client account id:".$client->getAccountid()."<br/>";
+
+
+sleep(60);
+echo "after 60".date("Y-m-d H:i:s");
+
+sleep(60);
+echo "after 60".date("Y-m-d H:i:s");

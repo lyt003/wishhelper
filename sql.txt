@@ -110,7 +110,7 @@ CREATE TABLE `setting`(
 	`during_time` int(11),
 	`message` varchar(100)
 ) DEFAULT CHARSET=utf8;
-insert into setting(schedule_running,during_time) values(0,60);
+insert into setting(schedule_running,running_count,during_time) values(0,0,60);
 
 
 
