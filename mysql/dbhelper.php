@@ -110,13 +110,13 @@ class dbhelper {
 		return false;
 	}
 	public function startScheduleRunning() {
-		$this->updateScheduleRunning ( 1 );
+		$this->updateScheduleRunning ( 1, "started" );
 	}
 	public function stopScheduleRunning() {
-		$this->updateScheduleRunning ( 0 );
+		$this->updateScheduleRunning ( 0, "stoped" );
 	}
-	private function updateScheduleRunning($scheduleRunning) {
-		$updateSql = "update setting set schedule_running=" . $scheduleRunning;
+	private function updateScheduleRunning($scheduleRunning, $msg) {
+		$updateSql = 'update setting set schedule_running=' . $scheduleRunning . ', message = "' . $msg . '"';
 		return mysql_query ( $updateSql );
 	}
 	public function insertScheduleProduct($productInfo) {
@@ -130,6 +130,22 @@ class dbhelper {
 	public function updateScheduleFinished($productInfo) {
 		$updateFinished = 'update schedule_product set isfinished = 1 where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
 		return mysql_query ( $updateFinished );
+	}
+	public function updateSettingCount() {
+		$updateSql = 'update setting set running_count = running_count + 1';
+		return mysql_query ( $updateSql );
+	}
+	public function resetSettingCount() {
+		$resetSql = 'update setting set running_count = 0';
+		return mysql_query ( $resetSql );
+	}
+	public function updateSettingMsg($msg) {
+		$updateMsgSql = 'update setting set message = "' . $msg . '"';
+		return mysql_query ( $updateMsgSql );
+	}
+	public function getSettingDuringTime() {
+		$getDuringTimeSql = "select during_time from setting";
+		return mysql_query ( $getDuringTimeSql );
 	}
 	function __destruct() {
 		if (! empty ( $db ))

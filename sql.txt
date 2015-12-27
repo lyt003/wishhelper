@@ -103,10 +103,14 @@ CREATE TABLE `schedule_product` (
 ALTER TABLE `schedule_product`
 ADD PRIMARY KEY (`parent_sku`,`accountid`);
 
+DROP TABLE IF EXISTS `setting`;
 CREATE TABLE `setting`(
-	`schedule_running` int(1)
+	`schedule_running` int(1),
+	`running_count` int(11),
+	`during_time` int(11),
+	`message` varchar(100)
 ) DEFAULT CHARSET=utf8;
-insert into setting(schedule_running) values(0);
+insert into setting(schedule_running,during_time) values(0,60);
 
 
 

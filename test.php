@@ -1,5 +1,12 @@
 <?php
-phpinfo ();
+include 'Wish/WishClient.php';
+include 'mysql/dbhelper.php';
+use Wish\WishClient;
+use mysql\dbhelper;
+use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
+use Wish\WishResponse;
+//phpinfo ();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
@@ -68,3 +75,36 @@ if($add != 0){
 $curDate = date('Ymd');
 echo "curDate = ".$curDate."<br/>";
 echo date("y-m-d H:i:s",time());// H: 24小时制；   h：12小时制
+
+
+$dbhelper = new dbhelper ();
+$accountid = 1;
+if ($client == null || ($accountid == $client->getAccountid ())) {
+	$accountAcess = $dbhelper->getAccountToken ( $accountid );
+	if ($rows = mysql_fetch_array ( $accountAcess )) {
+		$token = $rows ['token'];
+		$client = new WishClient ( $token, 'prod' );
+		$client->setAccountid ( $accountid );
+		$clientid = $rows ['clientid'];
+		$clientsecret = $rows ['clientsecret'];
+		$refresh_token = $rows ['refresh_token'];
+		echo "client account id:".$client->getAccountid()."<br/>";
+	}
+}
+
+$accountid = 3;
+echo "equal: ".($accountid != $client->getAccountid ());
+if ($client == null || ($accountid != $client->getAccountid ())) {
+	$accountAcess = $dbhelper->getAccountToken ( $accountid );
+	if ($rows = mysql_fetch_array ( $accountAcess )) {
+		$token = $rows ['token'];
+		$client = new WishClient ( $token, 'prod' );
+		$client->setAccountid ( $accountid );
+		$clientid = $rows ['clientid'];
+		$clientsecret = $rows ['clientsecret'];
+		$refresh_token = $rows ['refresh_token'];
+		echo "client account id:".$client->getAccountid()."<br/>";
+	}
+}
+
+echo "the last, client account id:".$client->getAccountid()."<br/>";

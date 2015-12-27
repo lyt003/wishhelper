@@ -14,10 +14,17 @@ $client = null;
 $isRunning = $_GET ['isRunning'];
 if ($isRunning == 1) {
 	$dbhelper->stopScheduleRunning ();
+	$dbhelper->resetSettingCount ();
 } else {
 	$dbhelper->startScheduleRunning ();
 	do {
-		sleep ( 60); // sleep for 10 minutes;
+		$duringtime = $dbhelper->getSettingDuringTime ();
+		if ($rows = mysql_fetch_array ( $duringtime )) {
+			sleep ( $rows ['during_time'] );
+		} else {
+			sleep ( 120 ); // sleep for 2 minutes defaultly;
+		}
+		$dbhelper->updateSettingCount ();
 		$curDate = date ( 'Ymd' );
 		$productsInfo = $dbhelper->getScheduleProducts ( $curDate );
 		while ( $productInfo = mysql_fetch_array ( $productsInfo ) ) {
@@ -32,8 +39,14 @@ if ($isRunning == 1) {
 					$clientid = $rows ['clientid'];
 					$clientsecret = $rows ['clientsecret'];
 					$refresh_token = $rows ['refresh_token'];
+					$dbhelper->updateSettingMsg ( "get new client of account:" . $accountid );
+				} else {
+					$dbhelper->updateSettingMsg ( "failed to get token of account:" . $accountid );
 				}
+			} else {
+				$dbhelper->updateSettingMsg ( "client account id:" . $client->getAccountid () );
 			}
+			$dbhelper->updateSettingMsg ( "process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid () );
 			$products = $dbhelper->getProducts ( $parent_sku );
 			$addProduct = 0;
 			$prod_res = null;
