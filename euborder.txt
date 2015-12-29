@@ -1,4 +1,4 @@
-鼠标先在要进行列编辑的起点点击，再同时按shift+alt不放，鼠标在要进行列编辑的结尾区域点击。
+
 
 
 SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
@@ -13,17 +13,14 @@ SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countryc
 |5651430350fe62322c7b6829|565143029a469a18a44ea8d1| | |Nikki M Manuel
 |5651513a45f1a532233287c3|5651513a66df6e18bc74aa4a| | |Diana DeGeurin
 
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where orderid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
-update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
-update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
-update orders set provider='USPS',tracking='',orderstatus = '1' where orderid = '';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+
 
 
 

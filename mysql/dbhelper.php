@@ -84,7 +84,7 @@ class dbhelper {
 		return $result;
 	}
 	public function getUSOrders() {
-		$USOrderSql = "SELECT orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0'";
+		$USOrderSql = "SELECT transactionid, orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0' order by transactionid";
 		return mysql_query ( $USOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
