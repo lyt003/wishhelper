@@ -60,6 +60,7 @@ $extraImages = $_POST ['Extra_Images'];
 $colors = $_POST ['colors'];
 $sizes = $_POST ['sizes'];
 $price = $_POST ['Price'];
+$incrementPrice = $_POST ['increment_price'];
 $quantity = $_POST ['Quantity'];
 $shipping = $_POST ['Shipping'];
 $shippingTime = $_POST ['Shipping_Time'];
@@ -105,12 +106,16 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$sizeArray = explode ( "|", $sizes );
 	
 	foreach ( $colorArray as $color ) {
+		$basePrice = $price;
+		$sizeCount = 0;
 		foreach ( $sizeArray as $size ) {
 			if ($color != null) {
 				if ($size != null) {
 					$productarray ['sku'] = $uniqueID . "_" . $color . "_" . $size;
 					$productarray ['color'] = $color;
 					$productarray ['size'] = $size;
+					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
+					$sizeCount ++;
 				} else {
 					$productarray ['sku'] = $uniqueID . "_" . $color;
 					$productarray ['color'] = $color;
@@ -119,11 +124,12 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				if ($size != null) {
 					$productarray ['sku'] = $uniqueID . "_" . $size;
 					$productarray ['size'] = $size;
+					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
+					$sizeCount ++;
 				} else {
 					$productarray ['sku'] = $uniqueID;
 				}
 			}
-			
 			$insertResult = $dbhelper->insertProduct ( $productarray );
 			if ($insertResult != '1') {
 				echo "insert failed" . "<br/>";
@@ -132,6 +138,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$productarray ['sku'] = null;
 			$productarray ['color'] = null;
 			$productarray ['size'] = null;
+			$productarray ['price'] = null;
 		}
 	}
 	if ($scheduleDate != null) {
@@ -396,6 +403,18 @@ form.submit();
 								<input class="input-block-level required" name="Price"
 									id="price" type="text" value="<?php echo $price?>"
 									placeholder="可接受：$100.99" />
+							</div>
+						</div>
+
+						<div class="control-group" style="display: block;">
+							<label class="control-label" data-col-index="1"><span
+								class="col-name">increment price</span></label>
+
+							<div class="controls input-append">
+								<input class="input-block-level required" name="increment_price"
+									id="increment_price" type="text"
+									value="<?php echo $incrementPrice?>"
+									placeholder="根据尺码的价格递增量； 可接受：$2" />
 							</div>
 						</div>
 
