@@ -67,29 +67,29 @@ for($count = 0; $count < $i; $count ++) {
 	if (! empty ( $token )) {
 		// Get an array of all unfufilled orders since January 20, 2010
 		try {
-		    $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-		} catch (ServiceResponseException $e) {
-            if ($e->getStatusCode() == 1015) {
-                $response = $client->refreshToken($clientid, $clientsecret, $refresh_token);
-                echo "<br/>errorMessage:" . $response->getMessage();
-                $values = $response->getResponse()->{'data'};
-                $newToken = '0';
-                $newRefresh_token = '0';
-                foreach ($values as $k => $v) {
-                    echo 'key  ' . $k . '  value:' . $v;
-                    if ($k == 'access_token') {
-                        $newToken = $v;
-                    }
-                    if ($k == 'refresh_token') {
-                        $newRefresh_token = $v;
-                    }
-                }
-                echo "<br/>newToken = ".$newToken.$newRefresh_token;
-                $dbhelper->updateUserToken($accountid, $newToken, $newRefresh_token);
-                $client = new WishClient ( $newToken, 'prod' );
-                $unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-            }
-        }
+			$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+		} catch ( ServiceResponseException $e ) {
+			if ($e->getStatusCode () == 1015) {
+				$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
+				echo "<br/>errorMessage:" . $response->getMessage ();
+				$values = $response->getResponse ()->{'data'};
+				$newToken = '0';
+				$newRefresh_token = '0';
+				foreach ( $values as $k => $v ) {
+					echo 'key  ' . $k . '  value:' . $v;
+					if ($k == 'access_token') {
+						$newToken = $v;
+					}
+					if ($k == 'refresh_token') {
+						$newRefresh_token = $v;
+					}
+				}
+				echo "<br/>newToken = " . $newToken . $newRefresh_token;
+				$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+				$client = new WishClient ( $newToken, 'prod' );
+				$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+			}
+		}
 		echo "\n get orders count:" . count ( $unfulfilled_orders ) . "<br/>";
 		$orders_count = count ( $unfulfilled_orders );
 		
@@ -195,7 +195,7 @@ for($count = 0; $count < $i; $count ++) {
 					}
 				}
 				
-				$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 8 ) );
+				$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 3, 9 ) );
 				$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 				$quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
 				$packageno = $xml->addChild ( "PackageNo" );
@@ -270,7 +270,7 @@ for($count = 0; $count < $i; $count ++) {
 					$dbhelper->updateOrder ( $orderNoTracking );
 				}
 				if (! empty ( $error ))
-					echo "<br/>Failed to get the tracking from YW, error:" . $error."<br/>";
+					echo "<br/>Failed to get the tracking from YW, error:" . $error . "<br/>";
 			}
 		}
 	}

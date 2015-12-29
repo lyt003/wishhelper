@@ -10,7 +10,7 @@ use Wish\WishResponse;
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
-echo substr ( 10000 * microtime ( true ), 8 ) . "<br/>";
+echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
 
 $printTrackingnumbers = "<string>RG228167292CN,RG228167292CN,";
 $printTrackingnumbers = substr ( $printTrackingnumbers, 0, strlen ( $printTrackingnumbers ) - 1 ) . "</string>";
