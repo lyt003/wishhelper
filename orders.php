@@ -265,14 +265,12 @@ for($count = 0; $count < $i; $count ++) {
 				echo "tracking:" . $trackingnumber . "success:" . $success;
 				if (strcmp ( $success, "true" ) == 0) {
 					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
+					$orderNoTracking ['tracking'] = $trackingnumber;
+					$orderNoTracking ['orderstatus'] = '1';
+					$dbhelper->updateOrder ( $orderNoTracking );
 				}
 				if (! empty ( $error ))
-					echo "error:" . $error;
-				
-				$orderNoTracking ['tracking'] = $trackingnumber;
-				$orderNoTracking ['orderstatus'] = '1';
-				
-				$dbhelper->updateOrder ( $orderNoTracking );
+					echo "<br/>Failed to get the tracking from YW, error:" . $error."<br/>";
 			}
 		}
 	}
