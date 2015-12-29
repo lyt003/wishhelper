@@ -262,6 +262,13 @@ for($count = 0; $count < $i; $count ++) {
 				$response = $resultXML->Response;
 				$trackingnumber = $response->Epcode;
 				$success = $response->Success;
+				if ($trackingnumber == null || strcmp ( $trackingnumber, "" ) == 0) {
+					$createExpress = $resultXML->CreatedExpress;
+					$trackingnumber = $createExpress->Epcode;
+					if ($trackingnumber == null || strcmp ( $trackingnumber, "" ) == 0) {
+						$trackingnumber = $createExpress->YanwenNumber;
+					}
+				}
 				echo "tracking:" . $trackingnumber . "success:" . $success;
 				if (strcmp ( $success, "true" ) == 0) {
 					$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
