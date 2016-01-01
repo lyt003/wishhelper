@@ -195,7 +195,7 @@ for($count = 0; $count < $i; $count ++) {
 					}
 				}
 				
-				$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 3, 9 ) );
+				$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 				$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 				$quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
 				$packageno = $xml->addChild ( "PackageNo" );
