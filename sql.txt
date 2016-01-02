@@ -112,6 +112,15 @@ CREATE TABLE `setting`(
 ) DEFAULT CHARSET=utf8;
 insert into setting(schedule_running,running_count,during_time) values(0,0,60);
 
+DROP TABLE IF EXISTS `tracking_data`;
+CREATE TABLE `tracking_data`(
+	`userid` int(11),
+	`tracking_number` varchar(20),
+	`device_id` varchar(50),
+	`tracking_date` varchar(10),
+	PRIMARY KEY (`tracking_number`)
+) DEFAULT CHARSET=utf8;
+
 
 
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");

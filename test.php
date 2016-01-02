@@ -1,4 +1,5 @@
 <?php
+header ( "Content-Type: text/html;charset=utf-8" );
 include 'Wish/WishClient.php';
 include 'mysql/dbhelper.php';
 use Wish\WishClient;
@@ -110,8 +111,11 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 echo "the last, client account id:".$client->getAccountid()."<br/>";
 
 
-sleep(60);
+/* sleep(60);
 echo "after 60".date("Y-m-d H:i:s");
 
 sleep(60);
-echo "after 60".date("Y-m-d H:i:s");
+echo "after 60".date("Y-m-d H:i:s"); */
+
+?>
+<a href="addTrackingData.php">新增单号</a>

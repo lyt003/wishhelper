@@ -147,6 +147,10 @@ class dbhelper {
 		$getDuringTimeSql = "select during_time from setting";
 		return mysql_query ( $getDuringTimeSql );
 	}
+	public function insertTrackingData($trackingData) {
+		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . $trackingData ['tracking_number'] . '","' . $trackingData ['device_id'] . '","' . $trackingData ['tracking_date'] . '")';
+		return mysql_query ( $insertTracking );
+	}
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );
