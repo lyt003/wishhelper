@@ -243,6 +243,14 @@ if ($productName != null && $description != null && $mainImage != null && $price
 </head>
 <script type="text/javascript">
 
+	function showIncrementPrice(obj){
+		if(obj == "" || obj.length<2){
+			document.getElementById("increment_div").style.display="none";
+		}else{
+			document.getElementById("increment_div").style.display="block";
+		}
+	}
+
 	function updateEarnings(){
 		var price = document.getElementById("price").value;
 		var shipping = document.getElementById("shipping").value;
@@ -394,7 +402,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								class="col-name">Sizes</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level required" name="sizes"
+								<input class="input-block-level required" name="sizes" onchange="showIncrementPrice(this.value)"
 									id="sizes" type="text" value="<?php echo $sizes?>"
 									placeholder="可接受：size|size|size" />
 							</div>
@@ -417,7 +425,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							</div>
 						</div>
 
-						<div class="control-group" style="display: block;">
+						<div class="control-group" style="display: none;" id="increment_div">
 							<label class="control-label" data-col-index="1"><span
 								class="col-name">increment price</span></label>
 
