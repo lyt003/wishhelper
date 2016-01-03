@@ -243,45 +243,56 @@ if ($productName != null && $description != null && $mainImage != null && $price
 </head>
 <script type="text/javascript">
 
+	function updateEarnings(){
+		var price = document.getElementById("price").value;
+		var shipping = document.getElementById("shipping").value;
+		if(price == "")
+			price = 0;
+		if(shipping == "")
+			shipping = 0;
+		var earn = (parseInt(price) + parseInt(shipping)) * 0.85;
+		document.getElementById("earnings").value=earn;
+	} 
+
 	function createProduct(){
 		var productName = document.getElementById("product_name").value;
 		if(productName == null || productName == ''){
 			alert("name can't be empty");
-			return;}
-		var description = document.getElementById("description").value;
-			if(description == null || description == ''){
-				alert("description can't be empty");
-				return;}
-	var tags = document.getElementById("tags").value;
-	if(tags == null || tags == ''){
-		alert("tags can't be empty");
 		return;}
-var uniqueID = document.getElementById("unique_id").value;
-if(uniqueID == null || uniqueID == ''){
-	alert("uniqueID can't be empty");
-	return;}
-var mainImage = document.getElementById("main_image").value;
-if(mainImage == null || mainImage == ''){
-	alert("mainImage can't be empty");
-	return;}
-var price = document.getElementById("price").value;
-if(price == null || price == ''){
-	alert("price can't be empty");
-	return;}
-var quantity = document.getElementById("quantity").value;
-if(quantity == null || quantity == ''){
-	alert("quantity can't be empty");
-	return;}
-var shipping = document.getElementById("shipping").value;
-if(shipping == null || shipping == ''){
-	alert("shipping can't be empty");
-	return;}
-var shippingTime = document.getElementById("shipping_time").value;
-if(shippingTime == null || shippingTime == ''){
-	alert("shippingTime can't be empty");
-	return;}
-var form = document.getElementById("add_product");
-form.submit();
+		var description = document.getElementById("description").value;
+		if(description == null || description == ''){
+			alert("description can't be empty");
+		return;}
+		var tags = document.getElementById("tags").value;
+		if(tags == null || tags == ''){
+			alert("tags can't be empty");
+		return;}
+		var uniqueID = document.getElementById("unique_id").value;
+		if(uniqueID == null || uniqueID == ''){
+			alert("uniqueID can't be empty");
+			return;}
+		var mainImage = document.getElementById("main_image").value;
+		if(mainImage == null || mainImage == ''){
+			alert("mainImage can't be empty");
+			return;}
+		var price = document.getElementById("price").value;
+		if(price == null || price == ''){
+			alert("price can't be empty");
+			return;}
+		var quantity = document.getElementById("quantity").value;
+		if(quantity == null || quantity == ''){
+			alert("quantity can't be empty");
+			return;}
+		var shipping = document.getElementById("shipping").value;
+		if(shipping == null || shipping == ''){
+			alert("shipping can't be empty");
+			return;}
+		var shippingTime = document.getElementById("shipping_time").value;
+		if(shippingTime == null || shippingTime == ''){
+			alert("shippingTime can't be empty");
+			return;}
+		var form = document.getElementById("add_product");
+		form.submit();
 	}
 </script>
 <body>
@@ -400,7 +411,7 @@ form.submit();
 								class="col-name">Price</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level required" name="Price"
+								<input  class="input-block-level required" name="Price" onChange="updateEarnings()"
 									id="price" type="text" value="<?php echo $price?>"
 									placeholder="可接受：$100.99" />
 							</div>
@@ -434,7 +445,7 @@ form.submit();
 								class="col-name">Shipping</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level required" name="Shipping"
+								<input class="input-block-level required" name="Shipping" onchange="updateEarnings()"
 									id="shipping" type="text" value="<?php echo $shipping?>"
 									placeholder="可接受：$4.00" />
 							</div>
@@ -444,7 +455,7 @@ form.submit();
 							<label class="control-label"><span class="col-name">利润</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level" type="text" id="earnings"
+								<input class="input-block-level" type="text" id="earnings" value=""
 									disabled="disabled" />
 							</div>
 						</div>
