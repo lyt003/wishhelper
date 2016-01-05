@@ -1,5 +1,8 @@
 
 
+SELECT * FROM `tracking_data` where `tracking_date`  = '20160105' and `tracking_number`  LIKE  'L%'
+SELECT * FROM `tracking_data` where `tracking_date`  = '20160105' and `tracking_number` not LIKE  'L%'
+
 
 SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
 
@@ -13,17 +16,23 @@ SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countryc
 |5651430350fe62322c7b6829|565143029a469a18a44ea8d1| | |Nikki M Manuel
 |5651513a45f1a532233287c3|5651513a66df6e18bc74aa4a| | |Diana DeGeurin
 
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '56513fbe0b98e03237c7baef';
+update orders set provider='USPS',tracking='LS457389495CN',orderstatus = '1' where transactionid = '568aa203f6b06f3eafa45661';
+update orders set provider='USPS',tracking='LS456014338CN',orderstatus = '1' where transactionid = '5689de792e60131530952adb';
+update orders set provider='USPS',tracking='LS456008709CN',orderstatus = '1' where transactionid = '5689fbf02e601315599531a6';
+update orders set provider='USPS',tracking='LS456014355CN',orderstatus = '1' where transactionid = '5689fca1da8e91e51d4d1e80';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
+update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
 
+                                LS456008690CN	US	McQueltin Lane	0.1	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次
+	5689de792e60131530952adb	LS456014338CN	US	Nicole Kuntz	0.03	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次
+	5689fbf02e601315599531a6	LS456008709CN	US	TIANNA DEADMON	0.03	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次
+	5689fca1da8e91e51d4d1e80	LS456014355CN
 
-
-
+56897880b8c05f303e5b24aa
+5689de792e60131530952adb
+5689fbf02e601315599531a6
+5689fca1da8e91e51d4d1e80
 
 update orders set orderstatus = '1' where countrycode = 'US' and accountid = '1';
 SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
