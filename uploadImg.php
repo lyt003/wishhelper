@@ -23,13 +23,13 @@ function GrabImage($url,$filename="") {
 	return $filename;
 }
 
-$oldimageurl = $_POST ['old_image'];
+@$oldimageurl = $_POST ['old_image'];
 echo "<br/>".$oldimageurl."<br/>";
 if ($oldimageurl != null) {
 	$new=GrabImage($oldimageurl,"./images/".basename($oldimageurl));
 	
 	//获取压缩该图片文件的地址;
-	$newURL = "http://www.wishconsole.com/images/".basename($oldimageurl)."_800x800.jpg";
+	@$newURL = "http://www.wishconsole.com/images/".basename($oldimageurl)."_800x800.jpg";
 }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -74,7 +74,7 @@ if ($oldimageurl != null) {
 							class="col-name">压缩后图片地址</span></label>
 						<div class="controls input-append">
 							<input class="input-block-level required" id="new_image"
-								name="new_image" type="text" value="<?php echo $newURL?>" />
+								name="new_image" type="text" value="<?php echo @$newURL?>" />
 						</div>
 					</div>
 
@@ -84,7 +84,7 @@ if ($oldimageurl != null) {
 						class="btn btn-primary btn-large" onclick="cropImage()">压缩</button>
 				</div>
 				<div id="buttons-section" class="control-group text-right">
-					<img id="new_url" alt="" src="<?php echo $newURL?>" />
+					<img id="new_url" alt="" src="<?php echo @$newURL?>" />
 				</div>
 			</div>
 		</div>
