@@ -24,7 +24,6 @@ function GrabImage($url,$filename="") {
 }
 
 @$oldimageurl = $_POST ['old_image'];
-echo "<br/>".$oldimageurl."<br/>";
 if ($oldimageurl != null) {
 	$new=GrabImage($oldimageurl,"./images/".basename($oldimageurl));
 	
