@@ -96,6 +96,7 @@ if ($isRunning == 1) {
 							$client = new WishClient ( $newToken, 'prod' );
 							$prod_res = $client->createProduct ( $currentProduct );
 						}
+						$dbhelper->updateSettingMsg ( $e->getErrorMessage()." of account " . $accountid."<br/>" );
 					}
 					print_r ( $prod_res );
 					if ($prod_res != null) {
@@ -127,6 +128,7 @@ if ($isRunning == 1) {
 			}
 			
 			$dbhelper->updateScheduleFinished ( $productInfo );
+			$dbhelper->updateSettingMsg ( "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid () );
 		}
 	} while ( $dbhelper->isScheduleRunning () );
 }

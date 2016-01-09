@@ -103,7 +103,8 @@ class dbhelper {
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
 		$result = mysql_query ( $sql );
-		if ($row = mysql_fetch_array ( $result )) {
+		$row = mysql_fetch_array ( $result );
+		if($row != null){
 			$value = $row ['schedule_running'];
 			return ($value == 1);
 		}
