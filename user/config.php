@@ -1,8 +1,8 @@
 <?php
 $server="localhost";//数据库地址
 $username="root";//数据库用户名
-$password="root";//数据库密码
-$database="";//数据库名
+$password="yangwu";//数据库密码
+$database="wish";//数据库名
 
 //---------------------------------------------------------------------------------------------
 //矮个芝麻版权所有 http://www.286shequ.com
