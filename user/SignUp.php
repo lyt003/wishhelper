@@ -1,22 +1,22 @@
 <html>
 <head>
-<title>ÓÃ»§×¢²á</title>
+<title>ç”¨æˆ·æ³¨å†Œ</title>
 <meta content="text/html; charset=gb2312" http-equiv="Content-Type">
 </head>
 <body>
 <form name="form1" method="post" action="add.php">
-<h1>ÐÂÓÃ»§×¢²á</h1><br>
+<h1>æ–°ç”¨æˆ·æ³¨å†Œ</h1><br>
 <table width="400" border="0">
 <tr>
-<td align="center">ÓÃ»§Ãû</td>
+<td align="center">ç”¨æˆ·å</td>
 <td><input name="UserName" type="text" id="UserName" size="20"></input></td>
 </tr>
 <tr>
-<td align="center">ÃÜ  Âë</td>
+<td align="center">å¯†  ç </td>
 <td><input name="Password" type="password" id="Password" size="20"></input></td>
 </tr>
 <tr>
-<td align="center">È·ÈÏÃÜÂë</td>
+<td align="center">ç¡®è®¤å¯†ç </td>
 <td><input name="ConfirmPassword" type="password" id="ConfirmPassword" size="20"></input></td>
 </tr>
 <tr>
@@ -24,8 +24,8 @@
 <td><input name="Email" type="text" id="Email" size="20"></input></td>
 </tr>
 </table>
-<input name="SignUp" type="submit" id="SignUp" value="×¢²á"></input><br>
-Èç¹ûÄúÒÑ¾­ÓÐÕËºÅ£¬Çëµã»÷<a href="login.php">ÕâÀï</a>µÇÂ½¡£
+<input name="SignUp" type="submit" id="SignUp" value="æ³¨å†Œ"></input><br>
+å¦‚æžœæ‚¨å·²ç»æœ‰è´¦å·ï¼Œè¯·ç‚¹å‡»<a href="login.php">è¿™é‡Œ</a>ç™»é™†ã€‚
 </form>
 </body>
 </html>

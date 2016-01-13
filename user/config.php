@@ -1,22 +1,22 @@
 <?php
-$server="localhost";//���ݿ��ַ
-$username="root";//���ݿ��û���
-$password="yangwu";//���ݿ�����
-$database="wish";//���ݿ���
+$server="localhost";//数据库地址
+$username="root";//数据库用户名
+$password="root";//数据库密码
+$database="";//数据库名
 
 //---------------------------------------------------------------------------------------------
-//����֥���Ȩ���� http://www.286shequ.com
+//矮个芝麻版权所有 http://www.286shequ.com
 //QQ:470784782
 //---------------------------------------------------------------------------------------------
 if($database=="")
 {
- $query="use databasename";
+ $query="use 数据库名";
  if(mysql_query($query)==null)
  {
   $query="create database sqlsd66juu689ku";
   if(mysql_query($query)==1)
   {
-   //�������ݿ�ɹ�����ʼ�������ݿ�
+   //创建数据库成功，开始连接数据库
    $database="sqlsd66juu689ku";
    $conn=mysql_connect($server,$username,$password)
    or die("could not connect mysql");
@@ -25,12 +25,12 @@ if($database=="")
   }
   else
   {
-   echo "Error while creating database (Error".mysql_errno().":\"".mysql_error()."\")<br>";//�������ݿ����
+   echo "Error while creating database (Error".mysql_errno().":\"".mysql_error()."\")<br>";//创建数据库出错
   }
  }
  else
  {
-  //������ݿ��д���sqlsd66juu689ku���ݿ�
+  //如果数据库中存在sqlsd66juu689ku数据库
   $database="sqlsd66juu689ku";
   $conn=mysql_connect($server,$username,$password)
   or die("could not connect mysql");
@@ -40,7 +40,7 @@ if($database=="")
 }
 else
 {
- //���ѡ����Ǳ�����ݿ⣬Ҳ����˵$database��Ϊ��
+ //如果选择的是别的数据库，也就是说$database不为空
  $conn=mysql_connect($server,$username,$password)
  or die("could not connect mysql");
  mysql_select_db($database,$conn)

@@ -1,16 +1,16 @@
 <html>
 <head>
-<title>ÖØÐÂ·¢ËÍ¼¤»îÂë</title>
+<title>é‡æ–°å‘é€æ¿€æ´»ç </title>
 <meta http-equiv="Conten-Type" content="text/html; charset=gb2312"></meta>
 </head>
 <body>
 <?php
-//»ñÈ¡ÓÃ»§Ãû£¬¼¤»îÂë£¬ÓÊ¼þµØÖ·
+//èŽ·å–ç”¨æˆ·åï¼Œæ¿€æ´»ç ï¼Œé‚®ä»¶åœ°å€
 $UserName1=$HTTP_POST_VARS["UserName"];
 $actNum1=$HTTP_POST_VARS["actNum"];
 $Email1=$HTTP_POST_VARS["Email"];
-$Resend=$HTTP_POST_VARS["Resend"];//¼ì²éÊÇ·ñÐèÒªÖØ·¢¼¤»îÂë.ÔÚµã»÷ÖØÐÂ·¢ËÍ¼¤»îÂëºó´«µÝµÄÒþ²ØÊý¾Ý
-//Èç¹ûÓÃ»§ÒªÇóÔÙ´Î·¢ËÍ¼¤»îÂë
+$Resend=$HTTP_POST_VARS["Resend"];//æ£€æŸ¥æ˜¯å¦éœ€è¦é‡å‘æ¿€æ´»ç .åœ¨ç‚¹å‡»é‡æ–°å‘é€æ¿€æ´»ç åŽä¼ é€’çš„éšè—æ•°æ®
+//å¦‚æžœç”¨æˆ·è¦æ±‚å†æ¬¡å‘é€æ¿€æ´»ç 
 include 'config.php';
 if ($Resend==1)
 {
@@ -20,19 +20,19 @@ $row=mysql_fetch_array($result);
 if ($row)
 {
  $actNum=$row["actNum"];
- $subject="¼¤»îÂë";
- $message="ÄúµÄ¼¤»îÂëÎª£º$actNum";
+ $subject="æ¿€æ´»ç ";
+ $message="æ‚¨çš„æ¿€æ´»ç ä¸ºï¼š$actNum";
  mail($Email1,$subject,$message);
  ?>
- ¼¤»îÂëÒÑ¾­ÖØÐÂ·¢ËÍ£¬ÇëµÇÂ½ÓÊÏä»ñÈ¡¼¤»îÂë¡£<br>
- µã»÷<a href="activate.php">ÕâÀï</a>ÖØÐÂ¼¤»î¡£
+ æ¿€æ´»ç å·²ç»é‡æ–°å‘é€ï¼Œè¯·ç™»é™†é‚®ç®±èŽ·å–æ¿€æ´»ç ã€‚<br>
+ ç‚¹å‡»<a href="activate.php">è¿™é‡Œ</a>é‡æ–°æ¿€æ´»ã€‚
  <?php
 }
 else
 {
  ?>
- ÓÃ»§Ãû»òÕßµç×ÓÓÊ¼þ´íÎó¡£<br>
- µã»÷<a href="activate.php">ÕâÀï</a>·µ»Ø¡£
+ ç”¨æˆ·åæˆ–è€…ç”µå­é‚®ä»¶é”™è¯¯ã€‚<br>
+ ç‚¹å‡»<a href="activate.php">è¿™é‡Œ</a>è¿”å›žã€‚
  <?php
 }
 }

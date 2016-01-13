@@ -1,33 +1,33 @@
 <html>
 <head>
-<title>¼¤»î</title>
+<title>æ¿€æ´»</title>
 <meta http-equiv="Conten-Type" content="text/html; charset=gb2312"></meta>
 </head>
 <body>
 <?php
-//»ñÈ¡ÓÃ»§Ãû£¬¼¤»îÂë
+//èŽ·å–ç”¨æˆ·åï¼Œæ¿€æ´»ç 
 $UserName1=$HTTP_POST_VARS["UserName"];
 $actNum1=$HTTP_POST_VARS["actNum"];
 include 'config.php';
-//¼ì²éÓÃ»§ÃûºÍ¼¤»îÂëÊÇ·ñÕýÈ·
+//æ£€æŸ¥ç”¨æˆ·åå’Œæ¿€æ´»ç æ˜¯å¦æ­£ç¡®
 $query="select * from als_signup where UserName='$UserName1' and actNum='$actNum1'";
 $result=mysql_query($query);
 $row=mysql_fetch_array($result);
 if ($row)
 {
- //Èç¹ûÓÃ»§ÃûºÍ¼¤»îÂëÕýÈ·£¬³É¹¦¼¤»î£¬½«Êý¾Ý¿â±íÖÐ¼¤»îÂëÉèÎª0
+ //å¦‚æžœç”¨æˆ·åå’Œæ¿€æ´»ç æ­£ç¡®ï¼ŒæˆåŠŸæ¿€æ´»ï¼Œå°†æ•°æ®åº“è¡¨ä¸­æ¿€æ´»ç è®¾ä¸º0
  $query="update als_signup set actNum='0' where UserName='$UserName1'";
  $result=mysql_query($query);
  ?>
- ÄúÒÑ¾­³É¹¦¼¤»îÕËºÅ¡£<br>
- Çëµã»÷<a href="login.php">ÕâÀï</a>µÇÂ½
+ æ‚¨å·²ç»æˆåŠŸæ¿€æ´»è´¦å·ã€‚<br>
+ è¯·ç‚¹å‡»<a href="login.php">è¿™é‡Œ</a>ç™»é™†
  <?php
 }
 else
 {
- echo "ÓÃ»§Ãû»òÕß¼¤»îÂë´íÎó£¬Çë·µ»ØÖØÐÂÊäÈë<br>";
+ echo "ç”¨æˆ·åæˆ–è€…æ¿€æ´»ç é”™è¯¯ï¼Œè¯·è¿”å›žé‡æ–°è¾“å…¥<br>";
  ?>
- <a href="activate.php">·µ»Ø</a>
+ <a href="activate.php">è¿”å›ž</a>
  <?php
 }
 ?>

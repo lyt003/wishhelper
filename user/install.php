@@ -1,12 +1,12 @@
 <?php
 
 //---------------------------------------------------------------------------------------------
-//����֥���Ȩ���� http://www.286shequ.com
+//矮个芝麻版权所有 http://www.286shequ.com
 //QQ:470784782
 //---------------------------------------------------------------------------------------------
-//�������ݿ������ļ�
+//导入数据库连接文件
 include 'config.php';
-//�Զ���װ���ݿ��
+//自动安装数据库表
 $query="create table als_signup (
 UserName varchar(20),
 Password varchar(20),
@@ -17,7 +17,7 @@ SignUpdate varchar(20),
 LastLogin varchar(20),
 LastLoginFail varchar(20),
 NumLoginFail tinyint
-) DEFAULT CHARSET=utf8";
+)";
 $result=mysql_query($query);
 if($result==1)
 {

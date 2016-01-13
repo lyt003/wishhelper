@@ -1,18 +1,18 @@
 <?php
-//ÓÃ»§×¢²áÒÔºóµÄÊı¾İ´¦ÀíÎÄ¼ş¡£ĞèÒªÏÈ¼ì²éÊı¾İºÏ·¨ĞÔ£¬È»ºóĞ´ÈëÊı¾İ¿â
-//»ñÈ¡×¢²áÓÃ»§Ìá½»µÄÊı¾İ
-$UserName1=$_POST["UserName"];//ÓÃ»§Ãû
-$Password1=$_POST["Password"];//ÃÜÂë
-$ConfirmPassword1=$_POST["ConfirmPassword"];//È·ÈÏÃÜÂë
-$Email1=$_POST["Email"];//ÓÊÏä
-//¶¨Òå±£´æ¼¤»îÂë±äÁ¿
+//ç”¨æˆ·æ³¨å†Œä»¥åçš„æ•°æ®å¤„ç†æ–‡ä»¶ã€‚éœ€è¦å…ˆæ£€æŸ¥æ•°æ®åˆæ³•æ€§ï¼Œç„¶åå†™å…¥æ•°æ®åº“
+//è·å–æ³¨å†Œç”¨æˆ·æäº¤çš„æ•°æ®
+$UserName1=$_POST["UserName"];//ç”¨æˆ·å
+$Password1=$_POST["Password"];//å¯†ç 
+$ConfirmPassword1=$_POST["ConfirmPassword"];//ç¡®è®¤å¯†ç 
+$Email1=$_POST["Email"];//é‚®ç®±
+//å®šä¹‰ä¿å­˜æ¿€æ´»ç å˜é‡
 $actnum="";
-//µ¼ÈëÊı¾İ¿âÎÄ¼ş
+//å¯¼å…¥æ•°æ®åº“æ–‡ä»¶
 include 'config.php';
-//¶¨Òå²úÉú¼¤»îÂëº¯Êı
+//å®šä¹‰äº§ç”Ÿæ¿€æ´»ç å‡½æ•°
 
 //---------------------------------------------------------------------------------------------
-//°«¸öÖ¥Âé°æÈ¨ËùÓĞ http://www.286shequ.com
+//çŸ®ä¸ªèŠéº»ç‰ˆæƒæ‰€æœ‰ http://www.286shequ.com
 //QQ:470784782
 //---------------------------------------------------------------------------------------------
 function Check_actnum()
@@ -22,123 +22,123 @@ $chars_for_actnum=array("A","B","C","D","E","F","G","H","I","J","K","L",
 "e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v",
 "w","x","y","z","1","2","3","4","5","6","7","8","9","0"
 );
-for ($i=1;$i<=20;$i++)//Éú³ÉÒ»¸ö20¸ö×Ö·ûµÄ¼¤»îÂë
+for ($i=1;$i<=20;$i++)//ç”Ÿæˆä¸€ä¸ª20ä¸ªå­—ç¬¦çš„æ¿€æ´»ç 
 {
  $actnum.=$chars_for_actnum[mt_rand(0,count($chars_for_actnum)-1)];
 }
 return $actnum;
 }
-//ÅĞ¶ÏÓÃ»§Ãûº¯Êı
-function Check_username($UserName)//²ÎÊıÎªÓÃ»§×¢²áµÄÓÃ»§Ãû
+//åˆ¤æ–­ç”¨æˆ·åå‡½æ•°
+function Check_username($UserName)//å‚æ•°ä¸ºç”¨æˆ·æ³¨å†Œçš„ç”¨æˆ·å
 {
- //ÓÃ»§ÃûÈı¸ö·½Ãæ¼ì²é
- //ÊÇ·ñÎª¿Õ   ×Ö·û´®¼ì²â   ³¤¶È¼ì²â
- $Max_Strlen_UserName=16;//ÓÃ»§Ãû×î´ó³¤¶È
- $Min_Strlen_UserName=4;//ÓÃ»§Ãû×î¶Ì³¤¶È
- $UserNameChars="^[A-Za-z0-9_-]";//×Ö·û´®¼ì²âµÄÕıÔò±í´ïÊ½
- $UserNameGood="ÓÃ»§Ãû¼ì²âÕıÈ·";//¶¨Òå·µ»ØµÄ×Ö·û´®±äÁ¿
+ //ç”¨æˆ·åä¸‰ä¸ªæ–¹é¢æ£€æŸ¥
+ //æ˜¯å¦ä¸ºç©º   å­—ç¬¦ä¸²æ£€æµ‹   é•¿åº¦æ£€æµ‹
+ $Max_Strlen_UserName=16;//ç”¨æˆ·åæœ€å¤§é•¿åº¦
+ $Min_Strlen_UserName=4;//ç”¨æˆ·åæœ€çŸ­é•¿åº¦
+ $UserNameChars="^[A-Za-z0-9_-]";//å­—ç¬¦ä¸²æ£€æµ‹çš„æ­£åˆ™è¡¨è¾¾å¼
+ $UserNameGood="ç”¨æˆ·åæ£€æµ‹æ­£ç¡®";//å®šä¹‰è¿”å›çš„å­—ç¬¦ä¸²å˜é‡
  if($UserName=="")
  {
-  $UserNameGood="ÓÃ»§Ãû²»ÄÜÎª¿Õ";
+  $UserNameGood="ç”¨æˆ·åä¸èƒ½ä¸ºç©º";
   return $UserNameGood;
  }
- if(!ereg("$UserNameChars",$UserName))//ÕıÔò±í´ïÊ½Æ¥Åä¼ì²é
+ if(!ereg("$UserNameChars",$UserName))//æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…æ£€æŸ¥
  {
-  $UserNameGood="ÓÃ»§Ãû×Ö·û´®¼ì²â²»ÕıÈ·";
+  $UserNameGood="ç”¨æˆ·åå­—ç¬¦ä¸²æ£€æµ‹ä¸æ­£ç¡®";
   return $UserNameGood;
  }
  if (strlen($UserName)<$Min_Strlen_UserName || strlen($UserName)>$Max_Strlen_UserName)
  {
-  $UserNameGood="ÓÃ»§Ãû×Ö³¤¶È¼ì²â²»ÕıÈ·";
+  $UserNameGood="ç”¨æˆ·åå­—é•¿åº¦æ£€æµ‹ä¸æ­£ç¡®";
   return $UserNameGood;
  }
  return $UserNameGood;
 }
-//ÅĞ¶ÏÃÜÂëÊÇ·ñºÏ·¨º¯Êı
+//åˆ¤æ–­å¯†ç æ˜¯å¦åˆæ³•å‡½æ•°
 function Check_Password($Password)
 {
- //ÊÇ·ñÎª¿Õ    ×Ö·û´®¼ì²â      ³¤¶È¼ì²â
- $Max_Strlen_Password=16;//ÃÜÂë×î´ó³¤¶È
- $Min_Strlen_Password=6;//ÃÜÂë×î¶Ì³¤¶È
- $PasswordChars="^[A-Za-z0-9_-]";//ÃÜÂë×Ö·û´®¼ì²âÕıÔò±í´ïÊ½
- $PasswordGood="ÃÜÂë¼ì²âÕıÈ·";//¶¨Òå·µ»ØµÄ×Ö·û´®±äÁ¿
+ //æ˜¯å¦ä¸ºç©º    å­—ç¬¦ä¸²æ£€æµ‹      é•¿åº¦æ£€æµ‹
+ $Max_Strlen_Password=16;//å¯†ç æœ€å¤§é•¿åº¦
+ $Min_Strlen_Password=6;//å¯†ç æœ€çŸ­é•¿åº¦
+ $PasswordChars="^[A-Za-z0-9_-]";//å¯†ç å­—ç¬¦ä¸²æ£€æµ‹æ­£åˆ™è¡¨è¾¾å¼
+ $PasswordGood="å¯†ç æ£€æµ‹æ­£ç¡®";//å®šä¹‰è¿”å›çš„å­—ç¬¦ä¸²å˜é‡
  if($Password=="")
  {
-  $PasswordGood="ÃÜÂë²»ÄÜÎª¿Õ";
+  $PasswordGood="å¯†ç ä¸èƒ½ä¸ºç©º";
   return $PasswordGood;
  }
  if(!ereg("$PasswordChars",$Password))
  {
-  $PasswordGood="ÃÜÂë×Ö·û´®¼ì²â²»ÕıÈ·";
+  $PasswordGood="å¯†ç å­—ç¬¦ä¸²æ£€æµ‹ä¸æ­£ç¡®";
   return $PasswordGood;
  }
  if(strlen($Password)<$Min_Strlen_Password || strlen($Password)>$Max_Strlen_Password)
  {
-  $PasswordGood="ÃÜÂë³¤¶È¼ì²â²»ÕıÈ·";
+  $PasswordGood="å¯†ç é•¿åº¦æ£€æµ‹ä¸æ­£ç¡®";
   return $PasswordGood;
  }
  return $PasswordGood;
 }
-//ÅĞ¶ÏÓÊÏäÊÇ·ñºÏ·¨º¯Êı
+//åˆ¤æ–­é‚®ç®±æ˜¯å¦åˆæ³•å‡½æ•°
 function Check_Email($Email)
 {
- $EmailChars="^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*$";//ÕıÔò±í´ïÊ½ÅĞ¶ÏÊÇ·ñÊÇºÏ·¨ÓÊÏäµØÖ·
- $EmailGood="ÓÊÏä¼ì²âÕıÈ·";
+ $EmailChars="^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*$";//æ­£åˆ™è¡¨è¾¾å¼åˆ¤æ–­æ˜¯å¦æ˜¯åˆæ³•é‚®ç®±åœ°å€
+ $EmailGood="é‚®ç®±æ£€æµ‹æ­£ç¡®";
  if($Email=="")
  {
-  $EmailGood="ÓÊÏä²»ÄÜÎª¿Õ";
+  $EmailGood="é‚®ç®±ä¸èƒ½ä¸ºç©º";
   return $EmailGood;
  }
- if(!ereg("$EmailChars",$Email))//ÕıÔò±í´ïÊ½Æ¥Åä¼ì²é
+ if(!ereg("$EmailChars",$Email))//æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…æ£€æŸ¥
  {
-  $EmailGood="ÓÊÏä¸ñÊ½²»ÕıÈ·";
+  $EmailGood="é‚®ç®±æ ¼å¼ä¸æ­£ç¡®";
   return $EmailGood;
  }
  return $EmailGood;
 }
-//ÅĞ¶ÏÁ½´ÎÃÜÂëÊäÈëÊÇ·ñÒ»ÖÂ
+//åˆ¤æ–­ä¸¤æ¬¡å¯†ç è¾“å…¥æ˜¯å¦ä¸€è‡´
 function Check_ConfirmPassword($Password,$ConfirmPassword)
 {
- $ConfirmPasswordGood="Á½´ÎÃÜÂëÊäÈëÒ»ÖÂ";
+ $ConfirmPasswordGood="ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸€è‡´";
  if($Password<>$ConfirmPassword)
  {
-  $ConfirmPasswordGood="Á½´ÎÃÜÂëÊäÈë²»Ò»ÖÂ";
+  $ConfirmPasswordGood="ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸ä¸€è‡´";
   return $ConfirmPasswordGood;
  }
  else
  return $ConfirmPasswordGood;
 }
-//µ÷ÓÃº¯Êı£¬¼ì²âÓÃ»§ÊäÈëµÄÊı¾İ
+//è°ƒç”¨å‡½æ•°ï¼Œæ£€æµ‹ç”¨æˆ·è¾“å…¥çš„æ•°æ®
 $UserNameGood=Check_username($UserName1);
 $PasswordGood=Check_Password($Password1);
 $EmailGood=Check_Email($Email1);
 $ConfirmPasswordGood=Check_ConfirmPassword($Password1,$ConfirmPassword1);
-$error=false;//¶¨Òå±äÁ¿ÅĞ¶Ï×¢²áÊı¾İÊÇ·ñ³öÏÖ´íÎó
-if($UserNameGood !="ÓÃ»§Ãû¼ì²âÕıÈ·")
+$error=false;//å®šä¹‰å˜é‡åˆ¤æ–­æ³¨å†Œæ•°æ®æ˜¯å¦å‡ºç°é”™è¯¯
+if($UserNameGood !="ç”¨æˆ·åæ£€æµ‹æ­£ç¡®")
 {
-  $error=true;//¸Ä±äerrorµÄÖµ±íÊ¾³öÏÖÁË´íÎó
-     echo $UserNameGood;//Êä³ö´íÎóĞÅÏ¢
+  $error=true;//æ”¹å˜errorçš„å€¼è¡¨ç¤ºå‡ºç°äº†é”™è¯¯
+     echo $UserNameGood;//è¾“å‡ºé”™è¯¯ä¿¡æ¯
      echo "<br>";
 }
-if($PasswordGood !="ÃÜÂë¼ì²âÕıÈ·")
+if($PasswordGood !="å¯†ç æ£€æµ‹æ­£ç¡®")
 {
  $$error=true;
  echo $PasswordGood;
  echo "<br>";
 }
-if($EmailGood !="ÓÊÏä¼ì²âÕıÈ·")
+if($EmailGood !="é‚®ç®±æ£€æµ‹æ­£ç¡®")
 {
  $error=true;
  echo $EmailGood;
  echo "<br>";
 }
-if ($ConfirmPasswordGood !="Á½´ÎÃÜÂëÊäÈëÒ»ÖÂ")
+if ($ConfirmPasswordGood !="ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸€è‡´")
 {
  $error=true;
  echo $ConfirmPasswordGood;
  echo "<br>";
 }
-//ÅĞ¶ÏÊı¾İ¿âÖĞÓÃ»§ÃûºÍemailÊÇ·ñÒÑ¾­´æÔÚ
+//åˆ¤æ–­æ•°æ®åº“ä¸­ç”¨æˆ·åå’Œemailæ˜¯å¦å·²ç»å­˜åœ¨
 $query="select * from als_signup where UserName='$UserName1' or Email='$Email1'";
 $result=mysql_query($query);
 $row=mysql_fetch_array($result);
@@ -148,30 +148,30 @@ if($row)
  if ($row["UserName"]==$UserName1)
  {
   $error=true;
-  echo "ÓÃ»§ÃûÒÑ´æÔÚ<br>";
+  echo "ç”¨æˆ·åå·²å­˜åœ¨<br>";
  }
  if ($row["Email"]==$Email1)
  {
   $error=true;
-  echo "ÓÃ»§ÓÊÏäÒÑ¾­×¢²á<br>";
+  echo "ç”¨æˆ·é‚®ç®±å·²ç»æ³¨å†Œ<br>";
  }
 }
-//Èç¹ûÊı¾İ¼ì²â¶¼ºÏ·¨£¬Ôò½«ÓÃ»§×ÊÁÏĞ´½øÊı¾İ¿â±í
-if ($error==false) //$error==false±íÊ¾Ã»ÓĞ´íÎó
+//å¦‚æœæ•°æ®æ£€æµ‹éƒ½åˆæ³•ï¼Œåˆ™å°†ç”¨æˆ·èµ„æ–™å†™è¿›æ•°æ®åº“è¡¨
+if ($error==false) //$error==falseè¡¨ç¤ºæ²¡æœ‰é”™è¯¯
 {
- $actnum=Check_actnum();//µ÷ÓÃ¼¤»îÂëº¯Êı
- $Datetime=date("d-m-y G:i");//»ñÈ¡×¢²áÊ±¼ä£¬Ò²¾ÍÊÇÊı¾İĞ´Èëµ½ÓÃ»§±íµÄÊ±¼ä
+ $actnum=Check_actnum();//è°ƒç”¨æ¿€æ´»ç å‡½æ•°
+ $Datetime=date("d-m-y G:i");//è·å–æ³¨å†Œæ—¶é—´ï¼Œä¹Ÿå°±æ˜¯æ•°æ®å†™å…¥åˆ°ç”¨æˆ·è¡¨çš„æ—¶é—´
  $query="insert into als_signup (UserName,Password,Email,actNum,UserLevel,SignUpdate,LastLogin,LastLoginFail,NumLoginFail)
  values ('$UserName1','$Password1','$Email1','$actnum','1','$Datetime','0','0','0')";
  $result=mysql_query($query);
- $to=$Email1;//ÓÃ»§×¢²áµÄÓÊÏä
-    $subject="¼¤»îÂë";
-    $message="ÄúµÄ¼¤»îÂëÎª$actnum";
-    $header="From:kristin-wang@163.com"."\r\n";//ÓÊ¼şÍ·ĞÅÏ¢
+ $to=$Email1;//ç”¨æˆ·æ³¨å†Œçš„é‚®ç®±
+    $subject="æ¿€æ´»ç ";
+    $message="æ‚¨çš„æ¿€æ´»ç ä¸º$actnum";
+    $header="From:kristin-wang@163.com"."\r\n";//é‚®ä»¶å¤´ä¿¡æ¯
     
-     //²úÉúÁ´½Ó£¬Á´½Óµ½¼¤»îÒ³Ãæ
+     //äº§ç”Ÿé“¾æ¥ï¼Œé“¾æ¥åˆ°æ¿€æ´»é¡µé¢
      ?>
-     ÇëµÇÂ½ÓÊÏä»ñÈ¡¼¤»îÂë¡£È»ºóµã»÷<a href="activate.php">ÕâÀï</a>¼¤»î¡£
+     è¯·ç™»é™†é‚®ç®±è·å–æ¿€æ´»ç ã€‚ç„¶åç‚¹å‡»<a href="activate.php">è¿™é‡Œ</a>æ¿€æ´»ã€‚
      <?php
 }
 ?>

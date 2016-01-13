@@ -1,53 +1,53 @@
 <?php
 session_start();
-//ȡ���޸���������ݣ�ԭʼ���룬�����룬ȷ�ϵ�������
+//取出修改密码的数据，原始密码，新密码，确认的新密码
 $OldPassword1=$HTTP_POST_VARS["OldPassword"];
 $NewPassword1=$HTTP_POST_VARS["NewPassword"];
 $NewPasswordAgain=$HTTP_POST_VARS["NewPasswordAgain"];
-//�������ݿ������ļ�
-include '../config.php'; //../��ʾ��һ��Ŀ¼
-//�ж�ԭʼ�����Ƿ�Ϊ�գ����������������Ƿ�һ��
+//导入数据库连接文件
+include '../config.php'; //../表示上一级目录
+//判断原始密码是否为空，两次输入新密码是否一致
 if ($OldPassword1!="" && $NewPassword1==$NewPasswordAgain)
 {
-//�޸ı��е����룬ע���õ�session�����û���������ͬʱ�жϲ�ѯ
+//修改表中的密码，注意用到session变量用户名和密码同时判断查询
 $query="select * from als_signup where UserName='{$_SESSION['UserName']}' and Password='$OldPassword1'";
- //����Ҫ������ǰ����{}����Ȼ�޷�����������������{}��Ҫ�����ʶ�������Ƕ�̬������
+ //必须要在数组前加上{}，不然无法解析而报错。加上{}主要让语句识别里面是动态的数组
 $result=mysql_query($query);
 $row=mysql_fetch_array($result);
 if ($row)
 {
-//�޸����룬ͬʱ�޸�session�Ự����������
+//修改密码，同时修改session会话变量的密码
 $query="update als_signup set Password='$NewPassword1' where UserName='{$HTTP_SESSION_VARS['UserName']}'";
 $result=mysql_query($query);
 $HTTP_SESSION_VARS["Password"]=$NewPassword1;
-//�޸ĳɹ�����ת�ص�Ĭ�Ϲ���ҳ��
+//修改成功，跳转回到默认管理页面
 header("refresh:3;url=http://localhost/members/manage.php");
-echo "�����޸ĳɹ���3���Ӻ��Զ����ص�����ҳ��";
+echo "密码修改成功，3秒钟后自动返回到管理页面";
 exit;
 }
 else
 {
-//ԭʼ����������󣬵������ݿ����ѯʧ��
-//�����޸�����ҳ�棬��������
+//原始密码输入错误，导致数据库表查询失败
+//返回修改密码页面，重新输入
 header("refresh:3;url=http://localhost/members/manage/change_password.php");
-echo "ԭʼ���������������������<br>3���Ӻ��Զ�����";
+echo "原始密码输入错误，请重新输入<br>3秒钟后自动返回";
 exit;
 }
 }
 else
 {
-if ($OldPassword1=="")//���ԭʼ����Ϊ��
+if ($OldPassword1=="")//如果原始密码为空
 {
-//�����޸�����ҳ�棬��������
+//返回修改密码页面，重新输入
 header("refresh:3;url=http://localhost/members/manage/change_password.php");
-echo "ԭʼ���벻��Ϊ�գ�����������<br>3���Ӻ��Զ�����";
+echo "原始密码不能为空，请重新输入<br>3秒钟后自动返回";
 exit;
 }
-else //����������������벻һ��
+else //如果新密码两次输入不一致
 {
-//�����޸�����ҳ�棬��������
+//返回修改密码页面，重新输入
 header("refresh:3;url=http://localhost/members/manage/change_password.php");
-echo "�������������벻һ�£�����������<br>3���Ӻ��Զ�����";
+echo "新密码两次输入不一致，请重新输入<br>3秒钟后自动返回";
 exit;
 }
 }
