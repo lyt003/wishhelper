@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>注册账号激活</title>
-<meta http-equiv="Conten-Type" content="text/html; charset=iso-8859-1"></meta>
+<meta charset="UTF-8">
 </head>
 <body>
 <h1>注册账号激活</h1>

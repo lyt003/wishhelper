@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>激活</title>
-<meta http-equiv="Conten-Type" content="text/html; charset=gb2312"></meta>
+<meta charset="UTF-8">
 </head>
 <body>
 <?php

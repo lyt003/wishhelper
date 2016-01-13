@@ -1,4 +1,5 @@
 <?php
+header ( "Content-Type: text/html;charset=utf-8" );
 include 'config.php';
 session_start();//启动会话
 //获取用户的登录信息。用户名，密码，是否保存信息

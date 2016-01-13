@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>用户管理</title>
-<meta content="text/html;charset=gb2312" http-equiv="Content-Type">
+<meta charset="UTF-8">
 </head>
 <body>
 <h2>用户管理</h2>

@@ -1,4 +1,5 @@
 <?php
+header ( "Content-Type: text/html;charset=utf-8" );
 session_start();
 //取出修改密码的数据，原始密码，新密码，确认的新密码
 $OldPassword1=$HTTP_POST_VARS["OldPassword"];

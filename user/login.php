@@ -15,6 +15,7 @@ exit;
 <html>
 <head>
 <title>用户登录</title>
+<meta charset="UTF-8">
 </head>
 <body>
 <form name="form1" method="post" action="login_go.php">

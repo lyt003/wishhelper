@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>用户注册</title>
-<meta content="text/html; charset=gb2312" http-equiv="Content-Type">
+<meta charset="UTF-8">
 </head>
 <body>
 <form name="form1" method="post" action="add.php">

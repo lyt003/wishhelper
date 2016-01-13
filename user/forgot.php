@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta content="text/html;charset=gb2312" http-equiv="Content-Type">
+<meta charset="UTF-8">
 <title>密码找回</title>
 </head>
 <body>

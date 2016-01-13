@@ -1,4 +1,5 @@
 <?php
+header ( "Content-Type: text/html;charset=utf-8" );
 //用户注册以后的数据处理文件。需要先检查数据合法性，然后写入数据库
 //获取注册用户提交的数据
 $UserName1=$_POST["UserName"];//用户名
