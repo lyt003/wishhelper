@@ -1,3 +1,6 @@
+<?php 
+$errorMsg = $_GET ['errorMsg'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -76,6 +79,8 @@
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
 						action="wusercenter.php?<?php echo "type=register"?>">
+						<?php if($errorMsg != null)
+							echo "<ul align=\"center\">".$errorMsg."</ul>";?>
 						<div class="control-group">
 							<label class="control-label" for="email_address"> 邮箱地址</label>
 							<div class="controls input-append">

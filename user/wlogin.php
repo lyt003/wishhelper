@@ -1,3 +1,12 @@
+<?php 
+session_start ();
+$username = $_SESSION ['username'];
+if($username != null){
+	header("Location:./wusercenter.php");
+	exit;
+}
+$errorMsg = $_GET ['errorMsg'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -46,6 +55,8 @@
 					<div id="login-form">
 						<div class="header">登录</div>
 						<div class="inputs">
+							<?php if($errorMsg != null)
+							echo "<ul align=\"center\">".$errorMsg."</ul>";?>
 							<div>
 								<input value="" id="username-box" type="text" name="username"
 									class="login-input input-block-level" required="true"

@@ -24,14 +24,14 @@ fixed-width
 
 <div class="pull-right">
 
-<a href="http://wishconsole.com" class="login-btn btn">
+<a href="./wregister.php" class="login-btn btn">
 
 注册
 </a>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <div class="pull-right">
 
-<a href="http://wishconsole.com" class="login-btn btn">
+<a href="./wlogin.php" class="login-btn btn">
 
 登录
 </a>

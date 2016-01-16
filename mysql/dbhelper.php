@@ -26,17 +26,15 @@ class dbhelper {
 		mysql_select_db ( $dbname );
 		mysql_query ( "set names 'UTF8'" );
 	}
-	
-	public function queryUser($username, $email){
+	public function queryUser($username, $email) {
 		$querySql = 'select userid,username,email from users where email = "' . $email . '" or username = "' . $username . '"';
+		echo "querySql:" . $querySql;
 		return mysql_query ( $querySql );
 	}
-	
-	public function createUser($username,$password,$email){
-		$userInsert = 'insert into users(username,email,psd) values("'.$username.'","'.$email.'","'.$password.'")';
-		return mysql_query($userInsert);
+	public function createUser($username, $password, $email) {
+		$userInsert = 'insert into users(username,email,psd) values("' . $username . '","' . $email . '","' . $password . '")';
+		return mysql_query ( $userInsert );
 	}
-	
 	public function userLogin($username, $password) {
 		$loginSql = 'select userid,username,email from users where psd = "' . $password . '" and ';
 		if (stripos ( $username, "@" ) != false) {
@@ -47,7 +45,13 @@ class dbhelper {
 		return mysql_query ( $loginSql );
 	}
 	public function getUserToken($email) {
-		$result = mysql_query ( "select accountid, clientid,clientsecret,token,refresh_token from accounts, users where users.email = '" . $email . "' and users.userid = accounts.userid" );
+		$querySql = 'select accountid, clientid,clientsecret,token,refresh_token from accounts, users where';
+		if (stripos ( $email, "@" ) != false) {
+			$querySql = $querySql . ' users.email = "' . $email . '" and users.userid = accounts.userid';
+		} else {
+			$querySql = $querySql . ' users。username = "' . $email . '" and users.userid = accounts.userid';
+		}
+		$result = mysql_query ( $querySql );
 		return $result;
 	}
 	public function getAccountToken($accountid) {

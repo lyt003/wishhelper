@@ -1,291 +1,33 @@
 <?php
-/*
- * create Product:
- * name Name of the product as shown to users on Wish
- * description Description of the product. Should not contain HTML. If you want a new line use "\n".
- * tags Comma separated list of strings that describe the product. Only 10 are allowed. Any tags past 10 will be ignored.
- * sku The unique identifier that your system uses to recognize this product
- * color optional The color of the product. Example: red, blue, green
- * size optional The size of the product. Example: Large, Medium, Small, 5, 6, 7.5
- * inventory The physical quantities you have for this product
- * price The price of the product when the user purchases one
- * shipping The shipping of the product when the user purchases one
- * msrp optional Manufacturer's Suggested Retail Price. This field is recommended as it will show as a strikethrough price on Wish and appears above the selling price for the product.
- * shipping_time optional The amount of time it takes for the shipment to reach the buyer. Please also factor in the time it will take to fulfill and ship the item. Provide a time range in number of days. Lower bound cannot be less than 2 days. Example: 15-20
- * main_image URL of a photo of your product. Link directly to the image, not the page where it is located. We accept JPEG, PNG GIF format. Images should be at least 100 x 100 pixels in size.
- * parent_sku optional When defining a variant of a product we must know which product to attach the variation to. parent_sku is the unique id of the product that you can use later when using the add product variation API.
- * brand optional Brand or manufacturer of your product
- * landing_page_url optional URL on your website containing the product details
- * upc optional 12-digit Universal Product Codes (UPC)-contains no letters or other characters
- * extra_images optional
- *
- *
- * create ProductVariation:
- *
- * parent_sku The parent_sku of the product this new product variation should be added to. If the product is missing a parent_sku, then this should be the SKU of a product variation of the product
- * sku The unique identifier that your system uses to recognize this variation
- * color optional The color of the variation. Example: red, blue, green
- * size optional The size of the variation. Example: Large, Medium, Small, 5, 6, 7.5
- * inventory The physical quantities you have for this variation
- * price The price of the variation when the user purchases one
- * shipping The shipping of the variation when the user purchases one
- * msrp optional Manufacturer's Suggested Retail Price. This field is recommended as it will show as a strikethrough price on Wish and appears above the selling price for the product.
- * shipping_time optional The amount of time it takes for the shipment to reach the buyer. Please also factor in the time it will take to fulfill and ship the item. Provide a time range in number of days. Lower bound cannot be less than 2 days. Example: 15-20
- * main_image optional URL of a photo for this product variation. Provide this when you have different pictures for different product variation of the product. If left out, it'll use the main_image of the product with the provided parent_sku. Link directly to the image, not the page where it is located. We accept JPEG, PNG or GIF format. Images should be at least 100 x 100 pixels in size.
- *
- */
- 
-// Function: 获取远程图片并把它保存到本地
-// 确定您有把文件写入本地服务器的权限
-// 变量说明:
-// $url 是远程图片的完整URL地址，不能为空。
-// $filename 是可选变量: 如果为空，本地文件名将基于时间和日期
-// 自动生成.
-function GrabImage($url,$filename="") {
-	if($url==""):return false;endif;
-	if($filename=="") {
-		$ext=strrchr($url,".");
-		if($ext!=".gif" && $ext!=".jpg"):return false;endif;
-		$filename=date("dMYHis").$ext;
-	}
-	ob_start();
-	readfile($url);
-	$img = ob_get_contents();
-	ob_end_clean();
-	$size = strlen($img);
-	$fp2=@fopen($filename, "a");
-	fwrite($fp2,$img);
-	fclose($fp2);
-	return $filename;
-}
-
-function getCompressedImage($sourceURL){
-	list($width, $height, $type) = getimagesize($sourceURL);
-	if($width > 800 || $height > 800){
-		$new=GrabImage($sourceURL,"./images/".basename($sourceURL));
-		//获取压缩该图片文件的地址;
-		@$newURL = "http://www.wishconsole.com/images/".basename($sourceURL)."_800x800.jpg";
-		return $newURL;
-	}
-	return $sourceURL;
-}
-
-
-header ( "Content-Type: text/html;charset=utf-8" );
-include 'Wish/WishClient.php';
-include 'mysql/dbhelper.php';
-use Wish\WishClient;
-use mysql\dbhelper;
-use Wish\Model\WishTracker;
-use Wish\Exception\ServiceResponseException;
-use Wish\WishResponse;
 session_start ();
-$accountid = null;
-$dbhelper = null;
-$client = null;
-
-$accountid = $_GET ['accountid'];
-
-$productName = $_POST ['Product_Name'];
-$productName = str_replace ( '"', "''", $productName );
-$description = $_POST ['Description'];
-$description = str_replace ( '"', "''", $description );
-$tags = $_POST ['Tags'];
-$uniqueID = $_POST ['Unique_Id'];
-$mainImage = $_POST ['Main_Image'];
-$extraImages = $_POST ['Extra_Images'];
-$colors = $_POST ['colors'];
-$sizes = $_POST ['sizes'];
-$price = $_POST ['Price'];
-$incrementPrice = $_POST ['increment_price'];
-$quantity = $_POST ['Quantity'];
-$shipping = $_POST ['Shipping'];
-$shippingTime = $_POST ['Shipping_Time'];
-$MSRP = $_POST ['MSRP'];
-$brand = $_POST ['Brand'];
-$UPC = $_POST ['UPC'];
-$landingPageURL = $_POST ['Landing_Page_URL'];
-$productSourceURL = $_POST ['Product_Source_URL'];
-$scheduleDate = $_POST ['Schedule_Date'];
-
-if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
-	$productarray = array ();
-	$productarray ['name'] = $productName;
-	$productarray ['brand'] = $brand;
-	$productarray ['description'] = $description;
-	
-	$extraImagesArray = explode ( "|", $extraImages );
-	foreach ($extraImagesArray as $extraImage){
-		if($extraImage != null){
-			$productarray ['extra_images'] = $productarray ['extra_images'].getCompressedImage($extraImage).'|';
-		}
-	}
-	//$productarray ['extra_images'] = $extraImages;
-	
-	$productarray ['landingPageURL'] = $landingPageURL;
-	
-	$productarray ['main_image'] =getCompressedImage($mainImage);
-	$productarray ['MSRP'] = $MSRP;
-	$productarray ['price'] = $price;
-	$productarray ['parent_sku'] = $uniqueID;
-	$productarray ['quantity'] = $quantity;
-	$productarray ['shipping'] = $shipping;
-	$productarray ['shipping_time'] = $shippingTime;
-	$productarray ['tags'] = $tags;
-	$productarray ['UPC'] = $UPC;
-	$productarray ['productSourceURL'] = $productSourceURL;
-	
-	$dbhelper = new dbhelper ();
-	$accountAcess = $dbhelper->getAccountToken ( $accountid );
-	if ($rows = mysql_fetch_array ( $accountAcess )) {
-		$token = $rows ['token'];
-		$client = new WishClient ( $token, 'prod' );
-		$clientid = $rows ['clientid'];
-		$clientsecret = $rows ['clientsecret'];
-		$refresh_token = $rows ['refresh_token'];
-	}
-	
-	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
-	
-	$colorArray = explode ( "|", $colors );
-	
-	$sizeArray = explode ( "|", $sizes );
-	
-	foreach ( $colorArray as $color ) {
-		$basePrice = $price;
-		$sizeCount = 0;
-		foreach ( $sizeArray as $size ) {
-			if ($color != null) {
-				if ($size != null) {
-					$productarray ['sku'] = $uniqueID . "_" . $color . "_" . $size;
-					$productarray ['color'] = $color;
-					$productarray ['size'] = $size;
-					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
-					$sizeCount ++;
-				} else {
-					$productarray ['sku'] = $uniqueID . "_" . $color;
-					$productarray ['color'] = $color;
-				}
-			} else {
-				if ($size != null) {
-					$productarray ['sku'] = $uniqueID . "_" . $size;
-					$productarray ['size'] = $size;
-					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
-					$sizeCount ++;
-				} else {
-					$productarray ['sku'] = $uniqueID;
-				}
-			}
-			$insertResult = $dbhelper->insertProduct ( $productarray );
-			if ($insertResult != '1') {
-				echo "insert failed" . "<br/>";
-			}
-			
-			$productarray ['sku'] = null;
-			$productarray ['color'] = null;
-			$productarray ['size'] = null;
-			$productarray ['price'] = null;
-		}
-	}
-	if ($scheduleDate != null) {
-		$productarray ['accountid'] = $accountid;
-		$productarray ['scheduledate'] = $scheduleDate;
-		$dbhelper->insertScheduleProduct ( $productarray );
-	} else {
-		$products = $dbhelper->getProducts ( $uniqueID );
-		$addProduct = 0;
-		$prod_res = null;
-		while ( $product = mysql_fetch_array ( $products ) ) {
-			if ($addProduct == 0) { // add product;
-				$currentProduct = array ();
-				$currentProduct ['name'] = $product ['name'];
-				$currentProduct ['description'] = $product ['description'];
-				$currentProduct ['tags'] = $product ['tags'];
-				$currentProduct ['sku'] = $product ['sku'];
-				if ($product ['color'] != null)
-					$currentProduct ['color'] = $product ['color'];
-				if ($product ['size'] != null)
-					$currentProduct ['size'] = $product ['size'];
-				$currentProduct ['inventory'] = $product ['quantity'];
-				$currentProduct ['price'] = $product ['price'];
-				$currentProduct ['shipping'] = $product ['shipping'];
-				$currentProduct ['msrp'] = $product ['MSRP'];
-				$currentProduct ['shipping_time'] = $product ['shipping_time'];
-				$currentProduct ['main_image'] = $product ['main_image'];
-				$currentProduct ['parent_sku'] = $product ['parent_sku'];
-				$currentProduct ['brand'] = $product ['brand'];
-				$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-				$currentProduct ['upc'] = $product ['UPC'];
-				$currentProduct ['extra_images'] = $product ['extra_images'];
-				
-				try {
-					$prod_res = $client->createProduct ( $currentProduct );
-				} catch ( ServiceResponseException $e ) {
-					if ($e->getStatusCode () == 1015) {
-						$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
-						echo "<br/>errorMessage:" . $response->getMessage ();
-						$values = $response->getResponse ()->{'data'};
-						$newToken = '0';
-						$newRefresh_token = '0';
-						foreach ( $values as $k => $v ) {
-							echo 'key  ' . $k . '  value:' . $v;
-							if ($k == 'access_token') {
-								$newToken = $v;
-							}
-							if ($k == 'refresh_token') {
-								$newRefresh_token = $v;
-							}
-						}
-						echo "<br/>newToken = " . $newToken . $newRefresh_token;
-						$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
-						$client = new WishClient ( $newToken, 'prod' );
-						$prod_res = $client->createProduct ( $currentProduct );
-					}
-				}
-				print_r ( $prod_res );
-				if ($prod_res != null) {
-					echo "add product success<br/>";
-					$addProduct = 1;
-				} else {
-					echo "add product failed<br/>";
-				}
-			} else { // add product variation
-				$currentProductVar = array ();
-				$currentProductVar ['parent_sku'] = $product ['parent_sku'];
-				$currentProductVar ['sku'] = $product ['sku'];
-				if ($product ['color'] != null)
-					$currentProductVar ['color'] = $product ['color'];
-				if ($product ['size'] != null)
-					$currentProductVar ['size'] = $product ['size'];
-				$currentProductVar ['inventory'] = $product ['quantity'];
-				$currentProductVar ['price'] = $product ['price'];
-				$currentProductVar ['shipping'] = $product ['shipping'];
-				$currentProductVar ['msrp'] = $product ['MSRP'];
-				$currentProductVar ['shipping_time'] = $product ['shipping_time'];
-				$currentProductVar ['main_image'] = $product ['main_image'];
-				$prod_var = $client->createProductVariation ( $currentProductVar );
-				print_r ( $prod_var );
-				if (prod_var != null) {
-					echo "add product var success<br/>";
-				}
-			}
-		}
-	}
+use mysql\dbhelper;
+include '../mysql/dbhelper.php';
+header ( "Content-Type: text/html;charset=utf-8" );
+$dbhelper = new dbhelper();
+$result = $dbhelper->getUserToken ( $_SESSION ['username'] );
+$accounts = array ();
+$i = 0;
+while ( $rows = mysql_fetch_array ( $result ) ) {
+	$accounts ['clientid' . $i] = $rows ['clientid'];
+	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+	$accounts ['token' . $i] = $rows ['token'];
+	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+	$accounts ['accountid' . $i] = $rows ['accountid'];
+	$i ++;
 }
 
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta name="generator"
-	content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://china-merchant.wish.com/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wish 商户平台</title>
-<meta name="keywords" content="" />
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="../css/home_page.css">
 <link rel="stylesheet" type="text/css"
-	href="./css/add_products_page.css" />
+	href="../css/add_products_page.css" />
 </head>
 <script type="text/javascript">
 
@@ -350,7 +92,77 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	}
 </script>
 <body>
-	<form id="add_product"
+<!-- HEADER -->
+<div id="header" class="navbar navbar-fixed-top 
+
+
+
+" style="left: 0px;">
+<div class="container-fluid ">
+<a class="brand" href="http://wishconsole.com/">
+<span
+				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
+</a>
+
+<div class="pull-right">
+<ul class="nav">
+<li data-mid="5416857ef8abc87989774c1b" data-uid="5413fe984ad3ab745fee8b48">
+<?php echo $username?>
+</li>
+
+
+</ul>
+
+</div>
+
+</div>
+</div>
+<!-- END HEADER -->
+<!-- SUB HEADER NAV-->
+<!-- splash page subheader-->
+
+
+
+<div id="sub-header-nav" class="navbar navbar-fixed-top sub-header" style="left: 0px;">
+<div class="navbar-inner">
+<div class="container-fluid">
+<div class="pull-left">
+<ul class="nav">
+
+
+<li><a href="./wusercenter.php">
+订单处理
+</a></li>
+<li>
+<a href="./wuploadproduct.php">
+产品上传
+</a>
+</li>
+<li><a href="http://wishconsole.com/">
+个人信息
+</a></li>
+</ul>
+</div>
+
+<div class="pull-right">
+<ul class="nav">
+</ul>
+</div>
+
+</div>
+</div>
+</div>
+<!-- END SUB HEADER NAV -->
+<div class="banner-container">
+</div>
+
+<div id="page-content" class="container-fluid  user">
+<li>已绑定的wish账号:
+<?php  for($count = 0; $count < $i; $count ++) {
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$accounts ['accountid' . $count];
+}?>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">绑定wish账号</a></li>
+<form id="add_product"
 		action="products.php<?php echo "?accountid=".$accountid?>"
 		method="post">
 		<div id="add-products-page" class="center">
@@ -360,7 +172,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 				<div id="add-product-form">
 					<div id="basic-info" class="form-horizontal">
-						<div class="section-title">基本信息</div>
+						<div class="section-title" align="left">基本信息</div>
 
 						<div class="control-group">
 							<label class="control-label" data-col-index="3"><span
@@ -623,7 +435,19 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						</div>
 					</div>
 				</div>
-	
+			</div>
 	</form>
+
+</div>
+<!-- FOOTER -->
+	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
+		<div class="navbar-inner">
+			<div class="footer-container">
+				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+						wishconsole版权所有 京ICP备16000367号</a></span>
+			</div>
+		</div>
+	</div>
+	<!-- END FOOTER -->
 </body>
 </html>
