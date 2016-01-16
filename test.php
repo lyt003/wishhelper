@@ -109,8 +109,34 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 }
 
 echo "the last, client account id:".$client->getAccountid()."<br/>";
-
-
+try {
+			$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+		} catch ( ServiceResponseException $e ) {
+			echo "<br/>error,code:".$e->getStatusCode ();
+			if ($e->getStatusCode () == 1015 || $e->getStatusCode () == 4000) {
+				echo "<br/>refresh token params:".$clientid.$clientsecret.$refresh_token;
+				$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
+				echo "<br/>errorMessage:" . $response->getMessage ();
+				$values = $response->getResponse ()->{'data'};
+				$newToken = '0';
+				$newRefresh_token = '0';
+				foreach ( $values as $k => $v ) {
+					echo 'key  ' . $k . '  value:' . $v;
+					if ($k == 'access_token') {
+						$newToken = $v;
+					}
+					if ($k == 'refresh_token') {
+						$newRefresh_token = $v;
+					}
+				}
+				echo "<br/>newToken = " . $newToken . $newRefresh_token;
+				$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+				$client = new WishClient ( $newToken, 'prod' );
+				$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+			}
+		}
+		echo "\n get orders count:" . count ( $unfulfilled_orders ) . "<br/>";
+		$orders_count = count ( $unfulfilled_orders );
 /* sleep(60);
 echo "after 60".date("Y-m-d H:i:s");
 
