@@ -12,16 +12,6 @@
 </head>
 <script type="text/javascript">
 
-function checkEmail(str){
-   var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
-   if(re.test(str)){
-       alert("正确");
-   }else{
-       alert("错误");
-   }
-}
-
-
 	function register(){
 		var email = document.getElementById("email").value;
 		var username = document.getElementById("username").value;

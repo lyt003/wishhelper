@@ -19,7 +19,7 @@ if(strcmp($type,"register") == 0){
 			echo "该邮箱地址已经注册";
 		}	
 	}else{
-		$result = $dbhelper->createUser($username, $password, $email);
+		$result = $dbhelper->createUser($username, md5($password), $email);
 		echo "result".$result;
 		if($result !== false){
 			echo "register success";
@@ -33,7 +33,7 @@ if(strcmp($type,"register") == 0){
 	$password = $_POST ["password"];
 	
 	$dbhelper = new dbhelper();
-	$result = $dbhelper->userLogin($username, $password);
+	$result = $dbhelper->userLogin($username, md5($password));
 	$row=mysql_fetch_array($result);
 	if($row){
 		echo "Hello, login succeed";

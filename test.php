@@ -7,7 +7,7 @@ use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
-//phpinfo ();
+phpinfo ();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
@@ -78,7 +78,7 @@ echo "curDate = ".$curDate."<br/>";
 echo date("y-m-d H:i:s",time());// H: 24小时制；   h：12小时制
 
 
-$dbhelper = new dbhelper ();
+/* $dbhelper = new dbhelper ();
 $accountid = 1;
 if ($client == null || ($accountid == $client->getAccountid ())) {
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
@@ -108,8 +108,11 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 	}
 }
 
-echo "the last, client account id:".$client->getAccountid()."<br/>";
+echo "the last, client account id:".$client->getAccountid()."<br/>"; */
 
+$pwd ="123456";
+$hash = md5($pwd);
+echo "<br/>hash:".$hash;
 
 /* sleep(60);
 echo "after 60".date("Y-m-d H:i:s");

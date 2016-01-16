@@ -8,7 +8,7 @@ CREATE TABLE `users` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50),
   `email` varchar(50) NOT NULL,
-  `psd` varchar(15) NOT NULL,
+  `psd` varchar(50) NOT NULL,
   PRIMARY KEY (`userid`)
 )  DEFAULT CHARSET=utf8;
 
