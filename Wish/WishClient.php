@@ -17,14 +17,14 @@
 
 namespace Wish;
 
-include 'Wish/WishSession.php';
-include 'Wish/WishRequest.php';
-include 'Wish/Model/WishOrder.php';
-include 'Wish/Exception/UnauthorizedRequestException.php';
-include 'Wish/Exception/OrderAlreadyFulfilledException.php';
-include 'Wish/Model/WishProduct.php';
-include 'Wish/Model/WishProductVariation.php';
-include 'Wish/Model/WishTracker.php';
+include dirname(__FILE__).'/WishSession.php';
+include dirname(__FILE__).'/WishRequest.php';
+include dirname(__FILE__).'/Model/WishOrder.php';
+include dirname(__FILE__).'/Exception/UnauthorizedRequestException.php';
+include dirname(__FILE__).'/Exception/OrderAlreadyFulfilledException.php';
+include dirname(__FILE__).'/Model/WishProduct.php';
+include dirname(__FILE__).'/Model/WishProductVariation.php';
+include dirname(__FILE__).'/Model/WishTracker.php';
     
 use Wish\Exception\UnauthorizedRequestException;
 use Wish\Exception\ServiceResponseException;

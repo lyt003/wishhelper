@@ -17,7 +17,7 @@
 
 namespace Wish\Model;
 
-include 'Wish/Model/WishShippingDetail.php';
+include dirname(__FILE__).'/WishShippingDetail.php';
 
 class WishOrder{
 

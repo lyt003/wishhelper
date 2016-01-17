@@ -1,7 +1,13 @@
 <?php
 session_start ();
+include dirname('__FILE__').'./Wish/WishClient.php';
+include dirname('__FILE__').'./mysql/dbhelper.php';
+use Wish\WishClient;
 use mysql\dbhelper;
-include '../mysql/dbhelper.php';
+use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
+use Wish\WishResponse;
+
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper();
 $result = $dbhelper->getUserToken ( $_SESSION ['username'] );
@@ -14,6 +20,235 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
 	$accounts ['accountid' . $i] = $rows ['accountid'];
 	$i ++;
+}
+
+
+// Function: 获取远程图片并把它保存到本地
+// 确定您有把文件写入本地服务器的权限
+// 变量说明:
+// $url 是远程图片的完整URL地址，不能为空。
+// $filename 是可选变量: 如果为空，本地文件名将基于时间和日期
+// 自动生成.
+function GrabImage($url,$filename="") {
+	if($url==""):return false;endif;
+	if($filename=="") {
+		$ext=strrchr($url,".");
+		if($ext!=".gif" && $ext!=".jpg"):return false;endif;
+		$filename=date("dMYHis").$ext;
+	}
+	ob_start();
+	readfile($url);
+	$img = ob_get_contents();
+	ob_end_clean();
+	$size = strlen($img);
+	$fp2=@fopen($filename, "a");
+	fwrite($fp2,$img);
+	fclose($fp2);
+	return $filename;
+}
+
+function getCompressedImage($sourceURL){
+	list($width, $height, $type) = getimagesize($sourceURL);
+	if($width > 800 || $height > 800){
+		$new=GrabImage($sourceURL,"./images/".basename($sourceURL));
+		//获取压缩该图片文件的地址;
+		@$newURL = "http://www.wishconsole.com/images/".basename($sourceURL)."_800x800.jpg";
+		return $newURL;
+	}
+	return $sourceURL;
+}
+
+
+//$accountid = null;
+$client = null;
+
+//$accountid = $_GET ['accountid'];
+$accountid = $_POST['currentAccountid'];
+$productName = $_POST ['Product_Name'];
+$productName = str_replace ( '"', "''", $productName );
+$description = $_POST ['Description'];
+$description = str_replace ( '"', "''", $description );
+$tags = $_POST ['Tags'];
+$uniqueID = $_POST ['Unique_Id'];
+$mainImage = $_POST ['Main_Image'];
+$extraImages = $_POST ['Extra_Images'];
+$colors = $_POST ['colors'];
+$sizes = $_POST ['sizes'];
+$price = $_POST ['Price'];
+$incrementPrice = $_POST ['increment_price'];
+$quantity = $_POST ['Quantity'];
+$shipping = $_POST ['Shipping'];
+$shippingTime = $_POST ['Shipping_Time'];
+$MSRP = $_POST ['MSRP'];
+$brand = $_POST ['Brand'];
+$UPC = $_POST ['UPC'];
+$landingPageURL = $_POST ['Landing_Page_URL'];
+$productSourceURL = $_POST ['Product_Source_URL'];
+$scheduleDate = $_POST ['Schedule_Date'];
+
+if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
+	$productarray = array ();
+	$productarray ['name'] = $productName;
+	$productarray ['brand'] = $brand;
+	$productarray ['description'] = $description;
+
+	$extraImagesArray = explode ( "|", $extraImages );
+	foreach ($extraImagesArray as $extraImage){
+		if($extraImage != null){
+			$productarray ['extra_images'] = $productarray ['extra_images'].getCompressedImage($extraImage).'|';
+		}
+	}
+	//$productarray ['extra_images'] = $extraImages;
+
+	$productarray ['landingPageURL'] = $landingPageURL;
+
+	$productarray ['main_image'] =getCompressedImage($mainImage);
+	$productarray ['MSRP'] = $MSRP;
+	$productarray ['price'] = $price;
+	$productarray ['parent_sku'] = $uniqueID;
+	$productarray ['quantity'] = $quantity;
+	$productarray ['shipping'] = $shipping;
+	$productarray ['shipping_time'] = $shippingTime;
+	$productarray ['tags'] = $tags;
+	$productarray ['UPC'] = $UPC;
+	$productarray ['productSourceURL'] = $productSourceURL;
+
+	$dbhelper = new dbhelper ();
+	$accountAcess = $dbhelper->getAccountToken ( $accountid );
+	if ($rows = mysql_fetch_array ( $accountAcess )) {
+		$token = $rows ['token'];
+		$client = new WishClient ( $token, 'prod' );
+		$clientid = $rows ['clientid'];
+		$clientsecret = $rows ['clientsecret'];
+		$refresh_token = $rows ['refresh_token'];
+	}
+
+	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
+
+	$colorArray = explode ( "|", $colors );
+
+	$sizeArray = explode ( "|", $sizes );
+
+	foreach ( $colorArray as $color ) {
+		$basePrice = $price;
+		$sizeCount = 0;
+		foreach ( $sizeArray as $size ) {
+			if ($color != null) {
+				if ($size != null) {
+					$productarray ['sku'] = $uniqueID . "_" . $color . "_" . $size;
+					$productarray ['color'] = $color;
+					$productarray ['size'] = $size;
+					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
+					$sizeCount ++;
+				} else {
+					$productarray ['sku'] = $uniqueID . "_" . $color;
+					$productarray ['color'] = $color;
+				}
+			} else {
+				if ($size != null) {
+					$productarray ['sku'] = $uniqueID . "_" . $size;
+					$productarray ['size'] = $size;
+					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
+					$sizeCount ++;
+				} else {
+					$productarray ['sku'] = $uniqueID;
+				}
+			}
+			$insertResult = $dbhelper->insertProduct ( $productarray );
+			if ($insertResult != '1') {
+				echo "insert failed" . "<br/>";
+			}
+				
+			$productarray ['sku'] = null;
+			$productarray ['color'] = null;
+			$productarray ['size'] = null;
+			$productarray ['price'] = null;
+		}
+	}
+	if ($scheduleDate != null) {
+		$productarray ['accountid'] = $accountid;
+		$productarray ['scheduledate'] = $scheduleDate;
+		$dbhelper->insertScheduleProduct ( $productarray );
+	} else {
+		$products = $dbhelper->getProducts ( $uniqueID );
+		$addProduct = 0;
+		$prod_res = null;
+		while ( $product = mysql_fetch_array ( $products ) ) {
+			if ($addProduct == 0) { // add product;
+				$currentProduct = array ();
+				$currentProduct ['name'] = $product ['name'];
+				$currentProduct ['description'] = $product ['description'];
+				$currentProduct ['tags'] = $product ['tags'];
+				$currentProduct ['sku'] = $product ['sku'];
+				if ($product ['color'] != null)
+					$currentProduct ['color'] = $product ['color'];
+				if ($product ['size'] != null)
+					$currentProduct ['size'] = $product ['size'];
+				$currentProduct ['inventory'] = $product ['quantity'];
+				$currentProduct ['price'] = $product ['price'];
+				$currentProduct ['shipping'] = $product ['shipping'];
+				$currentProduct ['msrp'] = $product ['MSRP'];
+				$currentProduct ['shipping_time'] = $product ['shipping_time'];
+				$currentProduct ['main_image'] = $product ['main_image'];
+				$currentProduct ['parent_sku'] = $product ['parent_sku'];
+				$currentProduct ['brand'] = $product ['brand'];
+				$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
+				$currentProduct ['upc'] = $product ['UPC'];
+				$currentProduct ['extra_images'] = $product ['extra_images'];
+
+				try {
+					$prod_res = $client->createProduct ( $currentProduct );
+				} catch ( ServiceResponseException $e ) {
+					if ($e->getStatusCode () == 1015) {
+						$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
+						echo "<br/>errorMessage:" . $response->getMessage ();
+						$values = $response->getResponse ()->{'data'};
+						$newToken = '0';
+						$newRefresh_token = '0';
+						foreach ( $values as $k => $v ) {
+							echo 'key  ' . $k . '  value:' . $v;
+							if ($k == 'access_token') {
+								$newToken = $v;
+							}
+							if ($k == 'refresh_token') {
+								$newRefresh_token = $v;
+							}
+						}
+						echo "<br/>newToken = " . $newToken . $newRefresh_token;
+						$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+						$client = new WishClient ( $newToken, 'prod' );
+						$prod_res = $client->createProduct ( $currentProduct );
+					}
+				}
+				print_r ( $prod_res );
+				if ($prod_res != null) {
+					echo "add product success<br/>";
+					$addProduct = 1;
+				} else {
+					echo "add product failed<br/>";
+				}
+			} else { // add product variation
+				$currentProductVar = array ();
+				$currentProductVar ['parent_sku'] = $product ['parent_sku'];
+				$currentProductVar ['sku'] = $product ['sku'];
+				if ($product ['color'] != null)
+					$currentProductVar ['color'] = $product ['color'];
+				if ($product ['size'] != null)
+					$currentProductVar ['size'] = $product ['size'];
+				$currentProductVar ['inventory'] = $product ['quantity'];
+				$currentProductVar ['price'] = $product ['price'];
+				$currentProductVar ['shipping'] = $product ['shipping'];
+				$currentProductVar ['msrp'] = $product ['MSRP'];
+				$currentProductVar ['shipping_time'] = $product ['shipping_time'];
+				$currentProductVar ['main_image'] = $product ['main_image'];
+				$prod_var = $client->createProductVariation ( $currentProductVar );
+				print_r ( $prod_var );
+				if (prod_var != null) {
+					echo "add product var success<br/>";
+				}
+			}
+		}
+	}
 }
 
 ?>
@@ -86,7 +321,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		var shippingTime = document.getElementById("shipping_time").value;
 		if(shippingTime == null || shippingTime == ''){
 			alert("shippingTime can't be empty");
-			return;}
+			return;} 
 		var form = document.getElementById("add_product");
 		form.submit();
 	}
@@ -109,27 +344,18 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <li data-mid="5416857ef8abc87989774c1b" data-uid="5413fe984ad3ab745fee8b48">
 <?php echo $username?>
 </li>
-
-
 </ul>
-
 </div>
-
 </div>
 </div>
 <!-- END HEADER -->
 <!-- SUB HEADER NAV-->
 <!-- splash page subheader-->
-
-
-
 <div id="sub-header-nav" class="navbar navbar-fixed-top sub-header" style="left: 0px;">
 <div class="navbar-inner">
 <div class="container-fluid">
 <div class="pull-left">
 <ul class="nav">
-
-
 <li><a href="./wusercenter.php">
 订单处理
 </a></li>
@@ -163,7 +389,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 }?>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">绑定wish账号</a></li>
 <form id="add_product"
-		action="products.php<?php echo "?accountid=".$accountid?>"
+		action="./wuploadproduct.php"
 		method="post">
 		<div id="add-products-page" class="center">
 			<div>
@@ -174,6 +400,21 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 					<div id="basic-info" class="form-horizontal">
 						<div class="section-title" align="left">基本信息</div>
 
+						<div class="control-group">
+							<label class="control-label" data-col-index="3"><span
+								class="col-name">请选择wish账号</span></label>
+
+							<div class="controls input-append">
+							<label>
+							<?php  for($count = 0; $count < $i; $count ++) {
+									echo "<input type=\"radio\" name=\"currentAccountid\" value=\"".$accounts ['accountid' . $count]."\""
+										.($accountid == null?($count==0?"checked":""):((strcmp($accounts ['accountid' . $count],$accountid)==0)?"checked":"")).">";
+									echo "&nbsp;&nbsp;".$accounts ['accountid' . $count];
+									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							}?></label>
+							</div>
+						</div>
+						
 						<div class="control-group">
 							<label class="control-label" data-col-index="3"><span
 								class="col-name">Product Name</span></label>
@@ -194,7 +435,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								<textarea rows="5" class="input-block-level required"
 									name="Description" id="description" type="text"
 									placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $description?>
-</textarea>
+								</textarea>
 							</div>
 						</div>
 
@@ -203,11 +444,9 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								class="col-name">Tags</span></label>
 
 							<div class="controls input-append">
-								<ul class="typeahead-tokenizer">
-									<li class="token-li first-li"><input class="token-input"
-										type="text" id="tags" name="Tags" value="<?php echo $tags?>"
-										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel" /></li>
-								</ul>
+								<textarea rows="3" class="input-block-level required"
+										type="text" id="tags" name="Tags"
+										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $tags?></textarea>
 							</div>
 						</div>
 
@@ -238,9 +477,9 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								class="col-name">Extra Images</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level required" name="Extra_Images"
-									id="extra_images" type="text" value="<?php echo $extraImages?>"
-									placeholder="可接受：imageurl|imageurl|imageurl" />
+								<textarea rows="5" class="input-block-level required" name="Extra_Images"
+									id="extra_images" type="text" 
+									placeholder="可接受：imageurl|imageurl|imageurl" ><?php echo $extraImages?></textarea>
 							</div>
 						</div>
 
