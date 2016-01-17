@@ -48,20 +48,6 @@ if($username == null){
 		}
 	}
 }
-
-
-$result = $dbhelper->getUserToken ( $username );
-$accounts = array ();
-$i = 0;
-while ( $rows = mysql_fetch_array ( $result ) ) {
-	$accounts ['clientid' . $i] = $rows ['clientid'];
-	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-	$accounts ['token' . $i] = $rows ['token'];
-	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-	$accounts ['accountid' . $i] = $rows ['accountid'];
-	$i ++;
-}
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -73,6 +59,28 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <meta name="keywords" content="">
 <link rel="stylesheet" type="text/css" href="../css/home_page.css">
 </head>
+<script type="text/javascript">
+	function login(){
+		var clientid  = document.getElementById("clientid").value;
+		if(clientid == null){
+			alert("请先输入clientid");
+			return;
+		}
+		window.open("https://merchant.wish.com/oauth/authorize?client_id=" + clientid);    
+	}
+
+	function bind(){
+		var bindcode  = document.getElementById("bindcode").value;
+		if(bindcode == null || bindcode.indexOf("code") == -1){
+			alert("请先输入登录后页面的网址");
+			return;
+		}
+		var position = bindcode.indexOf("code");
+		code = bindcode.substring(position+5,bindcode.length);
+		alert(code);
+		window.open("http://localhost/wishhelper/index.php?code=" + code);  
+	}
+</script>
 <body>
 <!-- HEADER -->
 <div id="header" class="navbar navbar-fixed-top 
@@ -139,13 +147,15 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 </div>
 
 <div id="page-content" class="container-fluid  user">
-<li>已绑定的wish账号:
-<?php  for($count = 0; $count < $i; $count ++) {
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$accounts ['accountid' . $count];
-}?>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="wbindwish.php">绑定wish账号</a></li>
-<ul align="center"><a href="../orders.php" style="font-size: 56px; color: #000000">处理订单</a></ul>
-
+<ul>
+&nbsp;&nbsp;&nbsp;&nbsp;请输入wish账号验证信息：</ul>
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;Client Id:<input id="clientid" type="text" name="clientid" value=""/></ul>
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;Client Secret:<input id="clientsecret" type="text" name="clientsecret" value=""/></ul>
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" onclick="login()">登录wish</button>(请在新开页面中登录wish账号，并且把之后的页面地址复制下来)</ul>
+<ul></ul>
+<ul></ul>
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;输入页面地址:<input id="bindcode" type="text" name="bindcode" value=""/></ul>
+<ul><button type="button" onclick="bind()">绑定账号</button></ul>
 </div>
 <!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
