@@ -1,5 +1,9 @@
 <?php 
 session_start ();
+$type=$_GET['type'];
+if(strcmp($type,"exit") == 0){
+	$_SESSION['username'] = null;
+}
 $username = $_SESSION ['username'];
 if($username != null){
 	header("Location:./wusercenter.php");

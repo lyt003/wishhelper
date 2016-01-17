@@ -91,7 +91,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <li data-mid="5416857ef8abc87989774c1b" data-uid="5413fe984ad3ab745fee8b48">
 <?php echo $username?>
 </li>
-
+<li><button><a href="./wlogin.php?type=exit">注销</a></button></li>
 
 </ul>
 
