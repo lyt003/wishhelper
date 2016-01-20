@@ -351,24 +351,29 @@ if ($productName != null && $description != null && $mainImage != null && $price
 <!-- END HEADER -->
 <!-- SUB HEADER NAV-->
 <!-- splash page subheader-->
+
+
+
 <div id="sub-header-nav" class="navbar navbar-fixed-top sub-header" style="left: 0px;">
 <div class="navbar-inner">
 <div class="container-fluid">
 <div class="pull-left">
-<ul class="nav">
-<li><a href="./wusercenter.php">
+                      <div class="navbar-inner">
+                        <div class="container">
+                          <a href="./wusercenter.php" class="brand">
 订单处理
-</a></li>
-<li>
-<a href="./wuploadproduct.php">
+</a>
+<a href="./wuploadproduct.php" class="brand">
 产品上传
 </a>
-</li>
-<li><a href="http://wishconsole.com/">
+<a href="http://wishconsole.com/" class="brand">
 个人信息
-</a></li>
-</ul>
-</div>
+</a>
+						  
+                        </div>
+                      </div>
+                      <!-- /navbar-inner -->
+                    </div>
 
 <div class="pull-right">
 <ul class="nav">
@@ -383,11 +388,6 @@ if ($productName != null && $description != null && $mainImage != null && $price
 </div>
 
 <div id="page-content" class="container-fluid  user">
-<li>已绑定的wish账号:
-<?php  for($count = 0; $count < $i; $count ++) {
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$accounts ['accountid' . $count];
-}?>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">绑定wish账号</a></li>
 <form id="add_product"
 		action="./wuploadproduct.php"
 		method="post">

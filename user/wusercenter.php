@@ -109,22 +109,22 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <div class="navbar-inner">
 <div class="container-fluid">
 <div class="pull-left">
-<ul class="nav">
-
-
-<li><a href="./wusercenter.php">
+                      <div class="navbar-inner">
+                        <div class="container">
+                          <a href="./wusercenter.php" class="brand">
 订单处理
-</a></li>
-<li>
-<a href="./wuploadproduct.php">
+</a>
+<a href="./wuploadproduct.php" class="brand">
 产品上传
 </a>
-</li>
-<li><a href="http://wishconsole.com/">
+<a href="http://wishconsole.com/" class="brand">
 个人信息
-</a></li>
-</ul>
-</div>
+</a>
+						  
+                        </div>
+                      </div>
+                      <!-- /navbar-inner -->
+                    </div>
 
 <div class="pull-right">
 <ul class="nav">
@@ -146,6 +146,791 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="wbindwish.php">绑定wish账号</a></li>
 <ul align="center"><a href="../orders.php" style="font-size: 56px; color: #000000">处理订单</a></ul>
 
+<!-- table 1: -->
+          <div class="row-fluid">
+              
+              <div class="span12">
+                <div class="widget">
+                  <div class="widget-header">
+                    <div class="title">
+                      账号1 未处理订单
+                    </div>
+                    <span class="tools">
+                      <a class="fs1" aria-hidden="true" data-icon="&#xe090;"></a>
+                    </span>
+                  </div>
+                  <div class="widget-body">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th style="width:5%">
+                            <input type="checkbox" class="no-margin" />
+                          </th>
+                          <th style="width:40%">
+                            Name
+                          </th>
+                          <th style="width:20%" class="hidden-phone">
+                            Product
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Status
+                          </th>
+                          <th style="width:15%" class="hidden-phone">
+                            Date
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Mahendra Singh Dhoni
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #567
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            15 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Michel Clark
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #224
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            10 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Rahul Dravid
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #342
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-important">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            14 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Anthony Michell
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #3021
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            19 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Srinu Baswa
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #771
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            12 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+    
+<!-- table 2 -->    
+          <div class="row-fluid">
+              
+              <div class="span12">
+                <div class="widget">
+                  <div class="widget-header">
+                    <div class="title">
+                       账号2 未处理订单
+                    </div>
+                    <span class="tools">
+                      <a class="fs1" aria-hidden="true" data-icon="&#xe090;"></a>
+                    </span>
+                  </div>
+                  <div class="widget-body">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th style="width:5%">
+                            <input type="checkbox" class="no-margin" />
+                          </th>
+                          <th style="width:40%">
+                            Name
+                          </th>
+                          <th style="width:20%" class="hidden-phone">
+                            Product
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Status
+                          </th>
+                          <th style="width:15%" class="hidden-phone">
+                            Date
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Mahendra Singh Dhoni
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #567
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            15 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Michel Clark
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #224
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            10 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Rahul Dravid
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #342
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-important">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            14 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Anthony Michell
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #3021
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            19 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Srinu Baswa
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #771
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            12 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+      <!-- table 3 --> 
+                      <div class="row-fluid">
+              
+              <div class="span12">
+                <div class="widget">
+                  <div class="widget-header">
+                    <div class="title">
+                       账号3 未处理订单
+                    </div>
+                    <span class="tools">
+                      <a class="fs1" aria-hidden="true" data-icon="&#xe090;"></a>
+                    </span>
+                  </div>
+                  <div class="widget-body">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th style="width:5%">
+                            <input type="checkbox" class="no-margin" />
+                          </th>
+                          <th style="width:40%">
+                            Name
+                          </th>
+                          <th style="width:20%" class="hidden-phone">
+                            Product
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Status
+                          </th>
+                          <th style="width:15%" class="hidden-phone">
+                            Date
+                          </th>
+                          <th style="width:10%" class="hidden-phone">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Mahendra Singh Dhoni
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #567
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            15 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Michel Clark
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #224
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            10 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Rahul Dravid
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #342
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-important">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            14 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Anthony Michell
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #3021
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-info">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            19 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="checkbox" class="no-margin" />
+                          </td>
+                          <td>
+                            <span class="name">
+                              Srinu Baswa
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            Baswa #771
+                          </td>
+                          <td class="hidden-phone">
+                            <span class="label label label-success">
+                              New
+                            </span>
+                          </td>
+                          <td class="hidden-phone">
+                            12 - 02 - 2013
+                          </td>
+                          <td class="hidden-phone">
+                            
+                            <div class="btn-group">
+                              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                                Action 
+                                <span class="caret">
+                                </span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a href="#">
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
 </div>
 <!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
