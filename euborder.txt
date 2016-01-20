@@ -1,9 +1,16 @@
 
+select  count(*) 
+from tracking_data where 
+tracking_date in ('20160111','20160112','20160113','20160114','20160115') 
+and `tracking_number`  LIKE  'L%' 
+group by tracking_date
+ORDER BY tracking_date ;
+
 
 SELECT * FROM `tracking_data` where `tracking_date`  = '20160105' and `tracking_number`  LIKE  'L%'
 SELECT * FROM `tracking_data` where `tracking_date`  = '20160105' and `tracking_number` not LIKE  'L%'
 
-
+select tracking_date, count(*) from tracking_data where tracking_date in ('20160111','20160112','20160113','20160114','20160115') and `tracking_number`  LIKE  'L%' order by tracking_date group by tracking_date;
 SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
 
 
@@ -16,13 +23,41 @@ SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countryc
 |5651430350fe62322c7b6829|565143029a469a18a44ea8d1| | |Nikki M Manuel
 |5651513a45f1a532233287c3|5651513a66df6e18bc74aa4a| | |Diana DeGeurin
 
-update orders set provider='USPS',tracking='LS457389495CN',orderstatus = '1' where transactionid = '568aa203f6b06f3eafa45661';
-update orders set provider='USPS',tracking='LS456014338CN',orderstatus = '1' where transactionid = '5689de792e60131530952adb';
-update orders set provider='USPS',tracking='LS456008709CN',orderstatus = '1' where transactionid = '5689fbf02e601315599531a6';
-update orders set provider='USPS',tracking='LS456014355CN',orderstatus = '1' where transactionid = '5689fca1da8e91e51d4d1e80';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
-update orders set provider='USPS',tracking='LS277617523CN',orderstatus = '1' where transactionid = '';
+
+569a7399c81aeb169d3036e5
+569ae29958ea1a14a8133076
+569af7e91f1acf14b55d293c
+569b08bd7f03dc1494ea1201
+569b32b9fd508614b06167f2
+569b4bdd2ae1d014b1134a76
+
+56998d6986f648438c2f1f05
+56999b792a6244f9e40e0a4a
+569a551b881afb1812d3ca2d
+86f648438c2f1f05	            LS495156505CN	US	Alicia Blevins	0.03	卖家自送	16011708464596615	shiptemplate_01.xls	20160117084656545338	hongliang5301	运单 批次
+	56999b792a6244f9e40e0a4a	LS495162418CN	US	Jake Morris	0.1	卖家自送	16011708464596615	shiptemplate_01.xls	20160117084656545338	hongliang5301	运单 批次
+	569a551b881afb1812d3ca2d	LS495156514CN
+	、
+	
+	c81aeb169d3036e5	        LS497761405CN	US	John Bynum	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
+	569ae29958ea1a14a8133076	LS497759044CN	US	Melissa Schuster	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
+	569af7e91f1acf14b55d293c	LS497761431CN	US	Gloria E. Velez	0.03	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
+	569b08bd7f03dc1494ea1201	LS497761811CN	US	Jessica Grach	0.03	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
+	569b32b9fd508614b06167f2	LS497759061CN	US	Ashley Lillie	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
+	569b4bdd2ae1d014b1134a76	LS497761842CN	
+	
+	516269d930c             	LS498033046CN	US	Priya vadivel kannappan	0.2	卖家自送	16011809580712994	shiptemplate_01.xls	20160118095822549081	hongliang5301	运单 批次
+	569b2e37cd05721451a6e98d	LS498038635CN	
+	
+569ab11cf0eab516269d930c
+569b2e37cd05721451a6e98d
+update orders set provider='USPS',tracking='LS498033046CN',orderstatus = '1' where transactionid = '569ab11cf0eab516269d930c';
+update orders set provider='USPS',tracking='LS498038635CN',orderstatus = '1' where transactionid = '569b2e37cd05721451a6e98d';
+update orders set provider='USPS',tracking='LS497761431CN',orderstatus = '1' where transactionid = '569af7e91f1acf14b55d293c';
+update orders set provider='USPS',tracking='LS497761811CN',orderstatus = '1' where transactionid = '569b08bd7f03dc1494ea1201';
+update orders set provider='USPS',tracking='LS497759061CN',orderstatus = '1' where transactionid = '569b32b9fd508614b06167f2';
+update orders set provider='USPS',tracking='LS497761842CN',orderstatus = '1' where transactionid = '569b4bdd2ae1d014b1134a76';
+update orders set provider='USPS',tracking='',orderstatus = '1' where transactionid = '';
 
                                 LS456008690CN	US	McQueltin Lane	0.1	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次
 	5689de792e60131530952adb	LS456014338CN	US	Nicole Kuntz	0.03	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次

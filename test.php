@@ -78,23 +78,9 @@ echo "curDate = ".$curDate."<br/>";
 echo date("y-m-d H:i:s",time());// H: 24小时制；   h：12小时制
 
 
-/* $dbhelper = new dbhelper ();
-$accountid = 1;
-if ($client == null || ($accountid == $client->getAccountid ())) {
-	$accountAcess = $dbhelper->getAccountToken ( $accountid );
-	if ($rows = mysql_fetch_array ( $accountAcess )) {
-		$token = $rows ['token'];
-		$client = new WishClient ( $token, 'prod' );
-		$client->setAccountid ( $accountid );
-		$clientid = $rows ['clientid'];
-		$clientsecret = $rows ['clientsecret'];
-		$refresh_token = $rows ['refresh_token'];
-		echo "client account id:".$client->getAccountid()."<br/>";
-	}
-}
+ $dbhelper = new dbhelper ();
 
-$accountid = 3;
-echo "equal: ".($accountid != $client->getAccountid ());
+$accountid = 2;
 if ($client == null || ($accountid != $client->getAccountid ())) {
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
 	if ($rows = mysql_fetch_array ( $accountAcess )) {
@@ -108,7 +94,29 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 	}
 }
 
-echo "the last, client account id:".$client->getAccountid()."<br/>"; */
+
+$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
+echo "<br/>errorMessage:" . $response->getMessage ();
+$values = $response->getResponse ()->{'data'};
+$newToken = '0';
+$newRefresh_token = '0';
+foreach ( $values as $k => $v ) {
+	echo 'key  ' . $k . '  value:' . $v;
+	if ($k == 'access_token') {
+		$newToken = $v;
+	}
+	if ($k == 'refresh_token') {
+		$newRefresh_token = $v;
+	}
+}
+echo "<br/>newToken = " . $newToken . $newRefresh_token;
+$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
+$client = new WishClient ( $newToken, 'prod' );
+$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+echo "\n get orders count:" . count ( $unfulfilled_orders ) . "<br/>";
+
+
+echo "the last, client account id:".$client->getAccountid()."<br/>"; 
 
 $pwd ="123456";
 $hash = md5($pwd);
