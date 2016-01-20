@@ -16,7 +16,7 @@
  */
 namespace Wish;
 
-include 'Wish/WishPager.php';
+include dirname(__FILE__).'/WishPager.php';
 use Wish\WishPager;
 
 class WishResponse{

@@ -16,7 +16,7 @@
  */
 namespace Wish\Exception;
 
-include 'Wish/Exception/ExceptionInterface.php';
+include dirname(__FILE__).'/ExceptionInterface.php';
 class RuntimeException extends \RuntimeException implements ExceptionInterface{
 
 

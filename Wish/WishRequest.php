@@ -17,8 +17,8 @@
  */
 namespace Wish;
 
-include 'Wish/Exception/ConnectionException.php';
-include 'Wish/WishResponse.php';
+include dirname(__FILE__).'/Exception/ConnectionException.php';
+include dirname(__FILE__).'/WishResponse.php';
 use Wish\Exception\ConnectionException;
 use Wish\WishResponse;
 

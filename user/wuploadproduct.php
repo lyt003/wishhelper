@@ -1,40 +1,28 @@
 <?php
-/*
- * create Product:
- * name Name of the product as shown to users on Wish
- * description Description of the product. Should not contain HTML. If you want a new line use "\n".
- * tags Comma separated list of strings that describe the product. Only 10 are allowed. Any tags past 10 will be ignored.
- * sku The unique identifier that your system uses to recognize this product
- * color optional The color of the product. Example: red, blue, green
- * size optional The size of the product. Example: Large, Medium, Small, 5, 6, 7.5
- * inventory The physical quantities you have for this product
- * price The price of the product when the user purchases one
- * shipping The shipping of the product when the user purchases one
- * msrp optional Manufacturer's Suggested Retail Price. This field is recommended as it will show as a strikethrough price on Wish and appears above the selling price for the product.
- * shipping_time optional The amount of time it takes for the shipment to reach the buyer. Please also factor in the time it will take to fulfill and ship the item. Provide a time range in number of days. Lower bound cannot be less than 2 days. Example: 15-20
- * main_image URL of a photo of your product. Link directly to the image, not the page where it is located. We accept JPEG, PNG GIF format. Images should be at least 100 x 100 pixels in size.
- * parent_sku optional When defining a variant of a product we must know which product to attach the variation to. parent_sku is the unique id of the product that you can use later when using the add product variation API.
- * brand optional Brand or manufacturer of your product
- * landing_page_url optional URL on your website containing the product details
- * upc optional 12-digit Universal Product Codes (UPC)-contains no letters or other characters
- * extra_images optional
- *
- *
- * create ProductVariation:
- *
- * parent_sku The parent_sku of the product this new product variation should be added to. If the product is missing a parent_sku, then this should be the SKU of a product variation of the product
- * sku The unique identifier that your system uses to recognize this variation
- * color optional The color of the variation. Example: red, blue, green
- * size optional The size of the variation. Example: Large, Medium, Small, 5, 6, 7.5
- * inventory The physical quantities you have for this variation
- * price The price of the variation when the user purchases one
- * shipping The shipping of the variation when the user purchases one
- * msrp optional Manufacturer's Suggested Retail Price. This field is recommended as it will show as a strikethrough price on Wish and appears above the selling price for the product.
- * shipping_time optional The amount of time it takes for the shipment to reach the buyer. Please also factor in the time it will take to fulfill and ship the item. Provide a time range in number of days. Lower bound cannot be less than 2 days. Example: 15-20
- * main_image optional URL of a photo for this product variation. Provide this when you have different pictures for different product variation of the product. If left out, it'll use the main_image of the product with the provided parent_sku. Link directly to the image, not the page where it is located. We accept JPEG, PNG or GIF format. Images should be at least 100 x 100 pixels in size.
- *
- */
- 
+session_start ();
+include dirname('__FILE__').'./Wish/WishClient.php';
+include dirname('__FILE__').'./mysql/dbhelper.php';
+use Wish\WishClient;
+use mysql\dbhelper;
+use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
+use Wish\WishResponse;
+
+header ( "Content-Type: text/html;charset=utf-8" );
+$dbhelper = new dbhelper();
+$result = $dbhelper->getUserToken ( $_SESSION ['username'] );
+$accounts = array ();
+$i = 0;
+while ( $rows = mysql_fetch_array ( $result ) ) {
+	$accounts ['clientid' . $i] = $rows ['clientid'];
+	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+	$accounts ['token' . $i] = $rows ['token'];
+	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+	$accounts ['accountid' . $i] = $rows ['accountid'];
+	$i ++;
+}
+
+
 // Function: 获取远程图片并把它保存到本地
 // 确定您有把文件写入本地服务器的权限
 // 变量说明:
@@ -71,21 +59,11 @@ function getCompressedImage($sourceURL){
 }
 
 
-header ( "Content-Type: text/html;charset=utf-8" );
-include 'Wish/WishClient.php';
-include 'mysql/dbhelper.php';
-use Wish\WishClient;
-use mysql\dbhelper;
-use Wish\Model\WishTracker;
-use Wish\Exception\ServiceResponseException;
-use Wish\WishResponse;
-session_start ();
-$accountid = null;
-$dbhelper = null;
+//$accountid = null;
 $client = null;
 
-$accountid = $_GET ['accountid'];
-
+//$accountid = $_GET ['accountid'];
+$accountid = $_POST['currentAccountid'];
 $productName = $_POST ['Product_Name'];
 $productName = str_replace ( '"', "''", $productName );
 $description = $_POST ['Description'];
@@ -113,7 +91,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['name'] = $productName;
 	$productarray ['brand'] = $brand;
 	$productarray ['description'] = $description;
-	
+
 	$extraImagesArray = explode ( "|", $extraImages );
 	foreach ($extraImagesArray as $extraImage){
 		if($extraImage != null){
@@ -121,9 +99,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		}
 	}
 	//$productarray ['extra_images'] = $extraImages;
-	
+
 	$productarray ['landingPageURL'] = $landingPageURL;
-	
+
 	$productarray ['main_image'] =getCompressedImage($mainImage);
 	$productarray ['MSRP'] = $MSRP;
 	$productarray ['price'] = $price;
@@ -134,7 +112,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
 	$productarray ['productSourceURL'] = $productSourceURL;
-	
+
 	$dbhelper = new dbhelper ();
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
 	if ($rows = mysql_fetch_array ( $accountAcess )) {
@@ -144,13 +122,13 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		$clientsecret = $rows ['clientsecret'];
 		$refresh_token = $rows ['refresh_token'];
 	}
-	
+
 	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
-	
+
 	$colorArray = explode ( "|", $colors );
-	
+
 	$sizeArray = explode ( "|", $sizes );
-	
+
 	foreach ( $colorArray as $color ) {
 		$basePrice = $price;
 		$sizeCount = 0;
@@ -180,7 +158,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			if ($insertResult != '1') {
 				echo "insert failed" . "<br/>";
 			}
-			
+				
 			$productarray ['sku'] = null;
 			$productarray ['color'] = null;
 			$productarray ['size'] = null;
@@ -217,7 +195,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
 				$currentProduct ['upc'] = $product ['UPC'];
 				$currentProduct ['extra_images'] = $product ['extra_images'];
-				
+
 				try {
 					$prod_res = $client->createProduct ( $currentProduct );
 				} catch ( ServiceResponseException $e ) {
@@ -274,18 +252,17 @@ if ($productName != null && $description != null && $mainImage != null && $price
 }
 
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta name="generator"
-	content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://china-merchant.wish.com/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wish 商户平台</title>
-<meta name="keywords" content="" />
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="../css/home_page.css">
 <link rel="stylesheet" type="text/css"
-	href="./css/add_products_page.css" />
+	href="../css/add_products_page.css" />
 </head>
 <script type="text/javascript">
 
@@ -344,14 +321,75 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		var shippingTime = document.getElementById("shipping_time").value;
 		if(shippingTime == null || shippingTime == ''){
 			alert("shippingTime can't be empty");
-			return;}
+			return;} 
 		var form = document.getElementById("add_product");
 		form.submit();
 	}
 </script>
 <body>
-	<form id="add_product"
-		action="products.php<?php echo "?accountid=".$accountid?>"
+<!-- HEADER -->
+<div id="header" class="navbar navbar-fixed-top 
+
+
+
+" style="left: 0px;">
+<div class="container-fluid ">
+<a class="brand" href="http://wishconsole.com/">
+<span
+				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
+</a>
+
+<div class="pull-right">
+<ul class="nav">
+<li data-mid="5416857ef8abc87989774c1b" data-uid="5413fe984ad3ab745fee8b48">
+<?php echo $username?>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- END HEADER -->
+<!-- SUB HEADER NAV-->
+<!-- splash page subheader-->
+
+
+
+<div id="sub-header-nav" class="navbar navbar-fixed-top sub-header" style="left: 0px;">
+<div class="navbar-inner">
+<div class="container-fluid">
+<div class="pull-left">
+                      <div class="navbar-inner">
+                        <div class="container">
+                          <a href="./wusercenter.php" class="brand">
+订单处理
+</a>
+<a href="./wuploadproduct.php" class="brand">
+产品上传
+</a>
+<a href="http://wishconsole.com/" class="brand">
+个人信息
+</a>
+						  
+                        </div>
+                      </div>
+                      <!-- /navbar-inner -->
+                    </div>
+
+<div class="pull-right">
+<ul class="nav">
+</ul>
+</div>
+
+</div>
+</div>
+</div>
+<!-- END SUB HEADER NAV -->
+<div class="banner-container">
+</div>
+
+<div id="page-content" class="container-fluid  user">
+<form id="add_product"
+		action="./wuploadproduct.php"
 		method="post">
 		<div id="add-products-page" class="center">
 			<div>
@@ -360,8 +398,23 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 				<div id="add-product-form">
 					<div id="basic-info" class="form-horizontal">
-						<div class="section-title">基本信息</div>
+						<div class="section-title" align="left">基本信息</div>
 
+						<div class="control-group">
+							<label class="control-label" data-col-index="3"><span
+								class="col-name">请选择wish账号</span></label>
+
+							<div class="controls input-append">
+							<label>
+							<?php  for($count = 0; $count < $i; $count ++) {
+									echo "<input type=\"radio\" name=\"currentAccountid\" value=\"".$accounts ['accountid' . $count]."\""
+										.($accountid == null?($count==0?"checked":""):((strcmp($accounts ['accountid' . $count],$accountid)==0)?"checked":"")).">";
+									echo "&nbsp;&nbsp;".$accounts ['accountid' . $count];
+									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							}?></label>
+							</div>
+						</div>
+						
 						<div class="control-group">
 							<label class="control-label" data-col-index="3"><span
 								class="col-name">Product Name</span></label>
@@ -382,7 +435,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								<textarea rows="5" class="input-block-level required"
 									name="Description" id="description" type="text"
 									placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $description?>
-</textarea>
+								</textarea>
 							</div>
 						</div>
 
@@ -391,11 +444,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								class="col-name">Tags</span></label>
 
 							<div class="controls input-append">
-								<ul class="typeahead-tokenizer">
-									<li class="token-li first-li"><input class="token-input"
-										type="text" id="tags" name="Tags" value="<?php echo $tags?>"
-										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel" /></li>
-								</ul>
+								<textarea rows="3" class="input-block-level required"
+										type="text" id="tags" name="Tags"
+										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $tags?></textarea>
 							</div>
 						</div>
 
@@ -426,9 +477,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								class="col-name">Extra Images</span></label>
 
 							<div class="controls input-append">
-								<input class="input-block-level required" name="Extra_Images"
-									id="extra_images" type="text" value="<?php echo $extraImages?>"
-									placeholder="可接受：imageurl|imageurl|imageurl" />
+								<textarea rows="5" class="input-block-level required" name="Extra_Images"
+									id="extra_images" type="text" 
+									placeholder="可接受：imageurl|imageurl|imageurl" ><?php echo $extraImages?></textarea>
 							</div>
 						</div>
 
@@ -623,7 +674,19 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						</div>
 					</div>
 				</div>
-	
+			</div>
 	</form>
+
+</div>
+<!-- FOOTER -->
+	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
+		<div class="navbar-inner">
+			<div class="footer-container">
+				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+						wishconsole版权所有 京ICP备16000367号</a></span>
+			</div>
+		</div>
+	</div>
+	<!-- END FOOTER -->
 </body>
 </html>

@@ -17,6 +17,6 @@
 
 namespace Wish\Exception;
 
-include 'Wish/Exception/RuntimeException.php';
+include dirname(__FILE__).'/RuntimeException.php';
 
 class ConnectionException extends RuntimeException{}
