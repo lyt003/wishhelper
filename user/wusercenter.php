@@ -43,7 +43,7 @@ if($username == null){
 		if($row){
 			$_SESSION ['username'] = $username;
 		}else{
-			header("Location:http://localhost/wishhelper/user/wlogin.php?errorMsg=登录失败");
+			header("Location:./wlogin.php?errorMsg=登录失败");
 			exit;
 		}
 	}

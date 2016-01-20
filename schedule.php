@@ -46,8 +46,9 @@ if ($isRunning == 1) {
 			} else {
 				$dbhelper->updateSettingMsg ( "client account id:" . $client->getAccountid () );
 			}
-			$dbhelper->updateSettingMsg ( "process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid () );
 			$products = $dbhelper->getProducts ( $parent_sku );
+			$log = "process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
+			$dbhelper->updateSettingMsg ( $log );
 			$addProduct = 0;
 			$prod_res = null;
 			while ( $product = mysql_fetch_array ( $products ) ) {
@@ -76,9 +77,10 @@ if ($isRunning == 1) {
 					try {
 						$prod_res = $client->createProduct ( $currentProduct );
 					} catch ( ServiceResponseException $e ) {
-						if ($e->getStatusCode () == 1015) {
+						if ($e->getStatusCode () == 1015 || $e->getStatusCode () == 4000) {
 							$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
-							echo "<br/>errorMessage:" . $response->getMessage ();
+							$log = $log. "<br/>errorMessage:" . $response->getMessage ();
+							$dbhelper->updateSettingMsg ( $log );
 							$values = $response->getResponse ()->{'data'};
 							$newToken = '0';
 							$newRefresh_token = '0';
@@ -91,19 +93,23 @@ if ($isRunning == 1) {
 									$newRefresh_token = $v;
 								}
 							}
-							echo "<br/>newToken = " . $newToken . $newRefresh_token;
+							$log = $log. "<br/>newToken = " . $newToken . $newRefresh_token;
+							$dbhelper->updateSettingMsg ( $log );
 							$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
 							$client = new WishClient ( $newToken, 'prod' );
 							$prod_res = $client->createProduct ( $currentProduct );
 						}
-						$dbhelper->updateSettingMsg ( $e->getErrorMessage()." of account " . $accountid."<br/>" );
+						$log = $log.$e->getErrorMessage()." of account " . $accountid."<br/>";
+						$dbhelper->updateSettingMsg ( $log );
 					}
 					print_r ( $prod_res );
 					if ($prod_res != null) {
-						echo "add product success<br/>";
+						$log = $log."add product success<br/>";
+						$dbhelper->updateSettingMsg ( $log );
 						$addProduct = 1;
 					} else {
-						echo "add product failed<br/>";
+						$log = $log. "add product failed<br/>";
+						$dbhelper->updateSettingMsg ( $log );
 					}
 				} else { // add product variation
 					$currentProductVar = array ();
@@ -122,13 +128,15 @@ if ($isRunning == 1) {
 					$prod_var = $client->createProductVariation ( $currentProductVar );
 					print_r ( $prod_var );
 					if (prod_var != null) {
-						echo "add product var success<br/>";
+						$log = $log. "add product var success<br/>";
+						$dbhelper->updateSettingMsg ( $log );
 					}
 				}
 			}
 			
 			$dbhelper->updateScheduleFinished ( $productInfo );
-			$dbhelper->updateSettingMsg ( "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid () );
+			$log = $log. "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
+			$dbhelper->updateSettingMsg ( $log );
 		}
 	} while ( $dbhelper->isScheduleRunning () );
 }
