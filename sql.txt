@@ -133,10 +133,10 @@ CREATE TABLE `labels`(
 
 DROP TABLE IF EXISTS `product_label`;
 CREATE TABLE `product_label`(
-	`accountid` int(11),
+	`userid` int(11),
 	`parent_sku` int(11),
 	`label_id` varchar(20),
-	PRIMARY KEY (`parent_sku`,`accountid`)
+	PRIMARY KEY (`parent_sku`,`userid`)
 ) DEFAULT CHARSET=utf8;
 
 

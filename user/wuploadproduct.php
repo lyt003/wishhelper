@@ -366,7 +366,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 <a href="./wuploadproduct.php" class="brand">
 产品上传
 </a>
-<a href="http://wishconsole.com/" class="brand">
+<a href="./wuserinfo.php" class="brand">
 个人信息
 </a>
 						  
