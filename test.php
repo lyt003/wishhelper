@@ -7,11 +7,50 @@ use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
-phpinfo ();
+//phpinfo ();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
+
+$orderCount = 0;
+if($orderCount /2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
 
 $printTrackingnumbers = "<string>RG228167292CN,RG228167292CN,";
 $printTrackingnumbers = substr ( $printTrackingnumbers, 0, strlen ( $printTrackingnumbers ) - 1 ) . "</string>";
