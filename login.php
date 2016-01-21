@@ -8,7 +8,7 @@ if (isset ( $_SESSION ['userid'] )) {
 	header ( 'Location: ' . $next_url );
 } else {
 	$email = $_POST ['email'];
-	$psd = $_POST ['password'];
+	$psd = md5($_POST ['password']);
 	if (! empty ( $email ) && ! empty ( $psd )) {
 		
 		if($online){
