@@ -44,6 +44,7 @@ if($username == null){
 		$row=mysql_fetch_array($result);
 		if($row){
 			$_SESSION ['username'] = $username;
+			$_SESSION ['email'] = $username;
 		}else{
 			header("Location:./wlogin.php?errorMsg=登录失败");
 			exit;

@@ -123,6 +123,21 @@ CREATE TABLE `tracking_data`(
 	PRIMARY KEY (`tracking_number`)
 ) DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `labels`;
+CREATE TABLE `labels`(
+	`id` int(11),
+	`CN_Name` varchar(20),
+	`EN_Name` varchar(50),
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `product_label`;
+CREATE TABLE `product_label`(
+	`accountid` int(11),
+	`parent_sku` int(11),
+	`label_id` varchar(20),
+	PRIMARY KEY (`parent_sku`,`accountid`)
+) DEFAULT CHARSET=utf8;
 
 
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");
