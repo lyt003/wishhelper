@@ -176,6 +176,24 @@ class dbhelper {
 		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . $trackingData ['tracking_number'] . '","' . $trackingData ['device_id'] . '","' . $trackingData ['tracking_date'] . '")';
 		return mysql_query ( $insertTracking );
 	}
+	
+	public function getUserLabels($userid){
+		$querylabels = "SELECT l.id id,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE product_label.userid = ".$userid." and p.label_id = l.id";
+		return mysql_query($querylabels);
+	}
+	
+	public function insertLabel($cn_name,$en_name){
+		$insertlabel = 'insert into labels(CN_Name,EN_Name) values("'.$cn_name.'","'.$en_name.'")';
+		echo "insertlabel:".$insertlabel;
+		mysql_query($insertlabel);
+		return mysqli_insert_id();
+	}
+	
+	public function insertproductLabel($userid,$parent_sku,$labelid){
+		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values('.$labelid.',"'.$parent_sku.'",'.$userid.')';
+		return mysql_query(insertpl);
+	}
+	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

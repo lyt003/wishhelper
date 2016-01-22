@@ -125,7 +125,7 @@ CREATE TABLE `tracking_data`(
 
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels`(
-	`id` int(11),
+	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`CN_Name` varchar(20),
 	`EN_Name` varchar(50),
 	PRIMARY KEY (`id`)
@@ -134,8 +134,8 @@ CREATE TABLE `labels`(
 DROP TABLE IF EXISTS `product_label`;
 CREATE TABLE `product_label`(
 	`userid` int(11),
-	`parent_sku` int(11),
-	`label_id` varchar(20),
+	`parent_sku` varchar(50) NOT NULL,
+	`label_id` int(11),
 	PRIMARY KEY (`parent_sku`,`userid`)
 ) DEFAULT CHARSET=utf8;
 

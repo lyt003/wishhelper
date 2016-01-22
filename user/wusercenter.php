@@ -45,6 +45,7 @@ if($username == null){
 		if($row){
 			$_SESSION ['username'] = $username;
 			$_SESSION ['email'] = $username;
+			$_SESSION['userid'] = $row['userid'];
 		}else{
 			header("Location:./wlogin.php?errorMsg=登录失败");
 			exit;
@@ -52,6 +53,31 @@ if($username == null){
 	}
 }
 
+$add = $_GET['add'];
+$postlabels = array();
+$lc = 0;
+if(strcmp($add,"1") == 0){
+	$x = 3;
+	$y = 5;
+	for($z =0;$z<$x;$z ++){
+		for($lz=0;$lz<$y;$lz ++){
+			$postlabels[$lc] = $_POST['label_'.$z.$lz];
+			echo "label:".$z.$lz.$postlabels[$lc]."</br>";
+			$labelCNEN = explode ( "|", $postlabels[$lc]);
+			print_r("label:".$labelCNEN);
+			echo "insert lable id: ".$dbhelper->insertLabel($labelCNEN[0], $labelCNEN[1]);
+			$lc++;
+		}
+	}
+	
+	print_r($postlabels);	
+}
+
+$labels = array();
+$labelResult = $dbhelper->getUserLabels($_SESSION['userid']);
+while ($label = mysql_fetch_array ( $labelResult )) {
+	$labels[$label['id']] = $label['cn_name']."|".$label['en_name'];
+}
 
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
@@ -78,7 +104,19 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <title>Wish 商户平台</title>
 <meta name="keywords" content="">
 <link rel="stylesheet" type="text/css" href="../css/home_page.css">
+<link href="../css/bootstrap.min.css" rel="stylesheet">  
+<script src="../js/jquery-2.2.0.min.js"></script>  
+<script src="../js/bootstrap.min.js"></script>  
 </head>
+<script type="text/javascript">
+	function processorders(){
+		alert("processorders");	
+		var a=$('input[name^="label"]').map(function(){return {value:this.value,name:this.name}}).get();
+		//for(var i=0;i<a.length;i++)alert(a[i].name+'='+a[i].value);
+		var form = document.getElementById("processorders");
+		form.submit();
+	}
+</script>
 <body>
 <!-- HEADER -->
 <div id="header" class="navbar navbar-fixed-top 
@@ -141,14 +179,16 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <div class="banner-container">
 </div>
 <div id="page-content" class="dashboard-wrapper">
+<form class="form-horizontal" id="processorders" action="./wusercenter.php?add=1" method="post">
 <li>已绑定的wish账号:
 <?php  for($count = 0; $count < $i; $count ++) {
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$accounts ['accountid' . $count];
 }?>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="wbindwish.php">绑定wish账号</a></li>
-<ul align="center"><a href="../orders.php" style="font-size: 56px; color: #000000">处理订单</a></ul>
+<ul align="center"><button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="processorders()">下载标签</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="processorders()">上传单号</button></ul>
 
-<?php  for($count1 = 0; $count1 < $i; $count1 ++) {
+<?php
+for($count1 = 0; $count1 < $i; $count1 ++) {
 	$orders = $accounts ['order' . $count1];
 	echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号".$accounts ['accountid' . $count1].":&nbsp;&nbsp;".count ( $orders )."个未处理订单";
 	echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
@@ -169,12 +209,16 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"".$cur_order->product_image_url."\">".$cur_order->sku.":(".$cur_order->color." - ".$cur_order->size." * ".$cur_order->quantity.")</li><ul></td>";
 		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$cur_order->cost." + ".$cur_order->shipping_cost."=".$cur_order->order_total."</td>";
 		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$shippingdetail->name."&nbsp;|&nbsp;".$shippingdetail->country."</td>";
-		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><input type=\"text\" id=\"inputFirstName\" placeholder=\"中文|英文\"></td><tr>";
+		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" name=\"label_".$count1.$orderCount."\" placeholder=\"中文|英文\">";
+      	echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
+        echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
+        echo "<li>按钮式下拉菜单</li><li><a href=\"#\">输入框组带有下拉菜单的按钮</a></li><li>输入框组带有下拉菜单的按钮</li></ul></div></div></td><tr>";
 		$orderCount ++;
 	}
 	echo "</tbody></table></div></div></div></div>";
 	
 }?>
+</form>
 </div>
 <!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
