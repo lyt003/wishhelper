@@ -8,10 +8,28 @@ use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 //phpinfo ();
+
+$dbhelper = new dbhelper ();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
+
+$key = "label_fdafdkakfdas_12";
+if(preg_match("/^label/",$key,$matches)){
+	echo "preg yes".$matches[0];
+	$sku = explode("_",$key)[1];
+	echo "sku".$sku;
+}else{
+	echo "preg no";
+}
+echo "<br/>";
+
+$sku = 'TESTSKU';
+$names = explode("|","AAA|BBB");
+$dbhelper->insertproductLabel(1, $sku, $dbhelper->insertLabel($names[0], $names[1]));
+
+
 
 $orderCount = 0;
 if($orderCount /2 == 0){

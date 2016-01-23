@@ -1,14 +1,17 @@
 <?php
 session_start ();
 include dirname('__FILE__').'./Wish/WishClient.php';
-include dirname('__FILE__').'./mysql/dbhelper.php';
+include dirname('__FILE__').'./Wish/WishHelper.php';
+include_once dirname('__FILE__').'./mysql/dbhelper.php';
 use Wish\WishClient;
 use mysql\dbhelper;
+use Wish\WishHelper;
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper();
+$wishHelper = new WishHelper();
 
 $username = $_SESSION ['username'];
-if($username == null){
+if($username == null){//未登录
 	$type = $_GET ['type'];
 	if(strcmp($type,"register") == 0){
 		$email = $_POST ["email"];
@@ -51,48 +54,46 @@ if($username == null){
 			exit;
 		}
 	}
-}
+}else{//已登录
 
-$add = $_GET['add'];
-$postlabels = array();
-$lc = 0;
-if(strcmp($add,"1") == 0){
-	$x = 3;
-	$y = 5;
-	for($z =0;$z<$x;$z ++){
-		for($lz=0;$lz<$y;$lz ++){
-			$postlabels[$lc] = $_POST['label_'.$z.$lz];
-			echo "label:".$z.$lz.$postlabels[$lc]."</br>";
-			$labelCNEN = explode ( "|", $postlabels[$lc]);
-			print_r("label:".$labelCNEN);
-			echo "insert lable id: ".$dbhelper->insertLabel($labelCNEN[0], $labelCNEN[1]);
-			$lc++;
-		}
+	$result = $dbhelper->getUserToken ( $username );
+	$accounts = array ();
+	$i = 0;
+	while ( $rows = mysql_fetch_array ( $result ) ) {
+		$accounts ['clientid' . $i] = $rows ['clientid'];
+		$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+		$accounts ['token' . $i] = $rows ['token'];
+		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+		$accounts ['accountid' . $i] = $rows ['accountid'];
+	
+		$client = new WishClient ( $rows ['token'], 'prod' );
+		$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+	
+		$wishHelper->saveOrders($unfulfilled_orders, $rows ['accountid']);
+	
+		$i ++;
 	}
 	
-	print_r($postlabels);	
-}
-
-$labels = array();
-$labelResult = $dbhelper->getUserLabels($_SESSION['userid']);
-while ($label = mysql_fetch_array ( $labelResult )) {
-	$labels[$label['id']] = $label['cn_name']."|".$label['en_name'];
-}
-
-$result = $dbhelper->getUserToken ( $username );
-$accounts = array ();
-$i = 0;
-while ( $rows = mysql_fetch_array ( $result ) ) {
-	$accounts ['clientid' . $i] = $rows ['clientid'];
-	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-	$accounts ['token' . $i] = $rows ['token'];
-	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-	$accounts ['accountid' . $i] = $rows ['accountid'];
+	$add = $_GET['add'];
+	$postlabels = array();
 	
-	$client = new WishClient ( $rows ['token'], 'prod' );
-	$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-	$accounts ['order' . $i] = $unfulfilled_orders;
-	$i ++;
+	//process orders;
+	if(strcmp($add,"1") == 0){
+		foreach ($_POST as $key=>$value){
+			if(preg_match("/^label/",$key)){
+				$sku = explode("|",$key)[1];
+				$names = explode("|",$value);
+				$dbhelper->insertproductLabel($_SESSION['userid'], $sku, $dbhelper->insertLabel($names[0], $names[1]));
+			}
+		}
+	
+		for($ct = 0; $ct < $i; $ct ++) {
+			$wishHelper->applyTrackingsForOrders($accounts ['accountid' . $ct], $_SESSION['userid']);
+		}
+		
+	}else{
+		$labels = $wishHelper->getUserLabelsArray($_SESSION['userid']);
+	}
 }
 ?>
 
@@ -112,7 +113,13 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	function processorders(){
 		alert("processorders");	
 		var a=$('input[name^="label"]').map(function(){return {value:this.value,name:this.name}}).get();
-		//for(var i=0;i<a.length;i++)alert(a[i].name+'='+a[i].value);
+		for(var i=0;i<a.length;i++){
+			alert(a[i].name+'='+a[i].value);
+			if(a[i].value == null || a[i].value == ""){
+				alert("请填写好每个订单的中英文品名");
+				return;
+			}
+		}
 		var form = document.getElementById("processorders");
 		form.submit();
 	}
@@ -181,35 +188,34 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 <div id="page-content" class="dashboard-wrapper">
 <form class="form-horizontal" id="processorders" action="./wusercenter.php?add=1" method="post">
 <li>已绑定的wish账号:
-<?php  for($count = 0; $count < $i; $count ++) {
+<?php 
+for($count = 0; $count < $i; $count ++) {
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$accounts ['accountid' . $count];
 }?>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="wbindwish.php">绑定wish账号</a></li>
 <ul align="center"><button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="processorders()">下载标签</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="processorders()">上传单号</button></ul>
 
 <?php
+$orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
-	$orders = $accounts ['order' . $count1];
-	echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号".$accounts ['accountid' . $count1].":&nbsp;&nbsp;".count ( $orders )."个未处理订单";
+	$orders = $dbhelper->getOrdersNoTracking($accounts ['accountid' . $count1]);
+	echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号".$accounts ['accountid' . $count1].":&nbsp;&nbsp;".mysql_num_rows ( $orders )."个未处理订单";
 	echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 	echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
-	echo "<th style=\"width:10%\">日期</th><th style=\"width:10%\" class=\"hidden-phone\">履行的天数</th><th style=\"width:25%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
+	echo "<th style=\"width:10%\">日期</th><th style=\"width:35%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
 	echo "<th style=\"width:20%\" class=\"hidden-phone\">总成本(成本+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 	echo "<tbody>";
-	$orderCount = 0;
-	foreach ( $orders as $cur_order ) {
-		$shippingdetail = $cur_order->ShippingDetail;
+	while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 		if($orderCount % 2 == 0){
 			echo "<tr>";
 		}else{
 			echo "<tr class=\"gradeA success\">";
 		}
-		echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">".substr($cur_order->order_time,0,10)."</td>";
-		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\">".$cur_order->days_to_fulfill."天</td>";
-		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"".$cur_order->product_image_url."\">".$cur_order->sku.":(".$cur_order->color." - ".$cur_order->size." * ".$cur_order->quantity.")</li><ul></td>";
-		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$cur_order->cost." + ".$cur_order->shipping_cost."=".$cur_order->order_total."</td>";
-		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$shippingdetail->name."&nbsp;|&nbsp;".$shippingdetail->country."</td>";
-		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" name=\"label_".$count1.$orderCount."\" placeholder=\"中文|英文\">";
+		echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">".substr($cur_order['ordertime'],0,10)."</td>";
+		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"".$cur_order['productimage']."\">".$cur_order['sku'].":(".$cur_order['color']." - ".$cur_order['size']." * ".$cur_order['quantity'].")</li><ul></td>";
+		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$cur_order['cost']." + ".$cur_order['shippingcost']."=".$cur_order['totalcost']."</td>";
+		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">".$cur_order['name']."&nbsp;|&nbsp;".$cur_order['countrycode']."</td>";
+		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" name=\"label|".$cur_order['sku']."|".$orderCount."\" value=\"".$labels[$cur_order['sku']]."\" placeholder=\"中文|英文\">";
       	echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
         echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
         echo "<li>按钮式下拉菜单</li><li><a href=\"#\">输入框组带有下拉菜单的按钮</a></li><li>输入框组带有下拉菜单的按钮</li></ul></div></div></td><tr>";

@@ -69,7 +69,7 @@ class dbhelper {
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
 		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . $orderarray ['sku'] . '","' . $orderarray ['productname'] . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
 		
-		echo "insert sql:" . $insert_sql . "<br/>";
+		//echo "insert sql:" . $insert_sql . "<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function updateOrder($orderarray) {
@@ -178,7 +178,7 @@ class dbhelper {
 	}
 	
 	public function getUserLabels($userid){
-		$querylabels = "SELECT l.id id,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE product_label.userid = ".$userid." and p.label_id = l.id";
+		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE product_label.userid = ".$userid." and p.label_id = l.id";
 		return mysql_query($querylabels);
 	}
 	
@@ -186,12 +186,18 @@ class dbhelper {
 		$insertlabel = 'insert into labels(CN_Name,EN_Name) values("'.$cn_name.'","'.$en_name.'")';
 		echo "insertlabel:".$insertlabel;
 		mysql_query($insertlabel);
-		return mysqli_insert_id();
+		return mysql_insert_id();
 	}
 	
 	public function insertproductLabel($userid,$parent_sku,$labelid){
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values('.$labelid.',"'.$parent_sku.'",'.$userid.')';
-		return mysql_query(insertpl);
+		echo "insertpl:".$insertpl;
+		return mysql_query($insertpl);
+	}
+	
+	public function getExpressInfo($userid,$expressid){
+		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = '.$userid.' and express_id = '.$expressid;
+		return mysql_query($userSql);
 	}
 	
 	function __destruct() {
