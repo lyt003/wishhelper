@@ -2,8 +2,8 @@
 
 namespace Wish;
 
-include_once dirname('__FILE__').'./mysql/dbhelper.php';
-include dirname('__FILE__').'./user/wconfig.php';
+include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 use mysql\dbhelper;
 
 class WishHelper {
@@ -93,6 +93,14 @@ class WishHelper {
 		return $labels;
 	}
 	
+	public function getLabelsArray($userLabels){
+		$labelsarray = array();
+		foreach ($userLabels as $lKey=>$lValue){
+			$labelsarray[] = $lValue;
+		}
+		return $labelsarray;
+	}
+	
 	public function getCNENLabel($labels,$sku){
 		$curLabel = $labels[$sku];
 		$cnenlabel = explode('|',$curLabel);
@@ -103,16 +111,12 @@ class WishHelper {
 		return $cnenlabel;
 	}
 	
-	public function applyTrackingsForOrders($accountid,$userid){
-		
-		$expressinfo = $this->dbhelper->getExpressInfo($userid, 1);
+	public function applyTrackingsForOrders($accountid,$labels,$expressinfo){
 		
 		$post_header = array (
 				'Authorization: basic '.$expressinfo[YANWEN_API_TOKEN],
 				'Content-Type: text/xml; charset=utf-8'
 		);
-		
-		$labels = $this->getUserLabelsArray($userid);
 		
 		$ordersNoTracking = $this->dbhelper->getOrdersNoTracking ( $accountid );
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
@@ -229,10 +233,15 @@ class WishHelper {
 						$printTrackingnumbers = $printTrackingnumbers . $trackingnumber . ",";
 						$orderNoTracking ['tracking'] = $trackingnumber;
 						$orderNoTracking ['orderstatus'] = '1';
-						$dbhelper->updateOrder ( $orderNoTracking );
+						$this->dbhelper->updateOrder ( $orderNoTracking );
 					}
-					if (! empty ( $error ))
+					if (! empty ( $error )){
 						echo "<br/>Failed to get the tracking from YW, error:" . $error . "<br/>";
+						echo "<br/>post header:".$post_header[0]."<br/>";
+						var_dump($XMLString);
+						echo "<br/>result:".$result."<br/>";
+					}
+						
 				}
 			}
 		}

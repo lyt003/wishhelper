@@ -33,7 +33,8 @@ class dbhelper {
 	}
 	public function createUser($username, $password, $email) {
 		$userInsert = 'insert into users(username,email,psd) values("' . $username . '","' . $email . '","' . $password . '")';
-		return mysql_query ( $userInsert );
+		mysql_query ( $userInsert );
+		return mysql_insert_id();
 	}
 	public function userLogin($username, $password) {
 		$loginSql = 'select userid,username,email from users where psd = "' . $password . '" and ';
@@ -49,9 +50,10 @@ class dbhelper {
 		if (stripos ( $email, "@" ) != false) {
 			$querySql = $querySql . ' users.email = "' . $email . '" and users.userid = accounts.userid';
 		} else {
-			$querySql = $querySql . ' users。username = "' . $email . '" and users.userid = accounts.userid';
+			$querySql = $querySql . ' users.username = "' . $email . '" and users.userid = accounts.userid';
 		}
 		$result = mysql_query ( $querySql );
+		echo "get user:".$querySql;
 		return $result;
 	}
 	public function getAccountToken($accountid) {
@@ -178,25 +180,31 @@ class dbhelper {
 	}
 	
 	public function getUserLabels($userid){
-		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE product_label.userid = ".$userid." and p.label_id = l.id";
+		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = ".$userid." and p.label_id = l.id";
 		return mysql_query($querylabels);
 	}
 	
 	public function insertLabel($cn_name,$en_name){
-		$insertlabel = 'insert into labels(CN_Name,EN_Name) values("'.$cn_name.'","'.$en_name.'")';
-		echo "insertlabel:".$insertlabel;
-		mysql_query($insertlabel);
-		return mysql_insert_id();
+		$sqllabel = 'select id from labels where CN_Name = "'.$cn_name.'" and EN_Name = "'.$en_name.'"';
+		$result = mysql_query($sqllabel);
+		$row = mysql_fetch_array ( $result );
+		if($row){
+			return $row['id'];
+		}else{
+			$insertlabel = 'insert into labels(CN_Name,EN_Name) values("'.$cn_name.'","'.$en_name.'")';
+			mysql_query($insertlabel);
+			return mysql_insert_id();
+		}
 	}
 	
 	public function insertproductLabel($userid,$parent_sku,$labelid){
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values('.$labelid.',"'.$parent_sku.'",'.$userid.')';
-		echo "insertpl:".$insertpl;
 		return mysql_query($insertpl);
 	}
 	
 	public function getExpressInfo($userid,$expressid){
 		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = '.$userid.' and express_id = '.$expressid;
+		echo "<br/>get user info :".$userSql;
 		return mysql_query($userSql);
 	}
 	

@@ -1,8 +1,13 @@
 <?php
 header ( "Content-Type: text/html;charset=utf-8" );
-include 'Wish/WishClient.php';
-include 'mysql/dbhelper.php';
+
+include_once dirname ( '__FILE__' ).'/mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ).'/Wish/WishHelper.php';
+include_once dirname ( '__FILE__' ).'/Wish/WishClient.php';
+include_once dirname ( '__FILE__' ) . '/user/wconfig.php';
+
 use Wish\WishClient;
+use Wish\WishHelper;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
@@ -10,10 +15,25 @@ use Wish\WishResponse;
 //phpinfo ();
 
 $dbhelper = new dbhelper ();
+$wishHelper = new WishHelper();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
+
+
+$expressInfo = array();
+$expressResult = $dbhelper->getExpressInfo(1, 1);
+while($expressAttr = mysql_fetch_array($expressResult)){
+	echo "<br/>values:".$expressAttr['express_attr_name'].$expressAttr['express_attr_value'];
+	$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
+}
+
+echo "<br/>CONFIG:".YANWEN_USER_ATTR." value:".$expressInfo[YANWEN_USER_ATTR]."<br/>";
+foreach ($expressInfo as $ekey=>$eValue){
+	echo "<br/>".$ekey.":".$eValue;
+}
+
 
 $key = "label_fdafdkakfdas_12";
 if(preg_match("/^label/",$key,$matches)){
@@ -25,9 +45,15 @@ if(preg_match("/^label/",$key,$matches)){
 }
 echo "<br/>";
 
-$sku = 'TESTSKU';
-$names = explode("|","AAA|BBB");
-$dbhelper->insertproductLabel(1, $sku, $dbhelper->insertLabel($names[0], $names[1]));
+/* $sku = 'TESTSKU';
+$names = explode("|","Afdae|fdaBBB");
+//$dbhelper->insertproductLabel(1, $sku, $dbhelper->insertLabel($names[0], $names[1]));
+echo "insert label result:".$dbhelper->insertLabel($names[0], $names[1]); */
+
+$labels = $wishHelper->getUserLabelsArray(1);
+foreach ( array_unique($labels) as $labelkey => $labelvalue ) {
+	echo "<br/>".$labelkey.$labelvalue;
+}
 
 
 
