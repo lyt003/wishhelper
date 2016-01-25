@@ -1,6 +1,7 @@
 <?php
-
 namespace mysql;
+
+include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 
 class dbhelper {
 	private $db;
@@ -83,6 +84,10 @@ class dbhelper {
 		return $this->getOrders ( $accountid, '1' );
 	}
 	
+	public function getOrdersForUploadTracking($accountid) {
+		return $this->getOrders ( $accountid, ORDERSTATUS_DOWNLOADEDLABEL);
+	}
+	
 	// get the orders that the status is 1 and then get the labels.
 	public function getAccountOrdersForLabels($accountid) {
 		return $this->getOrders ( $accountid, '1' );
@@ -109,7 +114,7 @@ class dbhelper {
 	 */
 	private function getOrders($accountid, $orderstatus) {
 		$query_sql;
-		if (strcmp ( $orderstatus, '1' ) == 0) {
+		if (strcmp ( $orderstatus, '1' ) == 0 || strcmp ( $orderstatus, ORDERSTATUS_DOWNLOADEDLABEL) == 0) {
 			$query_sql = "SELECT transactionid,orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
 		} else if (strcmp ( $orderstatus, '0' ) == 0) {
 			$query_sql = "SELECT orderid,orderNum,accountid,ordertime,transactionid,orderstate,

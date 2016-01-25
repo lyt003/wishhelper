@@ -10,3 +10,5 @@ define('ORDERSTATUS_APPLIEDTRACKING',1);
 define('ORDERSTATUS_DOWNLOADEDLABEL',2);
 define('ORDERSTATUS_UPLOADEDTRACKING',3);
 
+define('NOTETOCUSTOMERS','Thanks for buying,welcome next time!');
+

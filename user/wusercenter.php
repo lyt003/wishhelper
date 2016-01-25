@@ -3,9 +3,11 @@ session_start ();
 include dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\WishHelper;
+use Wish\Model\WishTracker;
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
@@ -97,6 +99,20 @@ if (strcmp ( $add, "1" ) == 0) {
 	for($ct = 0; $ct < $i; $ct ++) {
 		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels,$expressinfo);
 	}
+}else if(strcmp ( $add, "2" ) == 0){
+	for($ut = 0;$ut <$i; $ut ++){
+		$ordersNotUpload = $dbhelper->getOrdersForUploadTracking ( $accounts ['accountid' . $ut] );
+		while ( $orderUpload = mysql_fetch_array ( $ordersNotUpload ) ) {
+			$tracker = new WishTracker ( $orderUpload ['provider'], $orderUpload ['tracking'], NOTETOCUSTOMERS );
+			$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
+		
+			if ($fulResult) {
+				$orderUpload ['orderstatus'] = ORDERSTATUS_UPLOADEDTRACKING;
+				$orderUpload ['accountid'] = $accounts ['accountid' . $ut];
+				$updateResult = $dbhelper->updateOrder ( $orderUpload );
+			}
+		}
+	}
 }
 	$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 
@@ -133,8 +149,14 @@ if (strcmp ( $add, "1" ) == 0) {
 		document.getElementById(test).value=value;
 	}
 
-	function processlabels(){
+	function downloadlabels(){
 		window.location.href="./wdownload.php";
+	}
+
+	function uploadtrackings(){
+		var form = document.getElementById("processorders");
+		form.action = "./wusercenter.php?add=2";
+		form.submit();
 	}
 </script>
 <body>
@@ -209,9 +231,9 @@ for($count = 0; $count < $i; $count ++) {
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="processlabels()">下载标签</button>
+				<button class="btn btn-info" type="button" onclick="downloadlabels()">下载标签</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="processorders()">上传单号</button>
+				<button class="btn btn-info" type="button" onclick="uploadtrackings()">上传单号</button>
 			</ul>
 
 <?php
