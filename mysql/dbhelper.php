@@ -34,7 +34,7 @@ class dbhelper {
 	public function createUser($username, $password, $email) {
 		$userInsert = 'insert into users(username,email,psd) values("' . $username . '","' . $email . '","' . $password . '")';
 		mysql_query ( $userInsert );
-		return mysql_insert_id();
+		return mysql_insert_id ();
 	}
 	public function userLogin($username, $password) {
 		$loginSql = 'select userid,username,email from users where psd = "' . $password . '" and ';
@@ -53,7 +53,7 @@ class dbhelper {
 			$querySql = $querySql . ' users.username = "' . $email . '" and users.userid = accounts.userid';
 		}
 		$result = mysql_query ( $querySql );
-		echo "get user:".$querySql;
+		echo "get user:" . $querySql;
 		return $result;
 	}
 	public function getAccountToken($accountid) {
@@ -71,7 +71,7 @@ class dbhelper {
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
 		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . $orderarray ['sku'] . '","' . $orderarray ['productname'] . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
 		
-		//echo "insert sql:" . $insert_sql . "<br/>";
+		// echo "insert sql:" . $insert_sql . "<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function updateOrder($orderarray) {
@@ -82,8 +82,24 @@ class dbhelper {
 	public function getOrdersNotUploadTracking($accountid) {
 		return $this->getOrders ( $accountid, '1' );
 	}
+	
+	// get the orders that the status is 1 and then get the labels.
+	public function getAccountOrdersForLabels($accountid) {
+		return $this->getOrders ( $accountid, '1' );
+	}
+	
+	// get the orders that the status is 1 and then get the labels.
+	public function getUserOrdersForLabels($userid) {
+		return $this->getUserOrders ( $userid, '1' );
+	}
+	
+	// get the orders that the status is 0 and then apply tracking numbers.
 	public function getOrdersNoTracking($accountid) {
 		return $this->getOrders ( $accountid, '0' );
+	}
+	public function updateOrderStatus($tracking, $status) {
+		$updateSql = "UPDATE orders set orderstatus = " . $status . " WHERE tracking = '" . $tracking . "'";
+		return mysql_query ( $updateSql );
 	}
 	/**
 	 *
@@ -108,6 +124,13 @@ class dbhelper {
 			echo "error:" . mysql_error ();
 		}
 		return $result;
+	}
+	private function getUserOrders($userid, $orderstatus) {
+		$userOrderSql = "";
+		if (strcmp ( $orderstatus, '1' ) == 0) {
+			$userOrderSql = "SELECT o.transactionid,o.orderid,o.provider,o.tracking FROM orders o,accounts a WHERE a.userid = " . $userid . " and a.accountid = o.accountid and o.orderstatus = " . $orderstatus;
+		}
+		return mysql_query ( $userOrderSql );
 	}
 	public function getUSOrders() {
 		$USOrderSql = "SELECT transactionid, orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0' order by transactionid";
@@ -178,36 +201,30 @@ class dbhelper {
 		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . $trackingData ['tracking_number'] . '","' . $trackingData ['device_id'] . '","' . $trackingData ['tracking_date'] . '")';
 		return mysql_query ( $insertTracking );
 	}
-	
-	public function getUserLabels($userid){
-		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = ".$userid." and p.label_id = l.id";
-		return mysql_query($querylabels);
+	public function getUserLabels($userid) {
+		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.label_id = l.id";
+		return mysql_query ( $querylabels );
 	}
-	
-	public function insertLabel($cn_name,$en_name){
-		$sqllabel = 'select id from labels where CN_Name = "'.$cn_name.'" and EN_Name = "'.$en_name.'"';
-		$result = mysql_query($sqllabel);
+	public function insertLabel($cn_name, $en_name) {
+		$sqllabel = 'select id from labels where CN_Name = "' . $cn_name . '" and EN_Name = "' . $en_name . '"';
+		$result = mysql_query ( $sqllabel );
 		$row = mysql_fetch_array ( $result );
-		if($row){
-			return $row['id'];
-		}else{
-			$insertlabel = 'insert into labels(CN_Name,EN_Name) values("'.$cn_name.'","'.$en_name.'")';
-			mysql_query($insertlabel);
-			return mysql_insert_id();
+		if ($row) {
+			return $row ['id'];
+		} else {
+			$insertlabel = 'insert into labels(CN_Name,EN_Name) values("' . $cn_name . '","' . $en_name . '")';
+			mysql_query ( $insertlabel );
+			return mysql_insert_id ();
 		}
 	}
-	
-	public function insertproductLabel($userid,$parent_sku,$labelid){
-		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values('.$labelid.',"'.$parent_sku.'",'.$userid.')';
-		return mysql_query($insertpl);
+	public function insertproductLabel($userid, $parent_sku, $labelid) {
+		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values(' . $labelid . ',"' . $parent_sku . '",' . $userid . ')';
+		return mysql_query ( $insertpl );
 	}
-	
-	public function getExpressInfo($userid,$expressid){
-		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = '.$userid.' and express_id = '.$expressid;
-		echo "<br/>get user info :".$userSql;
-		return mysql_query($userSql);
+	public function getExpressInfo($userid, $expressid) {
+		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = ' . $userid . ' and express_id = ' . $expressid;
+		return mysql_query ( $userSql );
 	}
-	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

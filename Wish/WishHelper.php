@@ -246,4 +246,31 @@ class WishHelper {
 			}
 		}
 	}
+	
+	public function getExpressInfo($userid){
+		$expressInfo = array();
+		$expressResult = $this->dbhelper->getExpressInfo($userid, 1);
+		while($expressAttr = mysql_fetch_array($expressResult)){
+			$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
+		}
+		return $expressInfo;
+	}
+	
+	public function getTrackingNumbersForLabel($userid){
+		$numbers;
+		$result = $this->dbhelper->getUserOrdersForLabels($userid);
+		while($order = mysql_fetch_array($result)){
+			if($order['tracking'] != null && $order['tracking']!= '')
+				$numbers = $numbers.$order['tracking'].',';
+		}
+		return $numbers;
+	}
+	
+	public function updateHasDownloadLabel($numbers){
+		$trackings = explode(',',$numbers);
+		foreach ($trackings as $tracking){
+			if($tracking != null && $tracking != '')
+				$this->dbhelper->updateOrderStatus($tracking, ORDERSTATUS_DOWNLOADEDLABEL);
+		}
+	}
 }

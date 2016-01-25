@@ -1,7 +1,7 @@
 <?php
 session_start ();
 include dirname ( '__FILE__' ) . './Wish/WishClient.php';
-include dirname ( '__FILE__' ) . './Wish/WishHelper.php';
+include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 use Wish\WishClient;
 use mysql\dbhelper;
@@ -92,14 +92,10 @@ if (strcmp ( $add, "1" ) == 0) {
 	
 	// get info of current user id:
 	$labels = $wishHelper->getUserLabelsArray($_SESSION ['userid']);
-	$expressInfo = array();
-	$expressResult = $dbhelper->getExpressInfo($_SESSION ['userid'], 1);
-	while($expressAttr = mysql_fetch_array($expressResult)){
-		$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
-	}
+	$expressinfo = $wishHelper->getExpressInfo($_SESSION ['userid']);
 	
 	for($ct = 0; $ct < $i; $ct ++) {
-		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels,$expressInfo);
+		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels,$expressinfo);
 	}
 }
 	$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
@@ -135,6 +131,10 @@ if (strcmp ( $add, "1" ) == 0) {
 
 	function setValue(value,test){
 		document.getElementById(test).value=value;
+	}
+
+	function processlabels(){
+		window.location.href="./wdownload.php";
 	}
 </script>
 <body>
@@ -209,7 +209,7 @@ for($count = 0; $count < $i; $count ++) {
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="processorders()">下载标签</button>
+				<button class="btn btn-info" type="button" onclick="processlabels()">下载标签</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="processorders()">上传单号</button>
 			</ul>
