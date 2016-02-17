@@ -106,6 +106,11 @@ class dbhelper {
 		$updateSql = "UPDATE orders set orderstatus = " . $status . " WHERE tracking = '" . $tracking . "'";
 		return mysql_query ( $updateSql );
 	}
+	
+	public function updateEUBOrderStatus($orderid,$status){
+		$eubupdateSql = "UPDATE orders set orderstatus = " . $status . " WHERE orderid = '" . $orderid . "'";
+		return mysql_query ( $eubupdateSql );
+	}
 	/**
 	 *
 	 * @param
@@ -140,6 +145,11 @@ class dbhelper {
 	public function getUSOrders() {
 		$USOrderSql = "SELECT transactionid, orderid,sku,productname,color, size,quantity, name,streetaddress1,streetaddress2,city,state,zipcode,phonenumber FROM `orders` WHERE countrycode = 'US' and orderstatus = '0' order by transactionid";
 		return mysql_query ( $USOrderSql );
+	}
+	
+	public function getEUBOrders($userid) {
+		$EUBOrderSql = "SELECT o.transactionid, o.orderid,o.sku,o.productname,o.color, o.size,o.quantity, o.name,o.streetaddress1,o.streetaddress2,o.city,o.state,o.zipcode,o.phonenumber FROM orders o,accounts a WHERE a.userid = ". $userid. " and a.accountid = o.accountid and o.countrycode = 'US' and o.orderstatus = '0' order by o.transactionid";
+		return mysql_query ( $EUBOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
 		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';

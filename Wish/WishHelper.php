@@ -266,6 +266,14 @@ class WishHelper {
 		return $numbers;
 	}
 	
+	public function getEUBOrders($userid){
+		return $this->dbhelper->getEUBOrders($userid);
+	}
+	
+	public function updateEUBOrders($orderid,$status){
+		return $this->dbhelper->updateEUBOrderStatus($orderid, $status);
+	}
+	
 	public function updateHasDownloadLabel($numbers){
 		$trackings = explode(',',$numbers);
 		foreach ($trackings as $tracking){

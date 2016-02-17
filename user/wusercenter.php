@@ -158,6 +158,13 @@ if (strcmp ( $add, "1" ) == 0) {
 		form.action = "./wusercenter.php?add=2";
 		form.submit();
 	}
+
+	function downloadEUB(){
+		window.location.href="./weubdownload.php";
+	}
+	function uploadEUB(){
+		window.open("./wuploadEUBtrackings.php");
+	}
 </script>
 <body>
 	<!-- HEADER -->
@@ -234,6 +241,10 @@ for($count = 0; $count < $i; $count ++) {
 				<button class="btn btn-info" type="button" onclick="downloadlabels()">下载标签</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadtrackings()">上传单号</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="downloadEUB()">下载E邮宝订单</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
 			</ul>
 
 <?php
