@@ -5,19 +5,10 @@ namespace mysql;
 class dbhelper {
 	private $db;
 	public function __construct() {
-		$online = false;
-		
-		if ($online) {
-			$dbhost = "bdm195587474.my3w.com";
-			$dbuser = "bdm195587474";
-			$dbpsd = "yangwu19821112";
-			$dbname = "bdm195587474_db";
-		} else {
-			$dbhost = "localhost";
-			$dbuser = "root";
-			$dbpsd = "yangwu";
-			$dbname = "wish";
-		}
+		$dbhost = "localhost";
+		$dbuser = "root";
+		$dbpsd = "yangwu";
+		$dbname = "wish";
 		
 		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd, true );
 		if (! $db) {

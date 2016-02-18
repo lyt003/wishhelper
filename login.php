@@ -1,6 +1,5 @@
 <?php
 session_start ();
-$online = false;
 $email = $_POST ['email'];
 $psd = $_POST ['password'];
 if (isset ( $_SESSION ['userid'] )) {
@@ -11,28 +10,18 @@ if (isset ( $_SESSION ['userid'] )) {
 	$psd = $_POST ['password'];
 	if (! empty ( $email ) && ! empty ( $psd )) {
 		
-		if($online){
-			$dbhost = "bdm195587474.my3w.com";
-			 
-			$dbuser = "bdm195587474";
-			 
-			$dbpsd = "yangwu19821112";
-			 
-			$dbname = "bdm195587474_db";
-		}else{
-			$dbhost = "localhost";
-			$dbuser = "root";
-			$dbpsd = "yangwu";
-			$dbname = "wish";
-		}
+		$dbhost = "localhost";
+		$dbuser = "root";
+		$dbpsd = "yangwu";
+		$dbname = "wish";
 		
 		$db = mysql_connect ( $dbhost, $dbuser, $dbpsd );
 		mysql_select_db ( $dbname );
 		mysql_query ( "set names 'utf-8'" );
 		
-		$query = "select userid from users where email = '".$email."' and psd = '".$psd."'";
+		$query = "select userid from users where email = '" . $email . "' and psd = '" . md5($psd) . "'";
 		$result = mysql_query ( $query );
-		if (mysql_num_rows($result) == 1) {
+		if (mysql_num_rows ( $result ) == 1) {
 			$row = mysqli_fetch_array ( $result );
 			$_SESSION ['userid'] = $row ['userid'];
 			$_SESSION ['email'] = $email;
@@ -86,14 +75,14 @@ if (isset ( $_SESSION ['userid'] )) {
 					<div class="header">登录</div>
 					<div class="inputs">
 						<div>
-							<input value="ydengwu@gmail.com" id="email-box" type="text" name="email"
-								class="login-input input-block-level" required="true"
-								placeholder="邮箱地址" />
+							<input value="ydengwu@gmail.com" id="email-box" type="text"
+								name="email" class="login-input input-block-level"
+								required="true" placeholder="邮箱地址" />
 						</div>
 						<div>
-							<input value="yangwu" id="password-box" type="password" name="password"
-								class="login-input input-block-level" required="true"
-								placeholder="密码" />
+							<input value="yangwu" id="password-box" type="password"
+								name="password" class="login-input input-block-level"
+								required="true" placeholder="密码" />
 						</div>
 						<div class="clearfix control-group lst-elem">
 							<div class="pull-left remember-me">
