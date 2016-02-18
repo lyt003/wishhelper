@@ -197,6 +197,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		$prod_res = null;
 		while ( $product = mysql_fetch_array ( $products ) ) {
 			if ($addProduct == 0) { // add product;
+				
 				$currentProduct = array ();
 				$currentProduct ['name'] = $product ['name'];
 				$currentProduct ['description'] = $product ['description'];
@@ -209,14 +210,19 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				$currentProduct ['inventory'] = $product ['quantity'];
 				$currentProduct ['price'] = $product ['price'];
 				$currentProduct ['shipping'] = $product ['shipping'];
-				$currentProduct ['msrp'] = $product ['MSRP'];
+				if ($product ['MSRP'] != null)
+					$currentProduct ['msrp'] = $product ['MSRP'];
 				$currentProduct ['shipping_time'] = $product ['shipping_time'];
 				$currentProduct ['main_image'] = $product ['main_image'];
 				$currentProduct ['parent_sku'] = $product ['parent_sku'];
-				$currentProduct ['brand'] = $product ['brand'];
-				$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-				$currentProduct ['upc'] = $product ['UPC'];
-				$currentProduct ['extra_images'] = $product ['extra_images'];
+				if ($product ['brand'] != null)
+					$currentProduct ['brand'] = $product ['brand'];
+				if ($product ['landingPageURL'] != null)
+					$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
+				if ($product ['UPC'] != null)
+					$currentProduct ['upc'] = $product ['UPC'];
+				if ($product ['extra_images'] != null)
+					$currentProduct ['extra_images'] = $product ['extra_images'];
 				
 				try {
 					$prod_res = $client->createProduct ( $currentProduct );
@@ -260,7 +266,8 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				$currentProductVar ['inventory'] = $product ['quantity'];
 				$currentProductVar ['price'] = $product ['price'];
 				$currentProductVar ['shipping'] = $product ['shipping'];
-				$currentProductVar ['msrp'] = $product ['MSRP'];
+				if($product ['MSRP'] != null)
+					$currentProductVar ['msrp'] = $product ['MSRP'];
 				$currentProductVar ['shipping_time'] = $product ['shipping_time'];
 				$currentProductVar ['main_image'] = $product ['main_image'];
 				$prod_var = $client->createProductVariation ( $currentProductVar );

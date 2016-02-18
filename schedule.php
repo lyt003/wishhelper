@@ -65,21 +65,26 @@ if ($isRunning == 1) {
 					$currentProduct ['inventory'] = $product ['quantity'];
 					$currentProduct ['price'] = $product ['price'];
 					$currentProduct ['shipping'] = $product ['shipping'];
-					$currentProduct ['msrp'] = $product ['MSRP'];
+					if ($product ['MSRP'] != null)
+						$currentProduct ['msrp'] = $product ['MSRP'];
 					$currentProduct ['shipping_time'] = $product ['shipping_time'];
 					$currentProduct ['main_image'] = $product ['main_image'];
 					$currentProduct ['parent_sku'] = $product ['parent_sku'];
-					$currentProduct ['brand'] = $product ['brand'];
-					$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-					$currentProduct ['upc'] = $product ['UPC'];
-					$currentProduct ['extra_images'] = $product ['extra_images'];
+					if ($product ['brand'] != null)
+						$currentProduct ['brand'] = $product ['brand'];
+					if ($product ['landingPageURL'] != null)
+						$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
+					if ($product ['UPC'] != null)
+						$currentProduct ['upc'] = $product ['UPC'];
+					if ($product ['extra_images'] != null)
+						$currentProduct ['extra_images'] = $product ['extra_images'];
 					
 					try {
 						$prod_res = $client->createProduct ( $currentProduct );
 					} catch ( ServiceResponseException $e ) {
 						if ($e->getStatusCode () == 1015 || $e->getStatusCode () == 4000) {
 							$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
-							$log = $log. "<br/>errorMessage:" . $response->getMessage ();
+							$log = $log . "<br/>errorMessage:" . $response->getMessage ();
 							$dbhelper->updateSettingMsg ( $log );
 							$values = $response->getResponse ()->{'data'};
 							$newToken = '0';
@@ -93,22 +98,22 @@ if ($isRunning == 1) {
 									$newRefresh_token = $v;
 								}
 							}
-							$log = $log. "<br/>newToken = " . $newToken . $newRefresh_token;
+							$log = $log . "<br/>newToken = " . $newToken . $newRefresh_token;
 							$dbhelper->updateSettingMsg ( $log );
 							$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
 							$client = new WishClient ( $newToken, 'prod' );
 							$prod_res = $client->createProduct ( $currentProduct );
 						}
-						$log = $log.$e->getErrorMessage()." of account " . $accountid."<br/>";
+						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
 					}
 					print_r ( $prod_res );
 					if ($prod_res != null) {
-						$log = $log."add product success<br/>";
+						$log = $log . "add product success<br/>";
 						$dbhelper->updateSettingMsg ( $log );
 						$addProduct = 1;
 					} else {
-						$log = $log. "add product failed<br/>";
+						$log = $log . "add product failed<br/>";
 						$dbhelper->updateSettingMsg ( $log );
 					}
 				} else { // add product variation
@@ -122,20 +127,21 @@ if ($isRunning == 1) {
 					$currentProductVar ['inventory'] = $product ['quantity'];
 					$currentProductVar ['price'] = $product ['price'];
 					$currentProductVar ['shipping'] = $product ['shipping'];
-					$currentProductVar ['msrp'] = $product ['MSRP'];
+					if ($product ['MSRP'] != null)
+						$currentProductVar ['msrp'] = $product ['MSRP'];
 					$currentProductVar ['shipping_time'] = $product ['shipping_time'];
 					$currentProductVar ['main_image'] = $product ['main_image'];
 					$prod_var = $client->createProductVariation ( $currentProductVar );
 					print_r ( $prod_var );
 					if (prod_var != null) {
-						$log = $log. "add product var success<br/>";
+						$log = $log . "add product var success<br/>";
 						$dbhelper->updateSettingMsg ( $log );
 					}
 				}
 			}
 			
 			$dbhelper->updateScheduleFinished ( $productInfo );
-			$log = $log. "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
+			$log = $log . "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
 			$dbhelper->updateSettingMsg ( $log );
 		}
 	} while ( $dbhelper->isScheduleRunning () );
