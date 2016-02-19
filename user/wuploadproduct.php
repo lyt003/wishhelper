@@ -674,7 +674,6 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						</div>
 					</div>
 				</div>
-			</div>
 	</form>
 
 </div>
