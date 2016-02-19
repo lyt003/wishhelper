@@ -9,8 +9,11 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 
 header ( "Content-Type: text/html;charset=utf-8" );
+
+$username = $_SESSION ['username'];
+
 $dbhelper = new dbhelper();
-$result = $dbhelper->getUserToken ( $_SESSION ['username'] );
+$result = $dbhelper->getUserToken ($username);
 $accounts = array ();
 $i = 0;
 while ( $rows = mysql_fetch_array ( $result ) ) {
@@ -340,12 +343,18 @@ if ($productName != null && $description != null && $mainImage != null && $price
 </a>
 
 <div class="pull-right">
-<ul class="nav">
-<li data-mid="5416857ef8abc87989774c1b" data-uid="5413fe984ad3ab745fee8b48">
+				<ul class="nav">
+					<li data-mid="5416857ef8abc87989774c1b"
+						data-uid="5413fe984ad3ab745fee8b48">
 <?php echo $username?>
 </li>
-</ul>
-</div>
+					<li><button>
+							<a href="./wlogin.php?type=exit">注销</a>
+						</button></li>
+
+				</ul>
+
+			</div>
 </div>
 </div>
 <!-- END HEADER -->
