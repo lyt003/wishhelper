@@ -1,10 +1,5 @@
 
-select  count(*) 
-from tracking_data where 
-tracking_date in ('20160111','20160112','20160113','20160114','20160115') 
-and `tracking_number`  LIKE  'L%' 
-group by tracking_date
-ORDER BY tracking_date ;
+select tracking_date, count(*) from tracking_data where tracking_date in ('20160125','20160126','20160127','20160217','20160218','20160219','20160220') and `tracking_number` LIKE 'L%' group by tracking_date ORDER BY tracking_date
 
 
 SELECT * FROM `tracking_data` where `tracking_date`  = '20160105' and `tracking_number`  LIKE  'L%'
@@ -49,14 +44,40 @@ SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countryc
 	516269d930c             	LS498033046CN	US	Priya vadivel kannappan	0.2	卖家自送	16011809580712994	shiptemplate_01.xls	20160118095822549081	hongliang5301	运单 批次
 	569b2e37cd05721451a6e98d	LS498038635CN	
 	
+	56c4e077964ebdc36cadfd97	LS585891233CN	US	Nicholas Findley	0.1	卖家自送	16021907562876189	shiptemplate_01.xls	20160219075643681566	hongliang5301	运单 批次
+	56c531c5cac87a29fbdf9876	LS585895703CN	
+	
 569ab11cf0eab516269d930c
 569b2e37cd05721451a6e98d
-update orders set provider='USPS',tracking='LS498033046CN',orderstatus = '1' where transactionid = '569ab11cf0eab516269d930c';
-update orders set provider='USPS',tracking='LS498038635CN',orderstatus = '1' where transactionid = '569b2e37cd05721451a6e98d';
-update orders set provider='USPS',tracking='LS497761431CN',orderstatus = '1' where transactionid = '569af7e91f1acf14b55d293c';
-update orders set provider='USPS',tracking='LS497761811CN',orderstatus = '1' where transactionid = '569b08bd7f03dc1494ea1201';
-update orders set provider='USPS',tracking='LS497759061CN',orderstatus = '1' where transactionid = '569b32b9fd508614b06167f2';
-update orders set provider='USPS',tracking='LS497761842CN',orderstatus = '1' where transactionid = '569b4bdd2ae1d014b1134a76';
+
+    56c66fb610fb73304b25e87b	LS590534305CN	US	Jason King	0.1	卖家自送	16022011073090230	shiptemplate_01.xls	20160220110745688892	hongliang5301	运单 批次
+	56c692c152efe61a20bc600a	LS590530847CN	US	Azalea Price	0.03	卖家自送	16022011073090230	shiptemplate_01.xls	20160220110745688892	hongliang5301	运单 批次
+	56c70bbdb6826155dac82068	LS590534336CN	
+	
+	
+	56c7cee6f577116787f31bad	LS592868120CN	US	Fahad Islam Badhon	0.03	卖家自送	16022109155297637	shiptemplate_01.xls	20160221091614692602	hongliang5301	运单 批次
+	56c7ddea5041690739be8053	LS592869142CN	US	Martie s riggs	0.03	卖家自送	16022109155297637	shiptemplate_01.xls	20160221091614692602	hongliang5301	运单 批次
+	56c7e12fe336443d7cc13d67	LS592868147CN	US	Rene Klopf	0.2	卖家自送	16022109155297637	shiptemplate_01.xls	20160221091614692602	hongliang5301	运单 批次
+	56c814cad49d5465a1eb7328	LS592869160CN	US	Kristalyn R Busby	0.03	卖家自送	16022109155297637	shiptemplate_01.xls	20160221091614692602	hongliang5301	运单 批次
+	56c8728f11e5eb1c2c9fbdca	LS592868155CN
+	
+	
+	56c8cc3722fe021c00a8f014	LS595114891CN	US	Maricela silva gracia	0.1	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
+	56c924179ec7c51a5854ebcd	LS595119465CN	US	Phoniquica	0.2	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
+	56c92433f55ef819cfaa80cf	LS595114905CN	US	Susan Kolar	0.4	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
+	56c931ca13c7ec1a44bc5dc5	LS595119474CN	US	Quartus Graves	0.1	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
+	56c9579001e0121a2d0bdb46	LS595114914CN	
+	
+	
+		
+	update orders set provider='USPS',tracking='LS595114891CN',orderstatus = '1' where transactionid = '56c8cc3722fe021c00a8f014';
+	update orders set provider='USPS',tracking='LS595119465CN',orderstatus = '1' where transactionid = '56c924179ec7c51a5854ebcd';
+	update orders set provider='USPS',tracking='LS595114905CN',orderstatus = '1' where transactionid = '56c92433f55ef819cfaa80cf';
+	update orders set provider='USPS',tracking='LS595119474CN',orderstatus = '1' where transactionid = '56c931ca13c7ec1a44bc5dc5';
+	update orders set provider='USPS',tracking='LS595119474CN',orderstatus = '1' where transactionid = '56c931e87c049619ec769c7f';
+	update orders set provider='USPS',tracking='LS595114914CN',orderstatus = '1' where transactionid = '56c9579001e0121a2d0bdb46';
+	
+update orders set provider='USPS',tracking='',orderstatus = '1' where transactionid = '';
 update orders set provider='USPS',tracking='',orderstatus = '1' where transactionid = '';
 
                                 LS456008690CN	US	McQueltin Lane	0.1	卖家自送	16010508325150075	shiptemplate_01.xls	20160105083416469834	hongliang5301	运单 批次
