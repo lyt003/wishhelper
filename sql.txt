@@ -96,11 +96,13 @@ INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 
 
+DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
 	`parent_sku` varchar(50) NOT NULL,
-	`scheduledate` varchar(10) NOT NULL,
-	`isfinished` int(1)
+	`scheduledate` varchar(20) NOT NULL,
+	`isfinished` int(1),
+	`errormessage` varchar(50)
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE `schedule_product`
 ADD PRIMARY KEY (`parent_sku`,`accountid`);
@@ -123,6 +125,49 @@ CREATE TABLE `tracking_data`(
 	PRIMARY KEY (`tracking_number`)
 ) DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `labels`;
+CREATE TABLE `labels`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`CN_Name` varchar(20),
+	`EN_Name` varchar(50),
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`EN_Name`)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `product_label`;
+CREATE TABLE `product_label`(
+	`userid` int(11),
+	`parent_sku` varchar(50) NOT NULL,
+	`label_id` int(11),
+	PRIMARY KEY (`parent_sku`,`userid`)
+) DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `express_info`;
+CREATE TABLE `express_info`(
+	`express_id` int(11) NOT NULL AUTO_INCREMENT,
+	`express_name` varchar(50) NOT NULL,
+	`express_code` varchar(50) NOT NULL,
+	`parent_express_id` int(11),
+ 	 PRIMARY KEY (`express_id`)
+) DEFAULT CHARSET=utf8;
+
+insert into express_info(express_name,express_code,parent_express_id) values('燕文物流','YW',0);
+insert into express_info(express_name,express_code,parent_express_id) values('E邮宝','EUB',0);
+
+
+DROP TABLE IF EXISTS `express_attr_info`;
+CREATE TABLE `express_attr_info`(
+	`userid` int(11),
+	`express_id` int(11),
+	`express_attr_name` varchar(50) NOT NULL,
+	`express_attr_value` varchar(50) NOT NULL,
+ 	 PRIMARY KEY (`express_attr_name`,`userid`)
+) DEFAULT CHARSET=utf8;
+
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'Userid','104903');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'ServiceEndPoint','http://online.yw56.com.cn/service');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'ApiToken','MTA0OTAzOnlhbmd3dTE5ODIxMTEy');
 
 
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");

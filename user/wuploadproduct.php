@@ -9,8 +9,11 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 
 header ( "Content-Type: text/html;charset=utf-8" );
+
+$username = $_SESSION ['username'];
+
 $dbhelper = new dbhelper ();
-$result = $dbhelper->getUserToken ( $_SESSION ['username'] );
+$result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;
 while ( $rows = mysql_fetch_array ( $result ) ) {
@@ -271,72 +274,19 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			<title>Wish 商户平台</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
+<<<<<<< HEAD
 					<link rel="stylesheet" type="text/css"
 						href="../css/add_products_page.css" />
 
 </head>
 <script type="text/javascript">
+=======
+				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
+				<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+				<link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+>>>>>>> workBranch
 
-	function showIncrementPrice(obj){
-		if(obj == "" || obj.length<2){
-			document.getElementById("increment_div").style.display="none";
-		}else{
-			document.getElementById("increment_div").style.display="block";
-		}
-	}
-
-	function updateEarnings(){
-		var price = document.getElementById("price").value;
-		var shipping = document.getElementById("shipping").value;
-		if(price == "")
-			price = 0;
-		if(shipping == "")
-			shipping = 0;
-		var earn = (parseInt(price) + parseInt(shipping)) * 0.85;
-		document.getElementById("earnings").value=earn;
-	} 
-
-	function createProduct(){
-		var productName = document.getElementById("product_name").value;
-		if(productName == null || productName == ''){
-			alert("name can't be empty");
-		return;}
-		var description = document.getElementById("description").value;
-		if(description == null || description == ''){
-			alert("description can't be empty");
-		return;}
-		var tags = document.getElementById("tags").value;
-		if(tags == null || tags == ''){
-			alert("tags can't be empty");
-		return;}
-		var uniqueID = document.getElementById("unique_id").value;
-		if(uniqueID == null || uniqueID == ''){
-			alert("uniqueID can't be empty");
-			return;}
-		var mainImage = document.getElementById("main_image").value;
-		if(mainImage == null || mainImage == ''){
-			alert("mainImage can't be empty");
-			return;}
-		var price = document.getElementById("price").value;
-		if(price == null || price == ''){
-			alert("price can't be empty");
-			return;}
-		var quantity = document.getElementById("quantity").value;
-		if(quantity == null || quantity == ''){
-			alert("quantity can't be empty");
-			return;}
-		var shipping = document.getElementById("shipping").value;
-		if(shipping == null || shipping == ''){
-			alert("shipping can't be empty");
-			return;}
-		var shippingTime = document.getElementById("shipping_time").value;
-		if(shippingTime == null || shippingTime == ''){
-			alert("shippingTime can't be empty");
-			return;} 
-		var form = document.getElementById("add_product");
-		form.submit();
-	}
-</script>
+</head>
 <body>
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top 
@@ -356,7 +306,16 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						data-uid="5413fe984ad3ab745fee8b48">
 <?php echo $username?>
 </li>
+<<<<<<< HEAD
 				</ul>
+=======
+					<li><button>
+							<a href="./wlogin.php?type=exit">注销</a>
+						</button></li>
+
+				</ul>
+
+>>>>>>> workBranch
 			</div>
 		</div>
 	</div>
@@ -375,7 +334,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						<div class="container">
 							<a href="./wusercenter.php" class="brand"> 订单处理 </a> <a
 								href="./wuploadproduct.php" class="brand"> 产品上传 </a> <a
+<<<<<<< HEAD
 								href="http://wishconsole.com/" class="brand"> 个人信息 </a>
+=======
+								href="./wuserinfo.php" class="brand"> 个人信息 </a>
+>>>>>>> workBranch
 
 						</div>
 					</div>
@@ -412,7 +375,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									<label>
 							<?php
 							
-for($count = 0; $count < $i; $count ++) {
+							for($count = 0; $count < $i; $count ++) {
 								echo "<input type=\"radio\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
 								echo "&nbsp;&nbsp;" . $accounts ['accountid' . $count];
 								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -663,10 +626,14 @@ for($count = 0; $count < $i; $count ++) {
 										class="col-name">定时上传日期</span></label>
 
 									<div class="controls input-append">
+<<<<<<< HEAD
 										<input class="input-block-level" name="Schedule_Date"
 											id="Schedule_Date" type="text"
 											value="<?php echo $scheduleDate?>"
 											placeholder="可接受：20151225; 为空则立即上传" />
+=======
+										<input class="input-block-level" name="Schedule_Date" type="text" value="<?php echo ($scheduleDate != null)?$scheduleDate:date('Y-m-d  H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii" placeholder="可接受：20151225; 为空则立即上传">
+>>>>>>> workBranch
 									</div>
 								</div>
 							</div>
@@ -676,15 +643,22 @@ for($count = 0; $count < $i; $count ++) {
 							<button id="clear-button" class="btn btn-large">清除</button>
 							<button id="submit-button" type="button"
 								class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
+<<<<<<< HEAD
 
 							<div id="loading-spinner" class="loading hide"></div>
+=======
+>>>>>>> workBranch
 						</div>
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
 	
 	</div>
 	</form>
+=======
+		</form>
+>>>>>>> workBranch
 
 	</div>
 	<!-- FOOTER -->
@@ -697,5 +671,81 @@ for($count = 0; $count < $i; $count ++) {
 		</div>
 	</div>
 	<!-- END FOOTER -->
+	
+<script type="text/javascript" src="../js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('#datetimepicker').datetimepicker({
+    	language: 'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1});
+
+    function showIncrementPrice(obj){
+		if(obj == "" || obj.length<2){
+			document.getElementById("increment_div").style.display="none";
+		}else{
+			document.getElementById("increment_div").style.display="block";
+		}
+	}
+
+	function updateEarnings(){
+		var price = document.getElementById("price").value;
+		var shipping = document.getElementById("shipping").value;
+		if(price == "")
+			price = 0;
+		if(shipping == "")
+			shipping = 0;
+		var earn = (parseInt(price) + parseInt(shipping)) * 0.85;
+		document.getElementById("earnings").value=earn;
+	} 
+
+	function createProduct(){
+		var productName = document.getElementById("product_name").value;
+		if(productName == null || productName == ''){
+			alert("name can't be empty");
+		return;}
+		var description = document.getElementById("description").value;
+		if(description == null || description == ''){
+			alert("description can't be empty");
+		return;}
+		var tags = document.getElementById("tags").value;
+		if(tags == null || tags == ''){
+			alert("tags can't be empty");
+		return;}
+		var uniqueID = document.getElementById("unique_id").value;
+		if(uniqueID == null || uniqueID == ''){
+			alert("uniqueID can't be empty");
+			return;}
+		var mainImage = document.getElementById("main_image").value;
+		if(mainImage == null || mainImage == ''){
+			alert("mainImage can't be empty");
+			return;}
+		var price = document.getElementById("price").value;
+		if(price == null || price == ''){
+			alert("price can't be empty");
+			return;}
+		var quantity = document.getElementById("quantity").value;
+		if(quantity == null || quantity == ''){
+			alert("quantity can't be empty");
+			return;}
+		var shipping = document.getElementById("shipping").value;
+		if(shipping == null || shipping == ''){
+			alert("shipping can't be empty");
+			return;}
+		var shippingTime = document.getElementById("shipping_time").value;
+		if(shippingTime == null || shippingTime == ''){
+			alert("shippingTime can't be empty");
+			return;} 
+		var form = document.getElementById("add_product");
+		form.submit();
+	}
+</script>
 </body>
 </html>

@@ -1,17 +1,100 @@
 <?php
 header ( "Content-Type: text/html;charset=utf-8" );
-include 'Wish/WishClient.php';
-include 'mysql/dbhelper.php';
+
+include_once dirname ( '__FILE__' ).'/mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ).'/Wish/WishHelper.php';
+include_once dirname ( '__FILE__' ).'/Wish/WishClient.php';
+include_once dirname ( '__FILE__' ) . '/user/wconfig.php';
+
 use Wish\WishClient;
+use Wish\WishHelper;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
-phpinfo ();
+//phpinfo ();
+
+$dbhelper = new dbhelper ();
+$wishHelper = new WishHelper();
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
+
+
+$expressInfo = array();
+$expressResult = $dbhelper->getExpressInfo(1, 1);
+while($expressAttr = mysql_fetch_array($expressResult)){
+	echo "<br/>values:".$expressAttr['express_attr_name'].$expressAttr['express_attr_value'];
+	$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
+}
+
+echo "<br/>CONFIG:".YANWEN_USER_ATTR." value:".$expressInfo[YANWEN_USER_ATTR]."<br/>";
+foreach ($expressInfo as $ekey=>$eValue){
+	echo "<br/>".$ekey.":".$eValue;
+}
+
+
+$key = "label_fdafdkakfdas_12";
+if(preg_match("/^label/",$key,$matches)){
+	echo "preg yes".$matches[0];
+	$sku = explode("_",$key)[1];
+	echo "sku".$sku;
+}else{
+	echo "preg no";
+}
+echo "<br/>";
+
+/* $sku = 'TESTSKU';
+$names = explode("|","Afdae|fdaBBB");
+//$dbhelper->insertproductLabel(1, $sku, $dbhelper->insertLabel($names[0], $names[1]));
+echo "insert label result:".$dbhelper->insertLabel($names[0], $names[1]); */
+
+$labels = $wishHelper->getUserLabelsArray(1);
+foreach ( array_unique($labels) as $labelkey => $labelvalue ) {
+	echo "<br/>".$labelkey.$labelvalue;
+}
+
+
+
+$orderCount = 0;
+if($orderCount /2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
+$orderCount++;
+echo "</br>";
+if($orderCount % 2 == 0){
+	echo "trgradeA".$orderCount;
+}else{
+	echo "gradeA success".$orderCount;
+}
+
 
 $printTrackingnumbers = "<string>RG228167292CN,RG228167292CN,";
 $printTrackingnumbers = substr ( $printTrackingnumbers, 0, strlen ( $printTrackingnumbers ) - 1 ) . "</string>";
@@ -149,7 +232,69 @@ echo "the last, client account id:".$client->getAccountid()."<br/>";  */
 
 $pwd ="123456";
 $hash = md5($pwd);
-echo "<br/>hash:".$hash;
+echo "<br/>hash:".$hash."<br/>";
 
+
+$addsuccess = 0;
+if($addsuccess){
+	echo "1";
+}else{
+	echo "nothing";
+}
 ?>
-<a href="addTrackingData.php">新增单号</a>
+<!DOCTYPE html>
+<html>
+<head>
+		<title></title>
+		<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+<div class="container">
+    <form action="" class="form-horizontal"  role="form">
+        <fieldset>
+            <legend>Test</legend>
+            <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label>
+                <div class="input-group date form_datetime col-md-5" data-date="<?php echo date('Y-m-d')?>" data-date-format="yyyy mm dd - hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input1" value="" /><br/>
+            </div>
+            
+            <input type="text" value="<?php echo date('Y-m-d  H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii">
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript" src="./js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+    $('#datetimepicker').datetimepicker({
+    	language: 'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1});
+</script>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 ignore_user_abort ();
 set_time_limit ( 0 );
-
+echo "schedule";
 $dbhelper = new dbhelper ();
 $client = null;
 $isRunning = $_GET ['isRunning'];
@@ -25,7 +25,7 @@ if ($isRunning == 1) {
 			sleep ( 120 ); // sleep for 2 minutes defaultly;
 		}
 		$dbhelper->updateSettingCount ();
-		$curDate = date ( 'Ymd' );
+		$curDate = date ( 'Y-m-d  H:i' );
 		$productsInfo = $dbhelper->getScheduleProducts ( $curDate );
 		while ( $productInfo = mysql_fetch_array ( $productsInfo ) ) {
 			$parent_sku = $productInfo ['parent_sku'];
@@ -50,6 +50,7 @@ if ($isRunning == 1) {
 			$log = "process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
 			$dbhelper->updateSettingMsg ( $log );
 			$addProduct = 0;
+			$addSuccess = 1;
 			$prod_res = null;
 			while ( $product = mysql_fetch_array ( $products ) ) {
 				if ($addProduct == 0) { // add product;
@@ -106,8 +107,9 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
+						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
+						$addSuccess = 0;
 					}
-					print_r ( $prod_res );
 					if ($prod_res != null) {
 						$log = $log . "add product success<br/>";
 						$dbhelper->updateSettingMsg ( $log );
@@ -115,6 +117,7 @@ if ($isRunning == 1) {
 					} else {
 						$log = $log . "add product failed<br/>";
 						$dbhelper->updateSettingMsg ( $log );
+						$addSuccess = 0;
 					}
 				} else { // add product variation
 					$currentProductVar = array ();
@@ -131,18 +134,25 @@ if ($isRunning == 1) {
 						$currentProductVar ['msrp'] = $product ['MSRP'];
 					$currentProductVar ['shipping_time'] = $product ['shipping_time'];
 					$currentProductVar ['main_image'] = $product ['main_image'];
-					$prod_var = $client->createProductVariation ( $currentProductVar );
-					print_r ( $prod_var );
+					try {
+						$prod_var = $client->createProductVariation ( $currentProductVar );
+					} catch ( ServiceResponseException $e ) {
+						$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
+						$addSuccess = 0;
+					}
 					if (prod_var != null) {
 						$log = $log . "add product var success<br/>";
 						$dbhelper->updateSettingMsg ( $log );
+					}else{
+						$addSuccess = 0;
 					}
 				}
 			}
-			
-			$dbhelper->updateScheduleFinished ( $productInfo );
-			$log = $log . "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
-			$dbhelper->updateSettingMsg ( $log );
+			if($addSuccess){
+				$dbhelper->updateScheduleFinished ( $productInfo );
+				$log = $log. "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
+				$dbhelper->updateSettingMsg ( $log );
+			}
 		}
 	} while ( $dbhelper->isScheduleRunning () );
 }
