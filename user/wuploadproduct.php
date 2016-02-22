@@ -274,18 +274,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			<title>Wish 商户平台</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
-<<<<<<< HEAD
-					<link rel="stylesheet" type="text/css"
-						href="../css/add_products_page.css" />
-
-</head>
-<script type="text/javascript">
-=======
 				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
 				<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
 				<link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
->>>>>>> workBranch
-
 </head>
 <body>
 	<!-- HEADER -->
@@ -306,16 +297,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						data-uid="5413fe984ad3ab745fee8b48">
 <?php echo $username?>
 </li>
-<<<<<<< HEAD
-				</ul>
-=======
 					<li><button>
 							<a href="./wlogin.php?type=exit">注销</a>
 						</button></li>
 
 				</ul>
-
->>>>>>> workBranch
 			</div>
 		</div>
 	</div>
@@ -334,12 +320,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						<div class="container">
 							<a href="./wusercenter.php" class="brand"> 订单处理 </a> <a
 								href="./wuploadproduct.php" class="brand"> 产品上传 </a> <a
-<<<<<<< HEAD
-								href="http://wishconsole.com/" class="brand"> 个人信息 </a>
-=======
 								href="./wuserinfo.php" class="brand"> 个人信息 </a>
->>>>>>> workBranch
-
 						</div>
 					</div>
 					<!-- /navbar-inner -->
@@ -626,40 +607,20 @@ if ($productName != null && $description != null && $mainImage != null && $price
 										class="col-name">定时上传日期</span></label>
 
 									<div class="controls input-append">
-<<<<<<< HEAD
-										<input class="input-block-level" name="Schedule_Date"
-											id="Schedule_Date" type="text"
-											value="<?php echo $scheduleDate?>"
-											placeholder="可接受：20151225; 为空则立即上传" />
-=======
 										<input class="input-block-level" name="Schedule_Date" type="text" value="<?php echo ($scheduleDate != null)?$scheduleDate:date('Y-m-d  H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii" placeholder="可接受：20151225; 为空则立即上传">
->>>>>>> workBranch
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<div id="buttons-section" class="control-group text-right">
-							<button id="clear-button" class="btn btn-large">清除</button>
 							<button id="submit-button" type="button"
 								class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
-<<<<<<< HEAD
-
-							<div id="loading-spinner" class="loading hide"></div>
-=======
->>>>>>> workBranch
 						</div>
 					</div>
 				</div>
 			</div>
-<<<<<<< HEAD
-	
-	</div>
-	</form>
-=======
 		</form>
->>>>>>> workBranch
-
 	</div>
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
