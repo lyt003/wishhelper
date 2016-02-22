@@ -382,7 +382,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									class="col-name">Description</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class="input-block-level required"
+									<textarea rows="5" class = "form-control"
 										name="Description" id="description" type="text"
 										placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $description?>
 								</textarea>
@@ -394,7 +394,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									class="col-name">Tags</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="3" class="input-block-level required"
+									<textarea rows="3" class="form-control"
 										type="text" id="tags" name="Tags"
 										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $tags?></textarea>
 								</div>
@@ -427,7 +427,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									class="col-name">Extra Images</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class="input-block-level required"
+									<textarea rows="5" class="form-control"
 										name="Extra_Images" id="extra_images" type="text"
 										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $extraImages?></textarea>
 								</div>
