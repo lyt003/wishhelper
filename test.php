@@ -235,4 +235,59 @@ $hash = md5($pwd);
 echo "<br/>hash:".$hash;
 
 ?>
-<a href="addTrackingData.php">新增单号</a>
+<!DOCTYPE html>
+<html>
+<head>
+		<title></title>
+		<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+<div class="container">
+    <form action="" class="form-horizontal"  role="form">
+        <fieldset>
+            <legend>Test</legend>
+            <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label>
+                <div class="input-group date form_datetime col-md-5" data-date="<?php echo date('Y-m-d')?>" data-date-format="yyyy mm dd - hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input1" value="" /><br/>
+            </div>
+            
+            <input type="text" value="<?php echo date('Y-m-d  H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii">
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript" src="./js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+    $('#datetimepicker').datetimepicker({
+    	language: 'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1});
+</script>
+
+</body>
+</html>
