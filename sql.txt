@@ -102,7 +102,7 @@ CREATE TABLE `schedule_product` (
 	`parent_sku` varchar(50) NOT NULL,
 	`scheduledate` varchar(20) NOT NULL,
 	`isfinished` int(1),
-	`errormessage` varchar(50)
+	`errormessage` varchar(500)
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE `schedule_product`
 ADD PRIMARY KEY (`parent_sku`,`accountid`);

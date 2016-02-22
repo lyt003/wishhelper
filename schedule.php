@@ -8,7 +8,6 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 ignore_user_abort ();
 set_time_limit ( 0 );
-echo "schedule";
 $dbhelper = new dbhelper ();
 $client = null;
 $isRunning = $_GET ['isRunning'];
@@ -107,7 +106,7 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
+						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage()));
 						$addSuccess = 0;
 					}
 					if ($prod_res != null) {

@@ -180,7 +180,7 @@ class dbhelper {
 		return mysql_query ( $insertSql );
 	}
 	public function getScheduleProducts($curDate) {
-		$scheduleSql = 'select accountid,parent_sku from schedule_product where scheduledate <= "' . $curDate . '" and isfinished = 0 order by accountid,parent_sku';
+		$scheduleSql = 'select accountid,parent_sku from schedule_product where date_format(scheduledate,"%Y-%c-%d %h:%i") <= date_format("' . $curDate . '","%Y-%c-%d %h:%i")  and isfinished = 0 order by accountid,parent_sku';
 		return mysql_query ( $scheduleSql );
 	}
 	public function updateScheduleFinished($productInfo) {
@@ -189,8 +189,8 @@ class dbhelper {
 	}
 	
 	public function updateScheduleError($productInfo,$errorInfo) {
-		$updateFinished = 'update schedule_product set errormessage = "'.$errorInfo.'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
-		return mysql_query ( $updateFinished );
+		$updateErrorFinished = 'update schedule_product set errormessage = "'.$errorInfo.'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		return mysql_query ( $updateErrorFinished );
 	}
 	
 	public function updateSettingCount() {
