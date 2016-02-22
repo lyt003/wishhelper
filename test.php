@@ -232,8 +232,15 @@ echo "the last, client account id:".$client->getAccountid()."<br/>";  */
 
 $pwd ="123456";
 $hash = md5($pwd);
-echo "<br/>hash:".$hash;
+echo "<br/>hash:".$hash."<br/>";
 
+
+$addsuccess = 0;
+if($addsuccess){
+	echo "1";
+}else{
+	echo "nothing";
+}
 ?>
 <!DOCTYPE html>
 <html>
