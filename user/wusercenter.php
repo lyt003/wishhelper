@@ -61,7 +61,6 @@ if ($username == null) { // 未登录
 }
 
 // 已登录
-echo "username = ".$username."<br/>";
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;

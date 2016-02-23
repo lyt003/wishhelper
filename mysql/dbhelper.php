@@ -45,7 +45,6 @@ class dbhelper {
 			$querySql = $querySql . ' users.username = "' . $email . '" and users.userid = accounts.userid';
 		}
 		$result = mysql_query ( $querySql );
-		echo "get user:" . $querySql;
 		return $result;
 	}
 	public function getAccountToken($accountid) {
@@ -120,10 +119,6 @@ class dbhelper {
 		}
 		
 		$result = mysql_query ( $query_sql );
-		var_dump ( $result );
-		if (! $result) {
-			echo "error:" . mysql_error ();
-		}
 		return $result;
 	}
 	private function getUserOrders($userid, $orderstatus) {

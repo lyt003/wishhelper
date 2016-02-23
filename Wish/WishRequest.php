@@ -80,7 +80,6 @@ class WishRequest {
 		
 		$result = curl_exec ( $curl );
 		$error = curl_errno ( $curl );
-		echo "error: " . $error;
 		
 		$error_message = curl_error ( $curl );
 		
