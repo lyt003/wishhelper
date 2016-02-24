@@ -147,6 +147,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				} else {
 					$productarray ['sku'] = $uniqueID . "_" . $color;
 					$productarray ['color'] = $color;
+					$productarray ['price'] = $price;
 				}
 			} else {
 				if ($size != null) {
@@ -156,6 +157,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 					$sizeCount ++;
 				} else {
 					$productarray ['sku'] = $uniqueID;
+					$productarray ['price'] = $price;
 				}
 			}
 			$insertResult = $dbhelper->insertProduct ( $productarray );
