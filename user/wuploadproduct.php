@@ -616,8 +616,16 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						</div>
 
 						<div id="buttons-section" class="control-group text-right">
+							<br/>
+							<br/>
 							<button id="submit-button" type="button"
 								class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
+						</div>
+						<div id="buttons-section" class="control-group text-right">
+							<br/>
+							<br/>
+							<br/>
+							<br/>
 						</div>
 					</div>
 				</div>
