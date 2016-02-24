@@ -8,6 +8,7 @@ use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\WishHelper;
 use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
@@ -74,7 +75,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	$client = new WishClient ( $rows ['token'], 'prod' );
 	$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
 	
-	$wishHelper->saveOrders($unfulfilled_orders, $rows ['accountid']);
+	$wishHelper->saveOrders ( $unfulfilled_orders, $rows ['accountid'] );
 	
 	$i ++;
 }
@@ -92,28 +93,38 @@ if (strcmp ( $add, "1" ) == 0) {
 	}
 	
 	// get info of current user id:
-	$labels = $wishHelper->getUserLabelsArray($_SESSION ['userid']);
-	$expressinfo = $wishHelper->getExpressInfo($_SESSION ['userid']);
+	$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
+	$expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );
 	
 	for($ct = 0; $ct < $i; $ct ++) {
-		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels,$expressinfo);
+		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels, $expressinfo );
 	}
-}else if(strcmp ( $add, "2" ) == 0){
-	for($ut = 0;$ut <$i; $ut ++){
+} else if (strcmp ( $add, "2" ) == 0) {
+	for($ut = 0; $ut < $i; $ut ++) {
 		$ordersNotUpload = $dbhelper->getOrdersForUploadTracking ( $accounts ['accountid' . $ut] );
 		while ( $orderUpload = mysql_fetch_array ( $ordersNotUpload ) ) {
-			$tracker = new WishTracker ( $orderUpload ['provider'], $orderUpload ['tracking'], NOTETOCUSTOMERS );
-			$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
-		
-			if ($fulResult) {
-				$orderUpload ['orderstatus'] = ORDERSTATUS_UPLOADEDTRACKING;
-				$orderUpload ['accountid'] = $accounts ['accountid' . $ut];
-				$updateResult = $dbhelper->updateOrder ( $orderUpload );
+			if ($orderUpload ['provider'] != null && $orderUpload ['tracking'] != null) {
+				$tracker = new WishTracker ( $orderUpload ['provider'], $orderUpload ['tracking'], NOTETOCUSTOMERS );
+				if ($client == null || $accounts ['accountid' . $ut] != $client->getAccountid ()) {
+					$client = new WishClient ( $accounts ['token' . $ut], 'prod' );
+					$client->setAccountid ( $accounts ['accountid' . $ut] );
+				}
+				try {
+					$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
+				} catch ( ServiceResponseException $e ) {
+					echo "<br/>failed to fulfillOrder" . $orderUpload ['orderid'] . $orderUpload ['tracking'] . $e->getStatusCode () . $e->getMessage ();
+				}
+				
+				if ($fulResult) {
+					$orderUpload ['orderstatus'] = ORDERSTATUS_UPLOADEDTRACKING;
+					$orderUpload ['accountid'] = $accounts ['accountid' . $ut];
+					$updateResult = $dbhelper->updateOrder ( $orderUpload );
+				}
 			}
 		}
 	}
 }
-	$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
+$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 
 ?>
 
@@ -122,14 +133,15 @@ if (strcmp ( $add, "1" ) == 0) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish 商户平台</title>
-<meta name="keywords" content="">
-<link rel="stylesheet" type="text/css" href="../css/home_page.css">
-<link href="../css/bootstrap.min.css" rel="stylesheet">
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+	<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Wish 商户平台</title>
+			<meta name="keywords" content="">
+				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
+					<link href="../css/bootstrap.min.css" rel="stylesheet">
+						<script src="../js/jquery-2.2.0.min.js"></script>
+						<script src="../js/bootstrap.min.js"></script>
+
 </head>
 <script type="text/javascript">
 	function processorders(){
@@ -237,9 +249,11 @@ for($count = 0; $count < $i; $count ++) {
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="downloadlabels()">下载标签</button>
+				<button class="btn btn-info" type="button"
+					onclick="downloadlabels()">下载标签</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="uploadtrackings()">上传单号</button>
+				<button class="btn btn-info" type="button"
+					onclick="uploadtrackings()">上传单号</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="downloadEUB()">下载E邮宝订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -263,13 +277,13 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<tr class=\"gradeA success\">";
 		}
 		echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">" . substr ( $cur_order ['ordertime'], 0, 10 ) . "</td>";
-		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"".$cur_order['productimage']."\">". $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
-		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" .$cur_order['quantity']." * (". $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
+		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
+		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
 		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" name=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" value=\"" . $labels [$cur_order ['sku']] . "\" placeholder=\"中文|英文\">";
 		echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 		echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
-		foreach ( array_unique($labels) as $labelkey => $labelvalue ) {
+		foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
 			echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
 		}
 		$orderCount ++;
