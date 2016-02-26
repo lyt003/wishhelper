@@ -17,12 +17,15 @@ $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;
 while ( $rows = mysql_fetch_array ( $result ) ) {
-	$accounts ['clientid' . $i] = $rows ['clientid'];
-	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-	$accounts ['token' . $i] = $rows ['token'];
-	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-	$accounts ['accountid' . $i] = $rows ['accountid'];
-	$i ++;
+	if($rows ['token'] != null){
+		$accounts ['clientid' . $i] = $rows ['clientid'];
+		$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+		$accounts ['token' . $i] = $rows ['token'];
+		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+		$accounts ['accountid' . $i] = $rows ['accountid'];
+		$accounts ['accountname' . $i] = $rows ['accountname'];
+		$i ++;
+	}
 }
 
 // Function: 获取远程图片并把它保存到本地
@@ -357,12 +360,18 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								<div class="controls input-append">
 									<label>
 							<?php
-							
-							for($count = 0; $count < $i; $count ++) {
-								echo "<input type=\"radio\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
-								echo "&nbsp;&nbsp;" . $accounts ['accountid' . $count];
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							if ($i>0){
+								for($count = 0; $count < $i; $count ++) {
+									if($count != 0 && $count%3 == 0)
+										echo "<br/>";
+									echo "<input type=\"radio\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
+									echo "&nbsp;&nbsp;" . $accounts ['accountname'.$count];
+									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+								}	
+							}else{
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./wbindwish.php\">绑定wish账号</a>";
 							}
+							
 							?></label>
 								</div>
 							</div>

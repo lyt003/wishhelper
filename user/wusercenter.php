@@ -71,12 +71,18 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	$accounts ['token' . $i] = $rows ['token'];
 	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
 	$accounts ['accountid' . $i] = $rows ['accountid'];
+	$accounts ['accountname' . $i] = $rows ['accountname'];
 	
-	$client = new WishClient ( $rows ['token'], 'prod' );
-	$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-	
-	$wishHelper->saveOrders ( $unfulfilled_orders, $rows ['accountid'] );
-	
+	if($rows ['token'] != null){
+		$client = new WishClient ( $rows ['token'], 'prod' );
+		try {
+			$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+			$wishHelper->saveOrders ( $unfulfilled_orders, $rows ['accountid'] );
+		} catch (ServiceResponseException $e) {
+			echo "<br/><br/><br/><br/><br/><br/>get orders faild of ".$accounts['accountname'.$i].", the error info:".$e->getCode().$e->getMessage().$e->getErrorMessage();
+		}		
+		
+	}
 	$i ++;
 }
 
@@ -111,7 +117,7 @@ if (strcmp ( $add, "1" ) == 0) {
 				}
 				try {
 					$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
-				} catch ( ServiceResponseException $e ) {
+				} catch (ServiceResponseException $e ) {
 					echo "<br/>failed to fulfillOrder" . $orderUpload ['orderid'] . $orderUpload ['tracking'] . $e->getStatusCode () . $e->getMessage ();
 				}
 				
@@ -240,11 +246,12 @@ $labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 			<li>已绑定的wish账号:
 <?php
 for($count = 0; $count < $i; $count ++) {
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $accounts ['accountid' . $count];
+	if($accounts ['token' . $count] != null)
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $accounts ['accountname' . $count];
 }
 ?>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-				href="wbindwish.php">绑定wish账号</a>
+				href="./wbindwish.php">绑定wish账号</a>
 			</li>
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
@@ -263,32 +270,34 @@ for($count = 0; $count < $i; $count ++) {
 <?php
 $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
-	$orders = $dbhelper->getOrdersNoTracking ( $accounts ['accountid' . $count1] );
-	echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1] . ":&nbsp;&nbsp;" . mysql_num_rows ( $orders ) . "个未处理订单";
-	echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
-	echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
-	echo "<th style=\"width:10%\">日期</th><th style=\"width:35%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-	echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
-	echo "<tbody>";
-	while ( $cur_order = mysql_fetch_array ( $orders ) ) {
-		if ($orderCount % 2 == 0) {
-			echo "<tr>";
-		} else {
-			echo "<tr class=\"gradeA success\">";
+	if($accounts ['token' . $count1] != null){
+		$orders = $dbhelper->getOrdersNoTracking ( $accounts ['accountid' . $count1] );
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1] . ":&nbsp;&nbsp;" . mysql_num_rows ( $orders ) . "个未处理订单";
+		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
+		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
+		echo "<th style=\"width:10%\">日期</th><th style=\"width:35%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
+		echo "<tbody>";
+		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
+			if ($orderCount % 2 == 0) {
+				echo "<tr>";
+			} else {
+				echo "<tr class=\"gradeA success\">";
+			}
+			echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">" . substr ( $cur_order ['ordertime'], 0, 10 ) . "</td>";
+			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
+			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
+			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" name=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" value=\"" . $labels [$cur_order ['sku']] . "\" placeholder=\"中文|英文\">";
+			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
+			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
+			foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
+				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
+			}
+			$orderCount ++;
 		}
-		echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">" . substr ( $cur_order ['ordertime'], 0, 10 ) . "</td>";
-		echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
-		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
-		echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
-		echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" name=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" value=\"" . $labels [$cur_order ['sku']] . "\" placeholder=\"中文|英文\">";
-		echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
-		echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
-		foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
-			echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
-		}
-		$orderCount ++;
+		echo "</tbody></table></div></div></div></div>";
 	}
-	echo "</tbody></table></div></div></div></div>";
 }
 ?>
 </form>

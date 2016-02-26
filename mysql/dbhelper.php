@@ -37,8 +37,15 @@ class dbhelper {
 		}
 		return mysql_query ( $loginSql );
 	}
+	
+	public function addUseraccount($userid,$accountname,$clientid,$clientsecret){
+		$addSql = 'insert into accounts(accountname,userid,clientid,clientsecret) values("'.$accountname.'",'.$userid.',"'.$clientid.'","'.$clientsecret.'")';
+		mysql_query($addSql);
+		return mysql_insert_id();
+	}
+	
 	public function getUserToken($email) {
-		$querySql = 'select accountid, clientid,clientsecret,token,refresh_token from accounts, users where';
+		$querySql = 'select accountid,accountname, clientid,clientsecret,token,refresh_token from accounts, users where';
 		if (stripos ( $email, "@" ) != false) {
 			$querySql = $querySql . ' users.email = "' . $email . '" and users.userid = accounts.userid';
 		} else {

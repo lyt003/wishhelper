@@ -21,6 +21,7 @@ CREATE TABLE `accounts` (
   `refresh_token` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`accountid`)
 )  DEFAULT CHARSET=utf8;
+Alter table `accounts` add `accountname` varchar(100) after `accountid`;
 
 CREATE TABLE `orders` (
   `orderid` varchar(40) NOT NULL,
