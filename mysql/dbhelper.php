@@ -182,7 +182,7 @@ class dbhelper {
 		return mysql_query ( $insertSql );
 	}
 	public function getScheduleProducts($curDate) {
-		$scheduleSql = 'select accountid,parent_sku from schedule_product where date_format(scheduledate,"%Y-%c-%d %h:%i") <= date_format("' . $curDate . '","%Y-%c-%d %h:%i")  and isfinished = 0 order by accountid,parent_sku';
+		$scheduleSql = 'select accountid,parent_sku from schedule_product where date_format(scheduledate,"%Y-%m-%d %H:%i") <= date_format("' . $curDate . '","%Y-%m-%d %H:%i")  and isfinished = 0 order by accountid,parent_sku';
 		return mysql_query ( $scheduleSql );
 	}
 	public function updateScheduleFinished($productInfo) {
