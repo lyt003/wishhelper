@@ -153,6 +153,13 @@ class dbhelper {
 					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . $productarray ['name'] . '","' . $productarray ['description'] . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . $productarray ['tags'] . '","' . $productarray ['UPC'] . '")';
 		return mysql_query ( $insert_sql );
 	}
+	
+	public function getUploadProducts($accountid){
+		$queryproducts = 'SELECT p.*,s.scheduledate from products p, schedule_product s WHERE s.isfinished = 0 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
+		echo "<br/><br/><br/>".$queryproducts;
+		return mysql_query($queryproducts);
+	}
+	
 	public function getProducts($parentSKU) {
 		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
 		return mysql_query ( $productsSQL );
