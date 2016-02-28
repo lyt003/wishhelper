@@ -59,9 +59,13 @@ class dbhelper {
 		return $result;
 	}
 	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
-		$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
-		echo "<br/> update result " . $updateTokenSql;
-		return mysql_query ( $updateTokenSql );
+		if($newToken != null && $newRefreshToken != null){
+			$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
+			echo "<br/> update result " . $updateTokenSql;
+			return mysql_query ( $updateTokenSql );
+		}
+		echo "<br/>newtoken or newrefreshtoken is null,failed to update user token";
+		return false;
 	}
 	public function insertOrder($orderarray) {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
