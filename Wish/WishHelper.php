@@ -175,7 +175,7 @@ class WishHelper {
 					$Goods = $xml->addChild ( "GoodsName" );
 					$gsUserid = $Goods->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 		
-					$gsLabel = $this->getCNENLabel($labels, $orderNoTracking ['sku']);
+					$gsLabel = $this->getCNENLabel($labels, str_replace(' ','_',$orderNoTracking ['sku']));
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
 					/* $gsName = $orderNoTracking ['productname'];

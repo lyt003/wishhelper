@@ -59,12 +59,12 @@ class dbhelper {
 		return $result;
 	}
 	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
-		if($newToken != null && $newRefreshToken != null){
+		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
 			$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
 			echo "<br/> update result " . $updateTokenSql;
 			return mysql_query ( $updateTokenSql );
 		}
-		echo "<br/>newtoken or newrefreshtoken is null,failed to update user token";
+		echo "<br/>newtoken or newrefreshtoken is invalid,failed to update user token";
 		return false;
 	}
 	public function insertOrder($orderarray) {
