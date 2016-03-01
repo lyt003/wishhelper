@@ -134,21 +134,17 @@ $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
 	if($accounts ['token' . $count1] != null){
 		$scheduleProducts = $dbhelper->getUploadProducts($accounts ['accountid' . $count1] );
-		//$products = $scheduleProducts;
-		//$productVars = $wishHelper->getProductVarsCount($products);
+		$productsInfo = $wishHelper->getProductVarsCount($scheduleProducts);
+		$productvars = $productsInfo['productvars'];
 		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1];
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
-		echo "<th style=\"width:25%\">产品名称</th><th style=\"width:10%\" class=\"hidden-phone\">父SKU</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">SKU</th><th style=\"width:10%\" class=\"hidden-phone\">价格</th><th style=\"width:10%\" class=\"hidden-phone\">库存</th><th style=\"width:20%\" class=\"hidden-phone\">上传时间</th></tr></thead>";
+		echo "<th style=\"width:15%\">产品名称</th><th style=\"width:10%\">父SKU</th>";
+		echo "<th style=\"width:20%\">SKU</th><th style=\"width:10%\">价格</th><th style=\"width:10%\">库存</th><th style=\"width:5%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
 		echo "<tbody>";
-		/* $tempParentSKU = "";
-		var_dump($scheduleProducts);
-		echo "<br/>";
-		var_dump($productVars);	
-		echo "<br/>parent sku:"; */
-		while ( $cur_product = mysql_fetch_array ( $scheduleProducts) ) {
-			echo "<br/>parent sku1:";
+		$tempParentSKU = "";
+		$isProduct = false;
+		foreach ($productvars as $cur_product){
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {
@@ -156,18 +152,24 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			}
 			
 			$currentParentSKU =  $cur_product['parent_sku'];
-			echo "<br/>parent sku:".$currentParentSKU;
-			if($currentParentSKU != $tempParentSKU ){
-				$varCounts = 4;//$productVars[$currentParentSKU];
-				$tempParentSKU = $currentParentSKU;
-				echo "<td rowspan=".$varCounts." style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_product ['scheduledate'] ."</td>";
-				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
-				echo "<td rowspan=".$varCounts." style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
-			}
-				echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_product['sku']."</td>";
-				echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_product ['price'] ."</td>";
-				echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_product ['quantity'] ."</td>";
+			if($currentParentSKU != $tempParentSKU )
+				$isProduct = true;
+				
+			if($isProduct){
+				$varCounts = $productsInfo[$currentParentSKU];
+				echo "<td rowspan=".$varCounts." style=\"width:15%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
+				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
+			}	
+				echo "<td style=\"width:20%;vertical-align:middle;\">" . $cur_product['sku']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['price'] ." + ".$cur_product ['shipping']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['quantity'] ."</td>";
 
+			if($isProduct){
+				echo "<td rowspan=".$varCounts." style=\"width:5%;vertical-align:middle;\">" . $cur_product ['scheduledate'] ."</td>";
+				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\"><p>查看</p></td>";
+				$tempParentSKU = $currentParentSKU;
+				$isProduct = false;
+			}
 				
 			echo "</tr>";
 			$orderCount ++;

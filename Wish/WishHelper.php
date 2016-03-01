@@ -283,18 +283,21 @@ class WishHelper {
 	}
 	
 	public function getProductVarsCount($productsVars){
-		$products = array();
+		$productsInfo = array();
 		$tempParentSKU = "";
 		$varCounts = 0;
-		
+		$productsarray = array();
+		$index = 0;
 		while ( $curProductVar = mysql_fetch_array ( $productsVars) ) {
+			$productsarray[$index++] = $curProductVar;
+			
 			$currentParentSKU =  $curProductVar['parent_sku'];
 			
 			if($currentParentSKU != $tempParentSKU ){
 				
 				
 				if($tempParentSKU != ""){
-					$products[$tempParentSKU] = $varCounts;
+					$productsInfo[$tempParentSKU] = $varCounts;
 				}
 				
 				$tempParentSKU = $currentParentSKU;
@@ -306,9 +309,10 @@ class WishHelper {
 		
 		//for last product:
 		if($tempParentSKU != ""){
-			$products[$tempParentSKU] = $varCounts;
+			$productsInfo[$tempParentSKU] = $varCounts;
 		}
 		
-		return $products;
+		$productsInfo['productvars'] = $productsarray;
+		return $productsInfo;
 	}
 }

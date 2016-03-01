@@ -6,7 +6,7 @@ if(strcmp($type,"exit") == 0){
 }
 $username = $_SESSION ['username'];
 if($username != null){
-	header("Location:./wusercenter.php");
+	header("Location:./wuploadproduct.php");
 	exit;
 }
 $errorMsg = $_GET ['errorMsg'];
@@ -50,7 +50,7 @@ $errorMsg = $_GET ['errorMsg'];
 	<!-- END HEADER -->
 	<!-- SUB HEADER NAV-->
 	<!-- splash page subheader-->
-	<form id="loginform" method="post" action="wusercenter.php">
+	<form id="loginform" method="post" action="wuploadproduct.php">
 		<div id="page-content" class="container-fluid  ">
 
 			<div id="login-page-content" class="center">

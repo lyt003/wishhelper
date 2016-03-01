@@ -9,10 +9,55 @@ use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 
 header ( "Content-Type: text/html;charset=utf-8" );
-
+$dbhelper = new dbhelper ();
 $username = $_SESSION ['username'];
 
-$dbhelper = new dbhelper ();
+if ($username == null) { // 未登录
+	$type = $_GET ['type'];
+	if (strcmp ( $type, "register" ) == 0) {
+		$email = $_POST ["email"];
+		$username = $_POST ["username"];
+		$password = $_POST ["password"];
+		$check = $dbhelper->queryUser ( $username, $email );
+		$checkrow = mysql_fetch_array ( $check );
+		if ($checkrow) {
+			if ($checkrow ['username'] == $username) {
+				header ( "Location:./wregister.php?errorMsg=该用户已经存在" );
+				exit ();
+			}
+			if ($checkrow ['email'] == $email) {
+				header ( "Location:./wregister.php?errorMsg=该邮箱地址已经被注册" );
+				exit ();
+			}
+		} else {
+			$result = $dbhelper->createUser ( $username, md5 ( $password ), $email );
+			if ($result != 0) {
+				$_SESSION ['username'] = $username;
+				$_SESSION ['email'] = $email;
+				$_SESSION ['userid'] = $result;
+			} else {
+				header ( "Location:./wregister.php?errorMsg=注册失败" );
+				exit ();
+			}
+		}
+	} else {
+		// login;
+		$username = $_POST ["username"];
+		$password = $_POST ["password"];
+
+		$result = $dbhelper->userLogin ( $username, md5 ( $password ) );
+		$row = mysql_fetch_array ( $result );
+		if ($row) {
+			$_SESSION ['username'] = $row ['username'];
+			$_SESSION ['email'] = $row ['email'];
+			$_SESSION ['userid'] = $row ['userid'];
+		} else {
+			header ( "Location:./wlogin.php?errorMsg=登录失败" );
+			exit ();
+		}
+	}
+}
+
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;
