@@ -67,14 +67,14 @@ $accounts = array ();
 $i = 0;
 echo "<br/><br/><br/><br/><br/>";
 while ( $rows = mysql_fetch_array ( $result ) ) {
-	$accounts ['clientid' . $i] = $rows ['clientid'];
-	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-	$accounts ['token' . $i] = $rows ['token'];
-	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-	$accounts ['accountid' . $i] = $rows ['accountid'];
-	$accounts ['accountname' . $i] = $rows ['accountname'];
-	
 	if($rows ['token'] != null && strlen($rows ['token']) > 1){
+		$accounts ['clientid' . $i] = $rows ['clientid'];
+		$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+		$accounts ['token' . $i] = $rows ['token'];
+		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+		$accounts ['accountid' . $i] = $rows ['accountid'];
+		$accounts ['accountname' . $i] = $rows ['accountname'];
+	
 		$client = new WishClient ( $rows ['token'], 'prod' );
 		try {
 			$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
@@ -103,8 +103,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				$wishHelper->saveOrders ( $unfulfilled_orders, $accounts ['accountid' . $i] );
 			}
 		}		
+		$i ++;
 	}
-	$i ++;
 }
 
 $add = $_GET ['add'];
