@@ -281,4 +281,34 @@ class WishHelper {
 				$this->dbhelper->updateOrderStatus($tracking, ORDERSTATUS_DOWNLOADEDLABEL);
 		}
 	}
+	
+	public function getProductVarsCount($productsVars){
+		$products = array();
+		$tempParentSKU = "";
+		$varCounts = 0;
+		
+		while ( $curProductVar = mysql_fetch_array ( $productsVars) ) {
+			$currentParentSKU =  $curProductVar['parent_sku'];
+			
+			if($currentParentSKU != $tempParentSKU ){
+				
+				
+				if($tempParentSKU != ""){
+					$products[$tempParentSKU] = $varCounts;
+				}
+				
+				$tempParentSKU = $currentParentSKU;
+				$varCounts = 0;
+			}
+			
+			$varCounts ++;
+		}
+		
+		//for last product:
+		if($tempParentSKU != ""){
+			$products[$tempParentSKU] = $varCounts;
+		}
+		
+		return $products;
+	}
 }

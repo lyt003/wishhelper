@@ -241,6 +241,35 @@ if($addsuccess){
 }else{
 	echo "nothing";
 }
+
+echo "<br/>";
+$data = array();
+$curdata = array();
+$data['1'] = $curdata;
+$curdata[]  = 100;
+$curdata[]  = "else";
+var_dump($curdata);
+
+echo "<br/>data:";
+
+var_dump($data);
+$temp = $data['1'];
+$temp[] = "final";
+
+$data['1'] = $curdata;
+echo "<br/>final data:";
+var_dump($data);
+
+/* 
+echo "<br/>";
+$curdata = array();
+$curdata[]  = "new array100";
+$curdata[]  = "new else";
+var_dump($curdata);
+$data[] = $curdata;
+
+echo "<br/>data:";
+var_dump($data); */
 ?>
 <!DOCTYPE html>
 <html>
