@@ -82,7 +82,7 @@ if ($isRunning == 1) {
 					try {
 						$prod_res = $client->createProduct ( $currentProduct );
 					} catch ( ServiceResponseException $e ) {
-						if ($e->getStatusCode () == 1015 || $e->getStatusCode () == 4000) {
+						if ($e->getStatusCode () == 1015 || $e->getStatusCode () == 1016) {
 							$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
 							$log = $log . "<br/>errorMessage:" . $response->getMessage ();
 							$dbhelper->updateSettingMsg ( $log );
