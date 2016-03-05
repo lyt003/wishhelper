@@ -259,7 +259,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				try {
 					$prod_res = $client->createProduct ( $currentProduct );
 				} catch ( ServiceResponseException $e ) {
-					if ($e->getStatusCode () == 1015) {
+					if ($e->getStatusCode () == 1015 || $e->getStatusCode() == 1016) {
 						$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
 						echo "<br/>errorMessage:" . $response->getMessage ();
 						$values = $response->getResponse ()->{'data'};

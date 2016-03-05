@@ -65,25 +65,46 @@ if ($username == null) { // 未登录
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;
+echo "<br/><br/><br/><br/><br/>";
 while ( $rows = mysql_fetch_array ( $result ) ) {
-	$accounts ['clientid' . $i] = $rows ['clientid'];
-	$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-	$accounts ['token' . $i] = $rows ['token'];
-	$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-	$accounts ['accountid' . $i] = $rows ['accountid'];
-	$accounts ['accountname' . $i] = $rows ['accountname'];
+	if($rows ['token'] != null && strlen($rows ['token']) > 1){
+		$accounts ['clientid' . $i] = $rows ['clientid'];
+		$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
+		$accounts ['token' . $i] = $rows ['token'];
+		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
+		$accounts ['accountid' . $i] = $rows ['accountid'];
+		$accounts ['accountname' . $i] = $rows ['accountname'];
 	
-	if($rows ['token'] != null){
 		$client = new WishClient ( $rows ['token'], 'prod' );
 		try {
 			$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
 			$wishHelper->saveOrders ( $unfulfilled_orders, $rows ['accountid'] );
 		} catch (ServiceResponseException $e) {
-			echo "<br/><br/><br/><br/><br/><br/>get orders faild of ".$accounts['accountname'.$i].", the error info:".$e->getCode().$e->getMessage().$e->getErrorMessage();
+			echo "<br/>get orders faild of ".$accounts['accountname'.$i].", the error info:".$e->getStatusCode().$e->getMessage().$e->getErrorMessage();
+			if ($e->getStatusCode () == 1015 || $e->getStatusCode() == 1016) {
+				$response = $client->refreshToken ( $accounts ['clientid' . $i], $accounts ['clientsecret' . $i], $accounts ['refresh_token' . $i] );
+				echo "<br/>Message:" . $response->getMessage ();
+				$values = $response->getResponse ()->{'data'};
+				$newToken = '0';
+				$newRefresh_token = '0';
+				foreach ( $values as $k => $v ) {
+					echo 'key  ' . $k . '  value:' . $v;
+					if ($k == 'access_token') {
+						$newToken = $v;
+					}
+					if ($k == 'refresh_token') {
+						$newRefresh_token = $v;
+					}
+				}
+				$dbhelper->updateUserToken ( $accounts ['accountid' . $i], $newToken, $newRefresh_token );
+				
+				$client = new WishClient ( $newToken, 'prod' );
+				$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+				$wishHelper->saveOrders ( $unfulfilled_orders, $accounts ['accountid' . $i] );
+			}
 		}		
-		
+		$i ++;
 	}
-	$i ++;
 }
 
 $add = $_GET ['add'];
@@ -131,7 +152,6 @@ if (strcmp ( $add, "1" ) == 0) {
 	}
 }
 $labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -279,6 +299,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
+			$tempsku = str_replace(' ','_',$cur_order ['sku']);
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {
@@ -288,11 +309,11 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" name=\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\" value=\"" . $labels [$cur_order ['sku']] . "\" placeholder=\"中文|英文\">";
+			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
 			foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
-				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $cur_order ['sku'] . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
+				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
 			}
 			$orderCount ++;
 		}

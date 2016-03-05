@@ -59,9 +59,13 @@ class dbhelper {
 		return $result;
 	}
 	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
-		$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
-		echo "<br/> update result " . $updateTokenSql;
-		return mysql_query ( $updateTokenSql );
+		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
+			$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
+			echo "<br/> update result " . $updateTokenSql;
+			return mysql_query ( $updateTokenSql );
+		}
+		echo "<br/>newtoken or newrefreshtoken is invalid,failed to update user token";
+		return false;
 	}
 	public function insertOrder($orderarray) {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
@@ -188,11 +192,11 @@ class dbhelper {
 		return mysql_query ( $insertSql );
 	}
 	public function getScheduleProducts($curDate) {
-		$scheduleSql = 'select accountid,parent_sku from schedule_product where date_format(scheduledate,"%Y-%m-%d %H:%i") <= date_format("' . $curDate . '","%Y-%m-%d %H:%i")  and isfinished = 0 order by accountid,parent_sku';
+		$scheduleSql = 'select accountid,parent_sku from schedule_product where UNIX_TIMESTAMP(scheduledate) <= UNIX_TIMESTAMP("' . $curDate . '")  and isfinished = 0 order by accountid,parent_sku';
 		return mysql_query ( $scheduleSql );
 	}
 	public function updateScheduleFinished($productInfo) {
-		$updateFinished = 'update schedule_product set isfinished = 1 where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		$updateFinished = 'update schedule_product set isfinished = 1,errormessage= now() where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
 		return mysql_query ( $updateFinished );
 	}
 	
