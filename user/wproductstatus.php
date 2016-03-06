@@ -166,7 +166,13 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 
 			if($isProduct){
 				echo "<td rowspan=".$varCounts." style=\"width:5%;vertical-align:middle;\">" . $cur_product ['scheduledate'] ."</td>";
-				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\"><p>查看</p></td>";
+				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\">";
+				if($cur_product['errormessage'] != null){
+					echo "<p>上传失败".$cur_product['errormessage']."</p>";
+				}else{
+					echo"<p>查看</p>";
+				}
+				echo "</td>";
 				$tempParentSKU = $currentParentSKU;
 				$isProduct = false;
 			}

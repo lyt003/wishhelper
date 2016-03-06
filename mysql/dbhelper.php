@@ -159,7 +159,7 @@ class dbhelper {
 	}
 	
 	public function getUploadProducts($accountid){
-		$queryproducts = 'SELECT p.*,s.scheduledate from products p, schedule_product s WHERE s.isfinished = 0 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
+		$queryproducts = 'SELECT p.*,s.scheduledate,s.errormessage from products p, schedule_product s WHERE s.isfinished = 0 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
 		return mysql_query($queryproducts);
 	}
 	
