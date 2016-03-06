@@ -457,12 +457,13 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							<div class="control-group">
 								<label class="control-label" data-col-index="7"><span
 									class="col-name">Tags</span></label>
-
+								<span id="tag_left_counts" style="color:red">10</span>
 								<div class="controls input-append">
 									<textarea rows="3" class="form-control"
 										type="text" id="tags" name="Tags"
 										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $tags?></textarea>
 								</div>
+								
 							</div>
 
 							<div class="control-group" style="display: block;">
@@ -487,14 +488,35 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								</div>
 							</div>
 
+							<div class="control-group" style="display: none;" id="main_image_view">
+								<label class="control-label" data-col-index="1"><span
+									class="col-name">预览</span></label>
+								<div class="controls input-append">
+									<img id="main_img_view" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+								</div>
+							</div>
+							
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
 									class="col-name">Extra Images</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class="form-control"
+									<textarea rows="5" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
 										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $extraImages?></textarea>
+								</div>
+							</div>
+							
+							<div class="control-group" style="display: none;" id="extra_images_view">
+								<label class="control-label" data-col-index="1"><span
+									class="col-name">预览</span></label>
+								<div class="controls input-append">
+									<img id="extra_img_view0" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view1" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view2" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view3" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view4" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view5" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
 								</div>
 							</div>
 
@@ -720,6 +742,57 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		startView: 2,
 		forceParse: 0,
         showMeridian: 1});
+
+	$('#tags').bind('input propertychange',function(){
+		var tags = $('#tags').val().split(",");
+		var tagsNoSpace = [];
+		$.each(tags,function(i,v){
+			if('' != $.trim(v))
+				tagsNoSpace.push(v)
+		});
+		$('#tag_left_counts').text(10 - tagsNoSpace.length);
+		if($('#tag_left_counts').text()<0){
+			alert("Tag的个数不能超过10");
+		}
+	});
+    
+    $('#main_image').bind('input propertychange',function(){
+        if($(this).val() != null && $(this).val() != ""){
+    			$('#main_image_view').show();
+    			$('#main_img_view').attr("src",$(this).val());
+        }else{
+            	$('#main_image_view').hide();
+        }
+     });
+
+    $('#extra_images').bind('input propertychange',function(){
+        if($(this).val() != null && $(this).val() != ""){
+        	$('#extra_images_view').show();
+        	var images = $(this).val();
+			var imagearray = images.split("|");
+			
+			
+			$.each(imagearray,function(id,url){
+				var imgid = "extra_img_view" + id;
+				$('#'+ imgid).show();
+				$('#'+ imgid).attr("src",url);
+			});
+
+			for(var i =0; i<6; i++){
+				var imgid = "extra_img_view" + i;
+				if(imagearray[i] != null && imagearray[i] != ""){
+					$('#'+ imgid).show();
+					$('#'+ imgid).attr("src",imagearray[i]);
+				}else{
+					$('#'+ imgid).hide();
+					$('#'+ imgid).attr("src","");
+				}
+			}
+			
+        }else{
+        	$('#extra_images_view').hide();
+       	}
+    });
 
     function showIncrementPrice(obj){
 		if(obj == "" || obj.length<2){
