@@ -123,15 +123,15 @@ class WishHelper {
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
 		
-			if (strcmp ( $orderNoTracking ['countrycode'], "US" ) != 0) {
+			//if (strcmp ( $orderNoTracking ['countrycode'], "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
 					
 				$epcode = $xml->addChild ( "Epcode" );
 				$ywuserid = $xml->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 					
-				$orderPrice = $orderNoTracking ['price'];
+				$orderTotalPrice = $orderNoTracking ['totalcost'];
 				$orderQuantity = $orderNoTracking ['quantity'];
-				$intPrice = intval ( $orderPrice );
+				$intPrice = intval ( $orderTotalPrice );
 					
 				if ($orderNoTracking ['orderNum'] != 0) {
 					$preGoodsNameEn = $preGoodsNameEn . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity;
@@ -142,7 +142,7 @@ class WishHelper {
 						$orderNoTracking ['provider'] = "ChinaAirPost";
 					} else {
 						$preTransactionid = $orderNoTracking ['transactionid'];
-						if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 6) {
+						if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 7) {
 							$channel = $xml->addChild ( "Channel", "105" ); // *
 							$orderNoTracking ['provider'] = "YanWen";
 						} else {
@@ -150,6 +150,11 @@ class WishHelper {
 							$orderNoTracking ['provider'] = "ChinaAirPost";
 						}
 					}
+					
+					$preGoodsNameEn = "";
+					
+					if (strcmp ( $orderNoTracking ['countrycode'], "US" ) == 0 && strcmp ($orderNoTracking ['provider'],"ChinaAirPost") == 0)
+						continue;
 		
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
@@ -196,8 +201,6 @@ class WishHelper {
 						$gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *;
 					} */
 		
-					$preGoodsNameEn = "";
-		
 					$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
 					$gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
 					$gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
@@ -243,7 +246,7 @@ class WishHelper {
 					}
 						
 				}
-			}
+			//}
 		}
 	}
 	
