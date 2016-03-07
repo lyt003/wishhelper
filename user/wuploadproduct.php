@@ -370,7 +370,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 						<div class="container">
 						
 						<ul class="nav">
-							<li><a href="./wusercenter.php"> 订单处理 </a></li>
+							<!-- <li><a href="./wusercenter.php"> 订单处理 </a></li> -->
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
@@ -378,7 +378,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								<li><a href="./wproductstatus.php">产品状态</a></li>
 								</ul>
 								</li>  
-							<li><a href="./wuserinfo.php"> 个人信息 </a></li>
+							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
 						</ul>
 						</div>
 					</div>
@@ -423,8 +423,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 								}	
 							}else{
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./wbindwish.php\">绑定wish账号</a>";
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;";
 							}
+							 echo "<a href=\"./wbindwish.php\">绑定wish账号</a>";
 							
 							?></label>
 								</div>

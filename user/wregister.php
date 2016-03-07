@@ -57,10 +57,8 @@ $errorMsg = $_GET ['errorMsg'];
 </script>
 <body>
 	<!-- HEADER -->
-	<div id="header" class="navbar navbar-fixed-top 
-
-">
-		<div class="container-fluid fixed-width">
+	<div id="header" class="navbar navbar-fixed-top">
+		<div class="container-fluid">
 			<a class="brand" href="http://wishconsole.com/"> <span
 				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
 			</a>

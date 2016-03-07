@@ -91,7 +91,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 						<div class="container">
 						
 						<ul class="nav">
-							<li><a href="./wusercenter.php"> 订单处理 </a></li>
+							<!-- <li><a href="./wusercenter.php"> 订单处理 </a></li> -->
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
@@ -99,7 +99,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								<li><a href="./wproductstatus.php">产品状态</a></li>
 								</ul>
 								</li>  
-							<li><a href="./wuserinfo.php"> 个人信息 </a></li>
+							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
 						</ul>
 						</div>
 					</div>

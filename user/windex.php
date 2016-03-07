@@ -9,13 +9,8 @@
 </head>
 <body>
 <!-- HEADER -->
-<div id="header" class="navbar navbar-fixed-top 
-
-
-" style="left: 0px;">
-<div class="container-fluid 
-fixed-width
-">
+<div id="header" class="navbar navbar-fixed-top" style="left: 0px;">
+<div class="container-fluid">
 <a class="brand" href="http://wishconsole.com/">
 <span class="merchant-header-text">
 更有效率的Wish商户实用工具
@@ -59,10 +54,10 @@ fixed-width
 <div class="column left">
 <div class="message message-1">以更有效率的方式<br/>刊登产品</div>
 <div class="message message-2">
-再也不用翻墙上wish后台了
+再也不怕图片无效了
 </div>
 
-<a class="signup-btn" href="http://china-merchant.wish.com/signup">免费使用</a>
+<a class="signup-btn" href="./wregister.php">免费使用</a>
 
 </div>
 <div class="column right">

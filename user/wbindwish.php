@@ -60,6 +60,9 @@ if($username == null){
 			<title>Wish 商户平台</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
+					<link href="../css/bootstrap.min.css" rel="stylesheet">
+						<script src="../js/jquery-2.2.0.min.js"></script>
+						<script src="../js/bootstrap.min.js"></script>
 </head>
 <body>
 <!-- HEADER -->
@@ -95,10 +98,17 @@ if($username == null){
 				<div class="pull-left">
 					<div class="navbar-inner">
 						<div class="container">
-							<a href="./wusercenter.php" class="brand"> 订单处理 </a> <a
-								href="./wuploadproduct.php" class="brand"> 产品上传 </a> <a
-								href="./wuserinfo.php" class="brand"> 个人信息 </a>
-
+							<ul class="nav">
+							<!-- <li><a href="./wusercenter.php"> 订单处理 </a></li> -->
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
+								<ul class="dropdown-menu">
+								<li><a href="./wuploadproduct.php">产品上传</a></li>
+								<li><a href="./wproductstatus.php">产品状态</a></li>
+								</ul>
+								</li>  
+							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
+						</ul>
 						</div>
 					</div>
 					<!-- /navbar-inner -->
