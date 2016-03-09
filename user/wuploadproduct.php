@@ -486,6 +486,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									<input class="input-block-level required" name="Main_Image"
 										id="main_image" type="text" value="<?php echo $mainImage?>"
 										placeholder="可接受：image url" />
+									<input type="file" name="file1" id="local_main_image" />
 								</div>
 							</div>
 
@@ -505,6 +506,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 									<textarea rows="5" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
 										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $extraImages?></textarea>
+									<input type="file" name="file2" id="local_extra_image" />
 								</div>
 							</div>
 							
@@ -733,7 +735,47 @@ if ($productName != null && $description != null && $mainImage != null && $price
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript">
+							
+	function mainImageChange (){
+		if($('#main_image').val() != null && $('#main_image').val() != ""){
+			$('#main_image_view').show();
+			$('#main_img_view').attr("src",$('#main_image').val());
+	    }else{
+	        $('#main_image_view').hide();
+	    }
+	}
+
+	function extraImagesChange(){
+		if($('#extra_images').val() != null && $('#extra_images').val() != ""){
+        	$('#extra_images_view').show();
+        	var images = $('#extra_images').val();
+			var imagearray = images.split("|");
+			
+			
+			$.each(imagearray,function(id,url){
+				var imgid = "extra_img_view" + id;
+				$('#'+ imgid).show();
+				$('#'+ imgid).attr("src",url);
+			});
+
+			for(var i =0; i<6; i++){
+				var imgid = "extra_img_view" + i;
+				if(imagearray[i] != null && imagearray[i] != ""){
+					$('#'+ imgid).show();
+					$('#'+ imgid).attr("src",imagearray[i]);
+				}else{
+					$('#'+ imgid).hide();
+					$('#'+ imgid).attr("src","");
+				}
+			}
+			
+        }else{
+        	$('#extra_images_view').hide();
+       	}
+	}
+	
     $('#datetimepicker').datetimepicker({
     	language: 'zh-CN',
         weekStart: 1,
@@ -758,42 +800,69 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	});
     
     $('#main_image').bind('input propertychange',function(){
-        if($(this).val() != null && $(this).val() != ""){
-    			$('#main_image_view').show();
-    			$('#main_img_view').attr("src",$(this).val());
-        }else{
-            	$('#main_image_view').hide();
-        }
-     });
-
-    $('#extra_images').bind('input propertychange',function(){
-        if($(this).val() != null && $(this).val() != ""){
-        	$('#extra_images_view').show();
-        	var images = $(this).val();
-			var imagearray = images.split("|");
-			
-			
-			$.each(imagearray,function(id,url){
-				var imgid = "extra_img_view" + id;
-				$('#'+ imgid).show();
-				$('#'+ imgid).attr("src",url);
-			});
-
-			for(var i =0; i<6; i++){
-				var imgid = "extra_img_view" + i;
-				if(imagearray[i] != null && imagearray[i] != ""){
-					$('#'+ imgid).show();
-					$('#'+ imgid).attr("src",imagearray[i]);
-				}else{
-					$('#'+ imgid).hide();
-					$('#'+ imgid).attr("src","");
-				}
-			}
-			
-        }else{
-        	$('#extra_images_view').hide();
-       	}
+    	mainImageChange();
     });
+
+    $("#local_main_image").AjaxFileUpload({
+		onComplete: function(filename, response) {
+			switch(response['error']){
+			case 0:
+				$('#main_image').val("http://localhost/wishhelper/user/" + filename);
+				mainImageChange();
+				break;
+			case -1:
+				alert("不支持上传该类型的文件");
+				break;
+			case 1:
+			case 2:
+			case -2:
+				alert("图片大小不能大于4M");
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 6:	
+			case -3:
+			case -4:
+			case -5:				
+				alert("文件上传出错");
+				break;
+			}
+		}
+	});
+	
+    $('#extra_images').bind('input propertychange',function(){
+    	extraImagesChange();
+    });
+
+    $("#local_extra_image").AjaxFileUpload({
+		onComplete: function(filename, response) {
+			switch(response['error']){
+			case 0:
+				var currentVal = $('#extra_images').val(); 
+				$('#extra_images').val(currentVal + "|http://localhost/wishhelper/user/" + filename);
+				extraImagesChange();
+				break;
+			case -1:
+				alert("不支持上传该类型的文件");
+				break;
+			case 1:
+			case 2:
+			case -2:
+				alert("图片大小不能大于4M");
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 6:	
+			case -3:
+			case -4:
+			case -5:				
+				alert("文件上传出错");
+				break;
+			}
+		}
+	});
 
     function showIncrementPrice(obj){
 		if(obj == "" || obj.length<2){
