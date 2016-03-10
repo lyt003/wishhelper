@@ -375,7 +375,8 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
 								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./wproductstatus.php">产品状态</a></li>
+								<li><a href="./wproductstatus.php">定时产品状态</a></li>
+								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
 								</li>  
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
@@ -775,97 +776,101 @@ if ($productName != null && $description != null && $mainImage != null && $price
         	$('#extra_images_view').hide();
        	}
 	}
-	
-    $('#datetimepicker').datetimepicker({
-    	language: 'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 1});
 
-	$('#tags').bind('input propertychange',function(){
-		var tags = $('#tags').val().split(",");
-		var tagsNoSpace = [];
-		$.each(tags,function(i,v){
-			if('' != $.trim(v))
-				tagsNoSpace.push(v)
+	$(document).ready(function(){
+
+		$('#datetimepicker').datetimepicker({
+	    	language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			forceParse: 0,
+	        showMeridian: 1});
+
+		$('#tags').bind('input propertychange',function(){
+			var tags = $('#tags').val().split(",");
+			var tagsNoSpace = [];
+			$.each(tags,function(i,v){
+				if('' != $.trim(v))
+					tagsNoSpace.push(v)
+			});
+			$('#tag_left_counts').text(10 - tagsNoSpace.length);
+			if($('#tag_left_counts').text()<0){
+				alert("Tag的个数不能超过10");
+			}
 		});
-		$('#tag_left_counts').text(10 - tagsNoSpace.length);
-		if($('#tag_left_counts').text()<0){
-			alert("Tag的个数不能超过10");
-		}
-	});
-    
-    $('#main_image').bind('input propertychange',function(){
-    	mainImageChange();
-    });
+	    
+	    $('#main_image').bind('input propertychange',function(){
+	    	mainImageChange();
+	    });
 
 
-    
-    $("#local_main_image").AjaxFileUpload({
-		onComplete: function(filename, response) {
-			switch(response['error']){
-			case 0:
-				$('#main_image').val("http://www.wishconsole.com/images/" + response['name']);
-				mainImageChange();
-				break;
-			case -1:
-				alert("不支持上传该类型的文件");
-				break;
-			case 1:
-			case 2:
-			case -2:
-				alert("图片大小不能大于4M");
-				break;
-			case 3:
-			case 4:
-			case 5:
-			case 6:	
-			case -3:
-			case -4:
-			case -5:				
-				alert("文件上传出错");
-				break;
+	    
+	    $("#local_main_image").AjaxFileUpload({
+			onComplete: function(filename, response) {
+				switch(response['error']){
+				case 0:
+					$('#main_image').val("http://www.wishconsole.com/images/" + response['name']);
+					mainImageChange();
+					break;
+				case -1:
+					alert("不支持上传该类型的文件");
+					break;
+				case 1:
+				case 2:
+				case -2:
+					alert("图片大小不能大于4M");
+					break;
+				case 3:
+				case 4:
+				case 5:
+				case 6:	
+				case -3:
+				case -4:
+				case -5:				
+					alert("文件上传出错");
+					break;
+				}
 			}
-		}
+		});
+		
+	    $('#extra_images').bind('input propertychange',function(){
+	    	extraImagesChange();
+	    });
+
+	    $("#local_extra_image").AjaxFileUpload({
+			onComplete: function(filename, response) {
+				switch(response['error']){
+				case 0:
+					var currentVal = $('#extra_images').val(); 
+					$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
+					extraImagesChange();
+					break;
+				case -1:
+					alert("不支持上传该类型的文件");
+					break;
+				case 1:
+				case 2:
+				case -2:
+					alert("图片大小不能大于4M");
+					break;
+				case 3:
+				case 4:
+				case 5:
+				case 6:	
+				case -3:
+				case -4:
+				case -5:				
+					alert("文件上传出错");
+					break;
+				}
+			}
+		});
+
 	});
 	
-    $('#extra_images').bind('input propertychange',function(){
-    	extraImagesChange();
-    });
-
-    $("#local_extra_image").AjaxFileUpload({
-		onComplete: function(filename, response) {
-			switch(response['error']){
-			case 0:
-				var currentVal = $('#extra_images').val(); 
-				$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
-				extraImagesChange();
-				break;
-			case -1:
-				alert("不支持上传该类型的文件");
-				break;
-			case 1:
-			case 2:
-			case -2:
-				alert("图片大小不能大于4M");
-				break;
-			case 3:
-			case 4:
-			case 5:
-			case 6:	
-			case -3:
-			case -4:
-			case -5:				
-				alert("文件上传出错");
-				break;
-			}
-		}
-	});
-
     function showIncrementPrice(obj){
 		if(obj == "" || obj.length<2){
 			document.getElementById("increment_div").style.display="none";

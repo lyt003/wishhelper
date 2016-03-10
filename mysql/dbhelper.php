@@ -249,6 +249,17 @@ class dbhelper {
 		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = ' . $userid . ' and express_id = ' . $expressid;
 		return mysql_query ( $userSql );
 	}
+	
+	public function  getProductSource($userid,$parent_sku = null){
+		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$userid;
+		if($parent_sku != null){
+			$psource .= " and i.parent_sku like '%".$parent_sku."%'";
+		}
+		$psource .= " limit 50";
+		return mysql_query($psource);
+	}
+	
+	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

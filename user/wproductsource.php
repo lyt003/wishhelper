@@ -19,6 +19,9 @@ if ($username == null) { // 未登录
 	exit ();
 }
 
+
+$parent_sku = $_GET['query_parent_sku'];
+
 // 已登录
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
@@ -118,8 +121,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	<!-- END SUB HEADER NAV -->
 	<div class="banner-container"></div>
 	<div id="page-content" class="dashboard-wrapper">
-		<form class="form-horizontal" id="processorders"
-			action="./wusercenter.php?add=1" method="post">
+		<form class="form-horizontal" id="processsource"
+			action="./wproductsource.php" method="get">
 			<li>已绑定的wish账号:
 <?php
 for($count = 0; $count < $i; $count ++) {
@@ -130,54 +133,40 @@ for($count = 0; $count < $i; $count ++) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
 				href="./wbindwish.php">绑定wish账号</a>
 			</li>
+			<br/>
+			<div class="control-group">
+				<label class="control-label"><span
+									class="col-name">查询parent_sku:</span></label>
+						<div class="controls input-append">
+							<input class="input-block-level required" id="query_parent_sku"
+									name="query_parent_sku" type="text"
+									value="<?php echo $parent_sku ?>"
+									/>
+									<button id="query_action" type="button"
+								class="btn btn-primary btn-large">提交</button>
+						</div>
+			</div>
 <?php
 $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
 	if($accounts ['token' . $count1] != null){
-		$scheduleProducts = $dbhelper->getUploadProducts($accounts ['accountid' . $count1] );
-		$productsInfo = $wishHelper->getProductVarsCount($scheduleProducts);
-		$productvars = $productsInfo['productvars'];
+		$productsInfo = $dbhelper->getProductSource($accounts ['accountid' . $count1],$parent_sku);
 		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1];
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
-		echo "<th style=\"width:15%\">产品名称</th><th style=\"width:10%\">父SKU</th>";
-		echo "<th style=\"width:20%\">SKU</th><th style=\"width:10%\">价格</th><th style=\"width:10%\">库存</th><th style=\"width:5%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
+		echo "<th style=\"width:20%\">父SKU</th><th style=\"width:50%\">产品名称</th>";
+		echo "<th style=\"width:30%\">产品源地址</th></tr></thead>";
 		echo "<tbody>";
-		$tempParentSKU = "";
-		$isProduct = false;
-		foreach ($productvars as $cur_product){
+		while ( $cur_product = mysql_fetch_array ( $productsInfo) ) {
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {
 				echo "<tr class=\"gradeA success\">";
 			}
 			
-			$currentParentSKU =  $cur_product['parent_sku'];
-			if($currentParentSKU != $tempParentSKU )
-				$isProduct = true;
-				
-			if($isProduct){
-				$varCounts = $productsInfo[$currentParentSKU];
-				echo "<td rowspan=".$varCounts." style=\"width:15%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
-				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
-			}	
-				echo "<td style=\"width:20%;vertical-align:middle;\">" . $cur_product['sku']."</td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['price'] ." + ".$cur_product ['shipping']."</td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['quantity'] ."</td>";
-
-			if($isProduct){
-				echo "<td rowspan=".$varCounts." style=\"width:5%;vertical-align:middle;\">" . $cur_product ['scheduledate'] ."</td>";
-				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\">";
-				if($cur_product['errormessage'] != null){
-					echo "<p>上传失败".$cur_product['errormessage']."</p>";
-				}else{
-					echo"<p>查看</p>";
-				}
-				echo "</td>";
-				$tempParentSKU = $currentParentSKU;
-				$isProduct = false;
-			}
-				
+			echo "<td style=\"width:20%;vertical-align:middle;\">" . $cur_product['parent_sku']."</td>";
+			echo "<td style=\"width:50%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">".$cur_product ['name'] ."</li></ul></td>";
+			echo "<td style=\"width:30%;vertical-align:middle;\">" . $cur_product ['source_url'] ."</td>";
 			echo "</tr>";
 			$orderCount ++;
 		}
@@ -197,5 +186,15 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		</div>
 	</div>
 	<!-- END FOOTER -->
+	<script type="text/javascript" src="../js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('button#query_action').click(function(){
+				$('#processsource').submit();	
+			});
+
+		}); 
+	</script>
 </body>
 </html>
