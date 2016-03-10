@@ -27,8 +27,15 @@
 <div class="pull-right">
 
 <a href="./wlogin.php" class="login-btn btn">
-
-登录
+<?php 
+session_start ();
+$username = $_SESSION ['username'];
+if($username != null){
+	echo "进入";
+}else{
+	echo "登录";
+}
+?>
 </a>
 </div>
 
