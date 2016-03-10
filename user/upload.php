@@ -7,6 +7,7 @@
 // Only accept files with these extensions
 $whitelist = array('jpg', 'jpeg', 'png', 'gif');
 $name      = null;
+$newname   = null;
 $error     = 'No file uploaded.';
 
 if (isset($_FILES)) {
@@ -15,21 +16,23 @@ if (isset($_FILES)) {
 		$tmp_name = $curFile['tmp_name'];
 		$name     = basename($curFile['name']);
 		$error    = $curFile['error'];
+		$extension = pathinfo($name, PATHINFO_EXTENSION);
+		
+		$newname = uniqid().".".$extension;
+		$dest = "../images/".$newname;
 		
 		if ($error === UPLOAD_ERR_OK) {
-			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		
 			if (!in_array($extension, $whitelist)) {
-				$error = '非图片文件不能上传';
+				$error = -1;
 			} else {
-				move_uploaded_file($tmp_name, $name);
+				move_uploaded_file($tmp_name, $dest);
 			}
 		}
 	}
 }
 
 echo json_encode(array(
-	'name'  => $name,
+	'name'  => $newname,
 	'error' => $error,
 ));
 die();

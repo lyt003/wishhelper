@@ -803,11 +803,13 @@ if ($productName != null && $description != null && $mainImage != null && $price
     	mainImageChange();
     });
 
+
+    
     $("#local_main_image").AjaxFileUpload({
 		onComplete: function(filename, response) {
 			switch(response['error']){
 			case 0:
-				$('#main_image').val("http://localhost/wishhelper/user/" + filename);
+				$('#main_image').val("http://www.wishconsole.com/images/" + response['name']);
 				mainImageChange();
 				break;
 			case -1:
@@ -840,7 +842,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			switch(response['error']){
 			case 0:
 				var currentVal = $('#extra_images').val(); 
-				$('#extra_images').val(currentVal + "|http://localhost/wishhelper/user/" + filename);
+				$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
 				extraImagesChange();
 				break;
 			case -1:
