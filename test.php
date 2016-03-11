@@ -160,6 +160,19 @@ $curDate = date('Ymd');
 echo "curDate = ".$curDate."<br/>";
 echo date("y-m-d H:i:s",time());// H: 24小时制；   h：12小时制
 
+$currentPID = uniqid();
+
+$pid = $dbhelper->getPID();
+if($pid != null){
+	echo "<br/>111".$currentPID."   ".$pid;
+	if(strcmp($pid,$currentPID) != 0){
+		echo "<br/>".$currentPID."   ".$pid;
+	}
+}else{
+	echo "<br/>222".$currentPID."   ".$pid;
+	$dbhelper->registerPID($currentPID);
+}
+
 
 /*  $dbhelper = new dbhelper ();
 

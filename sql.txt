@@ -116,6 +116,7 @@ CREATE TABLE `setting`(
 	`message` varchar(100)
 ) DEFAULT CHARSET=utf8;
 insert into setting(schedule_running,running_count,during_time) values(0,0,60);
+Alter table `setting` add `pid` varchar(50) after `schedule_running`;
 
 DROP TABLE IF EXISTS `tracking_data`;
 CREATE TABLE `tracking_data`(

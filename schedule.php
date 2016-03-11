@@ -16,6 +16,7 @@ if ($isRunning == 1) {
 	$dbhelper->resetSettingCount ();
 } else {
 	$dbhelper->startScheduleRunning ();
+	$currentPID = uniqid();
 	do {
 		$duringtime = $dbhelper->getSettingDuringTime ();
 		if ($rows = mysql_fetch_array ( $duringtime )) {
@@ -23,6 +24,16 @@ if ($isRunning == 1) {
 		} else {
 			sleep ( 120 ); // sleep for 2 minutes defaultly;
 		}
+		
+		$pid = $dbhelper->getPID();
+		if($pid != null){
+			if(strcmp($pid,$currentPID) != 0){
+				die();
+			}
+		}else{
+			$dbhelper->registerPID($currentPID);
+		}
+		
 		$dbhelper->updateSettingCount ();
 		$curDate = date ( 'Y-m-d  H:i' );
 		$productsInfo = $dbhelper->getScheduleProducts ( $curDate );
@@ -106,7 +117,7 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage()));
+						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
 						$addSuccess = 0;
 					}
 					if ($prod_res != null) {

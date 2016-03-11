@@ -210,7 +210,7 @@ class dbhelper {
 		return mysql_query ( $updateSql );
 	}
 	public function resetSettingCount() {
-		$resetSql = 'update setting set running_count = 0';
+		$resetSql = 'update setting set running_count = 0, pid= NULL';
 		return mysql_query ( $resetSql );
 	}
 	public function updateSettingMsg($msg) {
@@ -257,6 +257,20 @@ class dbhelper {
 		}
 		$psource .= " limit 50";
 		return mysql_query($psource);
+	}
+	
+	public function registerPID($pid){
+		$insertpid = "update setting set pid = '".$pid."'";
+		return mysql_query($insertpid);
+	}
+	
+	public function getPID(){
+		$psql = "select pid from setting";
+		$result = mysql_query($psql);
+		while( $pid = mysql_fetch_array ( $result )){
+			return $pid['pid'];
+		}
+		return null;
 	}
 	
 	
