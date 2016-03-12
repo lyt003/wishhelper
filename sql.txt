@@ -12,6 +12,12 @@ CREATE TABLE `users` (
   PRIMARY KEY (`userid`)
 )  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `resetpassword`(
+	`userid` int(11) NOT NULL,
+	`token`  varchar(50) NOT NULL,
+	PRIMARY KEY (`userid`)
+)  DEFAULT CHARSET=utf8;
+
 CREATE TABLE `accounts` (
   `accountid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,

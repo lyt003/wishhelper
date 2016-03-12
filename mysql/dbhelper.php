@@ -20,7 +20,6 @@ class dbhelper {
 	}
 	public function queryUser($username, $email) {
 		$querySql = 'select userid,username,email from users where email = "' . $email . '" or username = "' . $username . '"';
-		echo "querySql:" . $querySql;
 		return mysql_query ( $querySql );
 	}
 	public function createUser($username, $password, $email) {
@@ -28,6 +27,7 @@ class dbhelper {
 		mysql_query ( $userInsert );
 		return mysql_insert_id ();
 	}
+	
 	public function userLogin($username, $password) {
 		$loginSql = 'select userid,username,email from users where psd = "' . $password . '" and ';
 		if (stripos ( $username, "@" ) != false) {
@@ -159,7 +159,7 @@ class dbhelper {
 	}
 	
 	public function getUploadProducts($accountid){
-		$queryproducts = 'SELECT p.*,s.scheduledate,s.errormessage from products p, schedule_product s WHERE s.isfinished = 0 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
+		$queryproducts = 'SELECT p.*,s.scheduledate,s.errormessage from products p, schedule_product s WHERE s.isfinished != 1 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
 		return mysql_query($queryproducts);
 	}
 	
@@ -201,7 +201,7 @@ class dbhelper {
 	}
 	
 	public function updateScheduleError($productInfo,$errorInfo) {
-		$updateErrorFinished = 'update schedule_product set errormessage = "'.$errorInfo.'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		$updateErrorFinished = 'update schedule_product set isfinished = -1, errormessage = "'.$errorInfo.'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
 		return mysql_query ( $updateErrorFinished );
 	}
 	
@@ -273,6 +273,34 @@ class dbhelper {
 		return null;
 	}
 	
+	public function insertResetToken($userid,$token){
+		$tokensql = "insert into resetpassword(userid,token) values(".$userid.",'".$token."')";
+		return mysql_query ( $tokensql );
+	}
+	
+	public function removeResetToken($userid){
+		$delfirst = "delete from resetpassword where userid = ".$userid;
+		return mysql_query ( $delfirst );
+	}
+	
+	public function queryResetpsdUser($token){
+		$queryToken = "select userid from resetpassword where token = '".$token."'";
+		$result = mysql_query($queryToken);
+		while( $useridarray = mysql_fetch_array ( $result )){
+			return $useridarray['userid'];
+		}
+		return null;
+	}
+	
+	public function updatepsd($userid,$newpassword){
+		$psdupdate = "update users set psd = '".$newpassword."' where userid = ".$userid;
+		return mysql_query($psdupdate);
+		/* if($result){
+			echo "success<br/>";
+		}else{
+			echo "failed<br/>".mysql_error();
+		} */
+	}
 	
 	function __destruct() {
 		if (! empty ( $db ))
