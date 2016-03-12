@@ -117,8 +117,10 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
-						$addSuccess = 0;
+						if(strcmp($e->getErrorMessage(),"1000") != 0 ){
+							$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
+							$addSuccess = 0;
+						}
 					}
 					if ($prod_res != null) {
 						$log = $log . "add product success<br/>";
@@ -127,7 +129,6 @@ if ($isRunning == 1) {
 					} else {
 						$log = $log . "add product failed<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						$addSuccess = 0;
 					}
 				} else { // add product variation
 					$currentProductVar = array ();
@@ -147,14 +148,14 @@ if ($isRunning == 1) {
 					try {
 						$prod_var = $client->createProductVariation ( $currentProductVar );
 					} catch ( ServiceResponseException $e ) {
-						$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
-						$addSuccess = 0;
+						if(strcmp($e->getErrorMessage(),"1000") != 0 ){
+							$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
+							$addSuccess = 0;
+						}
 					}
 					if (prod_var != null) {
 						$log = $log . "add product var success<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-					}else{
-						$addSuccess = 0;
 					}
 				}
 			}
