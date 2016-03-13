@@ -302,6 +302,23 @@ class dbhelper {
 		} */
 	}
 	
+	
+	public function insertColors($color){
+		$colorsql = 'insert into wishcolors(color) values("'.$color.'")';
+		$result = mysql_query($colorsql);
+		if($result){
+			echo "success";
+		}else{
+			echo "failed".mysql_error();
+		}
+		return $reult;
+	}
+	
+	public function getWishColors(){
+		$wishcolors = "select id,color from wishcolors";
+		return mysql_query($wishcolors);
+	}
+	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

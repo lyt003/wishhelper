@@ -178,6 +178,15 @@ insert into express_attr_info(userid,express_id,express_attr_name,express_attr_v
 insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'ApiToken','MTA0OTAzOnlhbmd3dTE5ODIxMTEy');
 
 
+
+DROP TABLE IF EXISTS `wishcolors`;
+CREATE TABLE `wishcolors`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`color` varchar(50) NOT NULL,
+ 	 PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+
 insert into users (email,psd) values ("ydengwu@gmail.com","yangwu");
 
 insert into accounts (userid,clientid,clientsecret) values ("1","5635840527b83e0ff42704d4","aaa9745849b04045a0bdc5d2e97650e9");

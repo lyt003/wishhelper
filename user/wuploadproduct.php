@@ -434,7 +434,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="3"><span
-									class="col-name">Product Name</span></label>
+									class="col-name">产品名称</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" id="product_name"
@@ -446,7 +446,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="8"><span
-									class="col-name">Description</span></label>
+									class="col-name">描述</span></label>
 
 								<div class="controls input-append">
 									<textarea rows="5" class = "form-control"
@@ -470,7 +470,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">Unique Id</span></label>
+									class="col-name">父SKU</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Unique_Id"
@@ -481,7 +481,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">Main Image</span></label>
+									class="col-name">主图片</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Main_Image"
@@ -501,7 +501,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">Extra Images</span></label>
+									class="col-name">额外图片</span></label>
 
 								<div class="controls input-append">
 									<textarea rows="5" class="form-control" id="extra_images"
@@ -526,24 +526,26 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">Colors</span></label>
+									class="col-name">颜色</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="colors"
 										id="colors" type="text" value="<?php echo $colors?>"
-										placeholder="可接受：color|color|color" />
+										placeholder="可接受：color|color|color" /><br/>
+									<label>请用"|"分割多个颜色值，颜色取值可参考：<a href="./showwishcolors.php" target="_blank">wish颜色列表</a></label>
 								</div>
 							</div>
 
 							<div class="control-group" style="display: block;">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">Sizes</span></label>
+									class="col-name">尺码</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="sizes"
 										onchange="showIncrementPrice(this.value)" id="sizes"
 										type="text" value="<?php echo $sizes?>"
-										placeholder="可接受：size|size|size" />
+										placeholder="可接受：size|size|size" /><br/>
+									<label>请用"|"分割多个尺码值，尺码取值可参考：<a href="http://www.merchant.wish.com/documentation/size-charts" target="_blank">wish尺码说明</a></label>
 								</div>
 							</div>
 						</div>
@@ -555,7 +557,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="2"><span
-									class="col-name">Price</span></label>
+									class="col-name">价格</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Price"
@@ -567,7 +569,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							<div class="control-group" style="display: none;"
 								id="increment_div">
 								<label class="control-label" data-col-index="1"><span
-									class="col-name">increment price</span></label>
+									class="col-name">价格按尺码增量</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required"
@@ -579,7 +581,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="4"><span
-									class="col-name">Quantity</span></label>
+									class="col-name">数量</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Quantity"
@@ -590,7 +592,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="5"><span
-									class="col-name">Shipping</span></label>
+									class="col-name">运费</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Shipping"
@@ -600,7 +602,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							</div>
 
 							<div class="control-group">
-								<label class="control-label"><span class="col-name">利润</span></label>
+								<label class="control-label"><span class="col-name">净额</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level" type="text" id="earnings"
@@ -610,7 +612,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="5"><span
-									class="col-name">Shipping Time</span></label>
+									class="col-name">运输时间</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Shipping_Time"
@@ -629,7 +631,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							<div id="optional-fields">
 								<div class="control-group">
 									<label class="control-label" data-col-index="12"><span
-										class="col-name">MSRP</span></label>
+										class="col-name">MSRP(产品原价)</span></label>
 
 									<div class="controls input-append">
 										<input class="input-block-level" name="MSRP" id="MSRP"
@@ -640,7 +642,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 								<div class="control-group">
 									<label class="control-label" data-col-index="13"><span
-										class="col-name">Brand</span></label>
+										class="col-name">品牌</span></label>
 
 									<div class="controls input-append">
 										<input class="input-block-level" name="Brand" id="brand"
@@ -674,7 +676,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 								<div class="control-group">
 									<label class="control-label" data-col-index="14"><span
-										class="col-name">Product Source URL</span></label>
+										class="col-name">产品源地址</span></label>
 
 									<div class="controls input-append">
 										<input class="input-block-level" name="Product_Source_URL"
