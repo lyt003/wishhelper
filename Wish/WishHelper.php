@@ -151,10 +151,11 @@ class WishHelper {
 						}
 					}
 					
-					$preGoodsNameEn = "";
-					
-					if (strcmp ( $orderNoTracking ['countrycode'], "US" ) == 0 && strcmp ($orderNoTracking ['provider'],"ChinaAirPost") == 0)
+					if (strcmp ( $orderNoTracking ['countrycode'], "US" ) == 0 && strcmp ($orderNoTracking ['provider'],"ChinaAirPost") == 0){// process by EUB;
+						$preGoodsNameEn = "";
 						continue;
+					}
+						
 		
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
@@ -201,6 +202,7 @@ class WishHelper {
 						$gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *;
 					} */
 		
+					$preGoodsNameEn = "";
 					$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
 					$gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
 					$gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
