@@ -62,20 +62,17 @@ SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countryc
 	56c8728f11e5eb1c2c9fbdca	LS592868155CN
 	
 	
-	56c8cc3722fe021c00a8f014	LS595114891CN	US	Maricela silva gracia	0.1	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
-	56c924179ec7c51a5854ebcd	LS595119465CN	US	Phoniquica	0.2	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
-	56c92433f55ef819cfaa80cf	LS595114905CN	US	Susan Kolar	0.4	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
-	56c931ca13c7ec1a44bc5dc5	LS595119474CN	US	Quartus Graves	0.1	卖家自送	16022208115213508	shiptemplate_01.xls	20160222081334695680	hongliang5301	运单 批次
-	56c9579001e0121a2d0bdb46	LS595114914CN	
-	
+	56e30e6637958809fc7e242d	LS673480145CN	US	Amanda fuller	0.1	卖家自送	16031313500268037	shiptemplate_01.xls	20160313135106828146	hongliang5301	运单 批次
+	56e31bc7f8a8e41e894d236b	LS673479915CN	US	Kristopher	0.1	卖家自送	16031313500268037	shiptemplate_01.xls	20160313135106828146	hongliang5301	运单 批次
+	56e3a4becf1f683021abca2d	LS673480159CN
 	
 		
-	update orders set provider='USPS',tracking='LS595114891CN',orderstatus = '1' where transactionid = '56c8cc3722fe021c00a8f014';
-	update orders set provider='USPS',tracking='LS595119465CN',orderstatus = '1' where transactionid = '56c924179ec7c51a5854ebcd';
-	update orders set provider='USPS',tracking='LS595114905CN',orderstatus = '1' where transactionid = '56c92433f55ef819cfaa80cf';
-	update orders set provider='USPS',tracking='LS595119474CN',orderstatus = '1' where transactionid = '56c931ca13c7ec1a44bc5dc5';
-	update orders set provider='USPS',tracking='LS595119474CN',orderstatus = '1' where transactionid = '56c931e87c049619ec769c7f';
-	update orders set provider='USPS',tracking='LS595114914CN',orderstatus = '1' where transactionid = '56c9579001e0121a2d0bdb46';
+	update orders set provider='USPS',tracking='LS673480145CN'  where transactionid = '56e30e6637958809fc7e242d';
+	update orders set provider='USPS',tracking='LS673479915CN'  where transactionid = '56e31bc7f8a8e41e894d236b';
+	update orders set provider='USPS',tracking='LS673480159CN'  where transactionid = '56e3a4becf1f683021abca2d';
+	update orders set provider='USPS',tracking='LS595119474CN'  where transactionid = '56c931ca13c7ec1a44bc5dc5';
+	update orders set provider='USPS',tracking='LS595119474CN'  where transactionid = '56c931e87c049619ec769c7f';
+	update orders set provider='USPS',tracking='LS595114914CN'  where transactionid = '56c9579001e0121a2d0bdb46';
 	
 update orders set provider='USPS',tracking='',orderstatus = '1' where transactionid = '';
 update orders set provider='USPS',tracking='',orderstatus = '1' where transactionid = '';
