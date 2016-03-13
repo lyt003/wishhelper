@@ -30,9 +30,8 @@ if ($isRunning == 1) {
 			if(strcmp($pid,$currentPID) != 0){
 				die();
 			}
-		}else{
-			$dbhelper->registerPID($currentPID);
 		}
+		$dbhelper->registerPID($currentPID);
 		
 		$dbhelper->updateSettingCount ();
 		$curDate = date ( 'Y-m-d  H:i' );
@@ -117,7 +116,10 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						if(strcmp($e->getErrorMessage(),"1000") != 0 ){
+						if(stristr($e->getErrorMessage(),"You have already added SKU")){
+							$addProduct = 1;
+							//$dbhelper->updateScheduleError($productInfo, '222You have already added SKU '.$product ['sku']);
+						}else{
 							$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
 							$addSuccess = 0;
 						}
@@ -148,13 +150,11 @@ if ($isRunning == 1) {
 					try {
 						$prod_var = $client->createProductVariation ( $currentProductVar );
 					} catch ( ServiceResponseException $e ) {
-						if(strcmp($e->getErrorMessage(),"1000") != 0 ){
-							$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.$e->getErrorMessage());
+						if(!stristr($e->getErrorMessage(),"has already been added")){
+							$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
 							$addSuccess = 0;
 						}
-					}
-					if (prod_var != null) {
-						$log = $log . "add product var success<br/>";
+						$log = $log . "add product var failed<br/>";
 						$dbhelper->updateSettingMsg ( $log );
 					}
 				}
@@ -162,6 +162,9 @@ if ($isRunning == 1) {
 			if($addSuccess){
 				$dbhelper->updateScheduleFinished ( $productInfo );
 				$log = $log. "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
+				$dbhelper->updateSettingMsg ( $log );
+			}else{
+				$log = $log. "failed to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
 				$dbhelper->updateSettingMsg ( $log );
 			}
 		}
