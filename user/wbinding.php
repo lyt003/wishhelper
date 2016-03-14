@@ -55,7 +55,7 @@ if ($access_code != null) {
 	
 	$dbhelper->updateUserToken ( $accountid, $access_token, $refresh_token );
 	
-	header ( "Location:./wusercenter.php" );
+	header ( "Location:./wuploadproduct.php" );
 } else if ($clientid != null && $clientsecret != null && $storename != null) {
 	$result = $dbhelper->addUseraccount ( $userid, $storename, $clientid, $clientsecret );
 	if ($result != null) {

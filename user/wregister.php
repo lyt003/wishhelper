@@ -76,7 +76,7 @@ $errorMsg = $_GET ['errorMsg'];
 				<div class="signup-page-title">创建账号</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="registerform" method="post"
-						action="wusercenter.php?<?php echo "type=register"?>">
+						action="wuploadproduct.php?<?php echo "type=register"?>">
 						<?php if($errorMsg != null)
 							echo "<ul align=\"center\">".$errorMsg."</ul>";?>
 						<div class="control-group">
