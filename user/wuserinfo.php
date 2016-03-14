@@ -11,7 +11,7 @@ $username = $_SESSION ['username'];
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish 商户平台</title>
+<title>更有效率的Wish商户实用工具</title>
 <meta name="keywords" content="">
 <link rel="stylesheet" type="text/css" href="../css/home_page.css">
 <link href="../css/bootstrap-editable.css" rel="stylesheet">

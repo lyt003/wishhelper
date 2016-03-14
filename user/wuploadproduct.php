@@ -219,97 +219,18 @@ if ($productName != null && $description != null && $mainImage != null && $price
 			$productarray ['price'] = null;
 		}
 	}
-	if ($scheduleDate != null) {
-		$productarray ['accountid'] = $accountid;
-		$productarray ['scheduledate'] = $scheduleDate;
-		$dbhelper->insertScheduleProduct ( $productarray );
-	} else {
-		$products = $dbhelper->getProducts ( $uniqueID );
-		$addProduct = 0;
-		$prod_res = null;
-		while ( $product = mysql_fetch_array ( $products ) ) {
-			if ($addProduct == 0) { // add product;
-				
-				$currentProduct = array ();
-				$currentProduct ['name'] = $product ['name'];
-				$currentProduct ['description'] = $product ['description'];
-				$currentProduct ['tags'] = $product ['tags'];
-				$currentProduct ['sku'] = $product ['sku'];
-				if ($product ['color'] != null)
-					$currentProduct ['color'] = $product ['color'];
-				if ($product ['size'] != null)
-					$currentProduct ['size'] = $product ['size'];
-				$currentProduct ['inventory'] = $product ['quantity'];
-				$currentProduct ['price'] = $product ['price'];
-				$currentProduct ['shipping'] = $product ['shipping'];
-				if ($product ['MSRP'] != null)
-					$currentProduct ['msrp'] = $product ['MSRP'];
-				$currentProduct ['shipping_time'] = $product ['shipping_time'];
-				$currentProduct ['main_image'] = $product ['main_image'];
-				$currentProduct ['parent_sku'] = $product ['parent_sku'];
-				if ($product ['brand'] != null)
-					$currentProduct ['brand'] = $product ['brand'];
-				if ($product ['landingPageURL'] != null)
-					$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-				if ($product ['UPC'] != null)
-					$currentProduct ['upc'] = $product ['UPC'];
-				if ($product ['extra_images'] != null)
-					$currentProduct ['extra_images'] = $product ['extra_images'];
-				
-				try {
-					$prod_res = $client->createProduct ( $currentProduct );
-				} catch ( ServiceResponseException $e ) {
-					if ($e->getStatusCode () == 1015 || $e->getStatusCode() == 1016) {
-						$response = $client->refreshToken ( $clientid, $clientsecret, $refresh_token );
-						echo "<br/>errorMessage:" . $response->getMessage ();
-						$values = $response->getResponse ()->{'data'};
-						$newToken = '0';
-						$newRefresh_token = '0';
-						foreach ( $values as $k => $v ) {
-							echo 'key  ' . $k . '  value:' . $v;
-							if ($k == 'access_token') {
-								$newToken = $v;
-							}
-							if ($k == 'refresh_token') {
-								$newRefresh_token = $v;
-							}
-						}
-						echo "<br/>newToken = " . $newToken . $newRefresh_token;
-						$dbhelper->updateUserToken ( $accountid, $newToken, $newRefresh_token );
-						$client = new WishClient ( $newToken, 'prod' );
-						$prod_res = $client->createProduct ( $currentProduct );
-					}
-				}
-				print_r ( $prod_res );
-				if ($prod_res != null) {
-					echo "add product success<br/>";
-					$addProduct = 1;
-				} else {
-					echo "add product failed<br/>";
-				}
-			} else { // add product variation
-				$currentProductVar = array ();
-				$currentProductVar ['parent_sku'] = $product ['parent_sku'];
-				$currentProductVar ['sku'] = $product ['sku'];
-				if ($product ['color'] != null)
-					$currentProductVar ['color'] = $product ['color'];
-				if ($product ['size'] != null)
-					$currentProductVar ['size'] = $product ['size'];
-				$currentProductVar ['inventory'] = $product ['quantity'];
-				$currentProductVar ['price'] = $product ['price'];
-				$currentProductVar ['shipping'] = $product ['shipping'];
-				if ($product ['MSRP'] != null)
-					$currentProductVar ['msrp'] = $product ['MSRP'];
-				$currentProductVar ['shipping_time'] = $product ['shipping_time'];
-				$currentProductVar ['main_image'] = $product ['main_image'];
-				$prod_var = $client->createProductVariation ( $currentProductVar );
-				print_r ( $prod_var );
-				if (prod_var != null) {
-					echo "add product var success<br/>";
-				}
-			}
-		}
+	
+	if( $scheduleDate == null || strcmp($scheduleDate,'') == 0){
+		$scheduleDate = date('Y-m-d H:i');
 	}
+	$checkdate = strtotime(trim($scheduleDate));
+	if(!$checkdate){
+		$scheduleDate = date('Y-m-d H:i');
+	}
+	
+	$productarray ['accountid'] = $accountid;
+	$productarray ['scheduledate'] = $scheduleDate;
+	$scheduleResult = $dbhelper->insertScheduleProduct ( $productarray );
 }
 
 ?>
@@ -321,7 +242,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>Wish 商户平台</title>
+			<title>更有效率的Wish商户实用工具</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
 				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
@@ -403,7 +324,20 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				<div>
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
 					<legend>添加产品</legend>
-
+						<?php 
+	                      		if(isset($scheduleResult)){
+	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
+	                      			echo "<h4 class=\"alert-heading\">";
+	                      			if($scheduleResult){
+	                      				echo "产品".$uniqueID."已提交成功，";
+	                      			}else{
+	                      				echo "产品".$uniqueID."提交失败，请联系，";
+	                      			}
+	                      			echo "</h4>";
+	                      			echo "</div>";
+	                      			$scheduleResult = null;
+	                      		}
+	                    ?>
 					<div id="add-product-form">
 						<div id="basic-info" class="form-horizontal">
 							<div class="section-title" align="left">基本信息</div>
@@ -697,15 +631,14 @@ if ($productName != null && $description != null && $mainImage != null && $price
 							<div id="optional-fields">
 								<div class="control-group">
 									<label class="control-label" data-col-index="12"><span
-										class="col-name">定时上传日期</span></label>
+										class="col-name">定时上传时间</span></label>
 
 									<div class="controls input-append">
-										<input class="input-block-level" name="Schedule_Date" type="text" value="<?php echo ($scheduleDate != null)?$scheduleDate:date('Y-m-d  H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii" placeholder="可接受：20151225; 为空则立即上传">
+										<input class="input-block-level" name="Schedule_Date" type="text" value="<?php echo ($scheduleDate != null)?$scheduleDate:date('Y-m-d H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii" placeholder="可接受：20151225; 为空则立即上传">
 									</div>
 								</div>
 							</div>
 						</div>
-
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
 							<br/>
@@ -847,7 +780,15 @@ if ($productName != null && $description != null && $mainImage != null && $price
 				switch(response['error']){
 				case 0:
 					var currentVal = $('#extra_images').val(); 
-					$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
+					if(currentVal != null && currentVal != ""){
+						if(currentVal.chatAt(currentVal.length-1) == "|"){
+							$('#extra_images').val(currentVal + "http://www.wishconsole.com/images/" + response['name']);
+						}else{
+							$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
+						}
+					}else{
+						$('#extra_images').val(currentVal + "http://www.wishconsole.com/images/" + response['name']);
+					}
 					extraImagesChange();
 					break;
 				case -1:
@@ -884,9 +825,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	function updateEarnings(){
 		var price = document.getElementById("price").value;
 		var shipping = document.getElementById("shipping").value;
-		if(price == "")
+		if($.trim(price) == "")
 			price = 0;
-		if(shipping == "")
+		if($.trim(shipping) == "")
 			shipping = 0;
 		var earn = (parseInt(price) + parseInt(shipping)) * 0.85;
 		document.getElementById("earnings").value=earn;
@@ -895,40 +836,61 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	function createProduct(){
 		var productName = document.getElementById("product_name").value;
 		if(productName == null || productName == ''){
-			alert("name can't be empty");
+			alert("产品名称不能为空");
 		return;}
 		var description = document.getElementById("description").value;
 		if(description == null || description == ''){
-			alert("description can't be empty");
+			alert("产品描述不能为空");
 		return;}
 		var tags = document.getElementById("tags").value;
 		if(tags == null || tags == ''){
-			alert("tags can't be empty");
+			alert("tags不能为空");
 		return;}
 		var uniqueID = document.getElementById("unique_id").value;
 		if(uniqueID == null || uniqueID == ''){
-			alert("uniqueID can't be empty");
+			alert("父SKU不能为空");
 			return;}
 		var mainImage = document.getElementById("main_image").value;
 		if(mainImage == null || mainImage == ''){
-			alert("mainImage can't be empty");
+			alert("主图片不能为空");
 			return;}
 		var price = document.getElementById("price").value;
-		if(price == null || price == ''){
-			alert("price can't be empty");
-			return;}
+		if(price == null || $.trim(price) == ''){
+			alert("价格不能为空");
+			return;
+		}else if(isNaN(price)){
+			alert("价格不对，请输入数字");
+			return;
+		}
 		var quantity = document.getElementById("quantity").value;
-		if(quantity == null || quantity == ''){
-			alert("quantity can't be empty");
-			return;}
-		var shipping = document.getElementById("shipping").value;
-		if(shipping == null || shipping == ''){
-			alert("shipping can't be empty");
-			return;}
+		if(quantity == null || $.trim(quantity) == ''){
+			alert("数量不能为空");
+			return;
+		}else if(isNaN(quantity)){
+			alert("数量不对，请输入数字");
+			return;
+		}
+	    var shipping = document.getElementById("shipping").value;
+		if(shipping == null || $.trim(shipping) == ''){
+			alert("运费不能为空");
+			return;
+		}else if(isNaN(shipping)){
+			alert("运费不对，请输入数字");
+			return;
+		}
 		var shippingTime = document.getElementById("shipping_time").value;
-		if(shippingTime == null || shippingTime == ''){
-			alert("shippingTime can't be empty");
-			return;} 
+		if(shippingTime == null || $.trim(shippingTime) == ''){
+			alert("运输时间不能为空");
+			return;
+		}
+		var shippingtimes = shippingTime.split("-");
+		if(shippingtimes == null || shippingtimes.length != 2){
+			alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
+			return;
+		}else if($.trim(shippingtimes[0]) == "" || $.trim(shippingtimes[1]) == "" || isNaN($.trim(shippingtimes[0])) || isNaN($.trim(shippingtimes[1]))){
+			alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
+			return;
+		}
 		var form = document.getElementById("add_product");
 		form.submit();
 	}

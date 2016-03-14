@@ -21,7 +21,7 @@ echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
 
-$ttresult = strtotime('15');
+$ttresult = strtotime(trim('   '));
 if($ttresult){
 	echo "<br/>time true";	
 }else{
