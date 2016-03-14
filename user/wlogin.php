@@ -107,7 +107,11 @@ $errorMsg = $_GET ['errorMsg'];
 		<div class="navbar-inner">
 			<div class="footer-container">
 				<span><a href="https://wishconsole.com/">关于我们</a></span> <span><a>2016
-						wishconsole版权所有 京ICP备16000367号</a></span>
+						wishconsole版权所有 京ICP备16000367号</a>
+						<!-- 51.la 网站统计 -->
+						<script language="javascript" type="text/javascript" src="http://js.users.51.la/18799105.js"></script>
+						<noscript><a href="http://www.51.la/?18799105" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/18799105.asp" style="border:none" /></a></noscript>
+				</span>
 			</div>
 		</div>
 	</div>
