@@ -57,12 +57,17 @@ if ($access_code != null) {
 	
 	header ( "Location:./wuploadproduct.php" );
 } else if ($clientid != null && $clientsecret != null && $storename != null) {
-	$result = $dbhelper->addUseraccount ( $userid, $storename, $clientid, $clientsecret );
-	if ($result != null) {
-		$_SESSION ['accountid'] = $result;
-		$_SESSION ['clientid'] = $clientid;
-		$_SESSION ['clientsecret'] = $clientsecret;
-		header ( "Location:https://merchant.wish.com/oauth/authorize?client_id=" . $clientid );
+	
+	if($dbhelper->isClientidSecretExist($clientid, $clientsecret)){
+		header ( "Location:./wbindwish.php?error=该wish账号已经被绑定过,不能重复绑定" );
+	}else{
+		$result = $dbhelper->addUseraccount ( $userid, $storename, $clientid, $clientsecret );
+		if ($result != null) {
+			$_SESSION ['accountid'] = $result;
+			$_SESSION ['clientid'] = $clientid;
+			$_SESSION ['clientsecret'] = $clientsecret;
+			header ( "Location:https://merchant.wish.com/oauth/authorize?client_id=" . $clientid );
+		}	 
 	}
 }
 

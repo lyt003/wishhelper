@@ -44,6 +44,15 @@ class dbhelper {
 		return mysql_insert_id();
 	}
 	
+	public function isClientidSecretExist($clientid,$clientsecret){
+		$clientquery = 'select clientid,clientsecret from accounts where clientid = "'.$clientid.'" or clientsecret = "'.$clientsecret.'"';
+		$result = mysql_query($clientquery);
+		while($account = mysql_fetch_array($result)){
+			return true;
+		}
+		return false;
+	}
+	
 	public function getUserToken($email) {
 		$querySql = 'select accountid,accountname, clientid,clientsecret,token,refresh_token from accounts, users where';
 		if (stripos ( $email, "@" ) != false) {
@@ -61,10 +70,8 @@ class dbhelper {
 	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
 		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
 			$updateTokenSql = "update accounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where accountid = '" . $accountid . "'";
-			echo "<br/> update result " . $updateTokenSql;
 			return mysql_query ( $updateTokenSql );
 		}
-		echo "<br/>newtoken or newrefreshtoken is invalid,failed to update user token";
 		return false;
 	}
 	public function insertOrder($orderarray) {
@@ -73,12 +80,10 @@ class dbhelper {
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
 		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . $orderarray ['sku'] . '","' . $orderarray ['productname'] . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
 		
-		// echo "insert sql:" . $insert_sql . "<br/>";
 		return mysql_query ( $insert_sql );
 	}
 	public function updateOrder($orderarray) {
 		$update_sql = "UPDATE orders set provider = '" . $orderarray ['provider'] . "', tracking = '" . $orderarray ['tracking'] . "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and transactionid='" . $orderarray ['transactionid'] . "'";
-		echo $update_sql . "<br.>";
 		return mysql_query ( $update_sql );
 	}
 	public function getOrdersNotUploadTracking($accountid) {

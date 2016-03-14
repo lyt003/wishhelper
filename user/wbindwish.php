@@ -6,6 +6,8 @@ header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper();
 
 $username = $_SESSION ['username'];
+
+$error = $_GET['error'];
 if($username == null){
 	$type = $_GET ['type'];
 	if(strcmp($type,"register") == 0){
@@ -104,7 +106,8 @@ if($username == null){
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
 								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./wproductstatus.php">产品状态</a></li>
+								<li><a href="./wproductstatus.php">定时产品状态</a></li>
+								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
 								</li>  
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
@@ -127,6 +130,15 @@ if($username == null){
 </div>
 <form id="bind_form" action="./wbinding.php" method="post">
 <div id="page-content" class="container-fluid  user">
+<?php 
+if(isset($error)){
+	echo "<div class=\"alert alert-block alert-success fade in\">";
+	echo "<h4 class=\"alert-heading\">";
+	echo $error;
+	echo "</h4>";
+	echo "</div>";
+}
+?>
 <ul>
 &nbsp;&nbsp;&nbsp;&nbsp;<h4>请在wish设置页(账号-》设置-》API设置(V2))处，复制并填写如下wish账号验证信息：</h4></ul>
 <br/>
