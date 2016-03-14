@@ -151,7 +151,7 @@ $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
 	if($accounts ['token' . $count1] != null){
 		$productsInfo = $dbhelper->getProductSource($accounts ['accountid' . $count1],$parent_sku);
-		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1];
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
 		echo "<th style=\"width:20%\">父SKU</th><th style=\"width:50%\">产品名称</th>";
