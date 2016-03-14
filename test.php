@@ -21,20 +21,29 @@ echo strtotime ( date ( 'Y-m-d  H:i:s' ) ) . "<br/>";
 echo 10000 * microtime ( true ) . "<br/>";
 echo substr ( 10000 * microtime ( true ), 3,9 ) . "<br/>";
 
-/* 
- * add wish colors by wishcolor.txt;
+$ttresult = strtotime('15');
+if($ttresult){
+	echo "<br/>time true";	
+}else{
+	echo "<br/>time false";
+}
+
+/** init wish colors
+// add wish colors by wishcolor.txt;
 $wishcolors = array();
 $file = "wishcolor.txt";
 $content = file_get_contents($file);
-$wishcolors = explode("\r\n", $content);
+//$wishcolors = explode("\r\n", $content);  //Windows system
+$wishcolors = explode("\n", $content);     //Linux system
 $colorsz = count($wishcolors);
 echo "<br/>colors:".$colorsz;
-
 $i = 1;
 foreach ( $wishcolors as $color ) {
 	echo "<br/>".$i++."    :".$color;
 	$dbhelper->insertColors(trim($color));
-} */
+}
+**/
+
 
 $expressInfo = array();
 $expressResult = $dbhelper->getExpressInfo(1, 1);
