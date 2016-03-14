@@ -259,5 +259,14 @@ $username = $_SESSION ['username'];
 		</div>
 	</div>
 	<!-- END FOOTER -->
+	<!-- GoStats JavaScript Based Code -->
+<script type="text/javascript" src="https://ssl.gostats.com/js/counter.js"></script>
+<script type="text/javascript">_gos='c5.gostats.cn';_goa=1068962;
+_got=5;_goi=1;_gol='淘宝店铺计数器';_GoStatsRun();</script>
+<noscript><a target="_blank" title="淘宝店铺计数器" 
+href="http://gostats.cn"><img alt="淘宝店铺计数器" 
+src="https://ssl.gostats.com/bin/count/a_1068962/t_5/i_1/ssl_c5.gostats.cn/counter.png" 
+style="border-width:0" /></a></noscript>
+<!-- End GoStats JavaScript Based Code -->
 </body>
 </html>
