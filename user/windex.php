@@ -61,14 +61,19 @@ fixed-width
 <div class="column left">
 <div class="message message-1">以更有效率的方式<br/>刊登产品</div>
 <div class="message message-2">
-再也不怕图片无效了
+多账号轻松切换<br />
+图片自动缩放到合适尺寸<br />
+再多的颜色和尺码也能瞬间搞定<br />
+支持定时上传，一天搞定一周的上传工作<br />
+<br />
+更多更好的功能，等待你来发现......<br />
 </div>
 
-<a class="signup-btn" href="./wregister.php">免费使用</a>
+<a class="signup-btn" href="./wregister.php">马上使用</a>
 
 </div>
 <div class="column right">
-<i class="sprite-tmp_welcome_page-phone_with_feed__290_344"></i>
+<img src="../image/b1.jpg" alt=""  />
 </div>
 </div>
 </div>
@@ -106,5 +111,14 @@ var lemmings_url="http:\/\/contestimg.wish.com\/api\/webimage";
 
 <!-- end user voice code -->
 
-
+<!-- FOOTER -->
+	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
+		<div class="navbar-inner">
+			<div class="footer-container">
+				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+						wishconsole版权所有 京ICP备16000367号</a></span>
+			</div>
+		</div>
+	</div>
+	<!-- END FOOTER -->
 </body></html>
