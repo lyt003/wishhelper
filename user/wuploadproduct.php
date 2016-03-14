@@ -18,15 +18,17 @@ if ($username == null) { // 未登录
 		$email = $_POST ["email"];
 		$username = $_POST ["username"];
 		$password = $_POST ["password"];
-		$check = $dbhelper->queryUser ( $username, $email );
+		$check = $dbhelper->queryUser ( $username, $email );//不区分大小写
 		$checkrow = mysql_fetch_array ( $check );
 		if ($checkrow) {
-			if ($checkrow ['username'] == $username) {
-				header ( "Location:./wregister.php?errorMsg=该用户已经存在" );
+			if (strcmp($checkrow ['username'],$username) == 0 ) {//区分大小写
+				header ( "Location:./wregister.php?errorMsg=该用户已经被注册" );
 				exit ();
-			}
-			if ($checkrow ['email'] == $email) {
+			}else if (strcmp($checkrow ['email'],$email) == 0) {//区分大小写
 				header ( "Location:./wregister.php?errorMsg=该邮箱地址已经被注册" );
+				exit ();
+			}else{//可能仅大小写不一样的字符串已经被注册;
+				header ( "Location:./wregister.php?errorMsg=该邮箱地址或用户已经被注册" );
 				exit ();
 			}
 		} else {
@@ -258,7 +260,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 "
 		style="left: 0px;">
 		<div class="container-fluid ">
-			<a class="brand" href="http://wishconsole.com/"> <span
+			<a class="brand" href="https://wishconsole.com/"> <span
 				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
 			</a>
 
@@ -660,7 +662,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
 			<div class="footer-container">
-				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+				<span><a href="https://wishconsole.com/">关于我们</a></span> <span><a>2016
 						wishconsole版权所有 京ICP备16000367号</a></span>
 			</div>
 		</div>

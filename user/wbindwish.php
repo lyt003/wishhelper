@@ -70,7 +70,7 @@ if($username == null){
 	<div id="header" class="navbar navbar-fixed-top 
 " style="left: 0px;">
 		<div class="container-fluid ">
-			<a class="brand" href="http://wishconsole.com/"> <span
+			<a class="brand" href="https://wishconsole.com/"> <span
 				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
 			</a>
 
@@ -138,7 +138,9 @@ if($username == null){
 <br/>
 <ul><h5>4，请在"Redirect URI"项填写如下网址: https://wishconsole.com/user/wbinding.php</h5></ul>
 <br/>
-<ul><h5>5，请填写店铺名称：&nbsp;&nbsp;<input id="storename" type="text" name="storename" value=""/></h5></ul>
+<ul><h5>5，请在wish设置页点击update(更新)</h5></ul>
+<br/>
+<ul><h5>6，请填写店铺名称：&nbsp;&nbsp;<input id="storename" type="text" name="storename" value=""/></h5></ul>
 <br/>	
 <ul><button type="button" id="bind">绑定账号</button></ul>
 </div>
@@ -147,7 +149,7 @@ if($username == null){
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
 			<div class="footer-container">
-				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+				<span><a href="https://wishconsole.com/">关于我们</a></span> <span><a>2016
 						wishconsole版权所有 京ICP备16000367号</a></span>
 			</div>
 		</div>

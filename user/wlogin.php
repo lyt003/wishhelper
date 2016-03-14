@@ -42,7 +42,7 @@ $errorMsg = $_GET ['errorMsg'];
 	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top">
 		<div class="container-fluid ">
-			<a class="brand" href="http://wishconsole.com/"> <span
+			<a class="brand" href="https://wishconsole.com/"> <span
 				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
 			</a>
 		</div>
@@ -106,7 +106,7 @@ $errorMsg = $_GET ['errorMsg'];
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
 			<div class="footer-container">
-				<span><a href="http://wishconsole.com/">关于我们</a></span> <span><a>2016
+				<span><a href="https://wishconsole.com/">关于我们</a></span> <span><a>2016
 						wishconsole版权所有 京ICP备16000367号</a></span>
 			</div>
 		</div>
