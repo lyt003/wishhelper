@@ -244,7 +244,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>更有效率的Wish商户实用工具</title>
+			<title>Wish管理助手-更有效率的Wish商户实用工具</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
 				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
@@ -261,7 +261,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		style="left: 0px;">
 		<div class="container-fluid ">
 			<a class="brand" href="https://wishconsole.com/"> <span
-				class="merchant-header-text"> 更有效率的Wish商户实用工具 </span>
+				class="merchant-header-text">Wish管理助手-更有效率的Wish商户实用工具 </span>
 			</a>
 
 			<div class="pull-right">
