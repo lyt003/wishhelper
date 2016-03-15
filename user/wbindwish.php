@@ -111,6 +111,7 @@ if($username == null){
 								</ul>
 								</li>  
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
+							<li> <a href="./whelper.php">帮助文档</a></li>
 						</ul>
 						</div>
 					</div>

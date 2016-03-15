@@ -1,16 +1,66 @@
 <?php
 session_start ();
-header ( "Content-Type: text/html;charset=utf-8" );
-include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include dirname ( '__FILE__' ) . './Wish/WishClient.php';
+include dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+use Wish\WishClient;
 use mysql\dbhelper;
+use Wish\Model\WishTracker;
+use Wish\Exception\ServiceResponseException;
+use Wish\WishResponse;
 
+header ( "Content-Type: text/html;charset=utf-8" );
+$dbhelper = new dbhelper ();
 $username = $_SESSION ['username'];
 
 if ($username == null) { // 未登录
-	header ( "Location:./wlogin.php" );
-	exit ();
+	$type = $_GET ['type'];
+	if (strcmp ( $type, "register" ) == 0) {
+		$email = $_POST ["email"];
+		$username = $_POST ["username"];
+		$password = $_POST ["password"];
+		$check = $dbhelper->queryUser ( $username, $email );//不区分大小写
+		$checkrow = mysql_fetch_array ( $check );
+		if ($checkrow) {
+			if (strcmp($checkrow ['username'],$username) == 0 ) {//区分大小写
+				header ( "Location:./wregister.php?errorMsg=该用户已经被注册" );
+				exit ();
+			}else if (strcmp($checkrow ['email'],$email) == 0) {//区分大小写
+				header ( "Location:./wregister.php?errorMsg=该邮箱地址已经被注册" );
+				exit ();
+			}else{//可能仅大小写不一样的字符串已经被注册;
+				header ( "Location:./wregister.php?errorMsg=该邮箱地址或用户已经被注册" );
+				exit ();
+			}
+		} else {
+			$result = $dbhelper->createUser ( $username, md5 ( $password ), $email );
+			if ($result != 0) {
+				$_SESSION ['username'] = $username;
+				$_SESSION ['email'] = $email;
+				$_SESSION ['userid'] = $result;
+			} else {
+				header ( "Location:./wregister.php?errorMsg=注册失败" );
+				exit ();
+			}
+		}
+	} else {
+		// login;
+		$username = $_POST ["username"];
+		$password = $_POST ["password"];
+
+		$result = $dbhelper->userLogin ( $username, md5 ( $password ) );
+		$row = mysql_fetch_array ( $result );
+		if ($row) {
+			$_SESSION ['username'] = $row ['username'];
+			$_SESSION ['email'] = $row ['email'];
+			$_SESSION ['userid'] = $row ['userid'];
+		} else {
+			header ( "Location:./wlogin.php?errorMsg=登录失败" );
+			exit ();
+		}
+	}
 }
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0031)http://china-merchant.wish.com/ -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -21,13 +71,12 @@ if ($username == null) { // 未登录
 			<title>更有效率的Wish商户实用工具</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
-					<link href="../css/bootstrap.min.css" rel="stylesheet">
-						<script src="../js/jquery-2.2.0.min.js"></script>
-						<script src="../js/bootstrap.min.js"></script>
-
+				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
+				<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+				<link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<!-- HEADER -->
+	<!-- HEADER -->
 	<div id="header" class="navbar navbar-fixed-top 
 
 
@@ -94,39 +143,13 @@ if ($username == null) { // 未登录
 		</div>
 	</div>
 	<!-- END SUB HEADER NAV -->
-<?php 
-echo "<div id=\"page-content\">";
-echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\"><h1>Wish颜色列表：</h1><br/>";
-echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
-echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
-echo "<th style=\"width:35%\"><h1>颜色</h1></th><th style=\"width:35%\"><h1>颜色</h1></th>";
-echo "<th style=\"width:35%\"><h1>颜色</h1></th></tr></thead>";
-echo "<tbody>";
+	<div class="banner-container"></div>
 
-$dbhelper = new dbhelper();
-$colors = $dbhelper->getWishColors();
-$colorcount = 0;
-$currentLine = 0;
-echo "<tr>";
-while($color = mysql_fetch_array($colors)){
-	if($currentLine % 3 == 0){
-		if ($colorcount % 2 == 0) {
-			echo "</tr><tr>";
-		} else {
-			echo "</tr><tr class=\"gradeA success\">";
-		}
-		echo "<td style=\"width:35%;vertical-align:middle;\"><h2>" . $color['color'] ."</h2></td>";
-		$colorcount ++;
-	}else{
-		echo "<td style=\"width:35%;vertical-align:middle;\"><h2>" . $color['color'] ."</h2></td>";
-	}
-	
-	$currentLine ++;
-}
-echo "</tbody></table></div></div></div></div>";
-echo "</div>";
-?>
-<!-- FOOTER -->
+	<div id="page-content" class="container-fluid  user">
+		<center>
+		<img src="../image/upload.jpg" alt="" /></center>
+	</div>
+	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
 			<div class="footer-container">
@@ -149,5 +172,8 @@ href="http://gostats.cn"><img alt="淘宝店铺计数器"
 src="https://ssl.gostats.com/bin/count/a_1068962/t_5/i_1/ssl_c5.gostats.cn/counter.png" 
 style="border-width:0" /></a></noscript>
 <!-- End GoStats JavaScript Based Code -->
+	
+<script type="text/javascript" src="../js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 </body>
 </html>
