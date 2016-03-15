@@ -107,7 +107,7 @@ function getCompressedImage($sourceURL) {
 	if ($width > 800 || $height > 800) {
 		$new = GrabImage ( $sourceURL, "../images/" . basename ( $sourceURL ) );
 		// 获取压缩该图片文件的地址;
-		@$newURL = "http://www.wishconsole.com/images/" . basename ( $sourceURL ) . "_800x800.jpg";
+		@$newURL = "https://www.wishconsole.com/images/" . basename ( $sourceURL ) . "_800x800.jpg";
 		return $newURL;
 	}
 	return $sourceURL;
