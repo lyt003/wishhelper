@@ -1,12 +1,14 @@
 <?php
 session_start ();
 include dirname ( '__FILE__' ) . './Wish/WishClient.php';
-include dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ) . './user/mailHelper.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
+use user\mailHelper;
 
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
@@ -37,6 +39,9 @@ if ($username == null) { // 未登录
 				$_SESSION ['username'] = $username;
 				$_SESSION ['email'] = $email;
 				$_SESSION ['userid'] = $result;
+				
+				$mailHelper = new mailHelper();	
+				$sendResultl = $mailHelper->sendMailActiveAccount($email, $username);
 			} else {
 				header ( "Location:./wregister.php?errorMsg=注册失败" );
 				exit ();
@@ -356,7 +361,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								for($count = 0; $count < $i; $count ++) {
 									if($count != 0 && $count%3 == 0)
 										echo "<br/>";
-									echo "<input type=\"radio\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
+									echo "<input type=\"radio\" id=\"currentAccountid\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
 									echo "&nbsp;&nbsp;" . $accounts ['accountname'.$count];
 									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 								}	
@@ -850,6 +855,11 @@ style="border-width:0" /></a></noscript>
 	} 
 
 	function createProduct(){
+		 var currentAccount = document.getElementById("currentAccountid");
+		 if(currentAccount == null){
+			alert("请先绑定Wish账号");
+			return;
+			}
 		var productName = document.getElementById("product_name").value;
 		if(productName == null || productName == ''){
 			alert("产品名称不能为空");

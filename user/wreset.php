@@ -1,12 +1,14 @@
 <?php 
 require_once("PHPMailerAutoload.php");
-include dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once  dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once  dirname ( '__FILE__' ) . './user/mailHelper.php';
 use mysql\dbhelper;
+use user\mailHelper;
 $dbhelper = new dbhelper();
 $errorMsg = $_GET ['errorMsg'];
 $token = $_GET ['t'];
-$isreset = $_GET['type'];
-if(strcmp("reset",$isreset) == 0){
+$resetType = $_GET['type'];
+if(strcmp("reset",$resetType) == 0){
 	$password = $_POST ["password"];
 	$currentUserid = $_POST ["userid"];
 	$result = $dbhelper->updatepsd ( $currentUserid, md5 ( $password ));
@@ -18,10 +20,21 @@ if(strcmp("reset",$isreset) == 0){
 		$errorMsg = "对不起，重置密码失败，请重新操作,或者联系管理员admin@wishconsole.com";
 	}
 	
+}else if(strcmp("sendmail",$resetType) == 0){
+	$sendAddress = $_POST['email'];
+	$mailHelper = new mailHelper();	
+	$sendResultl = $mailHelper->sendMailResetPsd($sendAddress);
+	if($sendResultl){
+		$errorMsg = '发送邮件成功，请查收邮件，重置密码';
+	}else{
+		$errorMsg = '发送邮件失败,请直接联系管理员: admin@wishconsole.com';
+	}
 }
-$userid = $dbhelper->queryResetpsdUser($token);
-if($token != null && $userid == null)
-	$errorMsg = "对不起，您邮箱中的链接不正确或者已经过期，如想重置密码，请重新操作";
+if($token != null){
+	$userid = $dbhelper->queryResetpsdUser($token);
+	if($userid == null)
+		$errorMsg = "对不起，您邮箱中的链接不正确或者已经过期，如想重置密码，请重新操作";
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -95,10 +108,10 @@ if($token != null && $userid == null)
 				<div class="signup-page-title">重置密码</div>
 				<div class="signup-page-content">
 					<form class="form form-horizontal" id="resetform" method="post"
-						action="sendmail.php">
+						action="wreset.php?type=sendmail">
 						<?php if($errorMsg != null)
 							echo "<ul align=\"center\">".$errorMsg."</ul>";
-						if(t != null && $userid != null){
+						if($token != null && $userid != null){
 							echo "<div class=\"control-group\">";
 							echo "<input type=\"hidden\" id=\"userid\" name=\"userid\" value=".$userid.">";
 							echo "<label class=\"control-label\" for=\"password\"> 密码</label>";
