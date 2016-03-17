@@ -66,7 +66,7 @@ if ($access_code != null) {
 			$_SESSION ['accountid'] = $result;
 			$_SESSION ['clientid'] = $clientid;
 			$_SESSION ['clientsecret'] = $clientsecret;
-			header ( "Location:https://merchant.wish.com/oauth/authorize?client_id=" . $clientid );
+			header ( "Location:https://china-merchant.wish.com/oauth/authorize?client_id=" . $clientid );
 		}	 
 	}
 }

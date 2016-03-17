@@ -155,7 +155,7 @@ if(isset($error)){
 <br/>
 <ul><h5>6，请填写店铺名称：&nbsp;&nbsp;<input id="storename" type="text" name="storename" value=""/></h5></ul>
 <br/>	
-<ul><button type="button" id="bind">绑定账号</button></ul>
+<ul><button type="button" id="bind">申请Wish授权</button></ul>
 </div>
 </form>
 <!-- FOOTER -->
