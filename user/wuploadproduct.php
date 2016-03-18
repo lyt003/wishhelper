@@ -802,7 +802,7 @@ style="border-width:0" /></a></noscript>
 				case 0:
 					var currentVal = $('#extra_images').val(); 
 					if(currentVal != null && currentVal != ""){
-						if(currentVal.chatAt(currentVal.length-1) == "|"){
+						if(currentVal.substring(currentVal.length-1) == "|"){
 							$('#extra_images').val(currentVal + "http://www.wishconsole.com/images/" + response['name']);
 						}else{
 							$('#extra_images').val(currentVal + "|http://www.wishconsole.com/images/" + response['name']);
