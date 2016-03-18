@@ -119,8 +119,6 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	<!-- END SUB HEADER NAV -->
 	<div class="banner-container"></div>
 	<div id="page-content" class="dashboard-wrapper">
-		<form class="form-horizontal" id="processorders"
-			action="./wusercenter.php?add=1" method="post">
 			<li>已绑定的wish账号:
 <?php
 for($count = 0; $count < $i; $count ++) {
@@ -170,10 +168,9 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			if($isProduct){
 				echo "<td rowspan=".$varCounts." style=\"width:5%;vertical-align:middle;\">" . $cur_product ['scheduledate'] ."</td>";
 				echo "<td rowspan=".$varCounts." style=\"width:10%;vertical-align:middle;\">";
+				echo "<button onclick=\"updateSKU('".$accounts ['accountid' . $count1]."','".$cur_product['parent_sku']."','".$cur_product ['scheduledate']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">修改</span></button>";
 				if($cur_product['errormessage'] != null){
 					echo "<p>上传失败".$cur_product['errormessage']."</p>";
-				}else{
-					echo"<p>查看</p>";
 				}
 				echo "</td>";
 				$tempParentSKU = $currentParentSKU;
@@ -187,7 +184,6 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 	}
 }
 ?>
-</form>
 	</div>
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
@@ -203,6 +199,11 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		</div>
 	</div>
 	<!-- END FOOTER -->
+	<script type="text/javascript">
+		function updateSKU(id,sku,scheduledate){
+			window.location.href="./wuploadproduct.php?id=" + id + "&psku=" + sku + "&d=" + scheduledate;
+		}
+	</script>
 	<!-- GoStats JavaScript Based Code -->
 <script type="text/javascript" src="https://ssl.gostats.com/js/counter.js"></script>
 <script type="text/javascript">_gos='c5.gostats.cn';_goa=1068962;

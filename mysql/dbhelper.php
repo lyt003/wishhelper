@@ -64,7 +64,7 @@ class dbhelper {
 		return $result;
 	}
 	public function getAccountToken($accountid) {
-		$result = mysql_query ( "select clientid,clientsecret,token,refresh_token from accounts where accountid = '" . $accountid . "'" );
+		$result = mysql_query ( "select accountname, clientid,clientsecret,token,refresh_token from accounts where accountid = '" . $accountid . "'" );
 		return $result;
 	}
 	public function updateUserToken($accountid, $newToken, $newRefreshToken) {
@@ -157,11 +157,24 @@ class dbhelper {
 		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';
 		return mysql_query ( $insertSourceSQL );
 	}
+	
+	public function updateProductSource($accountid, $productarray){
+		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '" where accountid = '.$accountid.' and parent_sku="'.$productarray ['parent_sku'].'"';
+		return mysql_query ( $updateSourceSQL );
+	}
+	
+	
 	public function insertProduct($productarray) {
 		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
 					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . $productarray ['name'] . '","' . $productarray ['description'] . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . $productarray ['tags'] . '","' . $productarray ['UPC'] . '")';
 		return mysql_query ( $insert_sql );
 	}
+	public function removeProduct($parentSKU){
+		$removeSql = 'delete from products where parent_sku="'.$parentSKU.'"';
+		return mysql_query($removeSql);
+	}
+	
+	
 	
 	public function getUploadProducts($accountid){
 		$queryproducts = 'SELECT p.*,s.scheduledate,s.errormessage from products p, schedule_product s WHERE s.isfinished != 1 and s.accountid = '.$accountid.' and s.parent_sku = p.parent_sku order by p.parent_sku,p.color,p.size';
@@ -196,6 +209,12 @@ class dbhelper {
 		$insertSql = 'insert into schedule_product(accountid,parent_sku,scheduledate,isfinished) values (' . $productInfo ['accountid'] . ',"' . $productInfo ['parent_sku'] . '","' . $productInfo ['scheduledate'] . '",0)';
 		return mysql_query ( $insertSql );
 	}
+	public function removeScheduleProduct($parentSKU,$accountid){
+		$removeSql = 'delete from schedule_product where parent_sku = "'.$parentSKU.'" and accountid = '.$accountid;
+		return mysql_query ( $removeSql );
+	}
+	
+	
 	public function getScheduleProducts($curDate) {
 		$scheduleSql = 'select accountid,parent_sku from schedule_product where UNIX_TIMESTAMP(scheduledate) <= UNIX_TIMESTAMP("' . $curDate . '")  and isfinished = 0 order by accountid,parent_sku';
 		return mysql_query ( $scheduleSql );
@@ -255,8 +274,8 @@ class dbhelper {
 		return mysql_query ( $userSql );
 	}
 	
-	public function  getProductSource($userid,$parent_sku = null){
-		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$userid;
+	public function  getProductSource($accountid,$parent_sku = null){
+		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$accountid;
 		if($parent_sku != null){
 			$psource .= " and i.parent_sku like '%".$parent_sku."%'";
 		}

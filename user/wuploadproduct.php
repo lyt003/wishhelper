@@ -145,6 +145,8 @@ $landingPageURL = $_POST ['Landing_Page_URL'];
 $productSourceURL = $_POST ['Product_Source_URL'];
 $scheduleDate = $_POST ['Schedule_Date'];
 
+$updateSKU = $_POST['update'];
+
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
 	$productarray = array ();
 	$productarray ['name'] = $productName;
@@ -182,8 +184,22 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		$refresh_token = $rows ['refresh_token'];
 	}
 	
-	$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
+	if($updateSKU != null){
+		$insertSourceResult = $dbhelper->updateProductSource($accountid, $productarray);
+		$dbhelper->removeProduct($updateSKU);
+		$dbhelper->removeScheduleProduct($updateSKU,$accountid);
+		//
+	}else{
+		$insertSourceResult = $dbhelper->insertProductSource ( $accountid, $productarray );
+	}
 	
+	if($colors != null){
+		$colors = rtrim($colors,"|");
+	}
+	
+	if(sizes != null){
+		$sizes = rtrim($sizes,"|");
+	}
 	$colorArray = explode ( "|", $colors );
 	
 	$sizeArray = explode ( "|", $sizes );
@@ -192,8 +208,8 @@ if ($productName != null && $description != null && $mainImage != null && $price
 		$basePrice = $price;
 		$sizeCount = 0;
 		foreach ( $sizeArray as $size ) {
-			if ($color != null) {
-				if ($size != null) {
+			if ($color != null && strcmp(trim($color),"") != 0) {
+				if ($size != null && strcmp(trim($size),"") != 0) {
 					$productarray ['sku'] = $uniqueID . "_" . $color . "_" . $size;
 					$productarray ['color'] = $color;
 					$productarray ['size'] = $size;
@@ -205,7 +221,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 					$productarray ['price'] = $price;
 				}
 			} else {
-				if ($size != null) {
+				if ($size != null && strcmp(trim($size),"") != 0) {
 					$productarray ['sku'] = $uniqueID . "_" . $size;
 					$productarray ['size'] = $size;
 					$productarray ['price'] = $basePrice + $sizeCount * $incrementPrice;
@@ -237,9 +253,77 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	
 	$productarray ['accountid'] = $accountid;
 	$productarray ['scheduledate'] = $scheduleDate;
+	
 	$scheduleResult = $dbhelper->insertScheduleProduct ( $productarray );
 }
 
+
+//修改定时产品；
+$updateAccountID = $_GET['id'];
+$updateParentSKU = $_GET['psku'];
+$updateScheduleDate = $_GET['d'];
+if($updateAccountID !=  null && $updateParentSKU != null){
+	$accountid = $updateAccountID;
+	$scheduleDate = $updateScheduleDate;
+	$products = $dbhelper->getProducts($updateParentSKU);
+	$productSource = $dbhelper->getProductSource($updateAccountID,$updateParentSKU);
+	$currentColorArray = array();
+	$currentSizeArray = array();
+	$previousPrice = 0;
+	$currentBasePrice = 0;
+	while ($currentProduct = mysql_fetch_array($products)){
+		if($productName == null){
+			$productName = $currentProduct ['name'];
+			$description = $currentProduct ['description'];
+			$tags = $currentProduct ['tags'];
+			$uniqueID = $updateParentSKU;
+			$mainImage = $currentProduct ['main_image'];
+			$extraImages = $currentProduct ['extra_images'];
+
+			$quantity = $currentProduct ['quantity'];
+			$shipping = $currentProduct ['shipping'];
+			$shippingTime = $currentProduct ['shipping_time'];
+			$MSRP = $currentProduct ['MSRP'];
+			$brand = $currentProduct ['brand'];
+			$UPC = $currentProduct ['UPC'];
+			$landingPageURL = $currentProduct ['landingPageURL'];
+			$currentBasePrice = $currentProduct ['price'];
+		}
+		
+		$currentColorArray[$currentProduct ['color']] = $currentProduct ['color'];
+		$currentSizeArray[$currentProduct ['size']] = $currentProduct ['size'];
+		$price = $currentProduct ['price'];
+		if($previousPrice != 0 && $price != $previousPrice){
+			$incrementPrice = $price - $previousPrice;
+		}
+		$previousPrice = $price;
+	}
+	
+	$price = $currentBasePrice;
+	
+	foreach ($currentColorArray as $curColor){
+		$colors = $colors.$curColor."|";
+	}
+	
+	foreach ($currentSizeArray as $curSize){
+		$sizes = $sizes.$curSize."|";
+	}
+	
+	if($colors != null){
+		$colors = rtrim($colors,"|");
+	}
+	
+	if(sizes != null){
+		$sizes = rtrim($sizes,"|");
+	}
+	
+	while ($currentSource = mysql_fetch_array($productSource)){
+		if(strcmp($currentSource['parent_sku'],$updateParentSKU) == 0){
+			$productSourceURL = $currentSource ['source_url'];
+		}
+	}
+}
+	 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -328,10 +412,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 
 	<div id="page-content" class="container-fluid  user">
 		<form id="add_product" action="./wuploadproduct.php" method="post">
+			<input type="hidden" id="update" name="update" value="<?php echo $updateParentSKU?>"/>
 			<div id="add-products-page" class="center">
 				<div>
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
-					<legend>添加产品</legend>
+					<legend><?php echo ($updateParentSKU == null)?"添加产品":"修改产品:".$updateParentSKU?></legend>
 						<?php 
 	                      		if(isset($scheduleResult)){
 	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
@@ -339,7 +424,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	                      			if($scheduleResult){
 	                      				echo "产品".$uniqueID."已提交成功，";
 	                      			}else{
-	                      				echo "产品".$uniqueID."提交失败，请联系，";
+	                      				echo "产品".$uniqueID."提交失败，请联系管理员 admin@wishconsole.com，";
 	                      			}
 	                      			echo "</h4>";
 	                      			echo "</div>";
@@ -508,7 +593,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 								</div>
 							</div>
 
-							<div class="control-group" style="display: none;"
+							<div class="control-group" <?php echo ($incrementPrice == null)?"style=\"display: none;\"":" "?>
 								id="increment_div">
 								<label class="control-label" data-col-index="1"><span
 									class="col-name">价格按尺码增量</span></label>
