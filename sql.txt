@@ -195,6 +195,47 @@ insert into accounts (userid,clientid,clientsecret) values ("1","5635a9dfc827451
 UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE accountid = 1;
 
 
+DROP TABLE IF EXISTS `productssummary`;
+CREATE TABLE `productssummary`(
+    `accountid` int(11),
+	`startdate` date,
+	`enddate` date,
+	`productid`  varchar(50),
+	`productimpressions` int(11),
+	`buycart` int(11),
+	`buyctr`  varchar(10),
+	`orders`  int(11),
+	`checkoutconversion` varchar(10),
+	`gmv`  double(9,2),
+	PRIMARY KEY (`accountid`,`startdate`,`enddate`,`productid`)
+)DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
