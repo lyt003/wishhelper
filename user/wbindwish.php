@@ -141,21 +141,9 @@ if(isset($error)){
 }
 ?>
 <ul>
-&nbsp;&nbsp;&nbsp;&nbsp;<h4>请在wish设置页(账号-》设置-》API设置(V2))处，复制并填写如下wish账号验证信息：</h4></ul>
+&nbsp;&nbsp;&nbsp;&nbsp;<h4>该功能暂不开放,如有需要,请联系管理员admin@wishconsole.com</h4></ul>
 <br/>
-<ul><h5>1，请在"App Name"项填写应用名称: wish管理助手</h4></ul>
-<br/>
-<ul><h5>2，请填写&nbsp;&nbsp;Client Id：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="clientid" type="text" name="clientid" value=""/></h5></ul>
-<br/>
-<ul><h5>3，请填写&nbsp;&nbsp;Client Secret：&nbsp;&nbsp;<input id="clientsecret" type="text" name="clientsecret" value=""/></h5></ul>
-<br/>
-<ul><h5>4，请在"Redirect URI"项填写如下网址: https://wishconsole.com/user/wbinding.php</h5></ul>
-<br/>
-<ul><h5>5，请在wish设置页点击update(更新)</h5></ul>
-<br/>
-<ul><h5>6，请填写店铺名称：&nbsp;&nbsp;<input id="storename" type="text" name="storename" value=""/></h5></ul>
-<br/>	
-<ul><button type="button" id="bind">申请Wish授权</button></ul>
+
 </div>
 </form>
 <!-- FOOTER -->
