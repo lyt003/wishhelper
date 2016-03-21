@@ -134,11 +134,61 @@ for($count = 0; $count < $i; $count ++) {
 			<br><h3>&nbsp;&nbsp;&nbsp;&nbsp;等待上传的定时产品状态(已经上传的产品不显示)</h3></br>
 <?php
 //最近的订单时间为产品的最近更新时间。
-	if($accounts ['token2'] != null){
-		$client = new WishClient ( $accounts ['token2'], 'prod' );
-		/* $productList = $client->getAllProducts();
-		var_dump($productList); */
+for($count = 0; $count < $i; $count ++) {
+	if($accounts ['token'.$count] != null){
+		$client = new WishClient ($accounts ['token'.$count] , 'prod' );
+		$start = 0;
+		$limit = 50;
+		do{
+			$productsResult = $client->getProducts($start, $limit);
+			$hasmore = $productsResult['more'];
+			$products = $productsResult['data'];
+			foreach ($products as $product){
+
+				$tempProduct = array();
+				
+				//$product = $object->Product;
+				$vars = get_object_vars($product);
+				foreach ($vars as $key=>$val){
+					$tempProduct[$key] = $val;
+				}
+				/* $variants = array();
+				
+				foreach ($product->variants as $variant){
+					$variants[] = new WishProductVariation($variant);
+				}
+				$this->variants = $variants; */
+				
+				
+				
+				
+				$tempProduct['accountid'] = $accounts ['token'.$count] ;
+				$uploaded = $tempProduct['date_uploaded'];
+				$tempdate = explode("-",trim($uploaded));
+				$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
+				$tempProduct['date_updated'] = $tempProduct['date_uploaded'];
+				echo "<br/>insert into ".$tempProduct['parent_sku'];
+				$dbhelper->insertOnlineProduct($tempProduct);
+			
+				$productVars = $tempProduct['variants'];
+				foreach ($productVars as $productvar){
+					
+					$tempVars = array();
+					$vvvvars = get_object_vars($productvar);
+					foreach ($vvvvars as $key=>$val){
+						$tempVars[$key] = $val;
+					}
+					
+					echo "&nbsp;&nbsp;&nbsp;&nbsp;insert into ".$tempVars['sku'];
+					$tempVars['accountid'] = $accounts ['accountid2'];
+					$dbhelper->insertOnlineProductVar($tempVars);
+				}
+			}
+			
+			$start += $limit;
+		}while ($hasmore);
 	}
+}
 ?>
 </form>
 	</div>

@@ -24,7 +24,7 @@ use Wish\WishResponse;
 
 class WishRequest {
 	const VERSION = "v2/";
-	const BASE_PROD_PATH = "https://merchant.wish.com/api/";
+	const BASE_PROD_PATH = "https://china-merchant.wish.com/api/";
 	const BASE_SANDBOX_PATH = "https://sandbox.merchant.wish.com/api/";
 	const BASE_STAGE_PATH = "https://merch.corp.contextlogic.com/api/";
 	private $session;

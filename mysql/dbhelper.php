@@ -324,6 +324,24 @@ class dbhelper {
 		return mysql_query($wishcolors);
 	}
 	
+	public function insertOnlineProduct($productarray) {
+		$insert_sql = 'insert into onlineProducts (accountid, id, parent_sku,name,description,original_image_url,main_image,extra_images,is_promoted,tags,review_status,number_saves,number_sold,date_uploaded,date_updated)
+					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['parent_sku'] . '","' . $productarray ['name'] 
+							. '","' . $productarray ['description'] . '","' . $productarray ['original_image_url'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['is_promoted'] . '","' 
+							. $productarray ['tags'] . '","' . $productarray ['review_status'] . '",' . $productarray ['number_saves'] . ',' . $productarray ['number_sold'] . ',DATE_FORMAT("' . $productarray ['date_uploaded'] . '","%Y-%m-%d"),DATE_FORMAT("' . $productarray ['date_updated'] . '","%Y-%m-%d"))';
+		echo "insertSQL:".$insert_sql;
+		return mysql_query ( $insert_sql );
+	}
+	
+	public function insertOnlineProductVar($productarray) {
+		$insertvar_sql = 'insert into onlineProductVars (accountid, id, product_id,sku,color,size,enabled,price,all_images,inventory,shipping,shipping_time,MSRP)
+					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['product_id'] . '","' . $productarray ['sku']
+						. '","' . $productarray ['color'] . '","' . $productarray ['size'] . '","' . $productarray ['enabled'] . '","' . $productarray ['price'] . '","' . $productarray ['all_images'] . '",'
+								. $productarray ['inventory'] . ',"' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['MSRP'] . '")';
+		echo "insertSQL:".$insertvar_sql;
+		return mysql_query ( $insertvar_sql );
+	}
+	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );
