@@ -111,6 +111,20 @@ class WishClient{
     }while($response->hasMore());
     return $class_arr;
   }
+  
+  public function getResponseIterLimit($method,$uri,$getClass,$start,$limit){
+  	$result = array();
+  	$class_arr = array();
+  	$params['limit'] = $limit;
+  	$params['start']=$start;
+  	$response = $this->getResponse($method,$uri,$params);
+  	foreach($response->getData() as $class_raw){
+  		$class_arr[] = new $getClass($class_raw);
+  	}
+  	$result['more'] = $response->hasMore();
+  	$result['data'] = $class_arr;
+   	return $result;
+  }
 
   public function authTest(){
     $response = $this->getResponse('GET','auth_test');
@@ -167,6 +181,10 @@ class WishClient{
       'GET',
       'product/multi-get',
       "Wish\Model\WishProduct");
+  }
+  
+  public function getProducts($start,$limit){
+  	return $this->getResponseIterLimit('GET','product/multi-get',"Wish\Model\WishProduct", $start, $limit);
   }
 
   public function createProductVariation($object){

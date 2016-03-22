@@ -194,6 +194,46 @@ insert into accounts (userid,clientid,clientsecret) values ("1","5635a9dfc827451
 
 UPDATE accounts SET refresh_token = "3cdbddd6c23249d39ab951d58b454a93"  WHERE accountid = 1;
 
+DROP TABLE IF EXISTS `onlineProducts`;
+CREATE TABLE `onlineProducts`(
+	`accountid` int(11) NOT NULL,
+	`id` varchar(200) NOT NULL,
+	`parent_sku` varchar(50) NOT NULL,
+	`original_image_url` varchar(200) NOT NULL,
+	`main_image` varchar(200) NOT NULL,
+	`is_promoted` varchar(10),
+	`name` varchar(200) NOT NULL,
+	`tags` varchar(2000) NOT NULL,
+	`review_status` varchar(20) NOT NULL,
+	`extra_images` varchar(2000),
+	`number_saves` int(11),
+	`number_sold` int(11),
+	`date_uploaded` date,
+	`date_updated` date,
+	`description` varchar(10000) NOT NULL,
+ 	 PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `onlineProductVars`;
+CREATE TABLE `onlineProductVars`(
+	`accountid` int(11) NOT NULL,
+	`sku` varchar(50) NOT NULL,
+	`product_id` varchar(200) NOT NULL,
+	`id` varchar(200) NOT NULL,
+	`color` varchar(20),
+    `size` varchar(50),
+    `enabled` varchar(10),
+    `price` varchar(10) NOT NULL,
+    `all_images` varchar(2000),
+    `inventory` int(5) NOT NULL,
+    `shipping` varchar(10) NOT NULL,
+    `shipping_time` varchar(20) NOT NULL,
+    `MSRP` varchar(10),
+ 	 PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+
 
 DROP TABLE IF EXISTS `productssummary`;
 CREATE TABLE `productssummary`(
@@ -209,33 +249,6 @@ CREATE TABLE `productssummary`(
 	`gmv`  double(9,2),
 	PRIMARY KEY (`accountid`,`startdate`,`enddate`,`productid`)
 )DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
