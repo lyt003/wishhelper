@@ -10,6 +10,8 @@ use Wish\WishHelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 header ( "Content-Type: text/html;charset=utf-8" );
+
+set_time_limit ( 0 );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
 
@@ -147,22 +149,21 @@ for($count = 0; $count < $i; $count ++) {
 
 				$tempProduct = array();
 				
-				//$product = $object->Product;
 				$vars = get_object_vars($product);
 				foreach ($vars as $key=>$val){
 					$tempProduct[$key] = $val;
 				}
-				/* $variants = array();
 				
-				foreach ($product->variants as $variant){
-					$variants[] = new WishProductVariation($variant);
-				}
-				$this->variants = $variants; */
+				$tempTags = "";
+				print_r($tempProduct['tags']);
+				foreach ($tempProduct['tags'] as $tagObj){
+					print_r($tagObj);
+					$tempTags = $tempTags.$tagObj->Tag->name.",";
+				} 
+				$tempTags = rtrim($tempTags,",");
+				$tempProduct['tags'] = $tempTags;
 				
-				
-				
-				
-				$tempProduct['accountid'] = $accounts ['token'.$count] ;
+				$tempProduct['accountid'] = $accounts ['accountid'.$count] ;
 				$uploaded = $tempProduct['date_uploaded'];
 				$tempdate = explode("-",trim($uploaded));
 				$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
