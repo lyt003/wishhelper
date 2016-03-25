@@ -368,6 +368,15 @@ class dbhelper {
 		return mysql_query ( $insertvar_sql );
 	}
 	
+	public function getJaveUploadAppToken(){
+		$querySql = "select apptoken from apptoken";
+		$result = mysql_query($querySql);
+		$values = mysql_fetch_array($result);
+		if($values !=  null)
+			return $values['apptoken'];
+		return null;
+	}
+	
 	function __destruct() {
 		if (! empty ( $db ))
 			mysql_close ( $db );

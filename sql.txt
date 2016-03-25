@@ -251,6 +251,13 @@ CREATE TABLE `productssummary`(
 )DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE `apptoken`(
+	`apptoken` varchar(50),
+	primary key(`apptoken`)
+)DEFAULT CHARSET=utf8;
+insert into apptoken(apptoken) values('javauploadtoservertokena13xja');
+
+
 
 
 
