@@ -12,61 +12,18 @@ select tracking_date, count(*) from tracking_data where tracking_date in ('20160
 SELECT orderid,transactionid,provider,tracking,name FROM `orders` WHERE countrycode = 'US' and orderstatus = '0';
 
 
-|565103b7e960d03245911730|565101cfc241dc1bee155174| | |Jennie M McAllister
-|565114131f353d3239adf647|5651103fca492c1c396b0fc0| | |Chris lee
-|56512cd3bf3c953237045663|56512cd3f7a29118aead6299| | |Tu Q. Trac
-|56513064e2176a32327ee03a|56513064803bb0182c85478b| | |Amro Altahtamouni
-|56513fbe0b98e03237c7baef|56513fbef1fe24182b25cb29| | |Tiffany Jones
-|56513fd2d43d6f31fb8776aa|56513fd12a6abf18ae6672a8| | |Anny Torres
-|5651430350fe62322c7b6829|565143029a469a18a44ea8d1| | |Nikki M Manuel
-|5651513a45f1a532233287c3|5651513a66df6e18bc74aa4a| | |Diana DeGeurin
-
-
-569a7399c81aeb169d3036e5
-569ae29958ea1a14a8133076
-569af7e91f1acf14b55d293c
-569b08bd7f03dc1494ea1201
-569b32b9fd508614b06167f2
-569b4bdd2ae1d014b1134a76
-
-56998d6986f648438c2f1f05
-56999b792a6244f9e40e0a4a
-569a551b881afb1812d3ca2d
-86f648438c2f1f05	            LS495156505CN	US	Alicia Blevins	0.03	卖家自送	16011708464596615	shiptemplate_01.xls	20160117084656545338	hongliang5301	运单 批次
-	56999b792a6244f9e40e0a4a	LS495162418CN	US	Jake Morris	0.1	卖家自送	16011708464596615	shiptemplate_01.xls	20160117084656545338	hongliang5301	运单 批次
-	569a551b881afb1812d3ca2d	LS495156514CN
-	、
-	
-	c81aeb169d3036e5	        LS497761405CN	US	John Bynum	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
-	569ae29958ea1a14a8133076	LS497759044CN	US	Melissa Schuster	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
-	569af7e91f1acf14b55d293c	LS497761431CN	US	Gloria E. Velez	0.03	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
-	569b08bd7f03dc1494ea1201	LS497761811CN	US	Jessica Grach	0.03	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
-	569b32b9fd508614b06167f2	LS497759061CN	US	Ashley Lillie	0.1	卖家自送	16011809340612410	shiptemplate_01.xls	20160118093432548732	hongliang5301	运单 批次
-	569b4bdd2ae1d014b1134a76	LS497761842CN	
-	
-	516269d930c             	LS498033046CN	US	Priya vadivel kannappan	0.2	卖家自送	16011809580712994	shiptemplate_01.xls	20160118095822549081	hongliang5301	运单 批次
-	569b2e37cd05721451a6e98d	LS498038635CN	
-	
-	56c4e077964ebdc36cadfd97	LS585891233CN	US	Nicholas Findley	0.1	卖家自送	16021907562876189	shiptemplate_01.xls	20160219075643681566	hongliang5301	运单 批次
-	56c531c5cac87a29fbdf9876	LS585895703CN	
-	
-    56ed94972781d41daa4e5678	LS700403220CN	US	Sir Carlos C. Leyva	0.1	卖家自送	16032108124960908	shiptemplate_01.xls	20160321081303874130	hongliang5301	运单 批次
-	56edfbf39b44e9686bec0663	LS700402269CN	US	Mike Dobbs	0.1	卖家自送	16032108124960908	shiptemplate_01.xls	20160321081303874130	hongliang5301	运单 批次
-	56edfd5b15bb7b1cf7adc098	LS700403233CN	US	Zachery Kalinowski	0.1	卖家自送	16032108124960908	shiptemplate_01.xls	20160321081303874130	hongliang5301	运单 批次
-	56ee0f3338d17a5c36e3f589	LS700402286CN	US	Ashley Hutsell	0.2	卖家自送	16032108124960908	shiptemplate_01.xls	20160321081303874130	hongliang5301	运单 批次
-	56ee2476c71b4b1de9dc6cfe	LS700403255CN	US	Misti Moen	0.1	卖家自送	16032108124960908	shiptemplate_01.xls	20160321081303874130	hongliang5301	运单 批次
-	56eebb159e22e61f0594b3e3	LS700402309CN			
-
-56eef346f07fba20db08c757	LS705408011CN	US	Jon Girard	0.2	卖家自送	16032208354375896	shiptemplate_01.xls	20160322083557882425	hongliang5301	运单 批次
-	56effd010c9dc21d8f16888b	LS705409697CN	
+    56f6de5ffc01a61ce9d837c6	LS723337855CN	US	Rachel Scott	0.1	卖家自送	16032719434547685	shiptemplate_01.xls	20160327194356915744	hongliang5301	运单 批次
+	56f6f3cd3aeec401f34e2558	LS723338691CN	US	Bertha R Garcia	0.1	卖家自送	16032719434547685	shiptemplate_01.xls	20160327194356915744	hongliang5301	运单 批次
+	56f7387ea3a7621e98b247bb	LS723337869CN	US	Bryce Gonzalez	0.1	卖家自送	16032719434547685	shiptemplate_01.xls	20160327194356915744	hongliang5301	运单 批次
+	56f7478d82057631382a14d9	LS723338714CN	
 	
 		
-	update orders set provider='USPS',tracking='LS705408011CN'  where transactionid = '56eef346f07fba20db08c757';
-	update orders set provider='USPS',tracking='LS705409697CN'  where transactionid = '56effd010c9dc21d8f16888b';
-	update orders set provider='USPS',tracking='LS700403233CN'  where transactionid = '56edfd5b15bb7b1cf7adc098';
-	update orders set provider='USPS',tracking='LS700402286CN'  where transactionid = '56ee0f3338d17a5c36e3f589';
-	update orders set provider='USPS',tracking='LS700403255CN'  where transactionid = '56ee2476c71b4b1de9dc6cfe';
-	update orders set provider='USPS',tracking='LS700402309CN'  where transactionid = '56eebb159e22e61f0594b3e3';
+	update orders set provider='USPS',tracking='LS723337855CN'  where transactionid = '56f6de5ffc01a61ce9d837c6';
+	update orders set provider='USPS',tracking='LS723338691CN'  where transactionid = '56f6f3cd3aeec401f34e2558';
+	update orders set provider='USPS',tracking='LS723337869CN'  where transactionid = '56f7387ea3a7621e98b247bb';
+	update orders set provider='USPS',tracking='LS723338714CN'  where transactionid = '56f7478d82057631382a14d9';
+	update orders set provider='USPS',tracking='LS715515939CN'  where transactionid = '56f35ae830a8b3551b1bd8b8';
+	update orders set provider='USPS',tracking='LS715516660CN'  where transactionid = '56f366becf6f271d22fde13d';
 	update orders set provider='USPS',tracking=''  where transactionid = '';
 	update orders set provider='USPS',tracking=''  where transactionid = '';
 	update orders set provider='USPS',tracking='LS698425065CN'  where transactionid = '';
