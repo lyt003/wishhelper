@@ -200,7 +200,7 @@ $labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 		window.location.href="./weubdownload.php";
 	}
 	function uploadEUB(){
-		window.open("./wuploadEUBtrackings.php");
+		window.open("./wuploadEUBTrackings.php");
 	}
 </script>
 <body>

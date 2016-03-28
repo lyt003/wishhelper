@@ -117,6 +117,11 @@ class dbhelper {
 		$eubupdateSql = "UPDATE orders set orderstatus = " . $status . " WHERE orderid = '" . $orderid . "'";
 		return mysql_query ( $eubupdateSql );
 	}
+	
+	public function uploadEUBTracking($orderid,$tracking){
+		$eubUpload = "update orders set provider='USPS',tracking='". $tracking ."'  where transactionid = '".$orderid."';";
+		return mysql_query($eubUpload);
+	}
 	/**
 	 *
 	 * @param
