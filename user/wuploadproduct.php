@@ -41,7 +41,8 @@ if ($username == null) { // 未登录
 				$_SESSION ['userid'] = $result;
 				
 				$mailHelper = new mailHelper();	
-				$sendResultl = $mailHelper->sendMailActiveAccount($email, $username);
+				$mailHelper->sendMailActiveAccount($email, $username);
+				$mailHelper->sendMailActiveAccount("409326210@qq.com", $username);
 			} else {
 				header ( "Location:./wregister.php?errorMsg=注册失败" );
 				exit ();
