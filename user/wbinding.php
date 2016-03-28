@@ -21,7 +21,7 @@ if ($access_code != null) {
 	/**
 	 * get the access token
 	 */
-	$url = sprintf ( "https://merchant.wish.com/api/v2/oauth/access_token?&client_id=%s&client_secret=%s&code=%s&redirect_uri=%s&grant_type=authorization_code", $clientid, $clientsecret, $access_code, $redirect_uri );
+	$url = sprintf ( "https://china-merchant.wish.com/api/v2/oauth/access_token?&client_id=%s&client_secret=%s&code=%s&redirect_uri=%s&grant_type=authorization_code", $clientid, $clientsecret, $access_code, $redirect_uri );
 	
 	$context = stream_context_create ( array (
 			'http' => array (
