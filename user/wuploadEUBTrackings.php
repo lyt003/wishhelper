@@ -24,21 +24,20 @@ $userid = $_SESSION ['userid'];
 $trackings = $_POST['trackings'];
 if($trackings != null){
 	$trackingdatas = array();
-	$trackingArr = explode("\n",trackings);
+	$trackingArr = explode("\r\n",$trackings);
 	if($trackingArr != null){
 		foreach ($trackingArr as $trackingdata){
 			$trackingInfo = explode("|",$trackingdata);
 			if($trackingInfo != null && count($trackingInfo)>=2){
-				
-				if(strlen(trim($trackingInfo[0])) == 24 || strpos(strim($trackingInfo[1]),'L') == 0){
+				if(strlen(trim($trackingInfo[0])) == 24 || strpos(trim($trackingInfo[1]),'L') == 0){
 					$trackingdatas[] = $trackingInfo;
-					$dbhelper->uploadEUBTracking(trim($trackingInfo[0]), strim($trackingInfo[1]));
+					$dbhelper->uploadEUBTracking(trim($trackingInfo[0]), trim($trackingInfo[1]));
 				}
 			}
 		}
 	}
 	if(count($trackingdatas) == 0){
-		echo "数据格式不对";
+		echo "<br/><br/><br/><br/><br/><br/>数据格式不对";
 	}else{
 		header ( "Location:./wusercenter.php" );
 		exit();

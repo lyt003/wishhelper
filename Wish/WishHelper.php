@@ -182,25 +182,9 @@ class WishHelper {
 					$gsUserid = $Goods->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 		
 					$gsLabel = $this->getCNENLabel($labels, str_replace(' ','_',$orderNoTracking ['sku']));
+					$gsLabel = $this->getCNENLabel($labels, str_replace('&amp;','AND',$orderNoTracking ['sku']));
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
-					/* $gsName = $orderNoTracking ['productname'];
-					if (stripos ( $gsName, "earring" ) != false) {
-						$gsNameCh = $Goods->addChild ( "NameCh", "耳钉" ); // *
-						$gsNameEn = $Goods->addChild ( "NameEn", "earring: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
-					} else if (stripos ( $gsName, "wear" ) != false) {
-						$gsNameCh = $Goods->addChild ( "NameCh", "内裤" ); // *
-						$gsNameEn = $Goods->addChild ( "NameEn", "underwear: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
-					} else if (stripos ( $gsName, "cami" ) != false) {
-						$gsNameCh = $Goods->addChild ( "NameCh", "吊带" ); // *
-						$gsNameEn = $Goods->addChild ( "NameEn", "camisole: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
-					} else if (stripos ( $gsName, "sticker" ) != false) {
-						$gsNameCh = $Goods->addChild ( "NameCh", "墙贴" ); // *
-						$gsNameEn = $Goods->addChild ( "NameEn", "sticker: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
-					} else {
-						$gsNameCh = $Goods->addChild ( "NameCh", "衣服" ); // *
-						$gsNameEn = $Goods->addChild ( "NameEn", "clothes: " . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *;
-					} */
 		
 					$preGoodsNameEn = "";
 					$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
