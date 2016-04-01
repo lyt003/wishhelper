@@ -195,6 +195,11 @@ class dbhelper {
 		return mysql_query($queryonlineProducts);
 	}
 	
+	public function  getProductDetails($accountid,$parentsku){
+		$querypd = 'select p.*,pv.* from onlineProducts p, onlineProductVars pv where p.accountid = '.$accountid.' and p.parent_sku="'.$parentsku.'" and p.id = pv.product_id order by pv.color,pv.size';
+		return  mysql_query($querypd);
+	}
+	
 	public function getProducts($parentSKU) {
 		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
 		return mysql_query ( $productsSQL );
