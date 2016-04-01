@@ -186,6 +186,11 @@ class dbhelper {
 		return mysql_query($queryproducts);
 	}
 	
+	public function getOnlineProducts($accountid,$start=0,$limit=50){
+		$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' limit '.$start.','.$limit;
+		return mysql_query($queryonlineProducts);
+	}
+	
 	public function getProducts($parentSKU) {
 		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
 		return mysql_query ( $productsSQL );
