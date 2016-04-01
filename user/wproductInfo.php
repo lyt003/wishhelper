@@ -34,6 +34,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		$i ++;
 	}
 }
+
+$queryParentSKU = $_POST['query_parent_sku'];
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -46,6 +48,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 			<title>Wish管理助手-更有效率的Wish商户实用工具</title>
 			<meta name="keywords" content="">
 				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
+				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
 					<link href="../css/bootstrap.min.css" rel="stylesheet">
 						<script src="../js/jquery-2.2.0.min.js"></script>
 						<script src="../js/bootstrap.min.js"></script>
@@ -99,12 +102,21 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
-								</li>  
+							</li>  
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">店铺优化<b class="caret"></b> </a>
+								<ul class="dropdown-menu">
+								<li><a href="./csvupload.php">CSV文档上传</a></li>
+								<li><a href="./wproductlist.php">店铺产品同步</a></li>
+								<li><a href="./wproductInfo.php">产品统计数据</a></li>
+								</ul>
+							</li> 
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
 							<li> <a href="./whelper.php">帮助文档</a></li>
 						</ul>
 						</div>
 					</div>
+					<!-- /navbar-inner -->
 					<!-- /navbar-inner -->
 				</div>
 
@@ -119,6 +131,8 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	<!-- END SUB HEADER NAV -->
 	<div class="banner-container"></div>
 	<div id="page-content" class="dashboard-wrapper">
+	<form class="form-horizontal" id="processsource"
+			action="./wproductInfo.php" method="post">
 			<li>已绑定的wish账号:
 <?php
 for($count = 0; $count < $i; $count ++) {
@@ -129,12 +143,26 @@ for($count = 0; $count < $i; $count ++) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
 				href="./wbindwish.php">绑定wish账号</a>
 			</li>
-			<br><h3>&nbsp;&nbsp;&nbsp;&nbsp;等待上传的定时产品状态(已经上传的产品不显示)</h3></br>
+			<br/>
+			<div class="control-group">
+				<label class="control-label"><span
+									class="col-name">查询parent_sku:</span></label>
+						<div class="controls input-append">
+							<input class="input-block-level required" id="query_parent_sku"
+									name="query_parent_sku" type="text"
+									value="<?php echo $parent_sku ?>"
+									/>&nbsp;&nbsp;&nbsp;&nbsp;
+									<button id="query_action" type="submit"
+								class="btn btn-primary btn-large">提交</button>
+						</div>
+			</div>
+			
+			
 <?php
 $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
 	if($accounts ['token' . $count1] != null){
-		$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1] );
+		$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1],$queryParentSKU );
 		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
 		echo "</div><span class=\"tools\"></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
@@ -160,6 +188,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 	}
 }
 ?>
+</form>
 	</div>
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
