@@ -1,3 +1,5 @@
+SELECT STR_TO_DATE(scheduledate,'%Y-%m-%d') d,count(*) FROM `schedule_product` WHERE accountid = 1 GROUP by d
+
 
 select count(distinct product_id) from onlineProductVars where enabled = true and accountid = 1;
 
