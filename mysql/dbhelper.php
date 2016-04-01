@@ -352,7 +352,6 @@ class dbhelper {
 	public function insertWeeklySummary($accountid,$weekdata){
 		$insertWeek = 'insert into productssummary(accountid,startdate,enddate,productid,productimpressions,buycart,buyctr,orders,checkoutconversion,gmv) values('.$accountid.',DATE_FORMAT("'.
 			$weekdata['startdate'].'","%Y-%m-%d"),DATE_FORMAT("'.$weekdata['enddate'].'","%Y-%m-%d"),"'.$weekdata['productid'].'",'.$weekdata['productimpression'].','.$weekdata['buycart'].',"'.$weekdata['buyctr'].'",'.$weekdata['orders'].',"'.$weekdata['checkoutconversion'].'",'.$weekdata['gmv'].')';
-		echo "insert:".$insertWeek;
 		return mysql_query($insertWeek);
 	}
 	public function insertOnlineProduct($productarray) {

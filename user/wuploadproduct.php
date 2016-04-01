@@ -391,7 +391,15 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
-								</li>  
+							</li>  
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">店铺优化<b class="caret"></b> </a>
+								<ul class="dropdown-menu">
+								<li><a href="./csvupload.php">CSV文档上传</a></li>
+								<li><a href="./wproductlist.php">店铺产品同步</a></li>
+								<li><a href="./wproductInfo.php">产品统计数据</a></li>
+								</ul>
+							</li> 
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
 							<li> <a href="./whelper.php">帮助文档</a></li>
 						</ul>
