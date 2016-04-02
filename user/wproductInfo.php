@@ -180,7 +180,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['parent_sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			echo "</tr>";
 			$orderCount ++;
 		}
@@ -205,8 +205,8 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 	</div>
 	<!-- END FOOTER -->
 	<script type="text/javascript">
-		function productDetails(id,sku){
-			window.open="./wproductDetails.php?id=" + id + "&psku=" + sku;
+		function productDetails(uid,pid){
+			window.open("./wproductDetails.php?uid=" + uid + "&pid=" + pid);
 		}
 	</script>
 	<!-- GoStats JavaScript Based Code -->

@@ -195,15 +195,21 @@ class dbhelper {
 		return mysql_query($queryonlineProducts);
 	}
 	
-	public function  getProductDetails($accountid,$parentsku){
-		$querypd = 'select p.*,pv.* from onlineProducts p, onlineProductVars pv where p.accountid = '.$accountid.' and p.parent_sku="'.$parentsku.'" and p.id = pv.product_id order by pv.color,pv.size';
+	public function getProductDetails($accountid,$pid){
+		$querypd = 'select p.*,pv.* from onlineProducts p, onlineProductVars pv where p.accountid = '.$accountid.' and p.id="'.$pid.'" and p.id = pv.product_id order by pv.color,pv.size';
 		return  mysql_query($querypd);
 	}
 	
 	public function getProducts($parentSKU) {
-		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
+		$productsSQL = 'select * from products where parent_sku = "' . $parentSKU . '"';
 		return mysql_query ( $productsSQL );
 	}
+	
+	public function getProductVars($productid){
+		$pvars = 'select * from onlineProductVars where product_id = "'.$productid.'"';
+		return mysql_query($pvars);
+	}
+	
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
 		$result = mysql_query ( $sql );

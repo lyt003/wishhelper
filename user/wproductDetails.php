@@ -14,34 +14,38 @@ use Wish\WishHelper;
 
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
+$wishhelper = new WishHelper();
 $username = $_SESSION ['username'];
-
 if ($username == null) { // 未登录
 	header ( "Location:./wlogin.php?errorMsg=请先登录" );
 	exit ();
 }
 
-// 已登录
-$result = $dbhelper->getUserToken ( $username );
-$accounts = array ();
-$i = 0;
-while ( $rows = mysql_fetch_array ( $result ) ) {
-	if($rows ['token'] != null){
-		$accounts ['clientid' . $i] = $rows ['clientid'];
-		$accounts ['clientsecret' . $i] = $rows ['clientsecret'];
-		$accounts ['token' . $i] = $rows ['token'];
-		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
-		$accounts ['accountid' . $i] = $rows ['accountid'];
-		$accounts ['accountname' . $i] = $rows ['accountname'];
-		$i ++;
-	}
+$accountid = $_GET['uid'];
+$productid = $_GET['pid'];
+
+if($accountid == null || $productid == null){
+	
+	$accountid = $_POST['accountid'];
+	$productid = $_POST['productid'];
+	
+	$newProductName = $_POST['Product_Name'];
+	$newProductName = str_replace ( '"', "''", $newProductName );
+	$newDescription = $_POST['Description'];
+	$newTags = $_POST['Tags'];
+	$newmainImage = $_POST['Main_Image'];
+	$newExtraImages = $_POST['Extra_Images'];
 }
 
-$accountid = $_GET['id'];
-$parentSKU = $_GET['psku'];
-$wishhelper = new WishHelper();
+$accountInfo = $dbhelper->getAccountToken($accountid);
+$accounts = array ();
+if($rows = mysql_fetch_array ( $accountInfo )){
+	$accounts ['token'] = $rows ['token'];
+	$accounts ['refresh_token'] = $rows ['refresh_token'];
+	$accounts ['accountname'] = $rows ['accountname'];
+}
 
-$productDetails = $wishhelper->getProductDetails($dbhelper->getProductDetails($accountid, $parentSKU));
+$productDetails = $wishhelper->getProductDetails($dbhelper->getProductDetails($accountid, $productid));
 
 $productName = $productDetails['name'];
 $description = $productDetails['description'];
@@ -49,6 +53,94 @@ $tags = $productDetails['tags'];
 $uniqueID = $productDetails['parent_sku'];
 $mainImage = $productDetails['main_image'];
 $extraImages = $productDetails['extra_images'];
+
+
+if ($newProductName != null && $newDescription != null && $newmainImage != null && $newTags != null) {
+
+	$client = new WishClient ($accounts ['token'], 'prod' );
+	
+	$onlineProduct = $client->getProductById($productid);
+	
+	$productParamsArray = array('id');
+	if(strcmp($newProductName,$productName) != 0){
+		$productParamsArray[] = 'name';
+		$onlineProduct->name = $newProductName;
+	}
+		
+	if(strcmp($newDescription,$description) != 0){
+		$productParamsArray[] = 'description';
+		$onlineProduct->description = $newDescription;
+	}
+		
+	if(strcmp($newTags,$tags) != 0){
+		$productParamsArray[] = 'tags';
+		$onlineProduct->tags = $newTags;
+	}
+		
+	if(strcmp($newmainImage,$mainImage) != 0){
+		$productParamsArray[] = 'main_image';
+		$onlineProduct->main_image = $newmainImage;
+	}
+		
+	if(strcmp($newExtraImages,$extraImages) != 0){
+		$productParamsArray[] = 'extra_images';
+		$onlineProduct->extra_images = $newExtraImages;
+	}
+		
+	//update product
+	if(count($productParamsArray)>1){
+		$params = $onlineProduct->getParams($productParamsArray);
+		$client->updateProductByParams($params);
+	}
+		
+	
+	$price = $_POST ['Price'];
+	$incrementPrice = $_POST ['increment_price'];
+	$quantity = $_POST ['Quantity'];
+	$shipping = $_POST ['Shipping'];
+	$shippingTime = $_POST ['Shipping_Time'];
+	$MSRP = $_POST ['MSRP'];
+	
+	/* $product = $client->getProductById($productid); */
+	
+	//update product vars
+	if($price != null || $incrementPrice != null || $quantity != null || $shipping != null || $shippingTime != null || $MSRP != null){
+		$skus = $wishhelper->getProductVars($productid);
+		
+		$paramsarray = array('sku');
+		if($price != null ||$incrementPrice != null)
+			$paramsarray[] = 'price';
+		if($quantity != null)
+			$paramsarray[] = 'inventory';
+		if($shipping != null)
+			$paramsarray[] = 'shipping';
+		if($shippingTime != null)
+			$paramsarray[] = 'shipping_time';
+		if($MSRP != null)
+			$paramsarray[] = 'msrp';
+		
+		if(count($paramsarray) > 1 ){
+			foreach ($skus as $sku){
+				$onlineProductVar = $client->getProductVariationBySKU($sku);
+
+				if($price != null)
+					$onlineProductVar->price = $price;
+				if($quantity != null)
+					$onlineProductVar->inventory = $quantity;
+				if($shipping != null)
+					$onlineProductVar->shipping = $shipping;
+				if($shippingTime != null)
+					$onlineProductVar->shipping_time = $shippingTime;
+				if($MSRP != null)
+					$onlineProductVar->msrp = $MSRP;
+				
+				$params = $onlineProductVar->getParams($paramsarray);
+				$updateResult = $client->updateProductVarByParams($params);
+				//print_r($updateResult);
+			}	
+		}
+	}
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -144,8 +236,9 @@ $extraImages = $productDetails['extra_images'];
 	<div class="banner-container"></div>
 
 	<div id="page-content" class="container-fluid  user">
-		<form id="add_product" action="./wuploadproduct.php" method="post">
-			<input type="hidden" id="update" name="update" value="<?php echo $updateParentSKU?>"/>
+		<form id="update_product" action="./wproductDetails.php" method="post">
+			<input type="hidden" id="productid" name="productid" value="<?php echo $productid?>"/>
+			<input type="hidden" id="accountid" name="accountid" value="<?php echo $accountid?>"/>
 			<div id="add-products-page" class="center">
 				<div>
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
@@ -170,25 +263,10 @@ $extraImages = $productDetails['extra_images'];
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="3"><span
-									class="col-name">请选择wish账号</span></label>
+									class="col-name">wish账号</span></label>
 
 								<div class="controls input-append">
-									<label>
-							<?php
-							if ($i>0){
-								for($count = 0; $count < $i; $count ++) {
-									if($count != 0 && $count%3 == 0)
-										echo "<br/>";
-									echo "<input type=\"radio\" id=\"currentAccountid\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
-									echo "&nbsp;&nbsp;" . $accounts ['accountname'.$count];
-									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-								}	
-							}else{
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;";
-							}
-							 echo "<a href=\"./wbindwish.php\">绑定wish账号</a>";
-							
-							?></label>
+									<label  class="control-label"><?php echo $accounts ['accountname']?></label>
 								</div>
 							</div>
 
@@ -233,9 +311,7 @@ $extraImages = $productDetails['extra_images'];
 									class="col-name">父SKU</span></label>
 
 								<div class="controls input-append">
-									<input class="input-block-level required" name="Unique_Id"
-										value="<?php echo $uniqueID?>" id="unique_id" type="text"
-										value="" placeholder="可接受：HSC0424PP" />
+									<label  class="control-label"><?php echo $uniqueID?></label>
 								</div>
 							</div>
 
@@ -300,6 +376,13 @@ $extraImages = $productDetails['extra_images'];
 		echo "<th style=\"width:10%\">库存</th><th style=\"width:10%\">是否启用</th></tr></thead>";
 		echo "<tbody>";
 		foreach ($productVars as $productVar){
+			
+			//Get your product variation by its SKU
+			/* $product_var = $client->getProductVariationBySKU($productVar['sku']);
+			echo "<br/><br/><br/><br/><br/><br/>product:";
+			print_r($product_var); */
+				
+			
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {
@@ -320,7 +403,7 @@ $extraImages = $productDetails['extra_images'];
 				</div>
 				<div id="inventory-shipping"
 							class="form-horizontal earnings-section">
-							<div class="section-title">批量设置以下信息</div>
+							<div class="section-title">批量设置以下信息  (空白字段不会更新)</div>
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="2"><span
@@ -387,16 +470,7 @@ $extraImages = $productDetails['extra_images'];
 										value="<?php echo $shippingTime?>" placeholder="可接受：5 - 10" />
 								</div>
 							</div>
-						</div>
-
-						<div id="optional-info" class="form-horizontal">
-							<div class="section-title">
-								可选信息
-								<div id="toggle-optional" class="pull-right"></div>
-							</div>
-
-							<div id="optional-fields">
-								<div class="control-group">
+							<div class="control-group">
 									<label class="control-label" data-col-index="12"><span
 										class="col-name">MSRP(产品原价)</span></label>
 
@@ -406,77 +480,13 @@ $extraImages = $productDetails['extra_images'];
 											placeholder="可接受：$19.00" />
 									</div>
 								</div>
-
-								<div class="control-group">
-									<label class="control-label" data-col-index="13"><span
-										class="col-name">品牌</span></label>
-
-									<div class="controls input-append">
-										<input class="input-block-level" name="Brand" id="brand"
-											type="text" value="<?php echo $brand?>"
-											placeholder="可接受：Nike" />
-									</div>
-								</div>
-
-								<div class="control-group">
-									<label class="control-label" data-col-index="16"><span
-										class="col-name">UPC</span></label>
-
-									<div class="controls input-append">
-										<input class="input-block-level" name="UPC" id="UPC"
-											type="text" value="<?php echo $UPC?>"
-											placeholder="可接受：716393133224" />
-									</div>
-								</div>
-
-								<div class="control-group">
-									<label class="control-label" data-col-index="14"><span
-										class="col-name">Landing Page URL</span></label>
-
-									<div class="controls input-append">
-										<input class="input-block-level" name="Landing_Page_URL"
-											id="landing_page_url" type="text"
-											value="<?php echo $landingPageURL?>"
-											placeholder="可接受：http://www.amazon.com/gp/product/B008PE00DA/ref=s9_simh_gw_p193_d0_i3?ref=wish" />
-									</div>
-								</div>
-
-								<div class="control-group">
-									<label class="control-label" data-col-index="14"><span
-										class="col-name">产品源地址</span></label>
-
-									<div class="controls input-append">
-										<input class="input-block-level" name="Product_Source_URL"
-											id="product_source_url" type="text"
-											value="<?php echo $productSourceURL?>"
-											placeholder="可接受：http://detail.1688.com/offer/xxxxx.html" />
-									</div>
-								</div>
-							</div>
 						</div>
 
-						<div id="optional-info" class="form-horizontal">
-							<div class="section-title">
-								定时上传
-								<div id="toggle-optional" class="pull-right"></div>
-							</div>
-
-							<div id="optional-fields">
-								<div class="control-group">
-									<label class="control-label" data-col-index="12"><span
-										class="col-name">定时上传时间</span></label>
-
-									<div class="controls input-append">
-										<input class="input-block-level" name="Schedule_Date" type="text" value="<?php echo ($scheduleDate != null)?$scheduleDate:date('Y-m-d H:i')?>" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii" placeholder="可接受：20151225; 为空则立即上传">
-									</div>
-								</div>
-							</div>
-						</div>
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
 							<br/>
 							<button id="submit-button" type="button"
-								class="btn btn-primary btn-large" onclick="createProduct()">提交</button>
+								class="btn btn-primary btn-large" onclick="updateProduct()">提交</button>
 						</div>
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
@@ -515,8 +525,6 @@ style="border-width:0" /></a></noscript>
 	
 <script type="text/javascript" src="../js/jquery-2.2.0.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../js/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript">
 							
@@ -559,16 +567,6 @@ style="border-width:0" /></a></noscript>
 	}
 
 	$(document).ready(function(){
-
-		$('#datetimepicker').datetimepicker({
-	    	language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn:  1,
-			autoclose: 1,
-			todayHighlight: 1,
-			startView: 2,
-			forceParse: 0,
-	        showMeridian: 1});
 
 		$('#tags').bind('input propertychange',function(){
 			var tags = $('#tags').val().split(",");
@@ -679,12 +677,7 @@ style="border-width:0" /></a></noscript>
 		document.getElementById("earnings").value=earn;
 	} 
 
-	function createProduct(){
-		 var currentAccount = document.getElementById("currentAccountid");
-		 if(currentAccount == null){
-			alert("请先绑定Wish账号");
-			return;
-			}
+	function updateProduct(){
 		var productName = document.getElementById("product_name").value;
 		if(productName == null || productName == ''){
 			alert("产品名称不能为空");
@@ -697,52 +690,39 @@ style="border-width:0" /></a></noscript>
 		if(tags == null || tags == ''){
 			alert("tags不能为空");
 		return;}
-		var uniqueID = document.getElementById("unique_id").value;
-		if(uniqueID == null || uniqueID == ''){
-			alert("父SKU不能为空");
-			return;}
 		var mainImage = document.getElementById("main_image").value;
 		if(mainImage == null || mainImage == ''){
 			alert("主图片不能为空");
 			return;}
+		
 		var price = document.getElementById("price").value;
-		if(price == null || $.trim(price) == ''){
-			alert("价格不能为空");
-			return;
-		}else if(isNaN(price)){
+		if(price != '' && isNaN(price)){
 			alert("价格不对，请输入数字");
 			return;
 		}
 		var quantity = document.getElementById("quantity").value;
-		if(quantity == null || $.trim(quantity) == ''){
-			alert("数量不能为空");
-			return;
-		}else if(isNaN(quantity)){
+		if(quantity != '' && isNaN(quantity)){
 			alert("数量不对，请输入数字");
 			return;
 		}
 	    var shipping = document.getElementById("shipping").value;
-		if(shipping == null || $.trim(shipping) == ''){
-			alert("运费不能为空");
-			return;
-		}else if(isNaN(shipping)){
+		if(shipping != '' && isNaN(shipping)){
 			alert("运费不对，请输入数字");
 			return;
 		}
 		var shippingTime = document.getElementById("shipping_time").value;
-		if(shippingTime == null || $.trim(shippingTime) == ''){
-			alert("运输时间不能为空");
-			return;
-		}
-		var shippingtimes = shippingTime.split("-");
-		if(shippingtimes == null || shippingtimes.length != 2){
-			alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
-			return;
-		}else if($.trim(shippingtimes[0]) == "" || $.trim(shippingtimes[1]) == "" || isNaN($.trim(shippingtimes[0])) || isNaN($.trim(shippingtimes[1]))){
-			alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
-			return;
-		}
-		var form = document.getElementById("add_product");
+		if(shippingTime != ''){
+			var shippingtimes = shippingTime.split("-");
+			if(shippingtimes == null || shippingtimes.length != 2){
+				alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
+				return;
+			}else if($.trim(shippingtimes[0]) == "" || $.trim(shippingtimes[1]) == "" || isNaN($.trim(shippingtimes[0])) || isNaN($.trim(shippingtimes[1]))){
+				alert("运输时间格式不对，请输入类似的数字区间:\"10-30\"");
+				return;
+			}
+		} 
+		
+		var form = document.getElementById("update_product");
 		form.submit();
 	}
 </script>

@@ -331,4 +331,14 @@ class WishHelper {
 		}
 		return $productsInfo;
 	}
+	
+	
+	public  function getProductVars($productid){
+		$skus = array();
+		$vars = $this->dbhelper->getProductVars($productid);
+		while($var = mysql_fetch_array($vars)){
+			$skus[] = $var['sku'];
+		}
+		return $skus;
+	}
 }
