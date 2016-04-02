@@ -181,8 +181,11 @@ class WishHelper {
 					$Goods = $xml->addChild ( "GoodsName" );
 					$gsUserid = $Goods->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 		
-					$gsLabel = $this->getCNENLabel($labels, str_replace(' ','_',$orderNoTracking ['sku']));
-					$gsLabel = $this->getCNENLabel($labels, str_replace('&amp;','AND',$orderNoTracking ['sku']));
+					$tempSKU = $orderNoTracking ['sku'];
+					$tempSKU = str_replace(' ','_',$tempSKU);
+					$tempSKU = str_replace('&amp;','AND',$tempSKU);
+					
+					$gsLabel = $this->getCNENLabel($labels, $tempSKU);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
 		
