@@ -258,6 +258,16 @@ CREATE TABLE `apptoken`(
 insert into apptoken(apptoken) values('javauploadtoservertokena13xja');
 
 
+CREATE TABLE `optimizeparam`(
+	`checkoutconversion` varchar(10),
+	`buyctr` varchar(10),
+	`impression` int(11),
+	`inventory`  int(5),
+	`inventoryextra`  int(5)
+)DEFAULT CHARSET=utf8;
+insert into optimizeparam(checkoutconversion,buyctr,impression,inventory,inventoryextra) values('20%','0.5%',500,200,10);
+
+
 
 
 
