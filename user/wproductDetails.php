@@ -100,11 +100,12 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 	$shipping = $_POST ['Shipping'];
 	$shippingTime = $_POST ['Shipping_Time'];
 	$MSRP = $_POST ['MSRP'];
+	$isEnabled = $_POST['isenabled'];
 	
 	/* $product = $client->getProductById($productid); */
 	
 	//update product vars
-	if($price != null || $incrementPrice != null || $quantity != null || $shipping != null || $shippingTime != null || $MSRP != null){
+	if($price != null || $incrementPrice != null || $quantity != null || $shipping != null || $shippingTime != null || $MSRP != null || (strcmp($isEnabled,'2')!=0)){
 		$skus = $wishhelper->getProductVars($productid);
 		
 		$paramsarray = array('sku');
@@ -118,7 +119,9 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 			$paramsarray[] = 'shipping_time';
 		if($MSRP != null)
 			$paramsarray[] = 'msrp';
-		
+		if(strcmp($isEnabled,'2')!=0)
+			$paramsarray[] = 'enabled';
+ 		
 		if(count($paramsarray) > 1 ){
 			foreach ($skus as $sku){
 				$onlineProductVar = $client->getProductVariationBySKU($sku);
@@ -133,10 +136,15 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 					$onlineProductVar->shipping_time = $shippingTime;
 				if($MSRP != null)
 					$onlineProductVar->msrp = $MSRP;
+				if(strcmp($isEnabled,'1')==0){
+					$onlineProductVar->enabled = "true";
+				}else if(strcmp($isEnabled,'0')==0){
+					$onlineProductVar->enabled = "false";
+				}
+					
 				
 				$params = $onlineProductVar->getParams($paramsarray);
-				$updateResult = $client->updateProductVarByParams($params);
-				//print_r($updateResult);
+				$client->updateProductVarByParams($params);
 			}	
 		}
 	}
@@ -479,7 +487,19 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 											type="text" value="<?php echo $MSRP?>"
 											placeholder="可接受：$19.00" />
 									</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" data-col-index="5"><span
+									class="col-name">产品启用</span></label>
+
+								<div class="controls input-append">
+									<label>
+									<input type="radio" id="isenabled" name="isenabled" value="1">&nbsp;&nbsp;启用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="isenabled" name="isenabled" value="0">&nbsp;&nbsp;禁用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="isenabled" name="isenabled" value="2" checked>&nbsp;&nbsp;保持不变
+									</label>
 								</div>
+							</div>
 						</div>
 
 						<div id="buttons-section" class="control-group text-right">

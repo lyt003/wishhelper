@@ -235,7 +235,7 @@ if($currentAccountid != null){
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
 							<br/>
-							<button id="submit-button" type="button"
+							<button id="submit-button" type="submit"
 								class="btn btn-primary btn-large">同步店铺产品</button>
 						</div>
 					</div>
