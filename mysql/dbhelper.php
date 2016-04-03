@@ -45,10 +45,11 @@ class dbhelper {
 	}
 	
 	public function isClientidSecretExist($clientid,$clientsecret){
-		$clientquery = 'select clientid,clientsecret from accounts where clientid = "'.$clientid.'" or clientsecret = "'.$clientsecret.'"';
+		$clientquery = 'select clientid,clientsecret,refresh_token from accounts where clientid = "'.$clientid.'" or clientsecret = "'.$clientsecret.'"';
 		$result = mysql_query($clientquery);
 		while($account = mysql_fetch_array($result)){
-			return true;
+			if($account['refresh_token'] != null)
+				return true;
 		}
 		return false;
 	}
