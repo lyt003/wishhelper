@@ -2,17 +2,16 @@
 use mysql\dbhelper;
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 
-print_r ( $_FILES ['file'] );
 $filename = $_FILES ['file'] ['tmp_name'];
-echo "filename:" . $filename;
+
+$accountid = $_POST['currentAccountid'];
 
 $dbhelper = new dbhelper();
 $index = 0;
 $isProduct = 0;
 $csvfile = fopen($filename,'r');
+$result;
 while ($data = fgetcsv($csvfile)) {
-	echo "<br/>";
-	print_r($data);
 	if($index == 0){
 		if(strcmp($data[1],'Product URL') == 0){
 			$isProduct = 1;
@@ -23,10 +22,7 @@ while ($data = fgetcsv($csvfile)) {
 		if($isProduct == 1){//product summary
 			$weekdata = array();
 			$daterange = $data[0];
-			echo "<br/>data[0]".$daterange;
 			$datearray = explode("/",$daterange);
-			echo "<br/>dataarray:";
-			print_r($datearray);
 			if($datearray != null && count($datearray) == 2){
 				//03-07-2016 转换为 2016-03-07
 				$startarray = explode("-",trim($datearray[0]));
@@ -41,14 +37,11 @@ while ($data = fgetcsv($csvfile)) {
 			$weekdata['orders']= str_replace(",","",$data[6]);
 			$weekdata['checkoutconversion']= $data[7];
 			$weekdata['gmv']= str_replace(",","",$data[8]);
-			$dbhelper->insertWeeklySummary(1,$weekdata);
+			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata);
 		}else{//weekly summary;
 			$weekdata = array();
 			$daterange = $data[0];
-			echo "<br/>data[0]".$daterange;
 			$datearray = explode("/",$daterange);
-			echo "<br/>dataarray:";
-			print_r($datearray);
 			if($datearray != null && count($datearray) == 2){
 				//03-07-2016 转换为 2016-03-07
 				$startarray = explode("-",trim($datearray[0]));
@@ -66,9 +59,10 @@ while ($data = fgetcsv($csvfile)) {
 			
 			$weekdata['productid'] = '0';
 			
-			$dbhelper->insertWeeklySummary(1,$weekdata);
+			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata);
 		}
 }
 fclose($csvfile);
-
+header ( "Location:./csvupload.php?msg=".$result);
+exit ();
 ?>

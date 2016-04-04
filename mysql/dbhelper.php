@@ -187,10 +187,30 @@ class dbhelper {
 		return mysql_query($queryproducts);
 	}
 	
+	public function getOnlineProducts($accountid,$queryParentSKU,$start=0,$limit=20){
+		if($queryParentSKU == null){
+			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' limit '.$start.','.$limit;
+		}else{
+			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%" limit '.$start.','.$limit;
+		}
+		return mysql_query($queryonlineProducts);
+	}
+	
+	public function getProductDetails($accountid,$pid){
+		$querypd = 'select p.*,pv.* from onlineProducts p, onlineProductVars pv where p.accountid = '.$accountid.' and p.id="'.$pid.'" and p.id = pv.product_id order by pv.color,pv.size';
+		return  mysql_query($querypd);
+	}
+	
 	public function getProducts($parentSKU) {
-		$productsSQL = "select * from products where parent_sku = '" . $parentSKU . "'";
+		$productsSQL = 'select * from products where parent_sku = "' . $parentSKU . '"';
 		return mysql_query ( $productsSQL );
 	}
+	
+	public function getProductVars($productid){
+		$pvars = 'select * from onlineProductVars where product_id = "'.$productid.'"';
+		return mysql_query($pvars);
+	}
+	
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
 		$result = mysql_query ( $sql );
@@ -353,7 +373,6 @@ class dbhelper {
 	public function insertWeeklySummary($accountid,$weekdata){
 		$insertWeek = 'insert into productssummary(accountid,startdate,enddate,productid,productimpressions,buycart,buyctr,orders,checkoutconversion,gmv) values('.$accountid.',DATE_FORMAT("'.
 			$weekdata['startdate'].'","%Y-%m-%d"),DATE_FORMAT("'.$weekdata['enddate'].'","%Y-%m-%d"),"'.$weekdata['productid'].'",'.$weekdata['productimpression'].','.$weekdata['buycart'].',"'.$weekdata['buyctr'].'",'.$weekdata['orders'].',"'.$weekdata['checkoutconversion'].'",'.$weekdata['gmv'].')';
-		echo "insert:".$insertWeek;
 		return mysql_query($insertWeek);
 	}
 	public function insertOnlineProduct($productarray) {
@@ -372,6 +391,28 @@ class dbhelper {
 								. $productarray ['inventory'] . ',"' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['MSRP'] . '")';
 		echo "insertSQL:".$insertvar_sql;
 		return mysql_query ( $insertvar_sql );
+	}
+	
+	public function getSKUSforInventory($accountid){
+		$inventorySql = 'SELECT v.sku,v.product_id,v.id,v.enabled,v.inventory FROM onlineProductVars v,optimizeparam o WHERE v.enabled = "true" and v.accountid = '.$accountid.' and v.inventory > 0 and v.inventory<o.inventory';
+		return mysql_query($inventorySql);
+	}
+	
+	public function getWeekImpressions($accountid,$startDate,$endDate,$daysuploaded){
+		$optimizeSql = 'select * from onlineproducts op,'.
+					   '  (select * from (select p.id, p.date_uploaded,p.number_sold,ps.productimpressions	from'.
+					   '      (select distinct p.id ,p.date_uploaded,p.number_sold'.
+					   '       from onlineproducts p, onlineproductvars pv'.
+					   '       where p.accountid = 3 and pv.enabled = "true" and (TO_DAYS(now())-TO_DAYS(p.date_uploaded))>'.$daysuploaded.' and p.id = pv.product_id) p'.
+				       '       left join (SELECT * from productssummary where accountid = '.$accountid.' and startdate = "'.$startDate.'" and enddate = "'.$endDate.'") ps'.
+					   '       on p.id = ps.productid  ) result where productimpressions is NULL) pids'.
+					   '       where op.id = pids.id';
+		return mysql_query($optimizeSql);
+	}
+	
+	public function getOptimizeParams(){
+		$osql = 'select * from optimizeparam';
+		return mysql_query($osql);
 	}
 	
 	public function getJaveUploadAppToken(){

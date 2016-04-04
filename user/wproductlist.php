@@ -33,8 +33,65 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
 		$accounts ['accountid' . $i] = $rows ['accountid'];
 		$accounts ['accountname' . $i] = $rows ['accountname'];
+		
+		$accounts[$rows ['accountid']] = $rows ['token'];
 		$i ++;
 	}
+}
+
+$currentAccountid = $_GET['currentAccountid'];
+if($currentAccountid != null){
+	//最近的订单时间为产品的最近更新时间。
+			$client = new WishClient ($accounts [$currentAccountid] , 'prod' );
+			$start = 0;
+			$limit = 50;
+			do{
+				$productsResult = $client->getProducts($start, $limit);
+				$hasmore = $productsResult['more'];
+				$products = $productsResult['data'];
+				foreach ($products as $product){
+	
+					$tempProduct = array();
+	
+					$vars = get_object_vars($product);
+					foreach ($vars as $key=>$val){
+						$tempProduct[$key] = $val;
+					}
+	
+					$tempTags = "";
+					print_r($tempProduct['tags']);
+					foreach ($tempProduct['tags'] as $tagObj){
+						print_r($tagObj);
+						$tempTags = $tempTags.$tagObj->Tag->name.",";
+					}
+					$tempTags = rtrim($tempTags,",");
+					$tempProduct['tags'] = $tempTags;
+	
+					$tempProduct['accountid'] = $currentAccountid ;
+					$uploaded = $tempProduct['date_uploaded'];
+					$tempdate = explode("-",trim($uploaded));
+					$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
+					$tempProduct['date_updated'] = $tempProduct['date_uploaded'];
+					echo "<br/>insert into ".$tempProduct['parent_sku'];
+					$dbhelper->insertOnlineProduct($tempProduct);
+						
+					$productVars = $tempProduct['variants'];
+					foreach ($productVars as $productvar){
+							
+						$tempVars = array();
+						$vvvvars = get_object_vars($productvar);
+						foreach ($vvvvars as $key=>$val){
+							$tempVars[$key] = $val;
+						}
+							
+						echo "&nbsp;&nbsp;&nbsp;&nbsp;insert into ".$tempVars['sku'];
+						$tempVars['accountid'] = $currentAccountid ;
+						$dbhelper->insertOnlineProductVar($tempVars);
+					}
+				}
+					
+				$start += $limit;
+			}while ($hasmore);
 }
 ?>
 
@@ -47,11 +104,10 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<title>Wish管理助手-更有效率的Wish商户实用工具</title>
 			<meta name="keywords" content="">
-				<link rel="stylesheet" type="text/css" href="../css/home_page.css">
-					<link href="../css/bootstrap.min.css" rel="stylesheet">
-						<script src="../js/jquery-2.2.0.min.js"></script>
-						<script src="../js/bootstrap.min.js"></script>
-
+			<link rel="stylesheet" type="text/css" href="../css/home_page.css">
+				<link rel="stylesheet" type="text/css" href="../css/add_products_page.css" />
+				<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+				<link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<!-- HEADER -->
@@ -101,7 +157,15 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
-								</li>  
+							</li>  
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">店铺优化<b class="caret"></b> </a>
+								<ul class="dropdown-menu">
+								<li><a href="./csvupload.php">CSV文档上传</a></li>
+								<li><a href="./wproductlist.php">店铺产品同步</a></li>
+								<li><a href="./wproductInfo.php">产品优化</a></li>
+								</ul>
+							</li> 
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
 							<li> <a href="./whelper.php">帮助文档</a></li>
 						</ul>
@@ -120,79 +184,66 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 	</div>
 	<!-- END SUB HEADER NAV -->
 	<div class="banner-container"></div>
-	<div id="page-content" class="dashboard-wrapper">
-		<form class="form-horizontal" id="processorders"
-			action="./wusercenter.php?add=1" method="post">
-			<li>已绑定的wish账号:
-<?php
-for($count = 0; $count < $i; $count ++) {
-	if($accounts ['token' . $count] != null)
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $accounts ['accountname' . $count];
-}
-?>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-				href="./wbindwish.php">绑定wish账号</a>
-			</li>
-			<br><h3>&nbsp;&nbsp;&nbsp;&nbsp;等待上传的定时产品状态(已经上传的产品不显示)</h3></br>
-<?php
-//最近的订单时间为产品的最近更新时间。
-for($count = 0; $count < $i; $count ++) {
-	if($accounts ['token'.$count] != null){
-		$client = new WishClient ($accounts ['token'.$count] , 'prod' );
-		$start = 0;
-		$limit = 50;
-		do{
-			$productsResult = $client->getProducts($start, $limit);
-			$hasmore = $productsResult['more'];
-			$products = $productsResult['data'];
-			foreach ($products as $product){
+	
+	<div id="page-content" class="container-fluid  user">
+		<form id="addform" action="./wproductlist.php" method="get"> 
+			<div id="add-products-page" class="center">
+				<div>
+					<div id="add-product-form">
+						<div id="basic-info" class="form-horizontal">
 
-				$tempProduct = array();
-				
-				$vars = get_object_vars($product);
-				foreach ($vars as $key=>$val){
-					$tempProduct[$key] = $val;
-				}
-				
-				$tempTags = "";
-				print_r($tempProduct['tags']);
-				foreach ($tempProduct['tags'] as $tagObj){
-					print_r($tagObj);
-					$tempTags = $tempTags.$tagObj->Tag->name.",";
-				} 
-				$tempTags = rtrim($tempTags,",");
-				$tempProduct['tags'] = $tempTags;
-				
-				$tempProduct['accountid'] = $accounts ['accountid'.$count] ;
-				$uploaded = $tempProduct['date_uploaded'];
-				$tempdate = explode("-",trim($uploaded));
-				$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
-				$tempProduct['date_updated'] = $tempProduct['date_uploaded'];
-				echo "<br/>insert into ".$tempProduct['parent_sku'];
-				$dbhelper->insertOnlineProduct($tempProduct);
-			
-				$productVars = $tempProduct['variants'];
-				foreach ($productVars as $productvar){
-					
-					$tempVars = array();
-					$vvvvars = get_object_vars($productvar);
-					foreach ($vvvvars as $key=>$val){
-						$tempVars[$key] = $val;
-					}
-					
-					echo "&nbsp;&nbsp;&nbsp;&nbsp;insert into ".$tempVars['sku'];
-					$tempVars['accountid'] = $accounts ['accountid'.$count] ;
-					$dbhelper->insertOnlineProductVar($tempVars);
-				}
-			}
-			
-			$start += $limit;
-		}while ($hasmore);
-	}
-}
-?>
-</form>
+						<?php 
+	                      		if(isset($msg)){
+	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
+	                      			echo "<h4 class=\"alert-heading\">";
+	                      			if($msg){
+	                      				echo "同步成功";
+	                      			}else{
+	                      				echo "同步失败，请联系管理员 admin@wishconsole.com";
+	                      			}
+	                      			echo "</h4>";
+	                      			echo "</div>";
+	                      			$msg = null;
+	                      		}
+	                    ?>
+	                    
+							<div class="control-group">
+								<label class="control-label" data-col-index="3"><span
+									class="col-name">请选择wish账号</span></label>
+
+								<div class="controls input-append">
+									<label>
+							<?php
+							if ($i>0){
+								for($count = 0; $count < $i; $count ++) {
+									if($count != 0 && $count%3 == 0)
+										echo "<br/>";
+									echo "<input type=\"radio\" id=\"currentAccountid\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
+									echo "&nbsp;&nbsp;" . $accounts ['accountname'.$count];
+									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+								}	
+							}else{
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;";
+							}
+							 echo "<a href=\"./wbindwish.php\">绑定wish账号</a>";
+							
+							?></label>
+								</div>
+							</div>
+						</div>
+
+						<div id="buttons-section" class="control-group text-right">
+							<br/>
+							<br/>
+							<button id="submit-button" type="submit"
+								class="btn btn-primary btn-large">同步店铺产品</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
+	
 	<!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
 		<div class="navbar-inner">
@@ -216,5 +267,8 @@ href="http://gostats.cn"><img alt="淘宝店铺计数器"
 src="https://ssl.gostats.com/bin/count/a_1068962/t_5/i_1/ssl_c5.gostats.cn/counter.png" 
 style="border-width:0" /></a></noscript>
 <!-- End GoStats JavaScript Based Code -->
+
+<script type="text/javascript" src="../js/jquery-2.2.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 </body>
 </html>

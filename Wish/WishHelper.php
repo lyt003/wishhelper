@@ -307,4 +307,41 @@ class WishHelper {
 		$productsInfo['productvars'] = $productsarray;
 		return $productsInfo;
 	}
+	
+	public  function getProductDetails($productDetails){
+		$productsInfo = array();
+		$productVarsarray = array();
+		$index = 0;
+		while($curProductDetail = mysql_fetch_array($productDetails)){
+			$productVarsarray[$index++] = $curProductDetail;
+		}
+		if($index>0){
+			$productsInfo['parent_sku'] =  $productVarsarray[0]['parent_sku'];
+			$productsInfo['id'] =  $productVarsarray[0]['id'];
+			$productsInfo['main_image'] =  $productVarsarray[0]['main_image'];
+			$productsInfo['extra_images'] =  $productVarsarray[0]['extra_images'];
+			$productsInfo['is_promoted'] =  $productVarsarray[0]['is_promoted'];
+			$productsInfo['name'] =  $productVarsarray[0]['name'];
+			$productsInfo['review_status'] =  $productVarsarray[0]['review_status'];
+			$productsInfo['tags'] =  $productVarsarray[0]['tags'];
+			$productsInfo['description'] =  $productVarsarray[0]['description'];
+			$productsInfo['number_saves'] =  $productVarsarray[0]['number_saves'];
+			$productsInfo['number_sold'] =  $productVarsarray[0]['number_sold'];
+			$productsInfo['date_uploaded'] =  $productVarsarray[0]['date_uploaded'];
+			$productsInfo['date_updated'] =  $productVarsarray[0]['date_updated'];
+			
+			$productsInfo['productvars'] = $productVarsarray;
+		}
+		return $productsInfo;
+	}
+	
+	
+	public  function getProductVars($productid){
+		$skus = array();
+		$vars = $this->dbhelper->getProductVars($productid);
+		while($var = mysql_fetch_array($vars)){
+			$skus[] = $var['sku'];
+		}
+		return $skus;
+	}
 }

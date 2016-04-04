@@ -156,10 +156,16 @@ class WishClient{
       'main_image',
       'extra_images'));
 
-    $response = $this->getResponse('POST','product/update',$object);
+    $response = $this->getResponse('POST','product/update',$params);
 
     return "success";
   }
+  
+  public function updateProductByParams($params){
+  	$response = $this->getResponse('POST','product/update',$params);
+  	return "success";
+  }
+  
   public function enableProduct(WishProduct $product){
     $this->enableProductById($product->id);
   }
@@ -213,6 +219,12 @@ class WishClient{
     $response = $this->getResponse('POST','variant/update',$params);
     return "success";
   }
+  
+  public function updateProductVarByParams($params){
+  	$response = $this->getResponse('POST','variant/update',$params);
+  	return $response;
+  }
+  
   public function enableProductVariation(WishProductVariation $var){
     $this->enableProductVariationBySKU($var->sku);
   }
