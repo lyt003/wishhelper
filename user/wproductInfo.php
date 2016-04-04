@@ -40,15 +40,17 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 
 $queryParentSKU = $_POST['query_parent_sku'];
 
+$optimizeparams = $dbhelper->getOptimizeParams();
+if($oparams = mysql_fetch_array($optimizeparams)){
+	$regularInventory = $oparams['inventory'];
+	$daysUploaded = $oparams['daysuploaded'];
+}
+
 $command = $_POST['command'];
 $accountid = $_POST['currentAccountid'];
+$client = new WishClient ($accounts[$accountid], 'prod' );
 if($command != null && strcmp($command,'updateInventory') == 0){
-	$optimizeparams = $dbhelper->getOptimizeParams();
-	if($oparams = mysql_fetch_array($optimizeparams)){
-		$regularInventory = $oparams['inventory'];	
-	}
 	
-	$client = new WishClient ($accounts[$accountid], 'prod' );
 	$SKUS = $dbhelper->getSKUSforInventory($accountid);
 	
 	$resultSKU = array();
@@ -65,6 +67,11 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 			$resultSKU[] = $sku;
 		}
 	}
+}else if($command != null && strcmp($command,'salesOptimize') == 0){
+	$endDate = date('Y-m-d',strtotime('last monday',time()));
+	$startDate = date('Y-m-d',strtotime('last monday',strtotime($endDate)));
+	
+	$productsResults = $dbhelper->getWeekImpressions($accountid, $startDate, $endDate, $daysUploaded);
 }
 
 ?>
@@ -229,6 +236,9 @@ for($count = 0; $count < $i; $count ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="uploadtrackings()">运费调整</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="salesOptimize()">每周销量扫描</button>
 					</ul>
 								</div>
 							</div>
@@ -251,34 +261,79 @@ for($count = 0; $count < $i; $count ++) {
 			
 			
 <?php
-$orderCount = 0;
-for($count1 = 0; $count1 < $i; $count1 ++) {
-	if($accounts ['token' . $count1] != null){
-		$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1],$queryParentSKU );
-		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
+if($command != null && strcmp($command,'salesOptimize') == 0){
+	if(isset($productsResults)){
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品在上周没有任何推送，并且已经上传产品超过".$daysUploaded."天,建议下架,可优化后重新上架:";
 		echo "</div><span class=\"tools\"></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
 		echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
 		echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
 		echo "<tbody>";
-		while ( $cur_product = mysql_fetch_array ( $onlineProducts) ) {
-			if ($orderCount % 2 == 0) {
-				echo "<tr>";
-			} else {
-				echo "<tr class=\"gradeA success\">";
-			}
-			echo "<td style=\"width:25%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
-			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
-			echo "</tr>";
-			$orderCount ++;
+		$orderCount = 0;
+		while($productResult = mysql_fetch_array($productsResults)){
+			
+				if ($orderCount % 2 == 0) {
+					echo "<tr>";
+				} else {
+					echo "<tr class=\"gradeA success\">";
+				}
+			
+				echo "<td style=\"width:25%;vertical-align:middle;\">" . $productResult['name']. "</td>";
+				echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $productResult ['main_image'] . "\">" . $productResult ['parent_sku'] ."</li><ul></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $productResult['number_saves']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $productResult ['number_sold']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $productResult ['date_uploaded']."</td>";
+				
+				if($productResult['number_saves'] == 0 &&  $productResult ['number_sold'] == 0){
+					$skus = $wishHelper->getProductVars($productResult['id']);
+					foreach ($skus as $sku){
+						$params = array();
+						$params['sku'] = $sku;
+						$params['enabled'] = "false";
+						$client->updateProductVarByParams($params);
+					}
+					echo "<td style=\"width:10%;vertical-align:middle;\"><span class=\"label label-info\">该产品已经自动下架</span></td>";
+				}else{
+					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$productResult['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				}
+				echo "</tr>";
+				$orderCount ++;
+			
 		}
 		echo "</tbody></table></div></div></div></div>";
 	}
+}else{
+
+	$orderCount = 0;
+	for($count1 = 0; $count1 < $i; $count1 ++) {
+		if($accounts ['token' . $count1] != null){
+			$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1],$queryParentSKU );
+			echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
+			echo "</div><span class=\"tools\"></div>";
+			echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+			echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
+			echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
+			echo "<tbody>";
+			while ( $cur_product = mysql_fetch_array ( $onlineProducts) ) {
+				if ($orderCount % 2 == 0) {
+					echo "<tr>";
+				} else {
+					echo "<tr class=\"gradeA success\">";
+				}
+				echo "<td style=\"width:25%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
+				echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				echo "</tr>";
+				$orderCount ++;
+			}
+			echo "</tbody></table></div></div></div></div>";
+		}
+	}
 }
+
 ?>
 </form>
 	</div>
@@ -301,6 +356,12 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		function updateInventory(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("updateInventory");
+			form.submit();
+		}
+
+		function salesOptimize(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("salesOptimize");
 			form.submit();
 		}
 	</script>

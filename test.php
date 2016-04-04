@@ -28,6 +28,12 @@ if($ttresult){
 	echo "<br/>time false";
 }
 
+echo "<br/><br/><br/><br/> date time:";
+echo "今天是第几周：".date('W');
+$endDate = date('Y-m-d',strtotime('last monday',time()));
+$startDate = date('Y-m-d',strtotime('last monday',strtotime($endDate)));
+echo "endDate:".$endDate.",startDate:".$startDate;
+
 /** init wish colors
 // add wish colors by wishcolor.txt;
 $wishcolors = array();

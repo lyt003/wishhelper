@@ -397,6 +397,18 @@ class dbhelper {
 		return mysql_query($inventorySql);
 	}
 	
+	public function getWeekImpressions($accountid,$startDate,$endDate,$daysuploaded){
+		$optimizeSql = 'select * from onlineproducts op,'.
+					   '  (select * from (select p.id, p.date_uploaded,p.number_sold,ps.productimpressions	from'.
+					   '      (select distinct p.id ,p.date_uploaded,p.number_sold'.
+					   '       from onlineproducts p, onlineproductvars pv'.
+					   '       where p.accountid = 3 and pv.enabled = "true" and (TO_DAYS(now())-TO_DAYS(p.date_uploaded))>'.$daysuploaded.' and p.id = pv.product_id) p'.
+				       '       left join (SELECT * from productssummary where accountid = '.$accountid.' and startdate = "'.$startDate.'" and enddate = "'.$endDate.'") ps'.
+					   '       on p.id = ps.productid  ) result where productimpressions is NULL) pids'.
+					   '       where op.id = pids.id';
+		return mysql_query($optimizeSql);
+	}
+	
 	public function getOptimizeParams(){
 		$osql = 'select * from optimizeparam';
 		return mysql_query($osql);
