@@ -163,7 +163,7 @@ if($currentAccountid != null){
 								<ul class="dropdown-menu">
 								<li><a href="./csvupload.php">CSV文档上传</a></li>
 								<li><a href="./wproductlist.php">店铺产品同步</a></li>
-								<li><a href="./wproductInfo.php">产品统计数据</a></li>
+								<li><a href="./wproductInfo.php">产品优化</a></li>
 								</ul>
 							</li> 
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->

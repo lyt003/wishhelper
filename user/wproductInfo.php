@@ -10,6 +10,7 @@ use Wish\WishHelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 header ( "Content-Type: text/html;charset=utf-8" );
+set_time_limit ( 0 );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
 
@@ -31,11 +32,41 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		$accounts ['refresh_token' . $i] = $rows ['refresh_token'];
 		$accounts ['accountid' . $i] = $rows ['accountid'];
 		$accounts ['accountname' . $i] = $rows ['accountname'];
+		
+		$accounts[$rows ['accountid']] = $rows ['token']; 
 		$i ++;
 	}
 }
 
 $queryParentSKU = $_POST['query_parent_sku'];
+
+$command = $_POST['command'];
+$accountid = $_POST['currentAccountid'];
+if($command != null && strcmp($command,'updateInventory') == 0){
+	$optimizeparams = $dbhelper->getOptimizeParams();
+	if($oparams = mysql_fetch_array($optimizeparams)){
+		$regularInventory = $oparams['inventory'];	
+	}
+	
+	$client = new WishClient ($accounts[$accountid], 'prod' );
+	$SKUS = $dbhelper->getSKUSforInventory($accountid);
+	
+	$resultSKU = array();
+	
+	while($skuarray = mysql_fetch_array($SKUS)){
+		$sku = $skuarray['sku'];
+		$sku = str_replace("&amp;","&",$sku);
+		$onlineProductVar = $client->getProductVariationBySKU($sku);
+		if($onlineProductVar->inventory< $regularInventory){
+			$params = array();
+			$params['sku'] = $sku;
+			$params['inventory'] = $regularInventory;
+			$client->updateProductVarByParams($params);
+			$resultSKU[] = $sku;
+		}
+	}
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -108,7 +139,7 @@ $queryParentSKU = $_POST['query_parent_sku'];
 								<ul class="dropdown-menu">
 								<li><a href="./csvupload.php">CSV文档上传</a></li>
 								<li><a href="./wproductlist.php">店铺产品同步</a></li>
-								<li><a href="./wproductInfo.php">产品统计数据</a></li>
+								<li><a href="./wproductInfo.php">产品优化</a></li>
 								</ul>
 							</li> 
 							<!-- <li><a href="./wuserinfo.php"> 个人信息 </a></li> -->
@@ -131,8 +162,9 @@ $queryParentSKU = $_POST['query_parent_sku'];
 	<!-- END SUB HEADER NAV -->
 	<div class="banner-container"></div>
 	<div id="page-content" class="dashboard-wrapper">
-	<form class="form-horizontal" id="processsource"
+	<form class="form-horizontal" id="optimizeproduct"
 			action="./wproductInfo.php" method="post">
+			<input type="hidden" id="command" name="command" value=""/>
 			<li>已绑定的wish账号:
 <?php
 for($count = 0; $count < $i; $count ++) {
@@ -144,6 +176,66 @@ for($count = 0; $count < $i; $count ++) {
 				href="./wbindwish.php">绑定wish账号</a>
 			</li>
 			<br/>
+			
+			<?php 
+	                      		if(isset($resultSKU)){
+	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
+	                      			echo "<h4 class=\"alert-heading\">对以下的产品库存进行了更新:";
+	                      			$count = 0;
+	                      			foreach ($resultSKU as $currsku){
+	                      				echo "&nbsp;&nbsp;&nbsp;&nbsp;".$currsku.",";
+	                      				$count++;
+	                      				if($count%10 == 0)
+	                      					echo "<br/>";
+	                      			}
+	                      			echo "</h4>";
+	                      			echo "</div>";
+	                      			$resultSKU = null;
+	                      		}
+	                    ?>
+	                    
+			<div id="add-product-form">
+						<div id="basic-info" class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label" data-col-index="3"><span
+									class="col-name">请选择wish账号</span></label>
+
+								<div class="controls input-append">
+									<label>
+							<?php
+							if ($i>0){
+								for($count = 0; $count < $i; $count ++) {
+									if($count != 0 && $count%3 == 0)
+										echo "<br/>";
+									echo "<input type=\"radio\" id=\"currentAccountid\" name=\"currentAccountid\" value=\"" . $accounts ['accountid' . $count] . "\"" . ($accountid == null ? ($count == 0 ? "checked" : "") : ((strcmp ( $accounts ['accountid' . $count], $accountid ) == 0) ? "checked" : "")) . ">";
+									echo "&nbsp;&nbsp;" . $accounts ['accountname'.$count];
+									echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+								}	
+							}else{
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您暂时没有绑定任何wish账号，请先&nbsp;&nbsp;&nbsp;&nbsp;";
+							}
+							
+							?></label>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<div>
+								<ul align="center">
+				<button class="btn btn-info" type="button" onclick="updateInventory()">扫描库存</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="downloadlabels()">价格调整</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="uploadtrackings()">运费调整</button>
+					</ul>
+								</div>
+							</div>
+						</div>
+				</div>
+							
+							
 			<div class="control-group">
 				<label class="control-label"><span
 									class="col-name">查询parent_sku:</span></label>
@@ -196,9 +288,6 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			<div class="footer-container">
 				<span><a href="https://wishconsole.com/">关于我们</a></span> <span><a>2016
 						wishconsole版权所有 京ICP备16000367号</a>
-						<!-- 51.la 网站统计 -->
-						<script language="javascript" type="text/javascript" src="http://js.users.51.la/18799105.js"></script>
-						<noscript><a href="http://www.51.la/?18799105" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/18799105.asp" style="border:none" /></a></noscript>
 				</span>
 			</div>
 		</div>
@@ -207,6 +296,12 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 	<script type="text/javascript">
 		function productDetails(uid,pid){
 			window.open("./wproductDetails.php?uid=" + uid + "&pid=" + pid);
+		}
+
+		function updateInventory(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("updateInventory");
+			form.submit();
 		}
 	</script>
 	<!-- GoStats JavaScript Based Code -->

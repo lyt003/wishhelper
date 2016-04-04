@@ -392,6 +392,16 @@ class dbhelper {
 		return mysql_query ( $insertvar_sql );
 	}
 	
+	public function getSKUSforInventory($accountid){
+		$inventorySql = 'SELECT v.sku,v.product_id,v.id,v.enabled,v.inventory FROM onlineProductVars v,optimizeparam o WHERE v.enabled = "true" and v.accountid = '.$accountid.' and v.inventory > 0 and v.inventory<o.inventory';
+		return mysql_query($inventorySql);
+	}
+	
+	public function getOptimizeParams(){
+		$osql = 'select * from optimizeparam';
+		return mysql_query($osql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);
