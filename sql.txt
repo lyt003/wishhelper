@@ -60,6 +60,7 @@ CREATE TABLE `orders` (
   `orderstatus` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`orderid`)
 ) DEFAULT CHARSET=utf8;
+ALTER TABLE `orders` CHANGE `countrycode` `countrycode` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 DROP TABLE IF EXISTS  `products`;
 CREATE TABLE `products` (

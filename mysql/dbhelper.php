@@ -83,6 +83,17 @@ class dbhelper {
 		
 		return mysql_query ( $insert_sql );
 	}
+	
+	public function insertEbayOrder($accountid,$orderarray){
+		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
+		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
+		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
+		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray [0] . '",0,' . $accountid . ',"' . $orderarray [24] . '","' . $orderarray [0] . '"," ","' . $orderarray [12] 
+		. '","' . $orderarray [12] . '"," "," "," ","' . $orderarray [15] . '","' . $orderarray [15] . '","' . $orderarray [16] . '","' . $orderarray [16] . '","' . $orderarray [14] . '","' . $orderarray [20] . '"," "," ","' 
+				. $orderarray [2] . '","' . $orderarray [5] . '","' . $orderarray [6] . '","' . $orderarray [7] . '","' . $orderarray [8] . '","' . $orderarray [9] . '","' . $orderarray [3] . '","' . $orderarray [10] . '","0")';
+		return mysql_query ( $insert_sql );
+	}
+	
 	public function updateOrder($orderarray) {
 		$update_sql = "UPDATE orders set provider = '" . $orderarray ['provider'] . "', tracking = '" . $orderarray ['tracking'] . "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and transactionid='" . $orderarray ['transactionid'] . "'";
 		return mysql_query ( $update_sql );
