@@ -13,10 +13,6 @@ $csvfile = fopen($filename,'r');
 $result;
 $end;
 while ($data = fgetcsv($csvfile)) {
-	if($index == 1){
-		$index++;
-		continue;
-	}
 	if($index == 0){
 		if(strcmp('	Sales Record Number',$data[0]) != 0){
 			$result = "文件格式错误";
@@ -27,12 +23,8 @@ while ($data = fgetcsv($csvfile)) {
 		continue;
 	}
 	
-	if(count($data)>1){
+	if($data[10] != null && strcmp($data[10],"") !=0){
 		$dbhelper->insertEbayOrder($accountid,$data);
-	}else{
-		$result = 'success';
-		header ( "Location:./yanwenebay.php?msg=".$result);
-		exit();
 	}
 	$index++;
 }

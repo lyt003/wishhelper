@@ -85,6 +85,9 @@ class dbhelper {
 	}
 	
 	public function insertEbayOrder($accountid,$orderarray){
+		$orderarray[15] = str_replace('$','',$orderarray[15]);
+		$orderarray[16] = str_replace('$','',$orderarray[16]);
+		$orderarray[20] = str_replace('$','',$orderarray[20]);
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
