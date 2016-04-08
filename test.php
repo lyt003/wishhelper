@@ -28,6 +28,27 @@ if($ttresult){
 	echo "<br/>time false";
 }
 
+echo "<br/><br/><br/><br/>STARTTIME*************";
+$initTime =  date ( 'Y-m-d  H:i:s',time());
+for ($l=0;$l<5;$l++){
+	$curWeek = getPreWeek($initTime);
+	echo "<br/><br/><br/><br/>";
+	print_r($curWeek);
+	echo "<br/>".$curWeek[0]." | ".$curWeek[1];
+	$initTime = $curWeek[0];
+}
+
+
+function getPreWeek($curtime){
+	$preendDate = date('Y-m-d',strtotime('last monday',strtotime($curtime)));
+	$prestartDate = date('Y-m-d',strtotime('last monday',strtotime($preendDate)));
+	$week = array($prestartDate,$preendDate);
+	echo "<br/>curtime:".$curtime;
+	echo "<br/>preendDate:".$preendDate;
+	echo "<br/>prestartDate:".$prestartDate;
+	return $week;
+}
+
 echo "<br/><br/><br/><br/> date time:";
 echo "今天是第几周：".date('W');
 $endDate = date('Y-m-d',strtotime('last monday',time()));
