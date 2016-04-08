@@ -225,6 +225,17 @@ class dbhelper {
 		return mysql_query($pvars);
 	}
 	
+	public function getHotProducts($accountid,$startdate,$enddate){
+		$hotsql = 'select productid from productssummary where accountid = '.$accountid.' and startdate = "'.$startdate.'" and enddate = "'.$enddate.'" and productid != "0" and orders > 0 order by orders desc';
+		return mysql_query($hotsql);
+	}
+	
+	public function getProductOrders($accountid,$productid,$startdate,$enddate){
+		$posql = 'select * from productssummary where accountid = '.$accountid.' and UNIX_TIMESTAMP(startdate) >=UNIX_TIMESTAMP("'.$startdate.'") and UNIX_TIMESTAMP(startdate) <= UNIX_TIMESTAMP("'.$enddate.'") and productid = "'.$productid.'" order by UNIX_TIMESTAMP(startdate)';
+		return mysql_query($posql);
+	}
+	
+	
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
 		$result = mysql_query ( $sql );

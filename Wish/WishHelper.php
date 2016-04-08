@@ -344,4 +344,13 @@ class WishHelper {
 		}
 		return $skus;
 	}
+	
+	public function getProductOrders($accountid,$productid,$startdate,$enddate){
+		$orders = array();
+		$productOrders = $this->dbhelper->getProductOrders($accountid, $productid, $startdate, $enddate);
+		while($curOrder = mysql_fetch_array($productOrders)){
+				$orders[] = $curOrder['orders'];
+		}
+		return $orders;
+	}
 }

@@ -44,6 +44,7 @@ $optimizeparams = $dbhelper->getOptimizeParams();
 if($oparams = mysql_fetch_array($optimizeparams)){
 	$regularInventory = $oparams['inventory'];
 	$daysUploaded = $oparams['daysuploaded'];
+	$regularInventoryExtra = $oparams['inventoryextra'];
 }
 
 $command = $_POST['command'];
@@ -68,12 +69,71 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 		}
 	}
 }else if($command != null && strcmp($command,'salesOptimize') == 0){
-	$endDate = date('Y-m-d',strtotime('last monday',time()));
-	$startDate = date('Y-m-d',strtotime('last monday',strtotime($endDate)));
+	
+	$weekdate = $_POST['weekdate'];
+	$dates = explode(" | ",$weekdate);
+	$endDate = $dates[1];
+	$startDate = $dates[0];
 	
 	$productsResults = $dbhelper->getWeekImpressions($accountid, $startDate, $endDate, $daysUploaded);
+}else if($command != null && strcmp($command,'hotSalesOptimize' == 0)){
+	$weekdate = $_POST['weekdate'];
+	$dates = explode(" | ",$weekdate);
+	$endDate = $dates[1];
+	$startDate = $dates[0];
+	
+	$hotproducts = $dbhelper->getHotProducts($accountid, $startDate, $endDate);
+	$threeweeksdateEnd = $startDate;
+	$tempmonday = date('Y-m-d',strtotime('last monday',strtotime($threeweeksdateEnd)));
+	$threeweeksdateStart = date('Y-m-d',strtotime('last monday',strtotime($tempmonday)));
+
+	$updatecontent;
+	while ($hotproduct = mysql_fetch_array($hotproducts)){
+		$hotproductid = $hotproduct['productid'];
+		
+		$productOrders = $wishHelper->getProductOrders($accountid, $hotproductid, $threeweeksdateStart, $threeweeksdateEnd);
+		$initOrder = 0;
+		$isIncreased = 1;
+		foreach ($productOrders as $productOrder){
+			if($productOrder < $initOrder){//订单减少
+				$isIncreased = 0;
+				continue;
+			}
+			$initOrder = $productOrder;
+		}
+		
+		$hotskus = $wishHelper->getProductVars($hotproductid);
+		foreach ($hotskus as $hotsku){
+			$hotProductVar = $client->getProductVariationBySKU($hotsku);
+			$params = array();
+			$params['sku'] = $hotsku;
+			
+			if($isIncreased == 0){//订单减少的处理：  降价$0.01
+				$price = $hotProductVar->price;
+				$params['price'] = $price - 0.01;
+				$updatecontent .= $params['sku']." lower price to ".$params['price']."\n";
+			}else{//订单递增的处理： 添加库存
+				$curInventory = $hotProductVar->inventory;
+				if($curInventory<$regularInventory){
+					$hotProductVar->inventory = $regularInventory;
+				}else{
+					$hotProductVar->inventory = $hotProductVar->inventory + $regularInventoryExtra;
+				}
+				$params['inventory'] = $hotProductVar->inventory;
+				$updatecontent .= $params['sku']." updateinventory to ".$params['inventory']."\n";
+			}
+			//$client->updateProductVarByParams($params);
+		}
+	}
 }
 
+
+function getPreWeek($curtime){
+	$preendDate = date('Y-m-d',strtotime('last monday',strtotime($curtime)));
+	$prestartDate = date('Y-m-d',strtotime('last monday',strtotime($preendDate)));
+	$week = array($prestartDate,$preendDate);
+	return $week;
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -227,18 +287,53 @@ for($count = 0; $count < $i; $count ++) {
 							</div>
 							
 							<div class="control-group">
+								<label class="control-label" data-col-index="3"><span
+									class="col-name">时间段选择</span></label>
+
+								<div class="controls input-append">
+								<label>
+									<select id="weekdate" name="weekdate">
+										<?php 
+										$initTime =  date ( 'Y-m-d  H:i:s',time());
+										for ($l=0;$l<5;$l++){
+											$curWeek = getPreWeek($initTime);
+											if($weekdate != null){
+												if(strcmp($weekdate,$curWeek[0]." | ".$curWeek[1]) == 0){
+													echo "<option selected=\"selected\" value=\"".$curWeek[0]." | ".$curWeek[1]."\">".$curWeek[0]." | ".$curWeek[1]."</option>";
+												}else{
+													echo "<option value=\"".$curWeek[0]." | ".$curWeek[1]."\">".$curWeek[0]." | ".$curWeek[1]."</option>";
+												}												
+											}else{
+												if($l == 0){
+													echo "<option selected=\"selected\" value=\"".$curWeek[0]." | ".$curWeek[1]."\">".$curWeek[0]." | ".$curWeek[1]."</option>";
+												}else{
+													echo "<option value=\"".$curWeek[0]." | ".$curWeek[1]."\">".$curWeek[0]." | ".$curWeek[1]."</option>";
+												}	
+											}
+											$initTime = $curWeek[1];
+										}
+										?>
+									  </select>
+									</label>
+								</div>
+							</div>
+							
+							<div class="control-group">
 								<div>
 								<ul align="center">
 				<button class="btn btn-info" type="button" onclick="updateInventory()">扫描库存</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button"
+				<!-- <button class="btn btn-info" type="button"
 					onclick="downloadlabels()">价格调整</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="uploadtrackings()">运费调整</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				<button class="btn btn-info" type="button"
 					onclick="salesOptimize()">每周销量扫描</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="hotSalesOptimize()">热卖产品信息更新</button>
 					</ul>
 								</div>
 							</div>
@@ -263,7 +358,7 @@ for($count = 0; $count < $i; $count ++) {
 <?php
 if($command != null && strcmp($command,'salesOptimize') == 0){
 	if(isset($productsResults)){
-		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品在上周没有任何推送，并且已经上传产品超过".$daysUploaded."天,建议下架,可优化后重新上架:";
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品在  ".$weekdate." 没有任何推送，并且已经上传产品超过".$daysUploaded."天,建议下架,可优化后重新上架:";
 		echo "</div><span class=\"tools\"></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
 		echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
@@ -302,8 +397,15 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		}
 		echo "</tbody></table></div></div></div></div>";
 	}
-}else{
-
+} else if($command != null && strcmp($command,'hotSalesOptimize') == 0){
+	if(isset($updatecontent)){
+		echo "<div class=\"control-group\">";
+		echo "<label class=\"control-label\"><span class=\"col-name\">更新的内容:</span></label>";
+		echo "<textarea rows=\"5\" class = \"form-control\" name=\"updateContent\" id=\"updateContent\" type=\"text\">".$updatecontent;
+		echo "</textarea></div></div>";
+	}
+} else{
+/*
 	$orderCount = 0;
 	for($count1 = 0; $count1 < $i; $count1 ++) {
 		if($accounts ['token' . $count1] != null){
@@ -332,6 +434,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			echo "</tbody></table></div></div></div></div>";
 		}
 	}
+	*/
 }
 
 ?>
@@ -362,6 +465,12 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		function salesOptimize(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("salesOptimize");
+			form.submit();
+		}
+
+		function hotSalesOptimize(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("hotSalesOptimize");
 			form.submit();
 		}
 	</script>
