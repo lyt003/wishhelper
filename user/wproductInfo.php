@@ -44,6 +44,7 @@ $optimizeparams = $dbhelper->getOptimizeParams();
 if($oparams = mysql_fetch_array($optimizeparams)){
 	$regularInventory = $oparams['inventory'];
 	$daysUploaded = $oparams['daysuploaded'];
+	$regularInventoryExtra = $oparams['inventoryextra'];
 }
 
 $command = $_POST['command'];
@@ -75,6 +76,55 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$startDate = $dates[0];
 	
 	$productsResults = $dbhelper->getWeekImpressions($accountid, $startDate, $endDate, $daysUploaded);
+}else if($command != null && strcmp($command,'hotSalesOptimize' == 0)){
+	$weekdate = $_POST['weekdate'];
+	$dates = explode(" | ",$weekdate);
+	$endDate = $dates[1];
+	$startDate = $dates[0];
+	
+	$hotproducts = $dbhelper->getHotProducts($accountid, $startDate, $endDate);
+	$threeweeksdateEnd = $startDate;
+	$tempmonday = date('Y-m-d',strtotime('last monday',strtotime($threeweeksdateEnd)));
+	$threeweeksdateStart = date('Y-m-d',strtotime('last monday',strtotime($tempmonday)));
+
+	$updatecontent;
+	while ($hotproduct = mysql_fetch_array($hotproducts)){
+		$hotproductid = $hotproduct['productid'];
+		
+		$productOrders = $wishHelper->getProductOrders($accountid, $hotproductid, $threeweeksdateStart, $threeweeksdateEnd);
+		$initOrder = 0;
+		$isIncreased = 1;
+		foreach ($productOrders as $productOrder){
+			if($productOrder < $initOrder){//订单减少
+				$isIncreased = 0;
+				continue;
+			}
+			$initOrder = $productOrder;
+		}
+		
+		$hotskus = $wishHelper->getProductVars($hotproductid);
+		foreach ($hotskus as $hotsku){
+			$hotProductVar = $client->getProductVariationBySKU($hotsku);
+			$params = array();
+			$params['sku'] = $hotsku;
+			
+			if($isIncreased == 0){//订单减少的处理：  降价$0.01
+				$price = $hotProductVar->price;
+				$params['price'] = $price - 0.01;
+				$updatecontent .= $params['sku']." lower price to ".$params['price']."\n";
+			}else{//订单递增的处理： 添加库存
+				$curInventory = $hotProductVar->inventory;
+				if($curInventory<$regularInventory){
+					$hotProductVar->inventory = $regularInventory;
+				}else{
+					$hotProductVar->inventory = $hotProductVar->inventory + $regularInventoryExtra;
+				}
+				$params['inventory'] = $hotProductVar->inventory;
+				$updatecontent .= $params['sku']." updateinventory to ".$params['inventory']."\n";
+			}
+			//$client->updateProductVarByParams($params);
+		}
+	}
 }
 
 
@@ -273,14 +323,17 @@ for($count = 0; $count < $i; $count ++) {
 								<ul align="center">
 				<button class="btn btn-info" type="button" onclick="updateInventory()">扫描库存</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button"
+				<!-- <button class="btn btn-info" type="button"
 					onclick="downloadlabels()">价格调整</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="uploadtrackings()">运费调整</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				<button class="btn btn-info" type="button"
 					onclick="salesOptimize()">每周销量扫描</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="hotSalesOptimize()">热卖产品信息更新</button>
 					</ul>
 								</div>
 							</div>
@@ -344,7 +397,14 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		}
 		echo "</tbody></table></div></div></div></div>";
 	}
-}else{
+} else if($command != null && strcmp($command,'hotSalesOptimize') == 0){
+	if(isset($updatecontent)){
+		echo "<div class=\"control-group\">";
+		echo "<label class=\"control-label\"><span class=\"col-name\">更新的内容:</span></label>";
+		echo "<textarea rows=\"5\" class = \"form-control\" name=\"updateContent\" id=\"updateContent\" type=\"text\">".$updatecontent;
+		echo "</textarea></div></div>";
+	}
+} else{
 /*
 	$orderCount = 0;
 	for($count1 = 0; $count1 < $i; $count1 ++) {
@@ -405,6 +465,12 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		function salesOptimize(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("salesOptimize");
+			form.submit();
+		}
+
+		function hotSalesOptimize(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("hotSalesOptimize");
 			form.submit();
 		}
 	</script>
