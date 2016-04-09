@@ -1,4 +1,5 @@
 <?php
+session_start ();
 header ( "Content-Type: text/html;charset=utf-8" );
 
 include_once dirname ( '__FILE__' ).'/mysql/dbhelper.php';
@@ -27,6 +28,12 @@ if($ttresult){
 }else{
 	echo "<br/>time false";
 }
+
+echo "<br/><br/><br/><br/>START TO PROCESS ORDER:";
+$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
+$expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );
+
+$wishHelper->applyTrackingsForOrders ( "0", $labels, $expressinfo );
 
 echo "<br/><br/><br/><br/>STARTTIME*************";
 $initTime =  date ( 'Y-m-d  H:i:s',time());
