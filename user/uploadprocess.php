@@ -10,7 +10,7 @@ $dbhelper = new dbhelper();
 $index = 0;
 $isProduct = 0;
 $csvfile = fopen($filename,'r');
-$result;
+$result = true;
 while ($data = fgetcsv($csvfile)) {
 	if($index == 0){
 		if(strcmp($data[1],'Product URL') == 0){
@@ -37,7 +37,7 @@ while ($data = fgetcsv($csvfile)) {
 			$weekdata['orders']= str_replace(",","",$data[6]);
 			$weekdata['checkoutconversion']= $data[7];
 			$weekdata['gmv']= str_replace(",","",$data[8]);
-			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata);
+			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata) && $result;
 		}else{//weekly summary;
 			$weekdata = array();
 			$daterange = $data[0];
@@ -59,7 +59,7 @@ while ($data = fgetcsv($csvfile)) {
 			
 			$weekdata['productid'] = '0';
 			
-			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata);
+			$result = $dbhelper->insertWeeklySummary($accountid,$weekdata) || $result;
 		}
 }
 fclose($csvfile);
