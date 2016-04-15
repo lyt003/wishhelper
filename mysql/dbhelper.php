@@ -400,13 +400,30 @@ class dbhelper {
 			$weekdata['startdate'].'","%Y-%m-%d"),DATE_FORMAT("'.$weekdata['enddate'].'","%Y-%m-%d"),"'.$weekdata['productid'].'",'.$weekdata['productimpression'].','.$weekdata['buycart'].',"'.$weekdata['buyctr'].'",'.$weekdata['orders'].',"'.$weekdata['checkoutconversion'].'",'.$weekdata['gmv'].')';
 		return mysql_query($insertWeek);
 	}
+	
+	public function isProductExist($productid){
+		$querySql = 'select * from onlineProducts where id = "'.$productid.'"';
+		return mysql_query($querySql);
+	}
+	
 	public function insertOnlineProduct($productarray) {
 		$insert_sql = 'insert into onlineProducts (accountid, id, parent_sku,name,description,original_image_url,main_image,extra_images,is_promoted,tags,review_status,number_saves,number_sold,date_uploaded,date_updated)
 					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['parent_sku'] . '","' . $productarray ['name'] 
 							. '","' . $productarray ['description'] . '","' . $productarray ['original_image_url'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['is_promoted'] . '","' 
 							. $productarray ['tags'] . '","' . $productarray ['review_status'] . '",' . $productarray ['number_saves'] . ',' . $productarray ['number_sold'] . ',DATE_FORMAT("' . $productarray ['date_uploaded'] . '","%Y-%m-%d"),DATE_FORMAT("' . $productarray ['date_updated'] . '","%Y-%m-%d"))';
-		echo "insertSQL:".$insert_sql;
 		return mysql_query ( $insert_sql );
+	}
+	
+	public function updateOnlineProduct($productarray){
+		$update_sql = 'update onlineProducts set name="'.$productarray ['name'] . '", description = "'.$productarray ['description'] . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
+		. '",is_promoted = "'.$productarray ['is_promoted'] . '",tags = "'.$productarray ['tags'] . '",review_status = "'.$productarray ['review_status'] 
+		. '",number_saves = '.$productarray ['number_saves'] . ',numbers_sold = '.$productarray ['number_sold'] . ' where id = "'.$productarray['id'].'"';
+		return mysql_query ( $update_sql );
+	}
+	
+	public function isProductVarExist($productVarID){
+		$querySql = 'select * from onlineProductVars where id = "'.$productVarID.'"';
+		return mysql_query($querySql);
 	}
 	
 	public function insertOnlineProductVar($productarray) {
@@ -414,8 +431,14 @@ class dbhelper {
 					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['product_id'] . '","' . $productarray ['sku']
 						. '","' . $productarray ['color'] . '","' . $productarray ['size'] . '","' . $productarray ['enabled'] . '","' . $productarray ['price'] . '","' . $productarray ['all_images'] . '",'
 								. $productarray ['inventory'] . ',"' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['MSRP'] . '")';
-		echo "insertSQL:".$insertvar_sql;
 		return mysql_query ( $insertvar_sql );
+	}
+	
+	public function updateOnlineProductVar($productarray){
+		$update_sql = 'update onlineProductVars set color = "'.$productarray ['color'] . '",size = "'.$productarray ['size'] . '",enabled = "'
+				.$productarray ['enabled'] . '",price = "'.$productarray ['price'] . '",all_images="'.$productarray ['all_images'] . '",inventory='.$productarray ['inventory'] 
+				. ',shipping = "'.$productarray ['shipping'] . '",shipping_time="'.$productarray ['shipping_time'] . '",MSRP="'.$productarray ['MSRP'] .'" where id = "'.$productarray['id'].'"';
+		return mysql_query ( $update_sql );
 	}
 	
 	public function getSKUSforInventory($accountid){

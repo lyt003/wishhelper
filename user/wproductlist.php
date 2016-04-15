@@ -59,9 +59,7 @@ if($currentAccountid != null){
 					}
 	
 					$tempTags = "";
-					print_r($tempProduct['tags']);
 					foreach ($tempProduct['tags'] as $tagObj){
-						print_r($tagObj);
 						$tempTags = $tempTags.$tagObj->Tag->name.",";
 					}
 					$tempTags = rtrim($tempTags,",");
@@ -72,8 +70,7 @@ if($currentAccountid != null){
 					$tempdate = explode("-",trim($uploaded));
 					$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
 					$tempProduct['date_updated'] = $tempProduct['date_uploaded'];
-					echo "<br/>insert into ".$tempProduct['parent_sku'];
-					$dbhelper->insertOnlineProduct($tempProduct);
+					$wishHelper->insertOnlineProduct($tempProduct);
 						
 					$productVars = $tempProduct['variants'];
 					foreach ($productVars as $productvar){
@@ -84,9 +81,8 @@ if($currentAccountid != null){
 							$tempVars[$key] = $val;
 						}
 							
-						echo "&nbsp;&nbsp;&nbsp;&nbsp;insert into ".$tempVars['sku'];
 						$tempVars['accountid'] = $currentAccountid ;
-						$dbhelper->insertOnlineProductVar($tempVars);
+						$wishHelper->insertOnlineProductVar($tempVars);
 					}
 				}
 					
