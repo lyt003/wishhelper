@@ -405,36 +405,37 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		echo "</textarea></div></div>";
 	}
 } else{
-/*
-	$orderCount = 0;
-	for($count1 = 0; $count1 < $i; $count1 ++) {
-		if($accounts ['token' . $count1] != null){
-			$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1],$queryParentSKU );
-			echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
-			echo "</div><span class=\"tools\"></div>";
-			echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
-			echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
-			echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
-			echo "<tbody>";
-			while ( $cur_product = mysql_fetch_array ( $onlineProducts) ) {
-				if ($orderCount % 2 == 0) {
-					echo "<tr>";
-				} else {
-					echo "<tr class=\"gradeA success\">";
+
+	if($queryParentSKU != null){
+		$orderCount = 0;
+		for($count1 = 0; $count1 < $i; $count1 ++) {
+			if($accounts ['token' . $count1] != null){
+				$onlineProducts = $dbhelper->getOnlineProducts($accounts ['accountid' . $count1],$queryParentSKU );
+				echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accounts ['accountname' . $count1];
+				echo "</div><span class=\"tools\"></div>";
+				echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+				echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
+				echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
+				echo "<tbody>";
+				while ( $cur_product = mysql_fetch_array ( $onlineProducts) ) {
+					if ($orderCount % 2 == 0) {
+						echo "<tr>";
+					} else {
+						echo "<tr class=\"gradeA success\">";
+					}
+					echo "<td style=\"width:25%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
+					echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+					echo "</tr>";
+					$orderCount ++;
 				}
-				echo "<td style=\"width:25%;vertical-align:middle;\">" . $cur_product['name']. "</td>";
-				echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_product ['main_image'] . "\">" . $cur_product ['parent_sku'] ."</li><ul></td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
-				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
-				echo "</tr>";
-				$orderCount ++;
+				echo "</tbody></table></div></div></div></div>";
 			}
-			echo "</tbody></table></div></div></div></div>";
 		}
 	}
-	*/
 }
 
 ?>
