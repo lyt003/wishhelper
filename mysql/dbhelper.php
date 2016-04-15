@@ -417,7 +417,7 @@ class dbhelper {
 	public function updateOnlineProduct($productarray){
 		$update_sql = 'update onlineProducts set name="'.$productarray ['name'] . '", description = "'.$productarray ['description'] . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
 		. '",is_promoted = "'.$productarray ['is_promoted'] . '",tags = "'.$productarray ['tags'] . '",review_status = "'.$productarray ['review_status'] 
-		. '",number_saves = '.$productarray ['number_saves'] . ',numbers_sold = '.$productarray ['number_sold'] . ' where id = '.$productarray['id'];
+		. '",number_saves = '.$productarray ['number_saves'] . ',numbers_sold = '.$productarray ['number_sold'] . ' where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	
@@ -437,7 +437,7 @@ class dbhelper {
 	public function updateOnlineProductVar($productarray){
 		$update_sql = 'update onlineProductVars set color = "'.$productarray ['color'] . '",size = "'.$productarray ['size'] . '",enabled = "'
 				.$productarray ['enabled'] . '",price = "'.$productarray ['price'] . '",all_images="'.$productarray ['all_images'] . '",inventory='.$productarray ['inventory'] 
-				. ',shipping = "'.$productarray ['shipping'] . '",shipping_time="'.$productarray ['shipping_time'] . '",MSRP="'.$productarray ['MSRP'] .'" where id = '.$productarray['id'];
+				. ',shipping = "'.$productarray ['shipping'] . '",shipping_time="'.$productarray ['shipping_time'] . '",MSRP="'.$productarray ['MSRP'] .'" where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	
