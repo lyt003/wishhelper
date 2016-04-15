@@ -122,7 +122,7 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 				$params['inventory'] = $hotProductVar->inventory;
 				$updatecontent .= $params['sku']." updateinventory to ".$params['inventory']."\n";
 			}
-			//$client->updateProductVarByParams($params);
+			$client->updateProductVarByParams($params);
 		}
 	}
 }
