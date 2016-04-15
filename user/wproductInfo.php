@@ -45,13 +45,14 @@ if($oparams = mysql_fetch_array($optimizeparams)){
 	$regularInventory = $oparams['inventory'];
 	$daysUploaded = $oparams['daysuploaded'];
 	$regularInventoryExtra = $oparams['inventoryextra'];
+	$regularImpressions = $oparams['impression'];
 }
 
 $command = $_POST['command'];
 $accountid = $_POST['currentAccountid'];
 $client = new WishClient ($accounts[$accountid], 'prod' );
+
 if($command != null && strcmp($command,'updateInventory') == 0){
-	
 	$SKUS = $dbhelper->getSKUSforInventory($accountid);
 	
 	$resultSKU = array();
@@ -69,14 +70,13 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 		}
 	}
 }else if($command != null && strcmp($command,'salesOptimize') == 0){
-	
 	$weekdate = $_POST['weekdate'];
 	$dates = explode(" | ",$weekdate);
 	$endDate = $dates[1];
 	$startDate = $dates[0];
 	
 	$productsResults = $dbhelper->getWeekImpressions($accountid, $startDate, $endDate, $daysUploaded);
-}else if($command != null && strcmp($command,'hotSalesOptimize' == 0)){
+}else if($command != null && strcmp($command,'hotSalesOptimize') == 0){
 	$weekdate = $_POST['weekdate'];
 	$dates = explode(" | ",$weekdate);
 	$endDate = $dates[1];
@@ -125,6 +125,14 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 			$client->updateProductVarByParams($params);
 		}
 	}
+}else if($command != null && strcmp($command,'productsOptimize') == 0){
+	$weekdate = $_POST['weekdate'];
+	$dates = explode(" | ",$weekdate);
+	$endDate = $dates[1];
+	$startDate = $dates[0];
+	
+	$ImpressionsProducts = $dbhelper->getProductsMoreImpressions($accountid, $startDate, $endDate, $regularImpressions);
+	
 }
 
 
@@ -133,7 +141,7 @@ function getPreWeek($curtime){
 	$prestartDate = date('Y-m-d',strtotime('last monday',strtotime($preendDate)));
 	$week = array($prestartDate,$preendDate);
 	return $week;
-}
+} 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -330,10 +338,13 @@ for($count = 0; $count < $i; $count ++) {
 					onclick="uploadtrackings()">运费调整</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				<button class="btn btn-info" type="button"
-					onclick="salesOptimize()">每周销量扫描</button>
+					onclick="salesOptimize()">无推送产品扫描</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
-					onclick="hotSalesOptimize()">热卖产品信息更新</button>
+					onclick="productsOptimize()">产品优化</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="hotSalesOptimize()">热卖产品自动更新</button>
 					</ul>
 								</div>
 							</div>
@@ -391,6 +402,44 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 				}else{
 					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$productResult['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 				}
+				echo "</tr>";
+				$orderCount ++;
+			
+		}
+		echo "</tbody></table></div></div></div></div>";
+	}
+} else if($command != null && strcmp($command,'productsOptimize') == 0){
+	if(isset($ImpressionsProducts)){
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品在  ".$weekdate." 展示超过". $regularImpressions ."次，可根据上周数据继续优化:";
+		echo "</div><span class=\"tools\"></div>";
+		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+		echo "<th style=\"width:20%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
+		echo "<th style=\"width:5%\">促销</th><th style=\"width:5%\">审核</th><th style=\"width:5%\">收藏数</th><th style=\"width:5%\">已售出</th><th style=\"width:10%\">浏览数</th><th style=\"width:5%\">购物车浏览数</th>";
+		echo "<th style=\"width:5%\">购买率</th><th style=\"width:5%\">订单数</th><th style=\"width:5%\">付款率</th><th style=\"width:10%\">操作</th></tr></thead>";
+		echo "<tbody>";
+		$orderCount = 0;
+		while($impressionProduct = mysql_fetch_array($ImpressionsProducts)){
+			
+				if ($orderCount % 2 == 0) {
+					echo "<tr>";
+				} else {
+					echo "<tr class=\"gradeA success\">";
+				}
+			
+				echo "<td style=\"width:25%;vertical-align:middle;\">" . $impressionProduct['name']. "</td>";
+				echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $impressionProduct ['main_image'] . "\">" . $impressionProduct ['parent_sku'] ."</li><ul></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct['is_promoted']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['review_status']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['number_saves']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['number_sold']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['productimpressions']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['buycart']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['buyctr']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['orders']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['checkoutconversion']."</td>";
+				
+				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$impressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				
 				echo "</tr>";
 				$orderCount ++;
 			
@@ -474,6 +523,13 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			$('#command').val("hotSalesOptimize");
 			form.submit();
 		}
+
+		function productsOptimize(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("productsOptimize");
+			form.submit();
+		}
+		
 	</script>
 	<!-- GoStats JavaScript Based Code -->
 <script type="text/javascript" src="https://ssl.gostats.com/js/counter.js"></script>

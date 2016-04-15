@@ -268,7 +268,7 @@ CREATE TABLE `optimizeparam`(
 	`inventoryextra`  int(5),
 	`daysuploaded` int(5)
 )DEFAULT CHARSET=utf8;
-insert into optimizeparam(checkoutconversion,buyctr,impression,inventory,inventoryextra,daysuploaded) values('20%','0.5%',500,200,10,180);
+insert into optimizeparam(checkoutconversion,buyctr,impression,inventory,inventoryextra,daysuploaded) values('20%','0.1%',500,200,10,180);
 
 
 
