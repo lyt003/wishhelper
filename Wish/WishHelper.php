@@ -353,4 +353,38 @@ class WishHelper {
 		}
 		return $orders;
 	}
+	
+	public function isProductExist($productid){
+		$result = $this->dbhelper->isProductExist($productid);
+		if($curproduct = mysql_fetch_array($result)){
+			if($curproduct['id'] != null)
+				return true;
+		}
+		return false;
+	}
+	
+	public function isProductVarExist($productvarid){
+		$result = $this->dbhelper->isProductVarExist($productvarid);
+		if($curproduct = mysql_fetch_array($result)){
+			if($curproduct['id'] != null)
+				return true;
+		}
+		return false;
+	}
+	
+	public function insertOnlineProduct($currentProduct){
+		if($this->isProductExist($currentProduct['id'])){
+			$this->dbhelper->updateOnlineProduct($currentProduct);
+		}else{
+			$this->dbhelper->insertOnlineProduct($currentProduct);
+		}
+	}
+	
+	public function insertOnlineProductVar($currentProductVar){
+		if($this->isProductVarExist($currentProductVar['id'])){
+			$this->dbhelper->updateOnlineProductVar($currentProductVar);
+		}else{
+			$this->dbhelper->insertOnlineProductVar($currentProductVar);
+		}
+	}
 }
