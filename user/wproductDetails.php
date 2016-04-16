@@ -16,6 +16,8 @@ header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
 $wishhelper = new WishHelper();
 $username = $_SESSION ['username'];
+session_commit();
+
 if ($username == null) { // 未登录
 	header ( "Location:./wlogin.php?errorMsg=请先登录" );
 	exit ();

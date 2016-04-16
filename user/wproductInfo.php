@@ -15,6 +15,7 @@ $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
 
 $username = $_SESSION ['username'];
+session_commit();
 if ($username == null) { // 未登录
 	header ( "Location:./wlogin.php?errorMsg=登录失败" );
 	exit ();
