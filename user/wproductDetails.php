@@ -59,6 +59,7 @@ $extraImages = $productDetails['extra_images'];
 
 if ($newProductName != null && $newDescription != null && $newmainImage != null && $newTags != null) {
 
+	$updateResult = "";
 	$client = new WishClient ($accounts ['token'], 'prod' );
 	
 	$onlineProduct = $client->getProductById($productid);
@@ -93,6 +94,7 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 	if(count($productParamsArray)>1){
 		$params = $onlineProduct->getParams($productParamsArray);
 		$client->updateProductByParams($params);
+		$updateResult = "update ".$onlineProduct->sku;
 	}
 		
 	
@@ -147,6 +149,7 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 				
 				$params = $onlineProductVar->getParams($paramsarray);
 				$client->updateProductVarByParams($params);
+				$updateResult = $updateResult.";".$onlineProductVar->sku;
 			}	
 		}
 	}
@@ -254,17 +257,13 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
 					<legend><?php echo ($updateParentSKU == null)?"添加产品":"修改产品:".$updateParentSKU?></legend>
 						<?php 
-	                      		if(isset($scheduleResult)){
+	                      		if(isset($updateResult)){
 	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
 	                      			echo "<h4 class=\"alert-heading\">";
-	                      			if($scheduleResult){
-	                      				echo "产品".$uniqueID."已提交成功，";
-	                      			}else{
-	                      				echo "产品".$uniqueID."提交失败，请联系管理员 admin@wishconsole.com，";
-	                      			}
+	                      			echo "产品".$updateResult." 已提交成功，";
 	                      			echo "</h4>";
 	                      			echo "</div>";
-	                      			$scheduleResult = null;
+	                      			$updateResult = null;
 	                      		}
 	                    ?>
 					<div id="add-product-form">
