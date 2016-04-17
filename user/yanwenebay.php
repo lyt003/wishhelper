@@ -102,14 +102,15 @@ if($result != null){
 	<div class="banner-container"></div>
 
 	<div id="page-content" class="container-fluid  user">
-		<form id="addform" action="./yanwenebayprocess.php" method="post" enctype="multipart/form-data"> 
+		<form id="addform" action="./yanwenebayprocess.php" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="localfile" name="localfile" value=""/>
 			<div id="add-products-page" class="center">
 				<div>
 					<div id="add-product-form">
 						<div id="basic-info" class="form-horizontal">
 							<div class="control-group">
 								<label class="control-label" data-col-index="5"><span
-									class="col-name">要导入的Excel文件</span></label>
+									class="col-name">要导入的csv文件</span></label>
 								<div class="controls input-append">
 									<input type="file" name="file" id="file">
 								</div>
@@ -119,8 +120,12 @@ if($result != null){
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
 							<br/>
+							
 							<button id="submit-button" type="button"
-								class="btn btn-primary btn-large" onclick="importexcel()">导入Excel</button>
+								class="btn btn-primary btn-large" onclick="readexcel()">读取本地csv文件</button>
+									
+							<button id="submit-button" type="button"
+								class="btn btn-primary btn-large" onclick="importexcel()">导入csv文件</button>
 						</div>
 						<ul align="center">
 							<button class="btn btn-info" type="button" onclick="initebayLabel()">初始化标签</button>
@@ -171,6 +176,13 @@ style="border-width:0" /></a></noscript>
 		if(csvfile == null || $.trim(csvfile) == ''){
 			alert("请先选择excel文件");
 			return;}
+		var form = document.getElementById("addform");
+		form.submit();
+	}
+
+	function readexcel(){
+		$('#localfile').val("./SalesHistory.csv");
+		
 		var form = document.getElementById("addform");
 		form.submit();
 	}

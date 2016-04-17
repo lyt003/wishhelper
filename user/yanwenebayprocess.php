@@ -4,6 +4,12 @@ include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 $filename = $_FILES ['file'] ['tmp_name'];
 
+$localfile = $_POST['localfile'];
+
+if($localfile !=  null || strcmp($localfile,"") != 0){
+	$filename = dirname ( '__FILE__' ) . $localfile;
+}
+
 $accountid = '0';
 
 $dbhelper = new dbhelper();
