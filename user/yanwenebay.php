@@ -5,20 +5,22 @@ use Wish\WishHelper;
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 header ( "Content-Type: text/html;charset=utf-8" );
+$currentUserid = $_SESSION ['userid'];
+session_commit();
 $accountid = '0';
 $dbhelper = new dbhelper();
 $wishHelper = new WishHelper();
 $result = $_GET['msg'];
 if($result != null){
 	if(strcmp($result,'success') ==0){
-		$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
-		$expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );
+		$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+		$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
 		$wishHelper->applyTrackingsForOrders ( $accountid, $labels, $expressinfo );
 	}else if(strcmp($result,'label') ==0){
-		$dbhelper->insertproductLabel ( $_SESSION ['userid'], "underwear", 5);
-		$dbhelper->insertproductLabel ( $_SESSION ['userid'], "pants",6);
-		$dbhelper->insertproductLabel ( $_SESSION ['userid'], "dress",1);
-		$dbhelper->insertproductLabel ( $_SESSION ['userid'], "camisole",7);
+		$dbhelper->insertproductLabel ( $currentUserid, "underwear", 5);
+		$dbhelper->insertproductLabel ( $currentUserid, "pants",6);
+		$dbhelper->insertproductLabel ( $currentUserid, "dress",1);
+		$dbhelper->insertproductLabel ( $currentUserid, "camisole",7);
 	}
 }
 ?>

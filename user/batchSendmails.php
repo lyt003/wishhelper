@@ -11,6 +11,7 @@ if ($username == null) { // 未登录
 }
 
 $userid = $_SESSION ['userid'];
+session_commit();
 if(strcmp($userid,"1") != 0){
 	echo "您无权访问此页面";
 	exit();

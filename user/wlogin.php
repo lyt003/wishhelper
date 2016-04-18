@@ -5,6 +5,7 @@ if(strcmp($type,"exit") == 0){
 	$_SESSION['username'] = null;
 }
 $username = $_SESSION ['username'];
+session_commit();
 if($username != null){
 	header("Location:./wuploadproduct.php");
 	exit;

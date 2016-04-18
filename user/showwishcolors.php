@@ -5,7 +5,7 @@ include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 use mysql\dbhelper;
 
 $username = $_SESSION ['username'];
-
+session_commit();
 if ($username == null) { // 未登录
 	header ( "Location:./wlogin.php" );
 	exit ();

@@ -65,7 +65,7 @@ if ($username == null) { // 未登录
 		}
 	}
 }
-
+session_commit();
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;

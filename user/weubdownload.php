@@ -8,7 +8,7 @@ header ( "Content-type:application/vnd.ms-excel" );
 header ( "Content-Disposition:filename=test.xls" );
 $wishhelper = new WishHelper ();
 $result = $wishhelper->getEUBOrders($_SESSION ['userid']);
-
+session_commit();
 $preTransactionid = null;
 $curTransactionid = null;
 while ( $rows = mysql_fetch_array ( $result ) ) {

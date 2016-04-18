@@ -20,7 +20,7 @@ if ($username == null) { // 未登录
 }
 
 $userid = $_SESSION ['userid'];
-
+session_commit();
 $trackings = $_POST['trackings'];
 if($trackings != null){
 	$trackingdatas = array();

@@ -61,6 +61,8 @@ if ($username == null) { // 未登录
 	}
 }
 
+$currentUserid = $_SESSION ['userid'];
+session_commit();
 // 已登录
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
@@ -115,13 +117,13 @@ if (strcmp ( $add, "1" ) == 0) {
 		if (preg_match ( "/^label/", $key )) {
 			$sku = explode ( "|", $key )[1];
 			$names = explode ( "|", $value );
-			$dbhelper->insertproductLabel ( $_SESSION ['userid'], $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
+			$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
 		}
 	}
 	
 	// get info of current user id:
-	$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
-	$expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );
+	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+	$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
 	
 	for($ct = 0; $ct < $i; $ct ++) {
 		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels, $expressinfo );
@@ -151,7 +153,7 @@ if (strcmp ( $add, "1" ) == 0) {
 		}
 	}
 }
-$labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
+$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -30,6 +30,7 @@ Wish管理助手-更有效率的Wish商户实用工具
 <?php 
 session_start ();
 $username = $_SESSION ['username'];
+session_commit();
 if($username != null){
 	echo "进入";
 }else{

@@ -5,6 +5,7 @@ use mysql\dbhelper;
 header ( "Content-Type: text/html;charset=utf-8" );
 
 $username = $_SESSION ['username'];
+session_commit();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0031)http://china-merchant.wish.com/ -->
