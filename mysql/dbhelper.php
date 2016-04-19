@@ -245,6 +245,17 @@ class dbhelper {
 		return mysql_query($impsql);
 	}
 	
+	public function getProductsLessImpressions($accountid,$startdate,$enddate,$impressions,$buyctr){
+		$lesimpsql = 'select op.id,op.parent_sku,op.main_image,op.is_promoted,op.name,op.review_status,op.number_saves,op.number_sold, '.
+       			  'ps.productimpressions,ps.buycart,ps.buyctr,ps.checkoutconversion,ps.orders '.
+				  'from '. 
+				  '(select productid,productimpressions,buycart,buyctr,orders,checkoutconversion from productssummary where accountid = '.
+				  $accountid.' and startdate = "'.$startdate.'" and enddate = "'.$enddate .'" and productid != "0" and productimpressions < '. $impressions. 
+				  ' and (left(buyctr,length(buyctr)-1)>'.$buyctr.' or orders > 0)) ps  '.
+				  'left join onlineProducts op on op.id = ps.productid order by ps.productimpressions desc';
+		return mysql_query($lesimpsql);
+	}
+	
 	
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
@@ -469,7 +480,7 @@ class dbhelper {
 	}
 	
 	public function getOptimizeParams(){
-		$osql = 'select * from optimizeparam';
+		$osql = 'select left(checkoutconversion,length(checkoutconversion)-1) checkoutconversion,left(buyctr,length(buyctr)-1) buyctr,impression,inventory,inventoryextra,daysuploaded from optimizeparam';
 		return mysql_query($osql);
 	}
 	
