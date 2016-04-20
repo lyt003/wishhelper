@@ -438,7 +438,7 @@ class dbhelper {
 	public function updateOnlineProduct($productarray){
 		$update_sql = 'update onlineProducts set name="'.$productarray ['name'] . '", description = "'.$productarray ['description'] . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
 		. '",is_promoted = "'.$productarray ['is_promoted'] . '",tags = "'.$productarray ['tags'] . '",review_status = "'.$productarray ['review_status'] 
-		. '",number_saves = '.$productarray ['number_saves'] . ',numbers_sold = '.$productarray ['number_sold'] . ' where id = "'.$productarray['id'].'"';
+		. '",number_saves = '.$productarray ['number_saves'] . ',number_sold = '.$productarray ['number_sold'] . ' where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	
