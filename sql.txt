@@ -270,6 +270,17 @@ CREATE TABLE `optimizeparam`(
 )DEFAULT CHARSET=utf8;
 insert into optimizeparam(checkoutconversion,buyctr,impression,inventory,inventoryextra,daysuploaded) values('20%','0.1%',500,200,10,180);
 
+DROP TABLE IF EXISTS `optimizejobs`;
+CREATE TABLE `optimizejobs`(
+	`accountid` int(11) NOT NULL,
+	`operator`  varchar(30),
+	`productid` varchar(50),
+	`startdate` date,
+	`isfinished` int(1),
+	`errormessage` varchar(500),
+	primary key(`productid`,`startdate`)
+)DEFAULT CHARSET=utf8;
+
 
 
 

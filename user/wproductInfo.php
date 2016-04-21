@@ -143,7 +143,7 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$tempmonday = date('Y-m-d',strtotime('last monday',strtotime($threeweeksdateEnd)));
 	$threeweeksdateStart = date('Y-m-d',strtotime('last monday',strtotime($tempmonday)));
 	
-	$littleProductsArray = $wishHelper->processLittleImpressionsProducts($client,$accountid, $threeweeksdateStart, $threeweeksdateEnd, $regularImpressions);
+	$littleProductsArray = $wishHelper->processLittleImpressionsProducts($accountid, $threeweeksdateStart, $threeweeksdateEnd, $regularImpressions);
 }
 
 

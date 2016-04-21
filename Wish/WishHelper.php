@@ -354,9 +354,7 @@ class WishHelper {
 		return $orders;
 	}
 	
-	public function processLittleImpressionsProducts($client,$accountid,$startdate,$enddate,$regularImpressions){
-		echo "<br/><br/><br/><br/>client:";
-		print_r($client);
+	public function processLittleImpressionsProducts($accountid,$startdate,$enddate,$regularImpressions){
 		$processResult = array();
 		$products = array();
 		$disabledsku = "";
@@ -370,8 +368,6 @@ class WishHelper {
 		while($productImpression = mysql_fetch_array($productImpressions)){
 			$currentProductid = $productImpression['productid'];
 			$currentImpressions = $productImpression['productimpressions'];
-			$startdate = $productImpression['startdate'];
-			//echo "<br/>currentProduct:".$startdate.'   ** '.$currentProductid."    **  ".$currentImpressions."   PRE:".$preProductid."  **  ".$preImpressions. '    ISINCREASED='.$isIncreased;
 			
 			if(strcmp($currentProductid,$preProductid) == 0){
 				$datacount ++;
@@ -394,6 +390,7 @@ class WishHelper {
 						$is_promoted = $p['is_promoted'];
 						if(strcmp($is_promoted,'False') == 0){
 							$disabledsku .= $curSKU."  ,  ";
+							$this->dbhelper->insertOptimizeJob($accountid, "DISABLEPRODUCT", $preProductid, $enddate);
 							//$client->disableProductById($preProductid);
 						}else{
 							$products[] = $preProductid;
@@ -405,20 +402,22 @@ class WishHelper {
 					if( $datacount > 1 && $totalImpressions > 10){
 						$products[] = $preProductid;
 					}else{
+						$this->dbhelper->insertOptimizeJob($accountid, "LOWERSHIPPING", $preProductid, $enddate);
+						$lowerpricesku .= $preProductid."   ,  ";
 						//自动优化，运费减0.01
-						$skus = $this->getProductVars($preProductid);
+						/* $skus = $this->getProductVars($preProductid);
 						foreach($skus as $sku){
 							 $productVar = $client->getProductVariationBySKU($sku);
 							 echo "<br/>SKU:".$sku." price:". $productVar->price;
-							/*$params = array();
+							$params = array();
 							$params['sku'] = $sku;
 							
 							$price = $productVar->price;
-							$params['price'] = $price - 0.01; */
+							$params['price'] = $price - 0.01; 
 
 							$lowerpricesku .= $sku."   ,  ";
 							//$client->updateProductVarByParams($params);
-						}
+						} */
 					}
  				}
 				$preProductid = $currentProductid;

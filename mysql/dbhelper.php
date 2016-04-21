@@ -267,7 +267,6 @@ class dbhelper {
 					' accountid = '.$accountid.' and productimpressions< '.$impressions.' and orders = 0 '.  
 					' and UNIX_TIMESTAMP(startdate) >=UNIX_TIMESTAMP("'.$startdate.'") and UNIX_TIMESTAMP(startdate) <= UNIX_TIMESTAMP("'.$enddate.'") '.
 					' order by productid,UNIX_TIMESTAMP(startdate) DESC';
-		echo "<br/><br/><br/><br/><br/>".$littleSql;
 		return mysql_query($littleSql);
 	}
 	
@@ -502,6 +501,26 @@ class dbhelper {
 	public function getOptimizeParams(){
 		$osql = 'select left(checkoutconversion,length(checkoutconversion)-1) checkoutconversion,left(buyctr,length(buyctr)-1) buyctr,impression,inventory,inventoryextra,daysuploaded from optimizeparam';
 		return mysql_query($osql);
+	}
+	
+	public function insertOptimizeJob($accountid,$operator,$productid,$startdate){
+		$insertjob = 'insert into optimizejobs(accountid,operator,productid,startdate) values('.$accountid.',"'.$operator.'","'.$productid.'",DATE_FORMAT("'.$startdate.'","%Y-%m-%d"))';
+		return mysql_query($insertjob);
+	}
+	
+	public function getOptimizeJobs(){
+		$getJobs = 'SELECT * FROM `optimizejobs` WHERE isfinished is NULL  limit 10';
+		return mysql_query($getJobs);
+	}
+	
+	public function updateJobMsg($productid,$startdate,$msg) {
+		$updateMsgSql = 'update optimizejobs set errormessage = "' . $msg . '" where productid = "'.$productid.'" and startdate = "'.$startdate.'"';
+		return mysql_query ( $updateMsgSql );
+	}
+	
+	public function updateJobFinished($isFinished,$productid,$startdate,$errorMsg) {
+		$updateFinished = 'update optimizejobs set isfinished = '.$isFinished.',errormessage= "'.$errorMsg.'" where productid = "'.$productid.'" and startdate = "'.$startdate.'"';
+		return mysql_query ( $updateFinished );
 	}
 	
 	public function getJaveUploadAppToken(){

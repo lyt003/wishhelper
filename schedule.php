@@ -18,19 +18,19 @@ if ($isRunning == 1) {
 	$dbhelper->startScheduleRunning ();
 	$currentPID = uniqid();
 	do {
-		$duringtime = $dbhelper->getSettingDuringTime ();
+		 $duringtime = $dbhelper->getSettingDuringTime ();
 		if ($rows = mysql_fetch_array ( $duringtime )) {
 			sleep ( $rows ['during_time'] );
 		} else {
 			sleep ( 120 ); // sleep for 2 minutes defaultly;
-		}
+		} 
 		
 		$pid = $dbhelper->getPID();
 		if($pid != null){
 			if(strcmp($pid,$currentPID) != 0){
 				die();
 			}
-		}
+		} 
 		$dbhelper->registerPID($currentPID);
 		
 		$dbhelper->updateSettingCount ();
@@ -167,6 +167,85 @@ if ($isRunning == 1) {
 				$log = $log. "failed to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
 				$dbhelper->updateSettingMsg ( $log );
 			}
-		}
+		} 
+		
+		
+		
+		//add jobs:
+		$jobs = $dbhelper->getOptimizeJobs();
+		$dbhelper->updateSettingMsg ( "start to process jobs");
+		while($job = mysql_fetch_array($jobs) ){
+			$accountid = $job ['accountid'];
+			$operator = $job['operator'];
+			$jobproductid = $job['productid'];
+			$date = $job['startdate'];
+			if ($client == null || ($accountid != $client->getAccountid ())) {
+				$accountAcess = $dbhelper->getAccountToken ( $accountid );
+				if ($rows = mysql_fetch_array ( $accountAcess )) {
+					$token = $rows ['token'];
+					$client = new WishClient ( $token, 'prod' );
+					$client->setAccountid ( $accountid );
+				}
+			}
+			if($client == null){
+				$dbhelper->updateJobMsg($jobproductid,$date,"Failed to init WishClient of accountid");
+				continue;
+			}
+				
+			
+			
+			if(strcmp($operator,'DISABLEPRODUCT') == 0){
+				try{
+					$response = $client->disableProductById($jobproductid);
+				}catch (ServiceResponseException $e ){
+					$dbhelper->updateJobMsg($jobproductid,$date,"Failed to disable productid ".$e->getErrorMessage());
+				}
+				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$response);
+			}else if(strcmp($operator,'LOWERSHIPPING') == 0){
+				
+				$vars = $dbhelper->getProductVars($jobproductid);
+				$varsResponse = "";
+				while($var = mysql_fetch_array($vars)){
+					$currSKU = $var['sku'];
+					
+					try {
+						$productVar = $client->getProductVariationBySKU($currSKU);
+					}catch (ServiceResponseException $e ){
+						$dbhelper->updateJobMsg($jobproductid,$date,"Failed to get productvars of productid ".$e->getErrorMessage());
+					}
+					
+					
+					$enabled = $productVar->enabled;
+					if(strcmp($enabled,'True') == 0){
+						$params = array();
+						$params['sku'] = $currSKU;
+							
+						$shipping = $productVar->shipping;
+						$price = $productVar->price;
+						if($shipping > 1){
+							$params['shipping'] = $shipping - 0.01;
+						}else {
+							if($price > 1){
+								$params['price'] = $price - 0.01;
+							}
+						}
+						if(count($params) >1){
+							try {
+								$response = $client->updateProductVarByParams($params);
+							}catch (ServiceResponseException $e ){
+								$dbhelper->updateJobMsg($jobproductid,$date,"Failed to updateProductVar of SKU ".$currSKU."   ".$e->getErrorMessage());
+							}
+							$varsResponse .= $varsResponse;
+						}
+					}else{
+						$varsResponse .= " SKU".$currSKU." has disabled";
+					}
+				}
+				
+				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$varsResponse);
+			}
+			
+			$dbhelper->updateSettingMsg ( "finished process product:".$jobproductid." of ".$date );
+		} 
 	} while ( $dbhelper->isScheduleRunning () );
 }

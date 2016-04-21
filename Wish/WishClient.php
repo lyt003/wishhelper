@@ -180,7 +180,7 @@ class WishClient{
   public function disableProductById($id){
     $params = array('id'=>$id);
     $response = $this->getResponse('POST','product/disable',$params);
-    return "success";
+    return $response;
   }
   public function getAllProducts(){
     return $this->getResponseIter(
