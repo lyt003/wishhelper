@@ -207,7 +207,6 @@ if ($isRunning == 1) {
 				$varsResponse = "";
 				while($var = mysql_fetch_array($vars)){
 					$currSKU = $var['sku'];
-					
 					try {
 						$productVar = $client->getProductVariationBySKU($currSKU);
 					}catch (ServiceResponseException $e ){
@@ -231,17 +230,16 @@ if ($isRunning == 1) {
 						}
 						if(count($params) >1){
 							try {
-								$response = $client->updateProductVarByParams($params);
+								$updateResponse = $client->updateProductVarByParams($params);
 							}catch (ServiceResponseException $e ){
 								$dbhelper->updateJobMsg($jobproductid,$date,"Failed to updateProductVar of SKU ".$currSKU."   ".$e->getErrorMessage());
 							}
-							$varsResponse .= $varsResponse;
+							$varsResponse .= $updateResponse->getMessage();;
 						}
 					}else{
 						$varsResponse .= " SKU".$currSKU." has disabled";
 					}
 				}
-				
 				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$varsResponse);
 			}
 			
