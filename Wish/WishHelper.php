@@ -354,15 +354,9 @@ class WishHelper {
 		return $orders;
 	}
 	
-	public function isMoreThan90Days($productid){
-		$result = $this->dbhelper->getSKUUploadMoreThanDays($productid);
-		if($p = mysql_fetch_array($result)){
-			return $p['parent_sku'];
-		}
-		return "";
-	}
-	
 	public function processLittleImpressionsProducts($client,$accountid,$startdate,$enddate,$regularImpressions){
+		echo "<br/><br/><br/><br/>client:";
+		print_r($client);
 		$processResult = array();
 		$products = array();
 		$disabledsku = "";
@@ -394,30 +388,34 @@ class WishHelper {
 				}
 			}else{
 				if($isIncreased == 0){//不增长的产品,如果没加黄钻，并且上传时间超过3个月,则直接下架;
-					$curSKU = $this->isMoreThan90Days($preProductid);
-					if(strcmp($curSKU,"") != 0){
-						//echo "<br/>disable product :".$preProductid;
-						$disabledsku .= $curSKU."  ,  ";
-						//$client->disableProductById($preProductid);
+					$result = $this->dbhelper->getSKUUploadMoreThanDays($preProductid);
+					if($p = mysql_fetch_array($result)){
+						$curSKU = $p['parent_sku'];
+						$is_promoted = $p['is_promoted'];
+						if(strcmp($is_promoted,'False') == 0){
+							$disabledsku .= $curSKU."  ,  ";
+							//$client->disableProductById($preProductid);
+						}else{
+							$products[] = $preProductid;
+						}
 					}
 				}
 				
 				if($isIncreased == 1 && isset($preProductid)){
 					if( $datacount > 1 && $totalImpressions > 10){
 						$products[] = $preProductid;
-						//echo "<br/>added ".$preProductid;
 					}else{
 						//自动优化，运费减0.01
 						$skus = $this->getProductVars($preProductid);
 						foreach($skus as $sku){
-							/* $productVar = $client->getProductVariationBySKU($sku);
-							$params = array();
+							 $productVar = $client->getProductVariationBySKU($sku);
+							 echo "<br/>SKU:".$sku." price:". $productVar->price;
+							/*$params = array();
 							$params['sku'] = $sku;
 							
 							$price = $productVar->price;
 							$params['price'] = $price - 0.01; */
-							
-							//echo "<br/>lower price of ".$sku;
+
 							$lowerpricesku .= $sku."   ,  ";
 							//$client->updateProductVarByParams($params);
 						}

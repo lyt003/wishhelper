@@ -483,7 +483,7 @@ class dbhelper {
 	}
 	
 	public function getSKUUploadMoreThanDays($productid){
-		$queryUploadDays = 'select parent_sku from onlineProducts where and is_promoted = "False" and id = "'.$productid.'" and (TO_DAYS(now())-TO_DAYS(date_uploaded))> 90 ';
+		$queryUploadDays = 'select parent_sku,is_promoted from onlineProducts where id = "'.$productid.'" and (TO_DAYS(now())-TO_DAYS(date_uploaded))> 90 ';
 		return mysql_query($queryUploadDays);
 	}
 	

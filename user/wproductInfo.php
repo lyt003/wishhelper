@@ -502,7 +502,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		$littleDisabledSKU = $littleProductsArray['disable'];
 		$littleLowerPrice = $littleProductsArray['lower'];
 
-		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品连续三周展示有上升，可继续优化:";
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品或者是黄钻产品，或者连续三周展示有上升，可继续优化:";
 		echo "</div><span class=\"tools\"></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
 		echo "<th style=\"width:20%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
