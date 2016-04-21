@@ -354,6 +354,89 @@ class WishHelper {
 		return $orders;
 	}
 	
+	public function isMoreThan90Days($productid){
+		$result = $this->dbhelper->getSKUUploadMoreThanDays($productid);
+		if($p = mysql_fetch_array($result)){
+			return $p['parent_sku'];
+		}
+		return "";
+	}
+	
+	public function processLittleImpressionsProducts($client,$accountid,$startdate,$enddate,$regularImpressions){
+		$processResult = array();
+		$products = array();
+		$disabledsku = "";
+		$lowerpricesku = "";
+		$productImpressions = $this->dbhelper->getLittleImpressionsTrend($accountid, $startdate, $enddate, $regularImpressions);
+		$preProductid;
+		$preImpressions = 0;
+		$isIncreased = 1;
+		$datacount = 0;
+		$totalImpressions = 0;
+		while($productImpression = mysql_fetch_array($productImpressions)){
+			$currentProductid = $productImpression['productid'];
+			$currentImpressions = $productImpression['productimpressions'];
+			$startdate = $productImpression['startdate'];
+			//echo "<br/>currentProduct:".$startdate.'   ** '.$currentProductid."    **  ".$currentImpressions."   PRE:".$preProductid."  **  ".$preImpressions. '    ISINCREASED='.$isIncreased;
+			
+			if(strcmp($currentProductid,$preProductid) == 0){
+				$datacount ++;
+				$totalImpressions += $currentImpressions;
+				if( $isIncreased == 1){
+					if($currentImpressions>$preImpressions){//不增长
+						$isIncreased = 0;
+						$preImpressions = 0;
+					}else{//继续增长
+						$preImpressions = $currentImpressions;
+					}	
+				}else{//不增长的产品
+					$preImpressions = $currentImpressions;
+				}
+			}else{
+				if($isIncreased == 0){//不增长的产品,如果没加黄钻，并且上传时间超过3个月,则直接下架;
+					$curSKU = $this->isMoreThan90Days($preProductid);
+					if(strcmp($curSKU,"") != 0){
+						//echo "<br/>disable product :".$preProductid;
+						$disabledsku .= $curSKU."  ,  ";
+						//$client->disableProductById($preProductid);
+					}
+				}
+				
+				if($isIncreased == 1 && isset($preProductid)){
+					if( $datacount > 1 && $totalImpressions > 10){
+						$products[] = $preProductid;
+						//echo "<br/>added ".$preProductid;
+					}else{
+						//自动优化，运费减0.01
+						$skus = $this->getProductVars($preProductid);
+						foreach($skus as $sku){
+							/* $productVar = $client->getProductVariationBySKU($sku);
+							$params = array();
+							$params['sku'] = $sku;
+							
+							$price = $productVar->price;
+							$params['price'] = $price - 0.01; */
+							
+							//echo "<br/>lower price of ".$sku;
+							$lowerpricesku .= $sku."   ,  ";
+							//$client->updateProductVarByParams($params);
+						}
+					}
+ 				}
+				$preProductid = $currentProductid;
+				$preImpressions = $currentImpressions;
+				$isIncreased = 1;
+				$datacount = 1;
+				$totalImpressions = $currentImpressions;
+			}
+		}
+		$processResult['productids'] = $products;
+		$processResult['disable'] = $disabledsku;
+		$processResult['lower'] = $lowerpricesku;
+		
+		return  $processResult;
+	}
+	
 	public function isProductExist($productid){
 		$result = $this->dbhelper->isProductExist($productid);
 		if($curproduct = mysql_fetch_array($result)){

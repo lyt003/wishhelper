@@ -215,6 +215,12 @@ class dbhelper {
 		return  mysql_query($querypd);
 	}
 	
+	public function getProductSummary($pid,$startdate,$enddate){
+		$ssql = 'select * from onlineProducts op,productssummary ps where op.id = "'.$pid.'" and op.id = ps.productid'.
+ 				' and ps.startdate = "'.$startdate.'" and ps.enddate="'.$enddate.'"';
+		return mysql_query($ssql);
+	}
+	
 	public function getProducts($parentSKU) {
 		$productsSQL = 'select * from products where parent_sku = "' . $parentSKU . '"';
 		return mysql_query ( $productsSQL );
@@ -254,6 +260,15 @@ class dbhelper {
 				  ' and (left(buyctr,length(buyctr)-1)>'.$buyctr.' or orders > 0)) ps  '.
 				  'left join onlineProducts op on op.id = ps.productid order by ps.productimpressions desc';
 		return mysql_query($lesimpsql);
+	}
+	
+	public function getLittleImpressionsTrend($accountid,$startdate,$enddate,$impressions){
+		$littleSql = 'SELECT productid,productimpressions,startdate FROM productssummary  WHERE '. 
+					' accountid = '.$accountid.' and productimpressions< '.$impressions.' and orders = 0 '.  
+					' and UNIX_TIMESTAMP(startdate) >=UNIX_TIMESTAMP("'.$startdate.'") and UNIX_TIMESTAMP(startdate) <= UNIX_TIMESTAMP("'.$enddate.'") '.
+					' order by productid,UNIX_TIMESTAMP(startdate) DESC';
+		echo "<br/><br/><br/><br/><br/>".$littleSql;
+		return mysql_query($littleSql);
 	}
 	
 	
@@ -465,6 +480,11 @@ class dbhelper {
 	public function getSKUSforInventory($accountid){
 		$inventorySql = 'SELECT v.sku,v.product_id,v.id,v.enabled,v.inventory FROM onlineProductVars v,optimizeparam o WHERE v.enabled = "true" and v.accountid = '.$accountid.' and v.inventory > 0 and v.inventory<o.inventory';
 		return mysql_query($inventorySql);
+	}
+	
+	public function getSKUUploadMoreThanDays($productid){
+		$queryUploadDays = 'select parent_sku from onlineProducts where and is_promoted = "False" and id = "'.$productid.'" and (TO_DAYS(now())-TO_DAYS(date_uploaded))> 90 ';
+		return mysql_query($queryUploadDays);
 	}
 	
 	public function getWeekImpressions($accountid,$startDate,$endDate,$daysuploaded){

@@ -137,6 +137,13 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$ImpressionsProducts = $dbhelper->getProductsMoreImpressions($accountid, $startDate, $endDate, $regularImpressions);
 	
 	$LessImpressionsProducts = $dbhelper->getProductsLessImpressions($accountid, $startDate, $endDate, $regularImpressions, $regularBuyctr);
+	
+	
+	$threeweeksdateEnd = $startDate;
+	$tempmonday = date('Y-m-d',strtotime('last monday',strtotime($threeweeksdateEnd)));
+	$threeweeksdateStart = date('Y-m-d',strtotime('last monday',strtotime($tempmonday)));
+	
+	$littleProductsArray = $wishHelper->processLittleImpressionsProducts($client,$accountid, $threeweeksdateStart, $threeweeksdateEnd, $regularImpressions);
 }
 
 
@@ -488,6 +495,69 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 				
 		}
 		echo "</tbody></table></div></div></div></div>";
+	}
+	
+	if(isset($littleProductsArray)){
+		$productids = $littleProductsArray['productids'];
+		$littleDisabledSKU = $littleProductsArray['disable'];
+		$littleLowerPrice = $littleProductsArray['lower'];
+
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品连续三周展示有上升，可继续优化:";
+		echo "</div><span class=\"tools\"></div>";
+		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+		echo "<th style=\"width:20%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
+		echo "<th style=\"width:5%\">促销</th><th style=\"width:5%\">审核</th><th style=\"width:5%\">收藏数</th><th style=\"width:5%\">已售出</th><th style=\"width:10%\">浏览数</th><th style=\"width:5%\">购物车浏览数</th>";
+		echo "<th style=\"width:5%\">购买率</th><th style=\"width:5%\">订单数</th><th style=\"width:5%\">付款率</th><th style=\"width:10%\">操作</th></tr></thead>";
+		echo "<tbody>";
+		$orderCount = 0;
+		foreach ($productids as $productid){
+			$currentProductResult = $dbhelper->getProductSummary($productid,$startDate,$endDate);
+			if($currentProduct = mysql_fetch_array($currentProductResult)){
+				if ($orderCount % 2 == 0) {
+					echo "<tr>";
+				} else {
+					echo "<tr class=\"gradeA success\">";
+				}
+				
+				echo "<td style=\"width:25%;vertical-align:middle;\">" . $currentProduct['name']. "</td>";
+				echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $currentProduct ['main_image'] . "\">" . $currentProduct ['parent_sku'] ."</li><ul></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct['is_promoted']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['review_status']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['number_saves']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['number_sold']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['productimpressions']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['buycart']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['buyctr']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['orders']."</td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['checkoutconversion']."</td>";
+				
+				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$currentProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				
+				echo "</tr>";
+				$orderCount ++;
+			}
+		}
+		echo "</tbody></table></div></div></div></div>";
+		
+		
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品已自动处理完成:";
+		echo "</div><span class=\"tools\"></div>";
+		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+		echo "<th style=\"width:10%\">说明</th><th style=\"width:80%\">处理内容</th>";
+		echo "<tbody>";
+		
+		echo "<tr>";
+		echo "<td style=\"width:10%;vertical-align:middle;\">已禁用的产品SKU列表</td>";
+		echo "<td style=\"width:80%;vertical-align:middle;\">" . $littleDisabledSKU."</td>";
+		echo "</tr>";
+		
+		echo "<tr class=\"gradeA success\">";
+		echo "<td style=\"width:10%;vertical-align:middle;\">已调低运费0.01的产品SKU列表</td>";
+		echo "<td style=\"width:80%;vertical-align:middle;\">" . $littleLowerPrice."</td>";
+		echo "</tr>";
+		
+		echo "</tbody></table></div></div></div></div>";
+		
 	}
 } else if($command != null && strcmp($command,'hotSalesOptimize') == 0){
 	if(isset($updatecontent)){

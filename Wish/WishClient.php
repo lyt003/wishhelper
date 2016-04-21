@@ -179,7 +179,7 @@ class WishClient{
   }
   public function disableProductById($id){
     $params = array('id'=>$id);
-    $response = $this->getResponse('POST','product/dusable',$params);
+    $response = $this->getResponse('POST','product/disable',$params);
     return "success";
   }
   public function getAllProducts(){
