@@ -21,6 +21,7 @@ if($result != null){
 		$dbhelper->insertproductLabel ( $currentUserid, "pants",6);
 		$dbhelper->insertproductLabel ( $currentUserid, "dress",1);
 		$dbhelper->insertproductLabel ( $currentUserid, "camisole",7);
+		$dbhelper->insertproductLabel ( $currentUserid, "earring",3);
 	}
 }
 ?>
