@@ -144,6 +144,13 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$threeweeksdateStart = date('Y-m-d',strtotime('last monday',strtotime($tempmonday)));
 	
 	$littleProductsArray = $wishHelper->processLittleImpressionsProducts($accountid, $threeweeksdateStart, $threeweeksdateEnd, $regularImpressions);
+}else if($command != null && strcmp($command,'newproducts') == 0){
+	$weekdate = $_POST['weekdate'];
+	$dates = explode(" | ",$weekdate);
+	$endDate = $dates[1];
+	$startDate = $dates[0];
+	
+	$newProducts = $dbhelper->getNewProductImpressionsInfo($accountid, $startDate, $endDate);
 }
 
 
@@ -314,7 +321,7 @@ for($count = 0; $count < $i; $count ++) {
 									<select id="weekdate" name="weekdate">
 										<?php 
 										$initTime =  date ( 'Y-m-d  H:i:s',time());
-										for ($l=0;$l<5;$l++){
+										for ($l=0;$l<10;$l++){
 											$curWeek = getPreWeek($initTime);
 											if($weekdate != null){
 												if(strcmp($weekdate,$curWeek[0]." | ".$curWeek[1]) == 0){
@@ -356,6 +363,10 @@ for($count = 0; $count < $i; $count ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="hotSalesOptimize()">热卖产品自动更新</button>
+					</ul>
+					<ul align="center">
+					<button class="btn btn-info" type="button" onclick="newproducts()">新上产品扫描</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 								</div>
 							</div>
@@ -566,6 +577,44 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		echo "<textarea rows=\"5\" class = \"form-control\" name=\"updateContent\" id=\"updateContent\" type=\"text\">".$updatecontent;
 		echo "</textarea></div></div>";
 	}
+} else if($command != null && strcmp($command,'newproducts') == 0){
+	if(isset($newProducts)){
+		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$weekdate." 期间新上架产品展示信息,可参考优化:";
+		echo "</div><span class=\"tools\"></div>";
+		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
+		echo "<th style=\"width:20%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
+		echo "<th style=\"width:5%\">促销</th><th style=\"width:5%\">审核</th><th style=\"width:5%\">收藏数</th><th style=\"width:5%\">已售出</th><th style=\"width:10%\">浏览数</th><th style=\"width:5%\">购物车浏览数</th>";
+		echo "<th style=\"width:5%\">购买率</th><th style=\"width:5%\">订单数</th><th style=\"width:5%\">付款率</th><th style=\"width:10%\">操作</th></tr></thead>";
+		echo "<tbody>";
+		$orderCount = 0;
+		while($newProduct = mysql_fetch_array($newProducts)){
+		
+			if ($orderCount % 2 == 0) {
+				echo "<tr>";
+			} else {
+				echo "<tr class=\"gradeA success\">";
+			}
+		
+			echo "<td style=\"width:25%;vertical-align:middle;\">" . $newProduct['name']. "</td>";
+			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $newProduct ['main_image'] . "\">" . $newProduct ['parent_sku'] ."</li><ul></td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct['is_promoted']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['review_status']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['number_saves']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['number_sold']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['productimpressions']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['buycart']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['buyctr']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['orders']."</td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['checkoutconversion']."</td>";
+		
+			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$newProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+		
+			echo "</tr>";
+			$orderCount ++;
+		
+		}
+		echo "</tbody></table></div></div></div></div>";
+	}
 } else{
 
 	if($queryParentSKU != null){
@@ -640,6 +689,11 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		function productsOptimize(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("productsOptimize");
+			form.submit();
+		}
+		function newproducts(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("newproducts");
 			form.submit();
 		}
 		

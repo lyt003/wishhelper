@@ -498,6 +498,21 @@ class dbhelper {
 		return mysql_query($optimizeSql);
 	}
 	
+	
+	public function getNewProductImpressionsInfo($accountid,$startdate,$enddate){
+		$newpi = 'select op.id,op.name,op.parent_sku,op.main_image,op.is_promoted,op.review_status,op.date_uploaded'.
+      			 ',ps.productimpressions,ps.buycart,ps.buyctr,ps.orders,ps.checkoutconversion,ps.gmv'. 
+				 ' from ('.
+				 ' select *'. 
+				 ' from onlineProducts'. 
+				 ' where accountid = '. $accountid .' and UNIX_TIMESTAMP(date_uploaded)>=UNIX_TIMESTAMP("'.$startdate.'") and UNIX_TIMESTAMP(date_uploaded)<=UNIX_TIMESTAMP("'.$enddate.'")'. 
+				 ' ) op'.
+	             ' left join productssummary ps'. 
+				 ' on op.id = ps.productid and ps.startdate = "'.$startdate.'" and ps.enddate = "'.$enddate.'"'.
+				 ' order by ps.productimpressions DESC';
+		return mysql_query($newpi);
+	}
+	
 	public function getOptimizeParams(){
 		$osql = 'select left(checkoutconversion,length(checkoutconversion)-1) checkoutconversion,left(buyctr,length(buyctr)-1) buyctr,impression,inventory,inventoryextra,daysuploaded from optimizeparam';
 		return mysql_query($osql);
