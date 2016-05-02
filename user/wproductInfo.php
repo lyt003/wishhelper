@@ -93,6 +93,7 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$updatecontent;
 	while ($hotproduct = mysql_fetch_array($hotproducts)){
 		$hotproductid = $hotproduct['productid'];
+		$hotParentSKU = $hotproduct['parent_sku'];
 		
 		$productOrders = $wishHelper->getProductOrders($accountid, $hotproductid, $threeweeksdateStart, $threeweeksdateEnd);
 		$initOrder = 0;
@@ -105,8 +106,16 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 			$initOrder = $productOrder;
 		}
 		
-		$hotskus = $wishHelper->getProductVars($hotproductid);
-		foreach ($hotskus as $hotsku){
+		if($isIncreased == 0){//订单减少的处理：  降价$0.01
+			$dbhelper->insertOptimizeJob($accountid, "LOWERSHIPPING", $hotproductid, $startDate);
+			$updatecontent .= $hotParentSKU ." lower price\n";
+		}else{//订单递增的处理： 添加库存
+			$dbhelper->insertOptimizeJob($accountid, "ADDINVENTORY", $hotproductid, $startDate);
+			$updatecontent .= $hotParentSKU." updateinventory \n";
+		}
+		
+		/*$hotskus = $wishHelper->getProductVars($hotproductid);
+		 foreach ($hotskus as $hotsku){
 			$hotProductVar = $client->getProductVariationBySKU($hotsku);
 			$params = array();
 			$params['sku'] = $hotsku;
@@ -126,7 +135,7 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 				$updatecontent .= $params['sku']." updateinventory to ".$params['inventory']."\n";
 			}
 			$client->updateProductVarByParams($params);
-		}
+		} */
 	}
 }else if($command != null && strcmp($command,'productsOptimize') == 0){
 	$weekdate = $_POST['weekdate'];

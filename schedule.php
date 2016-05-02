@@ -174,6 +174,17 @@ if ($isRunning == 1) {
 		//add jobs:
 		$jobs = $dbhelper->getOptimizeJobs();
 		$dbhelper->updateSettingMsg ( "start to process jobs");
+		
+		$optimizeparams = $dbhelper->getOptimizeParams();
+		if($oparams = mysql_fetch_array($optimizeparams)){
+			$regularInventory = $oparams['inventory'];
+			$daysUploaded = $oparams['daysuploaded'];
+			$regularInventoryExtra = $oparams['inventoryextra'];
+			$regularImpressions = $oparams['impression'];
+			$regularBuyctr = $oparams['buyctr'];
+			$regularConversion = $oparams['checkoutconversion'];
+		}
+		
 		while($job = mysql_fetch_array($jobs) ){
 			$accountid = $job ['accountid'];
 			$operator = $job['operator'];
@@ -201,7 +212,7 @@ if ($isRunning == 1) {
 					$dbhelper->updateJobMsg($jobproductid,$date,"Failed to disable productid ".$e->getErrorMessage());
 				}
 				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$response);
-			}else if(strcmp($operator,'LOWERSHIPPING') == 0){
+			}else if(strcmp($operator,'LOWERSHIPPING') == 0 || strcmp($operator,'ADDINVENTORY') == 0){
 				
 				$vars = $dbhelper->getProductVars($jobproductid);
 				$varsResponse = "";
@@ -219,15 +230,29 @@ if ($isRunning == 1) {
 						$params = array();
 						$params['sku'] = $currSKU;
 							
-						$shipping = $productVar->shipping;
-						$price = $productVar->price;
-						if($shipping > 1){
-							$params['shipping'] = $shipping - 0.01;
-						}else {
-							if($price > 1){
-								$params['price'] = $price - 0.01;
-							}
+						if(strcmp($operator,'LOWERSHIPPING') == 0){
+							$shipping = $productVar->shipping;
+							$price = $productVar->price;
+							if($shipping > 1){
+								$params['shipping'] = $shipping - 0.01;
+							}else {
+								if($price > 1){
+									$params['price'] = $price - 0.01;
+								}
+							}	
 						}
+						
+						if(strcmp($operator,'ADDINVENTORY') == 0){
+							$curInventory = $productVar->inventory;
+							if($curInventory<$regularInventory){
+								$productVar->inventory = $regularInventory;
+							}else{
+								$productVar->inventory = $productVar->inventory + $regularInventoryExtra;
+							}
+							$params['inventory'] = $productVar->inventory;
+						}
+						
+						
 						if(count($params) >1){
 							try {
 								$updateResponse = $client->updateProductVarByParams($params);
