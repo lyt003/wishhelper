@@ -237,7 +237,7 @@ if($currentAccountid != null){
 							<br/>
 							<br/>
 							<button id="submit-button" type="submit"
-								class="btn btn-primary btn-large">同步店铺产品</button>
+								class="btn btn-primary btn-large">自动同步和优化店铺产品</button>
 						</div>
 					</div>
 				</div>

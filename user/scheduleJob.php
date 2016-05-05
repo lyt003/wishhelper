@@ -11,10 +11,7 @@ use mysql\dbhelper;
 class scheduleJob {
 	private $dbhelper;
 	public function __construct() {
-		echo "HELLO";
 		$this->dbhelper = new dbhelper();
-		
-		echo "HELLOjiu";
 	}
 	public function execute() {
 	
@@ -39,7 +36,6 @@ class scheduleJob {
 			$operator = $job ['operator'];
 			$jobproductid = $job ['productid'];
 			$date = $job ['startdate'];
-			echo "<br/>Current job:".$operator;
 			if ($client == null || ($accountid != $client->getAccountid ())) {
 				$accountAcess = $this->dbhelper->getAccountToken ( $accountid );
 				if ($rows = mysql_fetch_array ( $accountAcess )) {
@@ -77,7 +73,7 @@ class scheduleJob {
 						$params = array ();
 						$params ['sku'] = $currSKU;
 						
-						if (strcmp ( $operator, 'LOWERSHIPPING' ) == 0) {
+						if (strcmp ( $operator, LOWERSHIPPING ) == 0) {
 							$shipping = $productVar->shipping;
 							$price = $productVar->price;
 							if ($shipping > 1) {
@@ -89,7 +85,7 @@ class scheduleJob {
 							}
 						}
 						
-						if (strcmp ( $operator, 'ADDINVENTORY' ) == 0) {
+						if (strcmp ( $operator, ADDINVENTORY ) == 0) {
 							$curInventory = $productVar->inventory;
 							if ($curInventory < $regularInventory) {
 								$productVar->inventory = $regularInventory;
