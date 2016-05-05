@@ -1,6 +1,6 @@
 <?php
 session_start ();
-include dirname ( '__FILE__' ) . './Wish/WishClient.php';
+include_once dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/wconfig.php';
@@ -42,8 +42,12 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 
 $currentAccountid = $_GET['currentAccountid'];
 if($currentAccountid != null){
+	
+		$nextday = date ( 'Y-m-d',strtotime('+1 day'));
+		$dbhelper->insertOptimizeJob($currentAccountid, SYNCHRONIZEDSTORE, "", $nextday);
+	
 	//最近的订单时间为产品的最近更新时间。
-			$client = new WishClient ($accounts [$currentAccountid] , 'prod' );
+			/* $client = new WishClient ($accounts [$currentAccountid] , 'prod' );
 			$start = 0;
 			$limit = 50;
 			do{
@@ -88,7 +92,7 @@ if($currentAccountid != null){
 				}
 					
 				$start += $limit;
-			}while ($hasmore);
+			}while ($hasmore); */
 }
 ?>
 

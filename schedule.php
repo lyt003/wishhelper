@@ -1,16 +1,20 @@
 <?php
-include 'Wish/WishClient.php';
-include 'mysql/dbhelper.php';
+include_once 'Wish/WishClient.php';
+include_once 'mysql/dbhelper.php';
+include_once 'user/scheduleJob.php';
 use Wish\WishClient;
 use mysql\dbhelper;
+use user\scheduleJob;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 ignore_user_abort ();
 set_time_limit ( 0 );
 $dbhelper = new dbhelper ();
+$jober = new scheduleJob();
 $client = null;
 $isRunning = $_GET ['isRunning'];
+
 if ($isRunning == 1) {
 	$dbhelper->stopScheduleRunning ();
 	$dbhelper->resetSettingCount ();
@@ -169,106 +173,8 @@ if ($isRunning == 1) {
 			}
 		} 
 		
-		
-		
 		//add jobs:
-		$jobs = $dbhelper->getOptimizeJobs();
-		$dbhelper->updateSettingMsg ( "start to process jobs");
+		$jober->execute();
 		
-		$optimizeparams = $dbhelper->getOptimizeParams();
-		if($oparams = mysql_fetch_array($optimizeparams)){
-			$regularInventory = $oparams['inventory'];
-			$daysUploaded = $oparams['daysuploaded'];
-			$regularInventoryExtra = $oparams['inventoryextra'];
-			$regularImpressions = $oparams['impression'];
-			$regularBuyctr = $oparams['buyctr'];
-			$regularConversion = $oparams['checkoutconversion'];
-		}
-		
-		while($job = mysql_fetch_array($jobs) ){
-			$accountid = $job ['accountid'];
-			$operator = $job['operator'];
-			$jobproductid = $job['productid'];
-			$date = $job['startdate'];
-			if ($client == null || ($accountid != $client->getAccountid ())) {
-				$accountAcess = $dbhelper->getAccountToken ( $accountid );
-				if ($rows = mysql_fetch_array ( $accountAcess )) {
-					$token = $rows ['token'];
-					$client = new WishClient ( $token, 'prod' );
-					$client->setAccountid ( $accountid );
-				}
-			}
-			if($client == null){
-				$dbhelper->updateJobMsg($jobproductid,$date,"Failed to init WishClient of accountid");
-				continue;
-			}
-				
-			
-			
-			if(strcmp($operator,'DISABLEPRODUCT') == 0){
-				try{
-					$response = $client->disableProductById($jobproductid);
-				}catch (ServiceResponseException $e ){
-					$dbhelper->updateJobMsg($jobproductid,$date,"Failed to disable productid ".$e->getErrorMessage());
-				}
-				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$response);
-			}else if(strcmp($operator,'LOWERSHIPPING') == 0 || strcmp($operator,'ADDINVENTORY') == 0){
-				
-				$vars = $dbhelper->getProductVars($jobproductid);
-				$varsResponse = "";
-				while($var = mysql_fetch_array($vars)){
-					$currSKU = $var['sku'];
-					try {
-						$productVar = $client->getProductVariationBySKU($currSKU);
-					}catch (ServiceResponseException $e ){
-						$dbhelper->updateJobMsg($jobproductid,$date,"Failed to get productvars of productid ".$e->getErrorMessage());
-					}
-					
-					
-					$enabled = $productVar->enabled;
-					if(strcmp($enabled,'True') == 0){
-						$params = array();
-						$params['sku'] = $currSKU;
-							
-						if(strcmp($operator,'LOWERSHIPPING') == 0){
-							$shipping = $productVar->shipping;
-							$price = $productVar->price;
-							if($shipping > 1){
-								$params['shipping'] = $shipping - 0.01;
-							}else {
-								if($price > 1){
-									$params['price'] = $price - 0.01;
-								}
-							}	
-						}
-						
-						if(strcmp($operator,'ADDINVENTORY') == 0){
-							$curInventory = $productVar->inventory;
-							if($curInventory<$regularInventory){
-								$productVar->inventory = $regularInventory;
-							}else{
-								$productVar->inventory = $productVar->inventory + $regularInventoryExtra;
-							}
-							$params['inventory'] = $productVar->inventory;
-						}
-						
-						
-						if(count($params) >1){
-							try {
-								$updateResponse = $client->updateProductVarByParams($params);
-							}catch (ServiceResponseException $e ){
-								$dbhelper->updateJobMsg($jobproductid,$date,"Failed to updateProductVar of SKU ".$currSKU."   ".$e->getErrorMessage());
-							}
-							$varsResponse .= $updateResponse->getMessage();;
-						}
-					}else{
-						$varsResponse .= " SKU".$currSKU." has disabled";
-					}
-				}
-				$dbhelper->updateJobFinished("1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' )."   :  ".$varsResponse);
-			}
-			
-			$dbhelper->updateSettingMsg ( "finished process product:".$jobproductid." of ".$date );
-		} 
-	} while ( $dbhelper->isScheduleRunning () );
+	} while ( $dbhelper->isScheduleRunning ());
 }

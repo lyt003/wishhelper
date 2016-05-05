@@ -524,17 +524,18 @@ class dbhelper {
 	}
 	
 	public function getOptimizeJobs(){
-		$getJobs = 'SELECT * FROM `optimizejobs` WHERE isfinished is NULL  limit 10';
+		$getJobs = 'SELECT * FROM `optimizejobs` WHERE isfinished is NULL order by startdate limit 10';
 		return mysql_query($getJobs);
 	}
 	
-	public function updateJobMsg($productid,$startdate,$msg) {
-		$updateMsgSql = 'update optimizejobs set errormessage = "' . $msg . '" where productid = "'.$productid.'" and startdate = "'.$startdate.'"';
+	public function updateJobMsg($accountid,$productid,$startdate,$msg) {
+		$updateMsgSql = 'update optimizejobs set errormessage = "' . $msg . '" where accountid = "'.$accountid.'"  and productid = "'.$productid.'" and startdate = "'.$startdate.'"';
 		return mysql_query ( $updateMsgSql );
 	}
 	
-	public function updateJobFinished($isFinished,$productid,$startdate,$errorMsg) {
-		$updateFinished = 'update optimizejobs set isfinished = '.$isFinished.',errormessage= "'.$errorMsg.'" where productid = "'.$productid.'" and startdate = "'.$startdate.'"';
+	public function updateJobFinished($accountid,$isFinished,$productid,$startdate,$errorMsg) {
+		$updateFinished = 'update optimizejobs set isfinished = '.$isFinished.',errormessage= "'.$errorMsg.'" where  accountid = "'.$accountid.'"  and  productid = "'.$productid.'" and startdate = "'.$startdate.'"';
+		echo "<br/>updateJob:".$updateFinished;
 		return mysql_query ( $updateFinished );
 	}
 	

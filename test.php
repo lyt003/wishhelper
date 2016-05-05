@@ -29,6 +29,20 @@ if($ttresult){
 	echo "<br/>time false";
 }
 
+/* $nextday = date ( 'Y-m-d',strtotime('+1 day'));
+echo "<br/><br/><br/><br/><br/>nextday:".$nextday;
+ */
+$date = "2016-05-04";
+$curtime = date('Y-m-d  H:i:s');
+if(strtotime($curtime) >= strtotime($date)){
+	//设定好下次同步的记录，然后完成本次同步。
+	$nextdate = date ( 'Y-m-d',strtotime('+1 day',strtotime($date)));
+	echo "<br/>nextdate:".$nextdate;
+}else{
+	echo "<br/>curdate:".$curtime;
+}
+
+
 echo "<br/><br/><br/><br/>START TO PROCESS ORDER:";
 $labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 $expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );

@@ -390,7 +390,7 @@ class WishHelper {
 						$is_promoted = $p['is_promoted'];
 						if(strcmp($is_promoted,'False') == 0){
 							$disabledsku .= $curSKU."  ,  ";
-							$this->dbhelper->insertOptimizeJob($accountid, "DISABLEPRODUCT", $preProductid, $enddate);
+							$this->dbhelper->insertOptimizeJob($accountid, DISABLEPRODUCT, $preProductid, $enddate);
 							//$client->disableProductById($preProductid);
 						}else{
 							$products[] = $preProductid;
@@ -402,7 +402,7 @@ class WishHelper {
 					if( $datacount > 1 && $totalImpressions > 10){
 						$products[] = $preProductid;
 					}else{
-						$this->dbhelper->insertOptimizeJob($accountid, "LOWERSHIPPING", $preProductid, $enddate);
+						$this->dbhelper->insertOptimizeJob($accountid, LOWERSHIPPING, $preProductid, $enddate);
 						$lowerpricesku .= $preProductid."   ,  ";
 						//自动优化，运费减0.01
 						/* $skus = $this->getProductVars($preProductid);

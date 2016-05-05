@@ -278,7 +278,7 @@ CREATE TABLE `optimizejobs`(
 	`startdate` date,
 	`isfinished` int(1),
 	`errormessage` varchar(500),
-	primary key(`productid`,`startdate`)
+	primary key(`accountid`,`productid`,`startdate`)
 )DEFAULT CHARSET=utf8;
 
 

@@ -107,10 +107,10 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 		}
 		
 		if($isIncreased == 0){//订单减少的处理：  降价$0.01
-			$dbhelper->insertOptimizeJob($accountid, "LOWERSHIPPING", $hotproductid, $startDate);
+			$dbhelper->insertOptimizeJob($accountid, LOWERSHIPPING, $hotproductid, $startDate);
 			$updatecontent .= $hotParentSKU ." lower price\n";
 		}else{//订单递增的处理： 添加库存
-			$dbhelper->insertOptimizeJob($accountid, "ADDINVENTORY", $hotproductid, $startDate);
+			$dbhelper->insertOptimizeJob($accountid, ADDINVENTORY, $hotproductid, $startDate);
 			$updatecontent .= $hotParentSKU." updateinventory \n";
 		}
 		
