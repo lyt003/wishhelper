@@ -535,8 +535,19 @@ class dbhelper {
 	
 	public function updateJobFinished($accountid,$isFinished,$productid,$startdate,$errorMsg) {
 		$updateFinished = 'update optimizejobs set isfinished = '.$isFinished.',errormessage= "'.$errorMsg.'" where  accountid = "'.$accountid.'"  and  productid = "'.$productid.'" and startdate = "'.$startdate.'"';
-		echo "<br/>updateJob:".$updateFinished;
 		return mysql_query ( $updateFinished );
+	}
+	
+	public function getPromotedProducts($accountid){
+		$pps = 'select id,parent_sku from onlineProducts where accountid = "'.$accountid.'" and is_promoted = "True" and review_status != "rejected"';
+		return mysql_query($pps);
+	}
+	
+	public function getProductsHasOrder($accountid){
+		$pos = 'select distinct ov.product_id from ('.
+			   ' select distinct sku from orders where TIMESTAMPDIFF(DAY,ordertime,now())<=2 and accountid = "'.$accountid.'"'.
+			   ' ) os left join onlineProductVars ov on ov.sku = os.sku and ov.accountid = "'.$accountid.'"';
+		return mysql_query($pos);
 	}
 	
 	public function getJaveUploadAppToken(){

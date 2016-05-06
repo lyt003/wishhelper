@@ -117,6 +117,28 @@ class scheduleJob {
 					$nextdate = date ( 'Y-m-d',strtotime('+1 day',strtotime($date)));
 					$this->dbhelper->insertOptimizeJob($accountid, "SYNCHRONIZEDSTORE", "", $nextdate);
 					$this->synchronizedStore($accountid,$jobproductid,$date);
+					
+					
+					//添加本次黄钻产品优化记录:
+					$promotedProducts = $this->dbhelper->getPromotedProducts($accountid);
+					$ordersProducts = $this->dbhelper->getProductsHasOrder($accountid);
+					
+				    $hasOrderProductids = array();
+				    while($op = mysql_fetch_array($ordersProducts)){
+				    	$hasOrderProductids[] = $op['product_id'];
+				    }
+					
+				    while($promotedProduct = mysql_fetch_array($promotedProducts)){
+				    	$curProductID = $promotedProduct['id'];
+				    	
+				    	if(in_array($curProductID,$hasOrderProductids)){
+				    		$this->dbhelper->insertOptimizeJob($accountid, ADDINVENTORY, $curProductID, $date);
+				    	}else{
+				    		$this->dbhelper->insertOptimizeJob($accountid, LOWERSHIPPING, $curProductID, $date);
+				    	}
+				    }
+				    
+				    
 				}
 			}
 			

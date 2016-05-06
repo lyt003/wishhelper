@@ -59,6 +59,29 @@ for ($l=0;$l<5;$l++){
 	$initTime = $curWeek[0];
 }
 
+/*
+echo "<br/>test promoted optimize";
+$accountid = "1";
+//添加本次黄钻产品优化记录:
+$promotedProducts = $dbhelper->getPromotedProducts($accountid);
+$ordersProducts = $dbhelper->getProductsHasOrder($accountid);
+	
+$hasOrderProductids = array();
+while($op = mysql_fetch_array($ordersProducts)){
+	$hasOrderProductids[] = $op['product_id'];
+}
+	
+while($promotedProduct = mysql_fetch_array($promotedProducts)){
+	$curProductID = $promotedProduct['id'];
+	 
+	if(in_array($curProductID,$hasOrderProductids)){
+		echo "<br/>".$accountid."+".ADDINVENTORY."|Product:".$curProductID;
+	}else{
+		echo "<br/>".$accountid."+".LOWERSHIPPING."|Product:".$curProductID;
+	}
+}
+echo "<br/>test promoted optimize end";
+*/
 
 function getPreWeek($curtime){
 	$preendDate = date('Y-m-d',strtotime('last monday',strtotime($curtime)));
