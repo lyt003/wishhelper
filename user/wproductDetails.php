@@ -4,6 +4,7 @@ include dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/mailHelper.php';
 include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
+include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
@@ -56,103 +57,112 @@ $uniqueID = $productDetails['parent_sku'];
 $mainImage = $productDetails['main_image'];
 $extraImages = $productDetails['extra_images'];
 
-
-if ($newProductName != null && $newDescription != null && $newmainImage != null && $newTags != null) {
-
-	$updateResult = "";
-	$client = new WishClient ($accounts ['token'], 'prod' );
+$command = $_POST['command'];
+$date = date('Y-m-d');
+if($command != null && strcmp($command,'updateInventory') == 0){
+	$dbhelper->insertOptimizeJob($accountid, ADDINVENTORY, $productid, $date);
+	$updateResult = $uniqueID." ADDINVENTORY";
+}else if($command != null && strcmp($command,'updatePrice') == 0){
+	$dbhelper->insertOptimizeJob($accountid, LOWERSHIPPING, $productid, $date);
+	$updateResult = $uniqueID." LOWERSHIPPING";
+}else{
+	if ($newProductName != null && $newDescription != null && $newmainImage != null && $newTags != null) {
 	
-	$onlineProduct = $client->getProductById($productid);
+		$updateResult = "";
+		$client = new WishClient ($accounts ['token'], 'prod' );
 	
-	$productParamsArray = array('id');
-	if(strcmp($newProductName,$productName) != 0){
-		$productParamsArray[] = 'name';
-		$onlineProduct->name = $newProductName;
-	}
-		
-	if(strcmp($newDescription,$description) != 0){
-		$productParamsArray[] = 'description';
-		$onlineProduct->description = $newDescription;
-	}
-		
-	if(strcmp($newTags,$tags) != 0){
-		$productParamsArray[] = 'tags';
-		$onlineProduct->tags = $newTags;
-	}
-		
-	if(strcmp($newmainImage,$mainImage) != 0){
-		$productParamsArray[] = 'main_image';
-		$onlineProduct->main_image = $newmainImage;
-	}
-		
-	if(strcmp($newExtraImages,$extraImages) != 0){
-		$productParamsArray[] = 'extra_images';
-		$onlineProduct->extra_images = $newExtraImages;
-	}
-		
-	//update product
-	if(count($productParamsArray)>1){
-		$params = $onlineProduct->getParams($productParamsArray);
-		$client->updateProductByParams($params);
-		$updateResult = "update ".$onlineProduct->sku;
-	}
-		
+		$onlineProduct = $client->getProductById($productid);
 	
-	$price = $_POST ['Price'];
-	$incrementPrice = $_POST ['increment_price'];
-	$quantity = $_POST ['Quantity'];
-	$shipping = $_POST ['Shipping'];
-	$shippingTime = $_POST ['Shipping_Time'];
-	$MSRP = $_POST ['MSRP'];
-	$isEnabled = $_POST['isenabled'];
-	
-	/* $product = $client->getProductById($productid); */
-	
-	//update product vars
-	if($price != null || $incrementPrice != null || $quantity != null || $shipping != null || $shippingTime != null || $MSRP != null || (strcmp($isEnabled,'2')!=0)){
-		$skus = $wishhelper->getProductVars($productid);
-		
-		$paramsarray = array('sku');
-		if($price != null ||$incrementPrice != null)
-			$paramsarray[] = 'price';
-		if($quantity != null)
-			$paramsarray[] = 'inventory';
-		if($shipping != null)
-			$paramsarray[] = 'shipping';
-		if($shippingTime != null)
-			$paramsarray[] = 'shipping_time';
-		if($MSRP != null)
-			$paramsarray[] = 'msrp';
-		if(strcmp($isEnabled,'2')!=0)
-			$paramsarray[] = 'enabled';
- 		
-		if(count($paramsarray) > 1 ){
-			foreach ($skus as $sku){
-				$onlineProductVar = $client->getProductVariationBySKU($sku);
-
-				if($price != null)
-					$onlineProductVar->price = $price;
-				if($quantity != null)
-					$onlineProductVar->inventory = $quantity;
-				if($shipping != null)
-					$onlineProductVar->shipping = $shipping;
-				if($shippingTime != null)
-					$onlineProductVar->shipping_time = $shippingTime;
-				if($MSRP != null)
-					$onlineProductVar->msrp = $MSRP;
-				if(strcmp($isEnabled,'1')==0){
-					$onlineProductVar->enabled = "true";
-				}else if(strcmp($isEnabled,'0')==0){
-					$onlineProductVar->enabled = "false";
-				}
-					
-				
-				$params = $onlineProductVar->getParams($paramsarray);
-				$client->updateProductVarByParams($params);
-				$updateResult = $updateResult.";".$onlineProductVar->sku;
-			}	
+		$productParamsArray = array('id');
+		if(strcmp($newProductName,$productName) != 0){
+			$productParamsArray[] = 'name';
+			$onlineProduct->name = $newProductName;
 		}
-	}
+	
+		if(strcmp($newDescription,$description) != 0){
+			$productParamsArray[] = 'description';
+			$onlineProduct->description = $newDescription;
+		}
+	
+		if(strcmp($newTags,$tags) != 0){
+			$productParamsArray[] = 'tags';
+			$onlineProduct->tags = $newTags;
+		}
+	
+		if(strcmp($newmainImage,$mainImage) != 0){
+			$productParamsArray[] = 'main_image';
+			$onlineProduct->main_image = $newmainImage;
+		}
+	
+		if(strcmp($newExtraImages,$extraImages) != 0){
+			$productParamsArray[] = 'extra_images';
+			$onlineProduct->extra_images = $newExtraImages;
+		}
+	
+		//update product
+		if(count($productParamsArray)>1){
+			$params = $onlineProduct->getParams($productParamsArray);
+			$client->updateProductByParams($params);
+			$updateResult = "update ".$onlineProduct->sku;
+		}
+	
+	
+		$price = $_POST ['Price'];
+		$incrementPrice = $_POST ['increment_price'];
+		$quantity = $_POST ['Quantity'];
+		$shipping = $_POST ['Shipping'];
+		$shippingTime = $_POST ['Shipping_Time'];
+		$MSRP = $_POST ['MSRP'];
+		$isEnabled = $_POST['isenabled'];
+	
+		/* $product = $client->getProductById($productid); */
+	
+		//update product vars
+		if($price != null || $incrementPrice != null || $quantity != null || $shipping != null || $shippingTime != null || $MSRP != null || (strcmp($isEnabled,'2')!=0)){
+			$skus = $wishhelper->getProductVars($productid);
+	
+			$paramsarray = array('sku');
+			if($price != null ||$incrementPrice != null)
+				$paramsarray[] = 'price';
+			if($quantity != null)
+				$paramsarray[] = 'inventory';
+			if($shipping != null)
+				$paramsarray[] = 'shipping';
+			if($shippingTime != null)
+				$paramsarray[] = 'shipping_time';
+			if($MSRP != null)
+				$paramsarray[] = 'msrp';
+			if(strcmp($isEnabled,'2')!=0)
+				$paramsarray[] = 'enabled';
+				
+			if(count($paramsarray) > 1 ){
+				foreach ($skus as $sku){
+					$onlineProductVar = $client->getProductVariationBySKU($sku);
+	
+					if($price != null)
+						$onlineProductVar->price = $price;
+					if($quantity != null)
+						$onlineProductVar->inventory = $quantity;
+					if($shipping != null)
+						$onlineProductVar->shipping = $shipping;
+					if($shippingTime != null)
+						$onlineProductVar->shipping_time = $shippingTime;
+					if($MSRP != null)
+						$onlineProductVar->msrp = $MSRP;
+					if(strcmp($isEnabled,'1')==0){
+						$onlineProductVar->enabled = "true";
+					}else if(strcmp($isEnabled,'0')==0){
+						$onlineProductVar->enabled = "false";
+					}
+						
+	
+					$params = $onlineProductVar->getParams($paramsarray);
+					$client->updateProductVarByParams($params);
+					$updateResult = $updateResult.";".$onlineProductVar->sku;
+				}
+			}
+		}
+	}	
 }
 ?>
 
@@ -252,6 +262,7 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 		<form id="update_product" action="./wproductDetails.php" method="post">
 			<input type="hidden" id="productid" name="productid" value="<?php echo $productid?>"/>
 			<input type="hidden" id="accountid" name="accountid" value="<?php echo $accountid?>"/>
+			<input type="hidden" id="command" name="command" value=""/>
 			<div id="add-products-page" class="center">
 				<div>
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
@@ -506,6 +517,13 @@ if ($newProductName != null && $newDescription != null && $newmainImage != null 
 						<div id="buttons-section" class="control-group text-right">
 							<br/>
 							<br/>
+							
+							<button id="submit-button" type="button"
+								class="btn btn-primary btn-large" onclick="updateInventory()">更新库存(+10)</button>
+								
+							<button id="submit-button" type="button"
+								class="btn btn-primary btn-large" onclick="updatePrice()">更新价格(-0.01)</button>
+								
 							<button id="submit-button" type="button"
 								class="btn btn-primary btn-large" onclick="updateProduct()">提交</button>
 						</div>
@@ -698,6 +716,18 @@ style="border-width:0" /></a></noscript>
 		document.getElementById("earnings").value=earn;
 	} 
 
+	function updatePrice(){
+		var form = document.getElementById("update_product");
+		$('#command').val("updatePrice");
+		form.submit();
+	}
+
+	function updateInventory(){
+		var form = document.getElementById("update_product");
+		$('#command').val("updateInventory");
+		form.submit();
+	}
+
 	function updateProduct(){
 		var productName = document.getElementById("product_name").value;
 		if(productName == null || productName == ''){
@@ -744,6 +774,7 @@ style="border-width:0" /></a></noscript>
 		} 
 		
 		var form = document.getElementById("update_product");
+		$('#command').val("updateProduct");
 		form.submit();
 	}
 </script>
