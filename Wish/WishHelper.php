@@ -142,7 +142,8 @@ class WishHelper {
 						$orderNoTracking ['provider'] = "ChinaAirPost";
 					} else {
 						$preTransactionid = $orderNoTracking ['transactionid'];
-						if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 7) {
+						//if (strcmp ( $orderQuantity, "1" ) == 0 && $intPrice < 7) {
+						if ($intPrice < 7) {
 							$channel = $xml->addChild ( "Channel", "105" ); // *
 							$orderNoTracking ['provider'] = "YanWen";
 						} else {
