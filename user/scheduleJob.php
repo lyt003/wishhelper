@@ -52,6 +52,7 @@ class scheduleJob {
 			if (strcmp ( $operator, DISABLEPRODUCT ) == 0) {
 				$response = $client->disableProductById ( $jobproductid );
 				$this->dbhelper->updateJobFinished ($accountid,  "1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' ) . "   :  " . $response );
+				$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 			} else if (strcmp ( $operator, LOWERSHIPPING ) == 0 || strcmp ( $operator, ADDINVENTORY ) == 0) {
 				
 				$vars = $this->dbhelper->getProductVars ( $jobproductid );
@@ -96,6 +97,7 @@ class scheduleJob {
 					}
 				}
 				$this->dbhelper->updateJobFinished ($accountid,  "1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' ) . "   :  " . $varsResponse );
+				$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 			} else if(strcmp ( $operator, SYNCHRONIZEDSTORE ) == 0){
 
 				$curtime = date('Y-m-d  H:i:s');
@@ -125,11 +127,9 @@ class scheduleJob {
 				    	}
 				    }
 				    
-				    
+				    $this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 				}
 			}
-			
-			$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 		}
 	}
 	
