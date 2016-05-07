@@ -134,12 +134,21 @@ class WishClient{
 
   public function getProductById($id){
     $params = array('id'=>$id);
-    $response = $this->getResponse('GET','product',$params);
+    try {
+    	$response = $this->getResponse('GET','product',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return new WishProduct($e->getResponse()->getData());
+    }
+    
     return new WishProduct($response->getData());
   }
 
   public function createProduct($object){
-    $response = $this->getResponse('POST','product/add',$object);
+    try {
+    	$response = $this->getResponse('POST','product/add',$object);
+    } catch ( ServiceResponseException $e ) {
+    	return new WishProduct($e->getResponse()->getData());
+    }
     return new WishProduct($response->getData());
   }
 
@@ -156,13 +165,21 @@ class WishClient{
       'main_image',
       'extra_images'));
 
-    $response = $this->getResponse('POST','product/update',$params);
-
+    try {
+    	$response = $this->getResponse('POST','product/update',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
+    
     return "success";
   }
   
   public function updateProductByParams($params){
-  	$response = $this->getResponse('POST','product/update',$params);
+  	try {
+  		$response = $this->getResponse('POST','product/update',$params);
+  	} catch ( ServiceResponseException $e ) {
+  		return $e->getErrorMessage();
+  	}
   	return "success";
   }
   
@@ -171,7 +188,12 @@ class WishClient{
   }
   public function enableProductById($id){
     $params = array('id'=>$id);
-    $response = $this->getResponse('POST','product/enable',$params);
+    try {
+    	$response = $this->getResponse('POST','product/enable',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
+    
     return "success";
   }
   public function disableProduct(WishProduct $product){
@@ -179,7 +201,11 @@ class WishClient{
   }
   public function disableProductById($id){
     $params = array('id'=>$id);
-    $response = $this->getResponse('POST','product/disable',$params);
+    try {
+    	$response = $this->getResponse('POST','product/disable',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return $response;
   }
   public function getAllProducts(){
@@ -194,12 +220,22 @@ class WishClient{
   }
 
   public function createProductVariation($object){
-    $response = $this->getResponse('POST','variant/add',$object);
+    try {
+    	$response = $this->getResponse('POST','variant/add',$object);
+    } catch ( ServiceResponseException $e ) {
+    	return new WishProductVariation($e->getResponse()->getData());
+    }
+    
     return new WishProductVariation($response->getData());
   }
 
   public function getProductVariationBySKU($sku){
-    $response = $this->getResponse('GET','variant',array('sku'=>$sku));
+  	
+  	try {
+  		$response = $this->getResponse('GET','variant',array('sku'=>$sku));
+  	} catch ( ServiceResponseException $e ) {
+  		 return new WishProductVariation($e->getResponse()->getData());
+  	}
     return new WishProductVariation($response->getData());
   }
 
@@ -216,12 +252,22 @@ class WishClient{
         'shipping_time',
         'main_image'
       ));
-    $response = $this->getResponse('POST','variant/update',$params);
+    try {
+	    $response = $this->getResponse('POST','variant/update',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
+    
     return "success";
   }
   
   public function updateProductVarByParams($params){
-  	$response = $this->getResponse('POST','variant/update',$params);
+  	try {
+  		$response = $this->getResponse('POST','variant/update',$params);
+  	} catch ( ServiceResponseException $e ) {
+  		return $e->getResponse();
+  	}
+  	
   	return $response;
   }
   
@@ -230,7 +276,11 @@ class WishClient{
   }
   public function enableProductVariationBySKU($sku){
     $params = array('sku'=>$sku);
-    $response = $this->getResponse('POST','variant/enable',$params);
+    try {
+    	$response = $this->getResponse('POST','variant/enable',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return "success";
   }
 
@@ -239,13 +289,21 @@ class WishClient{
   }
   public function disableProductVariationBySKU($sku){
     $params = array('sku'=>$sku);
-    $response = $this->getResponse('POST','variant/disable',$params);
+    try {
+    	$response = $this->getResponse('POST','variant/disable',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return "success";
   }
 
   public function updateInventoryBySKU($sku,$newInventory){
     $params = array('sku'=>$sku,'inventory'=>$newInventory);
-    $response = $this->getResponse('POST','variant/update-inventory',$params);
+    try {
+    	$response = $this->getResponse('POST','variant/update-inventory',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return "success";
   }
 
@@ -257,7 +315,11 @@ class WishClient{
   }
 
   public function getOrderById($id){
-    $response = $this->getResponse('GET','order',array('id'=>$id));
+    try {
+    	$response = $this->getResponse('GET','order',array('id'=>$id));
+    } catch ( ServiceResponseException $e ) {
+    	return new WishOrder($e->getResponse()->getData());
+    }
     return new WishOrder($response->getData());
   }
 
@@ -288,7 +350,12 @@ class WishClient{
   public function fulfillOrderById($id,WishTracker $tracking_info){
     $params = $tracking_info->getParams();
     $params['id']=$id;
-    $response = $this->getResponse('POST','order/fulfill-one',$params);
+    try {
+    	$response = $this->getResponse('POST','order/fulfill-one',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
+    
     return "success";
   }
 
@@ -303,7 +370,12 @@ class WishClient{
     if($note){
       $params['reason_note'] = $note;
     }
-    $response = $this->getResponse('POST','order/refund',$params);
+    
+    try {
+    	$response = $this->getResponse('POST','order/refund',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return "success";
   }
 
@@ -317,7 +389,11 @@ class WishClient{
   public function updateTrackingInfoById($id,WishTracker $tracker){
     $params = $tracker->getParams();
     $params['id']=$id;
-    $response = $this->getResponse('POST','order/modify-tracking',$params);
+    try {
+    	$response = $this->getResponse('POST','order/modify-tracking',$params);
+    } catch ( ServiceResponseException $e ) {
+    	return $e->getErrorMessage();
+    }
     return "success";
   }
 
