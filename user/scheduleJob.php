@@ -50,11 +50,7 @@ class scheduleJob {
 			}
 			
 			if (strcmp ( $operator, DISABLEPRODUCT ) == 0) {
-				try {
-					$response = $client->disableProductById ( $jobproductid );
-				} catch ( ServiceResponseException $e ) {
-					$this->dbhelper->updateJobMsg ( $accountid, $jobproductid, $date, "Failed to disable productid " . $e->getErrorMessage () );
-				}
+				$response = $client->disableProductById ( $jobproductid );
 				$this->dbhelper->updateJobFinished ($accountid,  "1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' ) . "   :  " . $response );
 			} else if (strcmp ( $operator, LOWERSHIPPING ) == 0 || strcmp ( $operator, ADDINVENTORY ) == 0) {
 				
@@ -62,11 +58,7 @@ class scheduleJob {
 				$varsResponse = "";
 				while ( $var = mysql_fetch_array ( $vars ) ) {
 					$currSKU = $var ['sku'];
-					try {
-						$productVar = $client->getProductVariationBySKU ( $currSKU );
-					} catch ( ServiceResponseException $e ) {
-						$this->dbhelper->updateJobMsg ($accountid, $jobproductid, $date, "Failed to get productvars of productid " . $e->getErrorMessage () );
-					}
+					$productVar = $client->getProductVariationBySKU ( $currSKU );
 					
 					$enabled = $productVar->enabled;
 					if (strcmp ( $enabled, 'True' ) == 0) {
@@ -96,13 +88,8 @@ class scheduleJob {
 						}
 						
 						if (count ( $params ) > 1) {
-							try {
-								$updateResponse = $client->updateProductVarByParams ( $params );
-							} catch ( ServiceResponseException $e ) {
-								$this->dbhelper->updateJobMsg ($accountid, $jobproductid, $date, "Failed to updateProductVar of SKU " . $currSKU . "   " . $e->getErrorMessage () );
-							}
+							$updateResponse = $client->updateProductVarByParams ( $params );
 							$varsResponse .= $updateResponse->getMessage ();
-							;
 						}
 					} else {
 						$varsResponse .= " SKU" . $currSKU . " has disabled";
