@@ -117,7 +117,15 @@ class WishClient{
   	$class_arr = array();
   	$params['limit'] = $limit;
   	$params['start']=$start;
-  	$response = $this->getResponse($method,$uri,$params);
+  	
+  	
+  	try {
+  		$response = $this->getResponse($method,$uri,$params);
+  	} catch ( ServiceResponseException $e ) {
+  		$response = $e->getResponse();
+  	}
+  	
+  	
   	foreach($response->getData() as $class_raw){
   		$class_arr[] = new $getClass($class_raw);
   	}
