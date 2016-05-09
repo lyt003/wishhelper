@@ -212,7 +212,7 @@ class WishClient{
     try {
     	$response = $this->getResponse('POST','product/disable',$params);
     } catch ( ServiceResponseException $e ) {
-    	return $e->getErrorMessage();
+    	return $e->getResponse();
     }
     return $response;
   }

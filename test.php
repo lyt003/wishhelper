@@ -5,6 +5,7 @@ header ( "Content-Type: text/html;charset=utf-8" );
 include_once dirname ( '__FILE__' ).'/mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ).'/Wish/WishHelper.php';
 include_once dirname ( '__FILE__' ).'/Wish/WishClient.php';
+include_once dirname ( '__FILE__' ).'/user/scheduleJob.php';
 include_once dirname ( '__FILE__' ) . '/user/wconfig.php';
 
 use Wish\WishClient;
@@ -13,6 +14,7 @@ use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
+use user\scheduleJob;
 //phpinfo ();
 
 $dbhelper = new dbhelper ();
@@ -28,6 +30,12 @@ if($ttresult){
 }else{
 	echo "<br/>time false";
 }
+
+
+//add jobs:
+/* $jober = new scheduleJob();
+$jober->execute(); */
+
 
 /* $nextday = date ( 'Y-m-d',strtotime('+1 day'));
 echo "<br/><br/><br/><br/><br/>nextday:".$nextday;
