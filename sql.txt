@@ -131,8 +131,13 @@ CREATE TABLE `tracking_data`(
 	`tracking_number` varchar(20),
 	`device_id` varchar(50),
 	`tracking_date` varchar(10),
+	`destinate` varchar(50),
+	`weight` int(6),
+	`shippingcost` varchar(10),
+	`finalshippingcost` varchar(10) 
 	PRIMARY KEY (`tracking_number`)
 ) DEFAULT CHARSET=utf8;
+Alter table `tracking_data` add `destinate` varchar(50),`weight` int(6),`shippingcost` varchar(10),`finalshippingcost` varchar(10) after `tracking_date`;
 
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels`(
@@ -280,7 +285,6 @@ CREATE TABLE `optimizejobs`(
 	`errormessage` varchar(500),
 	primary key(`accountid`,`productid`,`startdate`)
 )DEFAULT CHARSET=utf8;
-
 
 
 

@@ -335,6 +335,18 @@ class dbhelper {
 		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . $trackingData ['tracking_number'] . '","' . $trackingData ['device_id'] . '","' . $trackingData ['tracking_date'] . '")';
 		return mysql_query ( $insertTracking );
 	}
+	
+	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost){
+		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
+		$result = mysql_query($updateTracking); 
+		if(!$result){
+			$insertTracking = 'insert into tracking_data(tracking_number,destinate,weight,shippingcost,finalshippingcost) values("'.$tracking_number.'","'
+					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
+			$result = mysql_query($insertTracking);
+		}
+		return $result;
+	}
+	
 	public function getUserLabels($userid) {
 		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.label_id = l.id";
 		return mysql_query ( $querylabels );
