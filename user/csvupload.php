@@ -140,9 +140,9 @@ $msg = $_GET['msg'];
 	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
 	                      			echo "<h4 class=\"alert-heading\">";
 	                      			if($msg){
-	                      				echo "上传成功";
+	                      				echo $msg." 上传成功";
 	                      			}else{
-	                      				echo "上传失败，请联系管理员 admin@wishconsole.com";
+	                      				echo $msg." 上传失败，请联系管理员 admin@wishconsole.com";
 	                      			}
 	                      			echo "</h4>";
 	                      			echo "</div>";
@@ -176,9 +176,10 @@ $msg = $_GET['msg'];
 							
 							<div class="control-group">
 								<label class="control-label" data-col-index="5"><span
-									class="col-name">要导入的CSV文件</span></label>
+									class="col-name">要导入的文件:</span></label>
 								<div class="controls input-append">
-									<input type="file" name="file" id="file">
+									<input type="file" name="file" id="file"><br/>
+									<label>(CSV文件为销售数据;Excel文件为物流数据)</label>
 								</div>
 							</div>
 						</div>
