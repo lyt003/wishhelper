@@ -564,6 +564,23 @@ class dbhelper {
 		return mysql_query($pos);
 	}
 	
+	public function getProductShippingCost($sku){
+
+		$psc = 'select * from ('.
+			   ' select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost from orders o,'. 
+			   ' ('.
+			   ' select distinct pv.sku,p.product_id from onlineProductVars pv,'.
+			   ' (select product_id from onlineProductVars where sku = "'.$sku.'") p'.
+			   ' where p.product_id = pv.product_id'.
+	           ' ) ps'.
+	    	   ' where o.sku = ps.sku'.
+			   ' ) a'.
+			   ' left join tracking_data t on a.tracking = t.tracking_number'.
+			   ' and t.finalshippingcost IS NOT NULL'. 
+			   ' order by t.tracking_date DESC limit 10';
+		return mysql_query($psc);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);

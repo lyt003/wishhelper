@@ -431,7 +431,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 					}
 					echo "<td style=\"width:10%;vertical-align:middle;\"><span class=\"label label-info\">该产品已经自动下架</span></td>";
 				}else{
-					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$productResult['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$productResult['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$productResult['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 				}
 				echo "</tr>";
 				$orderCount ++;
@@ -469,7 +469,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['orders']."</td>";
 				echo "<td style=\"width:10%;vertical-align:middle;\">" . $impressionProduct ['checkoutconversion']."</td>";
 				
-				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$impressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$impressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$impressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 				
 				echo "</tr>";
 				$orderCount ++;
@@ -508,7 +508,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $lessImpressionProduct ['orders']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $lessImpressionProduct ['checkoutconversion']."</td>";
 	
-			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$lessImpressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$lessImpressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$lessImpressionProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 	
 			echo "</tr>";
 			$orderCount ++;
@@ -551,7 +551,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['orders']."</td>";
 				echo "<td style=\"width:10%;vertical-align:middle;\">" . $currentProduct ['checkoutconversion']."</td>";
 				
-				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$currentProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+				echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$currentProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$currentProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 				
 				echo "</tr>";
 				$orderCount ++;
@@ -616,7 +616,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['orders']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $newProduct ['checkoutconversion']."</td>";
 		
-			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accountid."','".$newProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$newProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$newProduct['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 		
 			echo "</tr>";
 			$orderCount ++;
@@ -648,7 +648,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
 					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
 					echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
-					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+					echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accounts ['accountid' . $count1]."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 					echo "</tr>";
 					$orderCount ++;
 				}
@@ -675,6 +675,10 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 	<script type="text/javascript">
 		function productDetails(uid,pid){
 			window.open("./wproductDetails.php?uid=" + uid + "&pid=" + pid);
+		}
+
+		function productshipping(uid,pid){
+			window.open("./wproductshipping.php?uid=" + uid + "&pid=" + pid);
 		}
 
 		function updateInventory(){

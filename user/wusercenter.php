@@ -204,6 +204,10 @@ $labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 	function uploadEUB(){
 		window.open("./wuploadEUBTrackings.php");
 	}
+
+	function productshipping(uid,sku){
+		window.open("./wproductshipping.php?uid=" + uid + "&sku=" + sku);
+	}
 </script>
 <body>
 	<!-- HEADER -->
@@ -308,7 +312,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
 		echo "<th style=\"width:10%\">日期</th><th style=\"width:35%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = str_replace(' ','_',$cur_order ['sku']);
@@ -322,6 +326,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
+			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".$cur_order ['sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
