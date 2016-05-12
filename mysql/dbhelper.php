@@ -338,11 +338,13 @@ class dbhelper {
 	
 	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost){
 		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
-		$result = mysql_query($updateTracking); 
+		mysql_query($updateTracking); 
+		$result = mysql_affected_rows();
 		if(!$result){
 			$insertTracking = 'insert into tracking_data(tracking_number,destinate,weight,shippingcost,finalshippingcost) values("'.$tracking_number.'","'
 					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
-			$result = mysql_query($insertTracking);
+			mysql_query($insertTracking);
+			$result = mysql_affected_rows();
 		}
 		return $result;
 	}
