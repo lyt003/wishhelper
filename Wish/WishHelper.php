@@ -93,6 +93,15 @@ class WishHelper {
 		return $labels;
 	}
 	
+	public function getPidBySKU($accountid,$subsku){
+		$productid = '';
+		$pr = $this->dbhelper->getProductIDByVSKU($accountid, $subsku);
+		if($pvalue = mysql_fetch_array($pr)){
+			$productid = $pvalue['product_id'];
+		}
+		return $productid;
+	}
+	
 	public function getLabelsArray($userLabels){
 		$labelsarray = array();
 		foreach ($userLabels as $lKey=>$lValue){
@@ -111,7 +120,10 @@ class WishHelper {
 		return $cnenlabel;
 	}
 	
-	public function applyTrackingsForOrders($accountid,$labels,$expressinfo){
+	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
+		
+		$yanwenExpresses = $this->getYanWenExpressinfos();
+		$expressinfos = $this->getUserExpressInfos($userid);
 		
 		$post_header = array (
 				'Authorization: basic '.$expressinfo[YANWEN_API_TOKEN],
@@ -123,6 +135,17 @@ class WishHelper {
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
 		
+			$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
+			$curCountrycode = $orderNoTracking['countrycode'];
+			
+			$curExpress = $expressinfos[$curProductid.'|'.$curCountrycode];
+			$expressid = explode ( "|", $curExpress )[0];
+			$expressValue = $yanwenExpresses[$expressid];
+			if($expressValue == null){
+				echo "<br/>".$orderNoTracking['sku']." use the other logistic";
+				continue;
+			}
+			
 			//if (strcmp ( $orderNoTracking ['countrycode'], "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
 					
@@ -137,7 +160,7 @@ class WishHelper {
 					$preGoodsNameEn = $preGoodsNameEn . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity;
 					$preTransactionid = $orderNoTracking ['transactionid'];
 				} else {
-					if (strcmp ( $preGoodsNameEn, "" ) != 0 && strcmp ( $orderNoTracking ['transactionid'], $preTransactionid ) == 0) {
+					/* if (strcmp ( $preGoodsNameEn, "" ) != 0 && strcmp ( $orderNoTracking ['transactionid'], $preTransactionid ) == 0) {
 						$channel = $xml->addChild ( "Channel", "154" ); // *
 						$orderNoTracking ['provider'] = "ChinaAirPost";
 					} else {
@@ -155,7 +178,12 @@ class WishHelper {
 					if (strcmp ( $orderNoTracking ['countrycode'], "US" ) == 0 && strcmp ($orderNoTracking ['provider'],"ChinaAirPost") == 0){// process by EUB;
 						$preGoodsNameEn = "";
 						continue;
-					}
+					} */
+					
+					$expressValue = explode ( "|",$expressValue);
+					$channel = $xml->addChild ( "Channel", $expressValue[0]); 
+					$orderNoTracking ['provider'] = $expressValue[1];
+					echo "<br/>currentorder ".$orderNoTracking['sku']." use the logistic:".$expressValue[0].$expressValue[1];
 						
 		
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
@@ -233,7 +261,7 @@ class WishHelper {
 						echo "<br/>post header:".$post_header[0]."<br/>";
 						var_dump($XMLString);
 						echo "<br/>result:".$result."<br/>";
-					}
+					} 
 						
 				}
 			//}
@@ -247,6 +275,33 @@ class WishHelper {
 			$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
 		}
 		return $expressInfo;
+	}
+	
+	public function getUserExpressInfos($userid){
+		$ExpressInfos = array();
+		$userExpressInfos = $this->dbhelper->getExpressInfos($userid);
+		while($elabel = mysql_fetch_array($userExpressInfos)){
+			$ExpressInfos[$elabel['product_id'].'|'.$elabel['countrycode']] = $elabel['express_id'].'|'.$elabel['express_name'];
+		}
+		return $ExpressInfos;
+	}
+	
+	public  function getSubExpressInfos(){
+		$expressInfos = array();
+		$expressInfosResult = $this->dbhelper->getSubExpressInfo();
+		while($result = mysql_fetch_array($expressInfosResult)){
+			$expressInfos[$result['express_id']] = $result['express_id'].'|'.$result['express_name'];
+		}
+		return $expressInfos;
+	}
+	
+	public function getYanWenExpressinfos(){
+		$yanwenexpresses = array();
+		$expresses = $this->dbhelper->getYanWenExpresses("YW");
+		while($exresult = mysql_fetch_array($expresses)){
+			$yanwenexpresses[$exresult['express_id']] = $exresult['express_code'].'|'.$exresult['express_name'];
+		}
+		return $yanwenexpresses;
 	}
 	
 	public function getTrackingNumbersForLabel($userid){

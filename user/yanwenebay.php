@@ -7,6 +7,7 @@ include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 header ( "Content-Type: text/html;charset=utf-8" );
 $currentUserid = $_SESSION ['userid'];
 session_commit();
+$userid = '1';
 $accountid = '0';
 $dbhelper = new dbhelper();
 $wishHelper = new WishHelper();
@@ -15,7 +16,7 @@ if($result != null){
 	if(strcmp($result,'success') ==0){
 		$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 		$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
-		$wishHelper->applyTrackingsForOrders ( $accountid, $labels, $expressinfo );
+		$wishHelper->applyTrackingsForOrders ($userid, $accountid, $labels, $expressinfo );
 	}else if(strcmp($result,'label') ==0){
 		$dbhelper->insertproductLabel ( $currentUserid, "underwear", 5);
 		$dbhelper->insertproductLabel ( $currentUserid, "pants",6);

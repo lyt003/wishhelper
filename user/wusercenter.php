@@ -111,6 +111,10 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 
 $add = $_GET ['add'];
 
+$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+$expressinfos = $wishHelper->getSubExpressInfos();
+$userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
+
 // process orders;
 if (strcmp ( $add, "1" ) == 0) {
 	foreach ( $_POST as $key => $value ) {
@@ -119,14 +123,21 @@ if (strcmp ( $add, "1" ) == 0) {
 			$names = explode ( "|", $value );
 			$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
 		}
+		
+		if (preg_match ( "/^express/", $key )) {
+			$keyvalues = explode("|",$key);
+			$expressValue = explode("|",$value);
+			$dbhelper->insertProductExpress($currentUserid, $wishHelper->getPidBySKU($keyvalues[3], $keyvalues[1]), $expressValue[0], $keyvalues[2]);
+		}
 	}
 	
+	
 	// get info of current user id:
-	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+	//$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 	$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
 	
 	for($ct = 0; $ct < $i; $ct ++) {
-		$wishHelper->applyTrackingsForOrders ( $accounts ['accountid' . $ct], $labels, $expressinfo );
+		$wishHelper->applyTrackingsForOrders ($currentUserid, $accounts ['accountid' . $ct], $labels, $expressinfo );
 	}
 } else if (strcmp ( $add, "2" ) == 0) {
 	for($ut = 0; $ut < $i; $ut ++) {
@@ -153,7 +164,7 @@ if (strcmp ( $add, "1" ) == 0) {
 		}
 	}
 }
-$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -180,11 +191,24 @@ $labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 				return;
 			}
 		}
+
+		var a=$('input[name^="express"]').map(function(){return {value:this.value,name:this.name}}).get();
+		for(var i=0;i<a.length;i++){
+			if(a[i].value == null || a[i].value == ""){
+				alert("请选择每个订单的物流方式");
+				return;
+			}
+		}
+		
 		var form = document.getElementById("processorders");
 		form.submit();
 	}
 
 	function setValue(value,test){
+		document.getElementById(test).value=value;
+	}
+
+	function setExpressValue(value,test){
 		document.getElementById(test).value=value;
 	}
 
@@ -307,12 +331,13 @@ for($count = 0; $count < $i; $count ++) {
 $orderCount = 0;
 for($count1 = 0; $count1 < $i; $count1 ++) {
 	if($accounts ['token' . $count1] != null){
-		$orders = $dbhelper->getOrdersNoTracking ( $accounts ['accountid' . $count1] );
+		$accountid = $accounts ['accountid' . $count1];
+		$orders = $dbhelper->getOrdersNoTracking ( $accountid );
 		echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">账号" . $accounts ['accountid' . $count1] . ":&nbsp;&nbsp;" . mysql_num_rows ( $orders ) . "个未处理订单";
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
-		echo "<th style=\"width:10%\">日期</th><th style=\"width:35%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
+		echo "<th style=\"width:10%\">日期</th><th style=\"width:25%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:10%\" class=\"hidden-phone\">物流选择</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = str_replace(' ','_',$cur_order ['sku']);
@@ -327,12 +352,22 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] . "</td>";
 			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".$cur_order ['sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			
+			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $userExpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']] . "\" placeholder=\"选择物流方式\">";
+			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
+			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
+			foreach ($expressinfos  as $expressid => $expressname ) {
+				echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
+			}
+			echo "</ul></div></td>";
+			
 			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
 			foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
 				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
 			}
+			echo "</ul></div></td>";
 			$orderCount ++;
 		}
 		echo "</tbody></table></div></div></div></div>";

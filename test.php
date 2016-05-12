@@ -60,12 +60,12 @@ if(strtotime($curtime) >= strtotime($date)){
 }
 
 
-echo "<br/><br/><br/><br/>START TO PROCESS ORDER:";
+/* echo "<br/><br/><br/><br/>START TO PROCESS ORDER:";
 $labels = $wishHelper->getUserLabelsArray ( $_SESSION ['userid'] );
 $expressinfo = $wishHelper->getExpressInfo ( $_SESSION ['userid'] );
 
-$wishHelper->applyTrackingsForOrders ( "0", $labels, $expressinfo );
-
+$wishHelper->applyTrackingsForOrders ("1", "0", $labels, $expressinfo );
+ */
 echo "<br/><br/><br/><br/>STARTTIME*************";
 $initTime =  date ( 'Y-m-d  H:i:s',time());
 for ($l=0;$l<5;$l++){

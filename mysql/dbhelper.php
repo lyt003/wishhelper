@@ -231,6 +231,11 @@ class dbhelper {
 		return mysql_query($pvars);
 	}
 	
+	public function getProductIDByVSKU($accountid,$subsku){
+		$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.$subsku.'"';
+		return mysql_query($pvs);
+	}
+	
 	public function getHotProducts($accountid,$startdate,$enddate){
 		$hotsql = 'select productid from productssummary where accountid = '.$accountid.' and startdate = "'.$startdate.'" and enddate = "'.$enddate.'" and productid != "0" and orders > 0 order by orders desc';
 		return mysql_query($hotsql);
@@ -353,6 +358,7 @@ class dbhelper {
 		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.label_id = l.id";
 		return mysql_query ( $querylabels );
 	}
+	
 	public function insertLabel($cn_name, $en_name) {
 		$sqllabel = 'select id from labels where CN_Name = "' . $cn_name . '" and EN_Name = "' . $en_name . '"';
 		$result = mysql_query ( $sqllabel );
@@ -372,6 +378,30 @@ class dbhelper {
 	public function getExpressInfo($userid, $expressid) {
 		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = ' . $userid . ' and express_id = ' . $expressid;
 		return mysql_query ( $userSql );
+	}
+	
+	public function getSubExpressInfo(){
+		$sei = 'select express_id,express_name,express_code from express_info where parent_express_id != 0';
+		return mysql_query($sei);
+	}
+
+	public function getYanWenExpresses($yanwencode){
+		$ywe = 'select c.express_id,c.express_name,c.express_code from express_info c,('.
+			   ' select express_id,express_name,express_code from express_info where express_code = "'.$yanwencode.'"'.
+			   ' ) p'.
+			   ' where c.parent_express_id = p.express_id';	
+		return mysql_query($ywe);
+	}
+	
+	public function getExpressInfos($userid){
+		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.express_id = e.express_id';
+		return mysql_query($uei);
+	}
+	
+	public function insertProductExpress($userid,$productid,$expressid,$countrycode){
+		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode) values('.$userid.',"'.$productid.'",'.$expressid.',"'.$countrycode.'")';
+		$result = mysql_query($ipe);
+		return mysql_affected_rows();
 	}
 	
 	public function  getProductSource($accountid,$parent_sku = null){
