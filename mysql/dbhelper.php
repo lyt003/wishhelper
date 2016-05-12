@@ -170,7 +170,7 @@ class dbhelper {
 	}
 	
 	public function getEUBOrders($userid) {
-		$EUBOrderSql = "SELECT o.transactionid, o.orderid,o.sku,o.productname,o.color, o.size,o.quantity, o.name,o.streetaddress1,o.streetaddress2,o.city,o.state,o.zipcode,o.phonenumber FROM orders o,accounts a WHERE a.userid = ". $userid. " and a.accountid = o.accountid and o.countrycode = 'US' and o.orderstatus = '0' order by o.transactionid";
+		$EUBOrderSql = "SELECT o.accountid, o.transactionid, o.orderid,o.sku,o.productname,o.color, o.size,o.quantity, o.name,o.streetaddress1,o.streetaddress2,o.city,o.state,o.zipcode,o.phonenumber,o.countrycode FROM orders o,accounts a WHERE a.userid = ". $userid. " and a.accountid = o.accountid and o.orderstatus = '0' order by o.transactionid";
 		return mysql_query ( $EUBOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
@@ -609,6 +609,11 @@ class dbhelper {
 			   ' and t.finalshippingcost IS NOT NULL'. 
 			   ' order by t.tracking_date DESC limit 10';
 		return mysql_query($psc);
+	}
+	
+	public function  getCountrycode(){
+		$cc = 'select * from countrycode';
+		return mysql_query($cc);
 	}
 	
 	public function getJaveUploadAppToken(){

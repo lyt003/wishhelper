@@ -122,7 +122,7 @@ class WishHelper {
 	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
-		$yanwenExpresses = $this->getYanWenExpressinfos();
+		$yanwenExpresses = $this->getChildrenExpressinfosOF("YW");
 		$expressinfos = $this->getUserExpressInfos($userid);
 		
 		$post_header = array (
@@ -295,9 +295,9 @@ class WishHelper {
 		return $expressInfos;
 	}
 	
-	public function getYanWenExpressinfos(){
+	public function getChildrenExpressinfosOF($parentExpressCode){
 		$yanwenexpresses = array();
-		$expresses = $this->dbhelper->getYanWenExpresses("YW");
+		$expresses = $this->dbhelper->getYanWenExpresses($parentExpressCode);
 		while($exresult = mysql_fetch_array($expresses)){
 			$yanwenexpresses[$exresult['express_id']] = $exresult['express_code'].'|'.$exresult['express_name'];
 		}
@@ -522,5 +522,14 @@ class WishHelper {
 		}else{
 			$this->dbhelper->insertOnlineProductVar($currentProductVar);
 		}
+	}
+	
+	public function getCountrynames(){
+		$countries = array();
+		$cresult = $this->dbhelper->getCountrycode();
+		while($country = mysql_fetch_array($cresult)){
+			$countries[$country['code']] = $country['name'];
+		}
+		return $countries;
 	}
 }

@@ -7,11 +7,32 @@ use Wish\WishHelper;
 header ( "Content-type:application/vnd.ms-excel" );
 header ( "Content-Disposition:filename=test.xls" );
 $wishhelper = new WishHelper ();
-$result = $wishhelper->getEUBOrders($_SESSION ['userid']);
+$userid = $_SESSION ['userid'];
+$result = $wishhelper->getEUBOrders($userid);
 session_commit();
+
+$EUBExpress = $wishhelper->getChildrenExpressinfosOF('EUB');
+$userExpressinfos = $wishhelper->getUserExpressInfos($userid);
+$countries = $wishhelper->getCountrynames();
+
 $preTransactionid = null;
 $curTransactionid = null;
 while ( $rows = mysql_fetch_array ( $result ) ) {
+	
+	$curSKU = $rows['sku'];
+	$curCountrycode = $rows['countrycode'];
+	$curAccountid = $rows['accountid'];
+	
+	$curProductid = $wishhelper->getPidBySKU($curAccountid, $curSKU);
+	$curExpress = $userExpressinfos[$curProductid.'|'.$curCountrycode];
+	
+	$expressid = explode ( "|", $curExpress )[0];
+	
+	$expressValue = $EUBExpress[$expressid];
+	if($expressValue == null){
+		continue;
+	}
+	
 	
 	$curTransactionid = $rows ['transactionid'];
 	if (strcmp ( $preTransactionid, $curTransactionid ) == 0) {
@@ -44,7 +65,10 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		echo $rows ['city'] . "\t";
 		echo $rows ['state'] . "\t";
 		echo $rows ['zipcode'] . "\t";
-		echo "United States\t";
+		
+		echo $countries[$rows['countrycode']]."\t";
+		//echo "United States\t";
+		
 		echo $rows ['phonenumber'] . "\t";
 		echo "\t";
 		echo $rows ['sku'] . ":" . $rows ['color'] . " " . $rows ['size'] . " " . "*" . $rows ['quantity'];

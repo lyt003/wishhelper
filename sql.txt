@@ -297,6 +297,14 @@ CREATE TABLE `optimizejobs`(
 	primary key(`accountid`,`productid`,`startdate`)
 )DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `countrycode`;
+CREATE TABLE `countrycode`(
+	`code` varchar(30),
+	`name` varchar(50),
+	primary key(`code`)
+)DEFAULT CHARSET=utf8;
+insert into countrycode(code,name) values('US','United Status');
+insert into countrycode(code,name) values('GB','United Kingdom');
 
 
 
