@@ -36,6 +36,15 @@ if($ttresult){
 /* $jober = new scheduleJob();
 $jober->execute(); */
 
+/* echo "<br/>******************************** start to insert trackingdata";
+$trackingdata = "LS831968003CN";
+$destinate = "美国";
+$weight = 422;
+$shippingcost = 40.65;
+$offprice = 0.88;
+$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $offprice*$shippingcost);
+echo "<br/>updateResult:".$updateResult; */
+
 
 /* $nextday = date ( 'Y-m-d',strtotime('+1 day'));
 echo "<br/><br/><br/><br/><br/>nextday:".$nextday;
