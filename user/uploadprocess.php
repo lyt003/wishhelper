@@ -73,29 +73,23 @@ if(strcasecmp($extension,'csv') == 0){
 	exit ();
 }else if(strcasecmp($extension,'xls') == 0){
 	$result = "process xls:";
-	echo "<br/>parse xls";
 	/** PHPExcel_IOFactory */
 	include_once dirname ( '__FILE__' ) . './PHPExcel/Classes/PHPExcel/IOFactory.php';
 	
 	
 	//$inputFileName = '../example1.xls';
-	echo '<br/>Loading file ',pathinfo($filename,PATHINFO_BASENAME),' using IOFactory to identify the format<br />';
 	$objPHPExcel = PHPExcel_IOFactory::load($filename);
 	
-	
-	echo '<hr />';
 	
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 	$sheet = $objPHPExcel->getActiveSheet();
 	$rows = $sheet->getHighestDataRow();
 	$columns = $sheet->getHighestDataColumn();
 	$columnMaxIndex = PHPExcel_Cell::columnIndexFromString($columns);
-	echo "<br/>max row:".$rows.",column:".$columns.$columnMaxIndex;
 	
 	if($columnMaxIndex <= 10){//飞宇
 	
 		for($row = 0;$row<=$rows;$row ++){
-			echo "<br/>";
 			if($column == 0){
 				$orderdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 				if(!is_numeric($orderdata))
@@ -117,16 +111,15 @@ if(strcasecmp($extension,'csv') == 0){
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($offprice)){
-				echo $trackingdata."  ".$destinate."  ".$weight."  ".$shippingcost."  ".$offprice*$shippingcost;
-				$dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $offprice*$shippingcost);
+				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $offprice*$shippingcost);
+				$result .= $row.$trackingdata."行完成;".$updateResult."  |";
 			}else{
-				$result .= $column."列没数据"; 
+				$result .= $row."行没数据"; 
 			}
 		}
 		
 	}else if($columnMaxIndex >= 15){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
-			echo "<br/>";
 			if($column == 0){
 				$orderdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 				if(!checkDatetime($orderdata))
@@ -148,10 +141,10 @@ if(strcasecmp($extension,'csv') == 0){
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($finalcost)){
-				echo $trackingdata."  ".$destinate."  ".$weight."  ".$shippingcost."  ".$finalcost;
-				$dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $finalcost);
+				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $finalcost);
+				$result .= $row.$trackingdata."行完成;".$updateResult."  |";
 			}else{
-				$result .= $column."列没数据";
+				$result .= $row."行没数据"; 
 			}	
 		}
 	}
@@ -162,11 +155,8 @@ if(strcasecmp($extension,'csv') == 0){
 }
 
 function excelTime($date, $time = false) {
- 	echo "<br/> data number:".is_numeric( $date );
 	if(function_exists('GregorianToJD')){
-		echo "use GregorianToJD";
 		if (is_numeric( $date )) {
-			echo "isnumberic";
 			$jd = GregorianToJD( 1, 1, 1970 );
 			$gregorian = JDToGregorian( $jd + intval ( $date ) - 25569 );
 			$date = explode( '/', $gregorian );
@@ -176,7 +166,6 @@ function excelTime($date, $time = false) {
 			. ($time ? " 00:00:00" : '');
 			return $date_str;
 		}
-		echo "no numberic";
 	}else{
 		$date=$date>25568?$date+1:25569;
 		/*There was a bug if Converting date before 1-1-1970 (tstamp 0)*/

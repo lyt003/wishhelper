@@ -337,8 +337,16 @@ class dbhelper {
 	}
 	
 	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost){
-		$updateTracking = 'update tracking_date set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
-		return mysql_query($updateTracking);
+		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
+		mysql_query($updateTracking); 
+		$result = mysql_affected_rows();
+		if(!$result){
+			$insertTracking = 'insert into tracking_data(tracking_number,destinate,weight,shippingcost,finalshippingcost) values("'.$tracking_number.'","'
+					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
+			mysql_query($insertTracking);
+			$result = mysql_affected_rows();
+		}
+		return $result;
 	}
 	
 	public function getUserLabels($userid) {
@@ -554,6 +562,23 @@ class dbhelper {
 			   ' select distinct sku from orders where TIMESTAMPDIFF(DAY,ordertime,now())<=2 and accountid = "'.$accountid.'"'.
 			   ' ) os left join onlineProductVars ov on ov.sku = os.sku and ov.accountid = "'.$accountid.'"';
 		return mysql_query($pos);
+	}
+	
+	public function getProductShippingCost($sku){
+
+		$psc = 'select * from ('.
+			   ' select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost from orders o,'. 
+			   ' ('.
+			   ' select distinct pv.sku,p.product_id from onlineProductVars pv,'.
+			   ' (select product_id from onlineProductVars where sku = "'.$sku.'") p'.
+			   ' where p.product_id = pv.product_id'.
+	           ' ) ps'.
+	    	   ' where o.sku = ps.sku'.
+			   ' ) a'.
+			   ' left join tracking_data t on a.tracking = t.tracking_number'.
+			   ' and t.finalshippingcost IS NOT NULL'. 
+			   ' order by t.tracking_date DESC limit 10';
+		return mysql_query($psc);
 	}
 	
 	public function getJaveUploadAppToken(){
