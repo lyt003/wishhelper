@@ -135,16 +135,20 @@ class WishHelper {
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
 		
-			$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
-			$curCountrycode = $orderNoTracking['countrycode'];
-			
-			$curExpress = $expressinfos[$curProductid.'|'.$curCountrycode];
-			$expressid = explode ( "|", $curExpress )[0];
-			$expressValue = $yanwenExpresses[$expressid];
-			if($expressValue == null){
-				echo "<br/>".$orderNoTracking['sku']." use the other logistic";
-				continue;
+			//exclude Ebay User:
+			if($accountid != 0){
+				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
+				$curCountrycode = $orderNoTracking['countrycode'];
+					
+				$curExpress = $expressinfos[$curProductid.'|'.$curCountrycode];
+				$expressid = explode ( "|", $curExpress )[0];
+				$expressValue = $yanwenExpresses[$expressid];
+				if($expressValue == null){
+					echo "<br/>".$orderNoTracking['sku']." use the other logistic";
+					continue;
+				}
 			}
+			
 			
 			//if (strcmp ( $orderNoTracking ['countrycode'], "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
@@ -180,11 +184,21 @@ class WishHelper {
 						continue;
 					} */
 					
-					$expressValue = explode ( "|",$expressValue);
-					$channel = $xml->addChild ( "Channel", $expressValue[0]); 
-					$orderNoTracking ['provider'] = $expressValue[1];
-					echo "<br/>currentorder ".$orderNoTracking['sku']." use the logistic:".$expressValue[0].$expressValue[1];
-						
+					//for Ebay User:
+					if($accountid == 0){
+						if ($intPrice < 7) {
+							$channel = $xml->addChild ( "Channel", "105" ); // *
+							$orderNoTracking ['provider'] = "YanWen";
+						} else {
+							$channel = $xml->addChild ( "Channel", "154" ); // *
+							$orderNoTracking ['provider'] = "ChinaAirPost";
+						}
+					}else{
+						$expressValue = explode ( "|",$expressValue);
+						$channel = $xml->addChild ( "Channel", $expressValue[0]);
+						$orderNoTracking ['provider'] = $expressValue[1];
+						echo "<br/>currentorder ".$orderNoTracking['sku']." use the logistic:".$expressValue[0].$expressValue[1];
+					}
 		
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
