@@ -303,8 +303,9 @@ CREATE TABLE `countrycode`(
 	`name` varchar(50),
 	primary key(`code`)
 )DEFAULT CHARSET=utf8;
-insert into countrycode(code,name) values('US','United Status');
+insert into countrycode(code,name) values('US','United States');
 insert into countrycode(code,name) values('GB','United Kingdom');
+insert into countrycode(code,name) values('NO','Norway');
 
 
 
