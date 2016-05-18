@@ -232,7 +232,13 @@ class dbhelper {
 	}
 	
 	public function getProductIDByVSKU($accountid,$subsku){
-		$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.$subsku.'"';
+		$tempsku = str_replace('_','%',$subsku);
+		$tempsku = str_replace('AND','%',$tempsku);
+		if(strpos($tempsku,'%') === false){
+			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.$tempsku.'"';
+		}else{
+			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.$tempsku.'"';
+		}
 		return mysql_query($pvs);
 	}
 	

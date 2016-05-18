@@ -111,10 +111,6 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 
 $add = $_GET ['add'];
 
-$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
-$expressinfos = $wishHelper->getSubExpressInfos();
-$userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
-
 // process orders;
 if (strcmp ( $add, "1" ) == 0) {
 	foreach ( $_POST as $key => $value ) {
@@ -133,7 +129,7 @@ if (strcmp ( $add, "1" ) == 0) {
 	
 	
 	// get info of current user id:
-	//$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 	$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
 	
 	for($ct = 0; $ct < $i; $ct ++) {
@@ -165,6 +161,10 @@ if (strcmp ( $add, "1" ) == 0) {
 	}
 }
 
+if(!isset($labels))
+	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+$expressinfos = $wishHelper->getSubExpressInfos();
+$userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

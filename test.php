@@ -32,6 +32,12 @@ if($ttresult){
 }
 
 
+echo "<br>Start key value express:";
+//"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. 
+$key = "express|screw earringsilve|US|1|2";
+$keyvalues = explode("|",$key);
+print_r($keyvalues);
+
 //add jobs:
 /* $jober = new scheduleJob();
 $jober->execute(); */
@@ -133,7 +139,7 @@ foreach ( $wishcolors as $color ) {
 **/
 
 
-$expressInfo = array();
+/* $expressInfo = array();
 $expressResult = $dbhelper->getExpressInfo(1, 1);
 while($expressAttr = mysql_fetch_array($expressResult)){
 	echo "<br/>values:".$expressAttr['express_attr_name'].$expressAttr['express_attr_value'];
@@ -144,7 +150,7 @@ echo "<br/>CONFIG:".YANWEN_USER_ATTR." value:".$expressInfo[YANWEN_USER_ATTR]."<
 foreach ($expressInfo as $ekey=>$eValue){
 	echo "<br/>".$ekey.":".$eValue;
 }
-
+ */
 
 $key = "label_fdafdkakfdas_12";
 if(preg_match("/^label/",$key,$matches)){
