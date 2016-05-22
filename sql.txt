@@ -306,6 +306,7 @@ CREATE TABLE `countrycode`(
 insert into countrycode(code,name) values('US','United States');
 insert into countrycode(code,name) values('GB','United Kingdom');
 insert into countrycode(code,name) values('NO','Norway');
+insert into countrycode(code,name) values('CA','Canada');
 
 
 

@@ -17,22 +17,25 @@ $countries = $wishhelper->getCountrynames();
 
 $preTransactionid = null;
 $curTransactionid = null;
+
+$accountid = $_GET['accountid'];//if $accountid = 0, the orders from EBay.
 while ( $rows = mysql_fetch_array ( $result ) ) {
 	
-	$curSKU = $rows['sku'];
-	$curCountrycode = $rows['countrycode'];
-	$curAccountid = $rows['accountid'];
-	
-	$curProductid = $wishhelper->getPidBySKU($curAccountid, $curSKU);
-	$curExpress = $userExpressinfos[$curProductid.'|'.$curCountrycode];
-	
-	$expressid = explode ( "|", $curExpress )[0];
-	
-	$expressValue = $EUBExpress[$expressid];
-	if($expressValue == null){
-		continue;
+	if(strcmp($accountid,"0") != 0 ){
+		$curSKU = $rows['sku'];
+		$curCountrycode = $rows['countrycode'];
+		$curAccountid = $rows['accountid'];
+		
+		$curProductid = $wishhelper->getPidBySKU($curAccountid, $curSKU);
+		$curExpress = $userExpressinfos[$curProductid.'|'.$curCountrycode];
+		
+		$expressid = explode ( "|", $curExpress )[0];
+		
+		$expressValue = $EUBExpress[$expressid];
+		if($expressValue == null){
+			continue;
+		}	
 	}
-	
 	
 	$curTransactionid = $rows ['transactionid'];
 	if (strcmp ( $preTransactionid, $curTransactionid ) == 0) {
@@ -66,7 +69,12 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		echo $rows ['state'] . "\t";
 		echo $rows ['zipcode'] . "\t";
 		
-		echo $countries[$rows['countrycode']]."\t";
+		if($countries[$rows['countrycode']] != null){
+			echo $countries[$rows['countrycode']]."\t";
+		}else{
+			echo $rows['countrycode']."\t";
+		}
+		
 		//echo "United States\t";
 		
 		echo $rows ['phonenumber'] . "\t";

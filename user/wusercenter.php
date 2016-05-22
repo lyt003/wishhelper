@@ -225,6 +225,11 @@ $userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
 	function downloadEUB(){
 		window.location.href="./weubdownload.php";
 	}
+
+	function downloadEbayEUB(){
+		window.location.href="./weubdownload.php?accountid=0";
+	}
+	
 	function uploadEUB(){
 		window.open("./wuploadEUBTrackings.php");
 	}
@@ -323,6 +328,8 @@ for($count = 0; $count < $i; $count ++) {
 					onclick="uploadtrackings()">上传单号</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="downloadEUB()">下载E邮宝订单</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="downloadEbayEUB()">下载E邮宝订单(From EBay)</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
 			</ul>
