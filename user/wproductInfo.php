@@ -635,7 +635,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		echo "</div><span class=\"tools\"></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr>";
 		echo "<th style=\"width:25%\">产品名称</th><th style=\"width:20%\">父SKU</th>";
-		echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:10%\">操作</th></tr></thead>";
+		echo "<th style=\"width:10%\">收藏数</th><th style=\"width:10%\">已售出</th><th style=\"width:10%\">上传时间</th><th style=\"width:30%\">操作</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_product = mysql_fetch_array ( $disabledProductslist) ) {
 			$curpid = $cur_product['product_id'];
@@ -655,7 +655,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product['number_saves']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['number_sold']."</td>";
 			echo "<td style=\"width:10%;vertical-align:middle;\">" . $cur_product ['date_uploaded']."</td>";
-			echo "<td style=\"width:10%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:30%;vertical-align:middle;\"><button type=\"button\" onclick=\"productshipping('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">运费</span></button><button type=\"button\" onclick=\"productDetails('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button><button type=\"button\" onclick=\"productDelete('".$accountid."','".$cur_product['id']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">删除</span></button></td>";
 			echo "</tr>";
 			$orderCount ++;
 		}
@@ -713,6 +713,11 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 		function productDetails(uid,pid){
 			window.open("./wproductDetails.php?uid=" + uid + "&pid=" + pid);
 		}
+		productDelete
+		function productDelete(uid,pid){
+			window.open("./wproductDelete.php?uid=" + uid + "&pid=" + pid);
+		}
+		
 
 		function productshipping(uid,pid){
 			window.open("./wproductshipping.php?uid=" + uid + "&pid=" + pid);

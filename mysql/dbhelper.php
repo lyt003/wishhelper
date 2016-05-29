@@ -603,13 +603,18 @@ class dbhelper {
 	public function getDisabledProducts($accountid){
 		$dpl = 'select * from '.
 				' ('.
-				' select o.id, o.name,o.parent_sku,o.main_image,o.number_saves,o.number_sold,o.date_uploaded,o.is_promoted,o.review_status,p.* from'. 
+				' select o.id, o.deleted,o.name,o.parent_sku,o.main_image,o.number_saves,o.number_sold,o.date_uploaded,o.is_promoted,o.review_status,p.* from'. 
 				' ('.
 				' select distinct product_id from onlineProductVars where enabled = "false" and accountid = "'.$accountid.'"'.
 				' ) p'.
 				' left join onlineProducts o on o.id = p.product_id'.
-				' ) r where r.review_status != "reject"  order by r.date_uploaded limit 50 ';
+				' ) r where r.review_status != "reject" and r.deleted is NULL order by r.date_uploaded limit 50 ';
 		return mysql_query($dpl);
+	}
+	
+	public function deleteProduct($accountid,$productid){
+		$dp = 'update onlineProducts set deleted = 1 where accountid = "'.$accountid.'" and id = "'.$productid.'"';
+		return mysql_query($dp);
 	}
 	
 	public function getProductVarsEnabled($pid){

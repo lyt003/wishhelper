@@ -230,7 +230,7 @@ CREATE TABLE `onlineProducts`(
 	`description` varchar(10000) NOT NULL,
  	 PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
-
+Alter table `onlineProducts` add `deleted` int(1);
 
 DROP TABLE IF EXISTS `onlineProductVars`;
 CREATE TABLE `onlineProductVars`(
