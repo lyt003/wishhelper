@@ -146,6 +146,8 @@ $landingPageURL = $_POST ['Landing_Page_URL'];
 $productSourceURL = $_POST ['Product_Source_URL'];
 $scheduleDate = $_POST ['Schedule_Date'];
 
+$lowesttotalprice = $_POST['lowesttotalprice'];
+
 $updateSKU = $_POST['update'];
 
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
@@ -174,6 +176,7 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['tags'] = $tags;
 	$productarray ['UPC'] = $UPC;
 	$productarray ['productSourceURL'] = $productSourceURL;
+	$productarray['lowesttotalprice'] = $lowesttotalprice;
 	
 	$dbhelper = new dbhelper ();
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
@@ -321,6 +324,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 	while ($currentSource = mysql_fetch_array($productSource)){
 		if(strcmp($currentSource['parent_sku'],$updateParentSKU) == 0){
 			$productSourceURL = $currentSource ['source_url'];
+			$lowesttotalprice = $currentSource['lowesttotalprice'];
 		}
 	}
 }
@@ -637,6 +641,17 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								</div>
 							</div>
 
+							<div class="control-group">
+								<label class="control-label" data-col-index="5"><span
+									class="col-name">最低总价</span></label>
+
+								<div class="controls input-append">
+									<input class="input-block-level required" name="lowesttotalprice"
+										id="lowesttotalprice" type="text"
+										value="<?php echo $lowesttotalprice?>" placeholder="系统自动优化时，保证价格在此价格之上。默认为当前总价,可接受：$4.00" />
+								</div>
+							</div>
+							
 							<div class="control-group">
 								<label class="control-label"><span class="col-name">净额</span></label>
 

@@ -174,12 +174,12 @@ class dbhelper {
 		return mysql_query ( $EUBOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
-		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '")';
+		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url,lowesttotalprice) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '","'.$productarray['lowesttotalprice'].'")';
 		return mysql_query ( $insertSourceSQL );
 	}
 	
 	public function updateProductSource($accountid, $productarray){
-		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '" where accountid = '.$accountid.' and parent_sku="'.$productarray ['parent_sku'].'"';
+		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '", lowesttotalprice="'.$productarray['lowesttotalprice'].'"  where accountid = '.$accountid.' and parent_sku="'.$productarray ['parent_sku'].'"';
 		return mysql_query ( $updateSourceSQL );
 	}
 	
@@ -413,7 +413,7 @@ class dbhelper {
 	}
 	
 	public function  getProductSource($accountid,$parent_sku = null){
-		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$accountid;
+		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url,i.lowesttotalprice FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$accountid;
 		if($parent_sku != null){
 			$psource .= " and i.parent_sku like '%".$parent_sku."%'";
 		}

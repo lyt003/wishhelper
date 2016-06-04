@@ -92,6 +92,8 @@ CREATE TABLE `productinfo` (
 )  DEFAULT CHARSET=utf8;
 ALTER TABLE `productinfo`
   ADD PRIMARY KEY (`parent_sku`,`accountid`);
+ALTER TABLE `productinfo`
+ add lowesttotalprice varchar(10);
 
 INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
 ('MLY_502', 2, 'http://detail.1688.com/offer/1263012741.html?spm=a2615.7691456.0.0.3cAnpj'),
