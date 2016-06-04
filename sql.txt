@@ -94,6 +94,9 @@ ALTER TABLE `productinfo`
   ADD PRIMARY KEY (`parent_sku`,`accountid`);
 ALTER TABLE `productinfo`
  add lowesttotalprice varchar(10);
+insert into `productinfo`(`parent_sku`,`accountid`,`source_url`,`lowesttotalprice`) values('1222',1,'','4');
+insert into `productinfo`(`parent_sku`,`accountid`,`source_url`,`lowesttotalprice`) values('lovelysharkearring',1,'','4');
+insert into `productinfo`(`parent_sku`,`accountid`,`source_url`,`lowesttotalprice`) values('yunfeink',1,'','10');
 
 INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
 ('MLY_502', 2, 'http://detail.1688.com/offer/1263012741.html?spm=a2615.7691456.0.0.3cAnpj'),

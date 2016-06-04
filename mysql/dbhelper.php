@@ -601,6 +601,23 @@ class dbhelper {
 			   ' ) os left join onlineProductVars ov on ov.sku = os.sku and ov.accountid = "'.$accountid.'"';
 		return mysql_query($pos);
 	}
+	
+	public function getLowesttotalprice($productid,$accountid){
+		$ltp = 'select o.id,o.parent_sku,p.* from onlineProducts o ,productinfo p where o.id = "'.$productid.'" and o.accountid = "'.$accountid.'" and o.parent_sku = p.parent_sku and o.accountid = p.accountid';
+		$lowesttotalpriceResult = mysql_query($ltp);
+		if($lowesttotalpricearray = mysql_fetch_array($lowesttotalpriceResult)){
+			$lowesttotalprice = $lowesttotalpricearray['lowesttotalprice'];
+			return $lowesttotalprice;
+		}else{
+			$ltp2 = 'select o.id,o.sku,p.* from onlineProductVars o ,productinfo p where o.product_id = "'.$productid.'" and o.accountid = "'.$accountid.'" and o.sku = p.parent_sku and o.accountid = p.accountid';
+			$lowesttotalpriceResult2 = mysql_query($ltp2);
+			if($lowesttotalpricearray2 = mysql_fetch_array($lowesttotalpriceResult2)){
+				$lowesttotalprice2 = $lowesttotalpricearray2['lowesttotalprice'];
+				return $lowesttotalprice2;
+			}
+		}
+		return null;
+	}
 
 	public function getDisabledProducts($accountid){
 		$dpl = 'select * from '.

@@ -29,8 +29,50 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 	echo "client account id:" . $client->getAccountid ();
 }
 
+//test lowesttotalprice:
+$jobproductid = '53bea5ef8e0d6c0cf96f562b';
 
-print_r($client);
+$vars = $dbhelper->getProductVars ($jobproductid);
+$date = date('Y-m-d');
+$varsResponse = "";
+if ( $var = mysql_fetch_array ( $vars ) ) {
+	$currSKU = $var ['sku'];
+	echo "<br/>currSKU:".$currSKU;
+	try {
+		$productVar = $client->getProductVariationBySKU ( $currSKU );
+		echo "<br/>ProductVar:";
+		print_r($productVar);
+
+		$lowesttotalprice = $dbhelper->getLowesttotalprice($jobproductid, $accountid);
+		echo "<br>lowestprice:".$lowesttotalprice;
+		$shipping = $productVar->shipping;
+		$price = $productVar->price;
+		
+		if($lowesttotalprice == null || $shipping + $price > $lowesttotalprice){
+			
+			if ($shipping > 1) {
+				$params ['shipping'] = $shipping - 0.01;
+				echo "<br/>update shipping to ".$params['shipping'];
+			} else {
+				if ($price > 1) {
+					$params ['price'] = $price - 0.01;
+					echo "<br/>update price to ".$params['price'];
+				}
+			}
+		}else {
+			echo "<br/> has reached the lowestprice,didn't update price  ";
+		}
+		
+	} catch ( ServiceResponseException $e ) {
+		echo "<br/>Error:";
+		print_r ( $e );
+		echo "<br/>Error Message:".$e->getErrorMessage();
+		echo "<br/>";
+	}
+}
+
+
+/* print_r($client);
 $jobproductid = '54578c68d26bc71607383832';
 $vars = $dbhelper->getProductVars ($jobproductid);
 $date = date('Y-m-d');
@@ -95,7 +137,7 @@ if ( $var = mysql_fetch_array ( $vars ) ) {
 }
 
 
-$prod_res = null;
+$prod_res = null; */
 
 // add product;
 /* $products = $dbhelper->getProducts ( $uniqueID );

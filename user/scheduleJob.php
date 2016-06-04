@@ -56,7 +56,7 @@ class scheduleJob {
 			} else if (strcmp ( $operator, LOWERSHIPPING ) == 0 || strcmp ( $operator, ADDINVENTORY ) == 0) {
 				
 				$vars = $this->dbhelper->getProductVars ( $jobproductid );
-				$varsResponse = "";
+				$varsResponse = "V0605";
 				while ( $var = mysql_fetch_array ( $vars ) ) {
 					$currSKU = $var ['sku'];
 					$productVar = $client->getProductVariationBySKU ( $currSKU );
@@ -67,14 +67,22 @@ class scheduleJob {
 						$params ['sku'] = $currSKU;
 						
 						if (strcmp ( $operator, LOWERSHIPPING ) == 0) {
+							
+							$lowesttotalprice = $this->dbhelper->getLowesttotalprice($jobproductid, $accountid);
+							
 							$shipping = $productVar->shipping;
 							$price = $productVar->price;
-							if ($shipping > 1) {
-								$params ['shipping'] = $shipping - 0.01;
-							} else {
-								if ($price > 1) {
-									$params ['price'] = $price - 0.01;
-								}
+
+							if($lowesttotalprice == null || $shipping + $price > $lowesttotalprice){
+								if ($shipping > 1) {
+									$params ['shipping'] = $shipping - 0.01;
+								} else {
+									if ($price > 1) {
+										$params ['price'] = $price - 0.01;
+									}
+								}	
+							}else {
+								$varsResponse .= " has reached the lowestprice,didn't update price  ";								
 							}
 						}
 						
