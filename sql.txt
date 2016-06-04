@@ -307,6 +307,51 @@ insert into countrycode(code,name) values('US','United States');
 insert into countrycode(code,name) values('GB','United Kingdom');
 insert into countrycode(code,name) values('NO','Norway');
 insert into countrycode(code,name) values('CA','Canada');
+insert into countrycode(code,name) values('AU','AUSTRALIA');
+insert into countrycode(code,name) values('FR','FRANCE');
+insert into countrycode(code,name) values('RU','RUSSIA');
+insert into countrycode(code,name) values('UA','UKRAINE');
+insert into countrycode(code,name) values('SA','KINGDOM OF SAUDI ARABIA');
+insert into countrycode(code,name) values('BR','BRAZIL');
+insert into countrycode(code,name) values('ES','SPAIN');
+insert into countrycode(code,name) values('DE','GERMANY');
+insert into countrycode(code,name) values('IE','IRELAND');
+insert into countrycode(code,name) values('FI','FINLAND');
+
+ES	SPAIN
+	
+SG	SINGAPORE
+NL	NETHERLANDS
+	
+BY	BELARUS
+DE	GERMANY
+	
+	
+NO	NORWAY
+IT	ITALY
+BE	BELGIUM
+LU	LUXEMBOURG
+IE	IRELAND
+DK	DENMARK
+GR	GREECE
+PT	PORTUGAL
+SE	SWEDEN
+FI	FINLAND
+AT	AUSTRIA
+CY	CYPRUS
+CZ	CZECH REPUBLIC
+EE	ESTONIA
+HU	HUNGARY
+LV	LATVIA
+LT	LITHUANIA
+MT	MALTA
+PL	POLAND
+SK	SLOVAKIA
+SI	SLOVENIA
+RO	ROMANIA
+BG	BULGARIA
+HR	CROATIA
+IN	INDIA
 
 
 
