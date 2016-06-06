@@ -301,6 +301,9 @@ CREATE TABLE `optimizejobs`(
 	`errormessage` varchar(500),
 	primary key(`accountid`,`productid`,`startdate`)
 )DEFAULT CHARSET=utf8;
+ALTER TABLE `optimizejobs`
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`accountid`,`productid`,`startdate`,`operator`);
 
 DROP TABLE IF EXISTS `countrycode`;
 CREATE TABLE `countrycode`(
