@@ -627,7 +627,7 @@ class dbhelper {
 				' select distinct product_id from onlineProductVars where enabled = "false" and accountid = "'.$accountid.'"'.
 				' ) p'.
 				' left join onlineProducts o on o.id = p.product_id'.
-				' ) r where r.review_status != "reject" and r.deleted is NULL order by r.date_uploaded limit 50 ';
+				' ) r where r.review_status != "reject" and r.deleted is NULL order by r.number_sold desc, r.number_saves desc, r.date_uploaded DESC limit 100 ';
 		return mysql_query($dpl);
 	}
 	
