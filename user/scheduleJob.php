@@ -56,7 +56,7 @@ class scheduleJob {
 			} else if (strcmp ( $operator, LOWERSHIPPING ) == 0 || strcmp ( $operator, ADDINVENTORY ) == 0) {
 				
 				$vars = $this->dbhelper->getProductVars ( $jobproductid );
-				$varsResponse = "V0605";
+				$varsResponse = "V0618";
 				while ( $var = mysql_fetch_array ( $vars ) ) {
 					$currSKU = $var ['sku'];
 					$productVar = $client->getProductVariationBySKU ( $currSKU );
@@ -77,7 +77,7 @@ class scheduleJob {
 								if ($shipping > 1) {
 									$params ['shipping'] = $shipping - 0.01;
 								} else {
-									if ($price > 1) {
+									if ($price > 2) {
 										$params ['price'] = $price - 0.01;
 									}
 								}	
