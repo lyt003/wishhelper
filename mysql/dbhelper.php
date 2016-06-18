@@ -201,9 +201,9 @@ class dbhelper {
 		return mysql_query($queryproducts);
 	}
 	
-	public function getOnlineProducts($accountid,$queryParentSKU,$start=0,$limit=20){
+	public function getOnlineProducts($accountid,$queryParentSKU,$start=0,$limit=50){
 		if($queryParentSKU == null){
-			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' limit '.$start.','.$limit;
+			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and review_status != "rejected"  and deleted is NULL order by number_saves desc limit '.$start.','.$limit;
 		}else{
 			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%" limit '.$start.','.$limit;
 		}

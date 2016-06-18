@@ -666,7 +666,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 	}
 } else{
 
-	if($queryParentSKU != null){
+	//if($queryParentSKU != null){
 		$orderCount = 0;
 		for($count1 = 0; $count1 < $i; $count1 ++) {
 			if($accounts ['token' . $count1] != null){
@@ -695,7 +695,7 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 				echo "</tbody></table></div></div></div></div>";
 			}
 		}
-	}
+	//}
 }
 
 ?>
