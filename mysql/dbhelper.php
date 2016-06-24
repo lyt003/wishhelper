@@ -411,7 +411,7 @@ class dbhelper {
 	}
 	
 	public function insertProductExpress($userid,$productid,$expressid,$countrycode){
-		$delsql = 'delete from product_express_info where userid ='.$userid.' and productid = "'.$productid.'" and  $countrycode = "'.$countrycode.'"';
+		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and  countrycode = "'.$countrycode.'"';
 		$del = mysql_query($delsql);
 		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode) values('.$userid.',"'.$productid.'",'.$expressid.',"'.$countrycode.'")';
 		$result = mysql_query($ipe);
