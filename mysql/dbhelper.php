@@ -203,7 +203,13 @@ class dbhelper {
 	
 	public function getOnlineProducts($accountid,$queryParentSKU,$start=0,$limit=50){
 		if($queryParentSKU == null){
-			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and review_status != "rejected"  and deleted is NULL order by number_saves desc limit '.$start.','.$limit;
+			//$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and review_status != "rejected"  and deleted is NULL order by number_saves desc limit '.$start.','.$limit;
+			
+			$queryonlineProducts = 'select max(a.price),a.* from ('.
+									' select v.price, p.* from onlineProducts p ,onlineProductVars v where p.id = v. product_id and p.accountid =  '.$accountid.' and review_status != "rejected" and deleted is NULL'. 	
+									' ) a'. 
+									' group by id'.
+									' order by price,number_sold desc,number_saves desc';
 		}else{
 			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%" limit '.$start.','.$limit;
 		}
