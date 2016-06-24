@@ -177,7 +177,7 @@ class scheduleJob {
 				$tempTags = rtrim($tempTags,",");
 				$tempProduct['tags'] = $tempTags;
 		
-				$tempProduct['accountid'] = $currentAccountid ;
+				$tempProduct['accountid'] = $accountid ;
 				$uploaded = $tempProduct['date_uploaded'];
 				$tempdate = explode("-",trim($uploaded));
 				$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
@@ -193,7 +193,7 @@ class scheduleJob {
 						$tempVars[$key] = $val;
 					}
 						
-					$tempVars['accountid'] = $currentAccountid ;
+					$tempVars['accountid'] = $accountid ;
 					$this->insertOnlineProductVar($tempVars);
 				}
 			}

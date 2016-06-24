@@ -39,8 +39,10 @@ $keyvalues = explode("|",$key);
 print_r($keyvalues);
 
 //add jobs:
-/* $jober = new scheduleJob();
-$jober->execute(); */
+/* echo "<br/>******************************** start to SYNCHRONIZEDSTORE";
+ $jober = new scheduleJob();
+$jober->synchronizedStore("1","0", "2016-06-24");
+echo "<br/>******************************** end SYNCHRONIZEDSTORE"; */
 
 /* echo "<br/>******************************** start to insert trackingdata";
 $trackingdata = "LS831968003CN";
