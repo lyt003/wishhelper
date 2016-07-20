@@ -68,10 +68,10 @@ $result = curl_exec($curl);
 //$decode_result = json_decode($result);
 curl_close($curl);
 //echo $url;
-//$xml1 = simplexml_load_string($result);
-//echo $xml1;
-//print_r($xml1);
-//var_dump($xml1);
+$xml1 = simplexml_load_string($result);
+echo $xml1;
+print_r($xml1);
+var_dump($xml1);
 //print_r($result);
 //var_dump($result);
 

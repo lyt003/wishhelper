@@ -179,6 +179,7 @@ insert into express_info(express_name,express_code,parent_express_id) values('E�
 insert into express_info(express_name,express_code,parent_express_id) values('YanWen','105',1);
 insert into express_info(express_name,express_code,parent_express_id) values('ChinaAirPost','154',1);
 insert into express_info(express_name,express_code,parent_express_id) values('各国E邮宝','EUB',2);
+insert into express_info(express_name,express_code,parent_express_id) values('燕邮宝平邮','141',1);
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
