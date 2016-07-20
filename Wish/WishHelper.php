@@ -232,15 +232,17 @@ class WishHelper {
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn ); // *
 		
+					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . ";" . $preGoodsNameEn );
+					
 					$preGoodsNameEn = "";
 					$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
 					$gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
 					$gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
-					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName" );
 					$GsHsCode = $Goods->addChild ( "HsCode" );
 		
 					$XMLString = $xml->asXML ();
-		
+					echo "<br/>XMLString:";
+					var_dump($XMLString);
 					$curl = curl_init ();
 					$url = $expressinfo[YANWEN_SERVICE_URL] . "/Users/" . $expressinfo[YANWEN_USER_ATTR] . "/Expresses";
 					curl_setopt ( $curl, CURLOPT_URL, $url );
@@ -252,6 +254,7 @@ class WishHelper {
 					$error = curl_error ( $curl );
 					curl_close ( $curl );
 					$resultXML = simplexml_load_string ( $result );
+					echo "<br/>resultXML:";
 					var_dump ( $resultXML );
 					$response = $resultXML->Response;
 					$trackingnumber = $response->Epcode;
