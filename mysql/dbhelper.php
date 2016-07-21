@@ -398,7 +398,7 @@ class dbhelper {
 	}
 
 	public function getYanWenExpresses($yanwencode){
-		$ywe = 'select c.express_id,c.express_name,c.express_code from express_info c,('.
+		$ywe = 'select c.express_id,c.express_name,c.express_code,c.provider_name from express_info c,('.
 			   ' select express_id,express_name,express_code from express_info where express_code = "'.$yanwencode.'"'.
 			   ' ) p'.
 			   ' where c.parent_express_id = p.express_id';	
@@ -406,7 +406,7 @@ class dbhelper {
 	}
 	
 	public function getExpressInfos($userid){
-		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.express_id = e.express_id';
+		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.express_id = e.express_id';
 		return mysql_query($uei);
 	}
 	

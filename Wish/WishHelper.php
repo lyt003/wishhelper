@@ -316,7 +316,7 @@ class WishHelper {
 		$yanwenexpresses = array();
 		$expresses = $this->dbhelper->getYanWenExpresses($parentExpressCode);
 		while($exresult = mysql_fetch_array($expresses)){
-			$yanwenexpresses[$exresult['express_id']] = $exresult['express_code'].'|'.$exresult['express_name'];
+			$yanwenexpresses[$exresult['express_id']] = $exresult['express_code'].'|'.$exresult['provider_name'];
 		}
 		return $yanwenexpresses;
 	}
