@@ -140,13 +140,17 @@ if(isset($error)){
 	echo "</div>";
 }
 ?>
-<ul>&nbsp;&nbsp;&nbsp;&nbsp;<h4>请在wish设置页(账号-》设置-》API设置(V2))处，先创建一个Private app：</h4></ul> 
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h3>在线客服：<a href="tencent://message/?uin=409326210&Site=l.com&Menu=yes"><img border="5" src="http://wpa.qq.com/pa?p=1:409326210:3" alt="QQ联系"/></a></h3></ul>
+<div class="col-md-6">
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;<h4>请在wish设置页(账号-》设置-》API设置)处，先创建一个Private app：</h4></ul> 
 <ul><h5>1，请在"name"项填写应用名称: 可任意填写 </h5></ul>
 <ul><h5>2，请在"Redirect URI"项填写如下网址: https://wishconsole.com/user/wbinding.php</h5></ul>
 <ul><h5>3，保存得到Client Id,Client Secret</h5></ul>
 <br/>
-<ul><h4> 然后复制并填写如下Private app验证信息：</h4></ul>
+
+<ul><h4> 然后复制并填写如下Private app验证信息：(可参考右侧图片)</h4></ul>
 <!-- &nbsp;&nbsp;&nbsp;&nbsp;<h4>该功能暂不开放,如有需要,请联系管理员admin@wishconsole.com</h4></ul> -->
+
  <br/>
 <ul><h5>1，请填写&nbsp;&nbsp;Client Id：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="clientid" type="text" name="clientid" value=""/></h5></ul>
 <br/>
@@ -155,6 +159,8 @@ if(isset($error)){
 <ul><h5>3，请填写店铺名称：&nbsp;&nbsp;<input id="storename" type="text" name="storename" value=""/></h5></ul>
 <br/>
 <ul><button type="button" id="bind">申请Wish授权</button></ul>
+ </div>
+<div class="col-md-6"><img src="../image/bind.jpg"></img>  </div>
 </div>
 </form>
 <!-- FOOTER -->
@@ -187,13 +193,27 @@ $(document).ready(function(){
   $("#bind").click(function(){
   	if($("#clientid").val() == ""){
   		alert("请输入Client Id值");
+  		return;
   	}
   	if($("#clientsecret").val() == ""){
   		alert("请输入Client Secret值");
+  		return;
   	}
   	if($("#storename").val() == ""){
   		alert("请输入店铺名称");
+  		return;
   	}
+
+  	if($.trim($("#clientid").val()).length<24){
+		alert("请参考右侧图片，填写正确的clientid值");
+		return;
+    }
+    
+  	if($.trim($("#clientsecret").val()).length<32){
+  		alert("请参考右侧图片，填写正确的clientsecret值");
+  		return;
+    }
+  	  	
   	if($("#clientid").val() != "" && $("#clientsecret").val() != "" && $("#storename").val() != ""){
   	  	$("#bind_form").submit()}	
   });

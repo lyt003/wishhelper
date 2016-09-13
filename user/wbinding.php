@@ -52,14 +52,19 @@ if ($access_code != null) {
 	echo "\n";
 	echo $access_token;
 	
-	$dbhelper->updateUserToken ( $accountid, $access_token, $refresh_token );
-	
-	header ( "Location:./wuploadproduct.php" );
+	if((strcmp($access_token,'0') == 0) || (strcmp($refresh_token,'0') == 0)){
+		echo "绑定出错，请联系客服<br/>";
+		var_dump($response);
+	}else{
+		$dbhelper->updateUserToken ( $accountid, $access_token, $refresh_token );
+		
+		header ( "Location:./wuploadproduct.php" );
+	}
 } else if ($clientid != null && $clientsecret != null && $storename != null) {
 	
-	if($dbhelper->isClientidSecretExist($clientid, $clientsecret)){
+	/* if($dbhelper->isClientidSecretExist($clientid, $clientsecret)){
 		header ( "Location:./wbindwish.php?error=该wish账号已经被绑定过,不能重复绑定" );
-	}else{
+	}else{ */
 		$result = $dbhelper->addUseraccount ( $userid, $storename, $clientid, $clientsecret );
 		if ($result != null) {
 			$_SESSION ['accountid'] = $result;
@@ -67,7 +72,7 @@ if ($access_code != null) {
 			$_SESSION ['clientsecret'] = $clientsecret;
 			header ( "Location:https://china-merchant.wish.com/oauth/authorize?client_id=" . $clientid );
 		}	 
-	}
+	//}
 }
 
 
