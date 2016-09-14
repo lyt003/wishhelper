@@ -53,8 +53,7 @@ if ($access_code != null) {
 	echo $access_token;
 	
 	if((strcmp($access_token,'0') == 0) || (strcmp($refresh_token,'0') == 0)){
-		echo "绑定出错，请联系客服<br/>";
-		var_dump($response);
+		echo "绑定出错，请尝试使用翻墙软件，确保能正常访问https://merchant.wish.com,或者您可在绑定页面直接联系客服<br/>";
 	}else{
 		$dbhelper->updateUserToken ( $accountid, $access_token, $refresh_token );
 		
