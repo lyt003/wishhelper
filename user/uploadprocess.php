@@ -118,7 +118,7 @@ if(strcasecmp($extension,'csv') == 0){
 			}
 		}
 		
-	}else if($columnMaxIndex >= 15){//Yanwen
+	}else if($columnMaxIndex >= 12){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
 				$orderdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
@@ -134,9 +134,9 @@ if(strcasecmp($extension,'csv') == 0){
 						$destinate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 					case 6:
 						$weight = $sheet->getCellByColumnAndRow($column,$row)->getValue();
-					case 10:
+					case 9:
 						$shippingcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
-					case 14:
+					case 12:
 						$finalcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 				}
 			}
