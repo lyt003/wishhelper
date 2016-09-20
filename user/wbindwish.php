@@ -162,6 +162,8 @@ if(isset($error)){
  </div>
 <div class="col-md-6"><img src="../image/bind.jpg"></img>  </div>
 </div>
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为保证能正常访问https://merchant.wish.com完成授权，建议使用如下免费VPN，翻墙操作</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cht.li/krwat" target="_blank"><img src="../image/VPNchitu.jpg" alt="免费VPN" /></a>
 </form>
 <!-- FOOTER -->
 	<div id="footer" class="navbar navbar-fixed-bottom" style="left: 0px;">
