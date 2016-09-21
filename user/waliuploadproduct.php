@@ -3,12 +3,14 @@ session_start ();
 include dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/mailHelper.php';
+include_once dirname ( '__FILE__' ) . './parse/parseutil.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
 use Wish\WishResponse;
 use user\mailHelper;
+use parse\parseutil;
 
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
@@ -123,33 +125,16 @@ function getCompressedImage($sourceURL) {
 $client = null;
 
 // $accountid = $_GET ['accountid'];
-$accountid = $_POST ['currentAccountid'];
-$productName = $_POST ['Product_Name'];
-$productName = str_replace ( '"', "''", $productName );
-$description = $_POST ['Description'];
-$description = str_replace ( '"', "''", $description );
-$tags = $_POST ['Tags'];
-$uniqueID = $_POST ['Unique_Id'];
-$mainImage = $_POST ['Main_Image'];
-$extraImages = $_POST ['Extra_Images'];
-$colors = $_POST ['colors'];
-$sizes = $_POST ['sizes'];
-$price = $_POST ['Price'];
-$incrementPrice = $_POST ['increment_price'];
-$quantity = $_POST ['Quantity'];
-$shipping = $_POST ['Shipping'];
-$shippingTime = $_POST ['Shipping_Time'];
-$MSRP = $_POST ['MSRP'];
-$brand = $_POST ['Brand'];
-$UPC = $_POST ['UPC'];
-$landingPageURL = $_POST ['Landing_Page_URL'];
-$productSourceURL = $_POST ['Product_Source_URL'];
-$scheduleDate = $_POST ['Schedule_Date'];
+$producturl = $_POST['product_url'];
+echo "<br/>";
+echo "<br/>producturl:".$producturl;
+if($producturl != null){
+	$parse = new parseutil();
+	$product = $parse->getProduct($producturl);
+	$product->showproduct();
+}
 
-$lowesttotalprice = $_POST['lowesttotalprice'];
-
-$updateSKU = $_POST['update'];
-
+/* 
 if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
 	$productarray = array ();
 	$productarray ['name'] = $productName;
@@ -327,7 +312,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 			$lowesttotalprice = $currentSource['lowesttotalprice'];
 		}
 	}
-}
+} */
 	 
 ?>
 
