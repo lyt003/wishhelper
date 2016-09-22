@@ -126,16 +126,17 @@ $client = null;
 
 // $accountid = $_GET ['accountid'];
 $producturl = $_POST['product_url'];
-echo "<br/>";
-echo "<br/>producturl:".$producturl;
 if($producturl != null){
 	$parse = new parseutil();
 	$product = $parse->getProduct($producturl);
-	$product->showproduct();
+	//$product->showproduct();
+	
+	$galleryarray = explode('|',$product->galleryphotos);
+	$extraarray = explode('|',$product->extraphotos);
+	$photoscount = count($galleryarray) + count($extraarray);
 }
 
-/* 
-if ($productName != null && $description != null && $mainImage != null && $price != null && $uniqueID != null && $quantity != null && $shipping != null && $shippingTime != null && $tags != null) {
+/* if ($product != null) {
 	$productarray = array ();
 	$productarray ['name'] = $productName;
 	$productarray ['brand'] = $brand;
@@ -244,9 +245,9 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['scheduledate'] = $scheduleDate;
 	
 	$scheduleResult = $dbhelper->insertScheduleProduct ( $productarray );
-}
+} */
 
-
+/*
 //修改定时产品；
 $updateAccountID = $_GET['id'];
 $updateParentSKU = $_GET['psku'];
@@ -465,7 +466,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" id="product_name"
 										name="Product_Name" type="text"
-										value="<?php echo $productName?>"
+										value="<?php echo $product->title?>"
 										placeholder="可接受：Men&#39;s Dress Casual Shirt Navy" />
 								</div>
 							</div>
@@ -477,7 +478,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<textarea rows="5" class = "form-control"
 										name="Description" id="description" type="text"
-										placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $description?>
+										placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $product->description?>
 								</textarea>
 								</div>
 							</div>
@@ -489,7 +490,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<textarea rows="3" class="form-control"
 										type="text" id="tags" name="Tags"
-										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $tags?></textarea>
+										placeholder="可接受：Shirt, Men&#39;s Fashion, Navy, Blue, Casual, Apparel"><?php echo $product->keywords?></textarea>
 								</div>
 								
 							</div>
@@ -500,7 +501,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Unique_Id"
-										value="<?php echo $uniqueID?>" id="unique_id" type="text"
+										value="<?php echo $product->SKU?>" id="unique_id" type="text"
 										value="" placeholder="可接受：HSC0424PP" />
 								</div>
 							</div>
@@ -511,13 +512,13 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Main_Image"
-										id="main_image" type="text" value="<?php echo $mainImage?>"
+										id="main_image" type="text" value="<?php echo $product->mainphoto?>"
 										placeholder="可接受：image url" />
 									<input type="file" name="file1" id="local_main_image" />
 								</div>
 							</div>
 
-							<div class="control-group" style="display: none;" id="main_image_view">
+							<div class="control-group"  id="main_image_view">
 								<label class="control-label" data-col-index="1"><span
 									class="col-name">预览</span></label>
 								<div class="controls input-append">
@@ -532,21 +533,21 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<textarea rows="5" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
-										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $extraImages?></textarea>
+										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $product->galleryphotos.'|'.$product->extraphotos?></textarea>
 									<input type="file" name="file2" id="local_extra_image" />
 								</div>
 							</div>
 							
-							<div class="control-group" style="display: none;" id="extra_images_view">
+							<div class="control-group" id="extra_images_view">
 								<label class="control-label" data-col-index="1"><span
 									class="col-name">预览</span></label>
 								<div class="controls input-append">
-									<img id="extra_img_view0" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
-									<img id="extra_img_view1" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
-									<img id="extra_img_view2" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
-									<img id="extra_img_view3" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
-									<img id="extra_img_view4" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
-									<img id="extra_img_view5" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+								<?php 
+									  for($c=0;$c<$photoscount;$c++){
+									  	if($c%5 ==0)
+									  		echo "<br/>";
+									  	echo "<img id=\"extra_img_view".$c."\" width=100 height=100 class=\"img-thumbnail\"src=\"\" alt=\"photos\" />";
+									  }?>
 								</div>
 							</div>
 
@@ -556,7 +557,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="colors"
-										id="colors" type="text" value="<?php echo $colors?>"
+										id="colors" type="text" value="<?php echo $product->colors?>"
 										placeholder="可接受：color|color|color" /><br/>
 									<label>请用"|"分割多个颜色值，颜色取值可参考：<a href="./showwishcolors.php" target="_blank">wish颜色列表</a></label>
 								</div>
@@ -569,7 +570,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="sizes"
 										onchange="showIncrementPrice(this.value)" id="sizes"
-										type="text" value="<?php echo $sizes?>"
+										type="text" value="<?php echo $product->sizes?>"
 										placeholder="可接受：size|size|size" /><br/>
 									<label>请用"|"分割多个尺码值，尺码取值可参考：<a href="http://www.merchant.wish.com/documentation/size-charts" target="_blank">wish尺码说明</a></label>
 								</div>
@@ -584,7 +585,13 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 							<div class="control-group">
 								<label class="control-label" data-col-index="2"><span
 									class="col-name">价格</span></label>
-
+								<?php if($product->discountprice != null){
+									$price = ceil(1.5 * $product->discountprice);
+								}else if($product->highprice != null ){
+									$price = ceil(1.2 * $product->highprice);
+								}else{
+									$price = ceil(1.5 * $product->fullprice);
+								}?>
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Price"
 										onChange="updateEarnings()" id="price" type="text"
@@ -611,7 +618,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Quantity"
-										id="quantity" type="text" value="<?php echo $quantity?>"
+										id="quantity" type="text" value="1000"
 										placeholder="可接受：1200" />
 								</div>
 							</div>
@@ -623,7 +630,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Shipping"
 										onchange="updateEarnings()" id="shipping" type="text"
-										value="<?php echo $shipping?>" placeholder="可接受：$4.00" />
+										value="2" placeholder="可接受：$4.00" />
 								</div>
 							</div>
 
@@ -654,7 +661,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Shipping_Time"
 										id="shipping_time" type="text"
-										value="<?php echo $shippingTime?>" placeholder="可接受：5 - 10" />
+										value="7-30" placeholder="可接受：5 - 10" />
 								</div>
 							</div>
 						</div>
@@ -672,7 +679,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 									<div class="controls input-append">
 										<input class="input-block-level" name="MSRP" id="MSRP"
-											type="text" value="<?php echo $MSRP?>"
+											type="text" value="<?php echo ceil(2*$product->fullprice);?>"
 											placeholder="可接受：$19.00" />
 									</div>
 								</div>
@@ -718,7 +725,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 									<div class="controls input-append">
 										<input class="input-block-level" name="Product_Source_URL"
 											id="product_source_url" type="text"
-											value="<?php echo $productSourceURL?>"
+											value="<?php echo $product->url?>"
 											placeholder="可接受：http://detail.1688.com/offer/xxxxx.html" />
 									</div>
 								</div>
@@ -812,7 +819,7 @@ style="border-width:0" /></a></noscript>
 				$('#'+ imgid).attr("src",url);
 			});
 
-			for(var i =0; i<6; i++){
+			for(var i =0; i<<?php echo $photoscount;?>; i++){
 				var imgid = "extra_img_view" + i;
 				if(imagearray[i] != null && imagearray[i] != ""){
 					$('#'+ imgid).show();
@@ -830,6 +837,8 @@ style="border-width:0" /></a></noscript>
 
 	$(document).ready(function(){
 
+		mainImageChange();
+		extraImagesChange();
 		$('#datetimepicker').datetimepicker({
 	    	language: 'zh-CN',
 	        weekStart: 1,

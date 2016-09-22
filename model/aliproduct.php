@@ -3,11 +3,12 @@ namespace model;
 
 
 class aliproduct{
-	public $url,$title,$keywords,$mainphoto,$storeurl,$storename,$fullprice,$discountprice,$lowprice,$highprice,$colors,$sizes,$galleryphotos,$extraphotos,$description,$descriptionhtml;
+	public $url,$title,$keywords,$mainphoto,$storeurl,$SKU,$storename,$fullprice,$discountprice,$lowprice,$highprice,$colors,$sizes,$galleryphotos,$extraphotos,$description,$descriptionhtml;
 	
 	function showproduct(){
 		echo "<br/>";
 		echo "<br/>title:".$this->title;
+		echo "<br/>SKU:".$this->SKU;
 		echo "<br/>keywords:".$this->keywords;
 		echo "<br/>mainphoto:".$this->mainphoto;
 		echo "<br/>storeurl:".$this->storeurl;
