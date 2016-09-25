@@ -20,34 +20,41 @@ if ($username == null) { // 未登录
 		$email = $_POST ["email"];
 		$username = $_POST ["username"];
 		$password = $_POST ["password"];
-		$check = $dbhelper->queryUser ( $username, $email );//不区分大小写
-		$checkrow = mysql_fetch_array ( $check );
-		if ($checkrow) {
-			if (strcmp($checkrow ['username'],$username) == 0 ) {//区分大小写
-				header ( "Location:./wregister.php?errorMsg=该用户已经被注册" );
-				exit ();
-			}else if (strcmp($checkrow ['email'],$email) == 0) {//区分大小写
-				header ( "Location:./wregister.php?errorMsg=该邮箱地址已经被注册" );
-				exit ();
-			}else{//可能仅大小写不一样的字符串已经被注册;
-				header ( "Location:./wregister.php?errorMsg=该邮箱地址或用户已经被注册" );
-				exit ();
-			}
-		} else {
-			$result = $dbhelper->createUser ( $username, md5 ( $password ), $email );
-			if ($result != 0) {
-				$_SESSION ['username'] = $username;
-				$_SESSION ['email'] = $email;
-				$_SESSION ['userid'] = $result;
-				
-				$mailHelper = new mailHelper();	
-				$mailHelper->sendMailActiveAccount($email, $username);
-				$mailHelper->sendMailActiveAccount("409326210@qq.com", $username);
+		
+		if($email != null && trim($email)!="" && $username != null && trim($username) != ""){
+			$check = $dbhelper->queryUser ( $username, $email );//不区分大小写
+			$checkrow = mysql_fetch_array ( $check );
+			if ($checkrow) {
+				if (strcmp($checkrow ['username'],$username) == 0 ) {//区分大小写
+					header ( "Location:./wregister.php?errorMsg=该用户已经被注册" );
+					exit ();
+				}else if (strcmp($checkrow ['email'],$email) == 0) {//区分大小写
+					header ( "Location:./wregister.php?errorMsg=该邮箱地址已经被注册" );
+					exit ();
+				}else{//可能仅大小写不一样的字符串已经被注册;
+					header ( "Location:./wregister.php?errorMsg=该邮箱地址或用户已经被注册" );
+					exit ();
+				}
 			} else {
-				header ( "Location:./wregister.php?errorMsg=注册失败" );
-				exit ();
-			}
+				$result = $dbhelper->createUser ( $username, md5 ( $password ), $email );
+				if ($result != 0) {
+					$_SESSION ['username'] = $username;
+					$_SESSION ['email'] = $email;
+					$_SESSION ['userid'] = $result;
+			
+					$mailHelper = new mailHelper();
+					$mailHelper->sendMailActiveAccount($email, $username);
+					$mailHelper->sendMailActiveAccount("409326210@qq.com", $username);
+				} else {
+					header ( "Location:./wregister.php?errorMsg=注册失败" );
+					exit ();
+				}
+			}	
+		}else{
+			header ( "Location:./wregister.php?errorMsg=注册信息填写有误" );
+			exit ();
 		}
+		
 	} else {
 		// login;
 		$username = $_POST ["username"];
