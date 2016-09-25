@@ -102,7 +102,7 @@ class parseutil{
 					$tempgallery = $galleryphotos[$g];
 					$tempimagesrc= $tempgallery->src;
 				
-					$product->galleryphotos .= rtrim($tempimagesrc,'_50x50.jpg').'.jpg|';
+					$product->galleryphotos .= rtrim($tempimagesrc,'_50x50.jpg').'.jpg|&#xd;';
 				}
 			
 			$scriptcode = $dom->find('script');
@@ -151,7 +151,7 @@ class parseutil{
 					foreach($desdom->find('img') as $element){
 						list ( $width, $height, $type )  = getimagesize($element->src );
 						if($width>400 && $height>400){
-							$product->extraphotos .= $element->src."|";
+							$product->extraphotos .= $element->src."|&#xd;";
 						}
 					}
 				}
