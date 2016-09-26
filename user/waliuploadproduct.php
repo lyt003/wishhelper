@@ -476,7 +476,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 									class="col-name">描述</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class = "form-control"
+									<textarea rows="15" class = "form-control"
 										name="Description" id="description" type="text"
 										placeholder="可接受：This dress shirt is 100% cotton and fits true to size."><?php echo $product->description?>
 								</textarea>
@@ -531,7 +531,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 									class="col-name">额外图片</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class="form-control" id="extra_images"
+									<textarea rows="15" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
 										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $product->galleryphotos.'|&#xd;'.$product->extraphotos?></textarea>
 									<input type="file" name="file2" id="local_extra_image" />
