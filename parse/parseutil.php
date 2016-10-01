@@ -74,7 +74,16 @@ class parseutil{
 								if($vtitle != null && trim($vtitle) != ''){
 									$product->colors .= trim($vtitle)."|";
 								}
-				
+							}
+						}
+						
+						$varphotos = $tempdom->find('img');
+						if($varphotos != null){
+							for($p=0;$p<count($varphotos);$p++){
+								$bigpic = $varphotos[$p]->bigpic;
+								if($bigpic != null && trim($bigpic) != ''){
+									$product->varphotos .= trim($bigpic)."|&#xd;";
+								}
 							}
 						}
 							

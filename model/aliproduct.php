@@ -3,7 +3,7 @@ namespace model;
 
 
 class aliproduct{
-	public $url,$title,$keywords,$mainphoto,$storeurl,$SKU,$storename,$fullprice,$discountprice,$lowprice,$highprice,$colors,$sizes,$galleryphotos,$extraphotos,$description,$descriptionhtml;
+	public $url,$title,$keywords,$mainphoto,$storeurl,$SKU,$storename,$fullprice,$discountprice,$lowprice,$highprice,$colors,$sizes,$galleryphotos,$varphotos,$extraphotos,$description,$descriptionhtml;
 	
 	function showproduct(){
 		echo "<br/>";
@@ -20,6 +20,7 @@ class aliproduct{
 		echo "<br/>colors:".$this->colors;
 		echo "<br/>sizes:".$this->sizes;
 		echo "<br/>galleryphotos:".$this->galleryphotos;
+		echo "<br/>varphotos:".$this->varphotos;
 		echo "<br/>extraphotos:".$this->extraphotos;
 		echo "<br/>description:".$this->description;
 		echo "<br/>descriptionhtml:".$this->descriptionhtml;

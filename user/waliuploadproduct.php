@@ -133,7 +133,8 @@ if($producturl != null){
 	
 	$galleryarray = explode('|',$product->galleryphotos);
 	$extraarray = explode('|',$product->extraphotos);
-	$photoscount = count($galleryarray) + count($extraarray);
+	$vararray = explode('|',$product->varphotos);
+	$photoscount = count($galleryarray) + count($extraarray) + count($vararray);
 }
 
 /* if ($product != null) {
@@ -533,7 +534,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<textarea rows="15" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
-										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $product->galleryphotos.'|&#xd;'.$product->extraphotos?></textarea>
+										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $product->galleryphotos.'|&#xd;'.$product->varphotos.'|&#xd;'.$product->extraphotos?></textarea>
 									<input type="file" name="file2" id="local_extra_image" />
 								</div>
 							</div>
