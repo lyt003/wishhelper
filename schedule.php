@@ -21,6 +21,7 @@ if ($isRunning == 1) {
 } else {
 	$dbhelper->startScheduleRunning ();
 	$currentPID = uniqid();
+	$dbhelper->registerPID($currentPID);
 	do {
 		 $duringtime = $dbhelper->getSettingDuringTime ();
 		if ($rows = mysql_fetch_array ( $duringtime )) {
@@ -30,12 +31,15 @@ if ($isRunning == 1) {
 		} 
 		
 		$pid = $dbhelper->getPID();
-		if($pid != null){
-			if(strcmp($pid,$currentPID) != 0){
-				die();
-			}
-		} 
-		$dbhelper->registerPID($currentPID);
+		if($pid == null){
+			$dbhelper->updateSettingMsg ( "pid is null:" . $accountid );
+			die();
+		}
+		if(strcmp($pid,$currentPID) != 0){
+			$dbhelper->updateSettingMsg ( "pid is not the same with current pid:" . $accountid );
+			die();
+		}
+			
 		
 		$dbhelper->updateSettingCount ();
 		$curDate = date ( 'Y-m-d  H:i' );
