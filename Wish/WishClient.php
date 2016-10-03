@@ -152,11 +152,11 @@ class WishClient{
   }
 
   public function createProduct($object){
-    try {
+   // try {
     	$response = $this->getResponse('POST','product/add',$object);
-    } catch ( ServiceResponseException $e ) {
-    	return new WishProduct($e->getResponse()->getData());
-    }
+    //} catch ( ServiceResponseException $e ) {
+   // 	return new WishProduct($e->getResponse()->getData());
+   // }
     return new WishProduct($response->getData());
   }
 
@@ -228,11 +228,11 @@ class WishClient{
   }
 
   public function createProductVariation($object){
-    try {
+   // try {
     	$response = $this->getResponse('POST','variant/add',$object);
-    } catch ( ServiceResponseException $e ) {
-    	return new WishProductVariation($e->getResponse()->getData());
-    }
+   // } catch ( ServiceResponseException $e ) {
+   // 	return new WishProductVariation($e->getResponse()->getData());
+   // }
     
     return new WishProductVariation($response->getData());
   }
