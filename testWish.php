@@ -11,7 +11,7 @@ $dbhelper = new dbhelper ();
 $client = null;
 
 $accountid = '1';
-$uniqueID = 'K19';
+$uniqueID = 'N160';
 if ($client == null || ($accountid != $client->getAccountid ())) {
 	$accountAcess = $dbhelper->getAccountToken ( $accountid );
 	if ($rows = mysql_fetch_array ( $accountAcess )) {
@@ -28,7 +28,7 @@ if ($client == null || ($accountid != $client->getAccountid ())) {
 } else {
 	echo "client account id:" . $client->getAccountid ();
 }
-
+/*
 //test lowesttotalprice:
 $jobproductid = '53bea5ef8e0d6c0cf96f562b';
 
@@ -70,7 +70,7 @@ if ( $var = mysql_fetch_array ( $vars ) ) {
 		echo "<br/>";
 	}
 }
-
+ */
 
 /* print_r($client);
 $jobproductid = '54578c68d26bc71607383832';
@@ -140,10 +140,11 @@ if ( $var = mysql_fetch_array ( $vars ) ) {
 $prod_res = null; */
 
 // add product;
-/* $products = $dbhelper->getProducts ( $uniqueID );
+$products = $dbhelper->getProducts ( $uniqueID );
 $addProduct = 0;
 $prod_res = null;
-if ($product = mysql_fetch_array ( $products )) {
+while ($product = mysql_fetch_array ( $products )) {
+	echo "<br/>Current product SKU:".$product['sku'];
 	/*
 	 * $currentProduct = array ();
 	 * $currentProduct ['name'] = 'fashion test wall sticker';
@@ -158,49 +159,89 @@ if ($product = mysql_fetch_array ( $products )) {
 	 * $currentProduct ['extra_images'] = 'http://img.china.alibaba.com/img/ibank/2015/400/592/2595295004_1929931971.jpg';
 	 * $currentProduct ['parent_sku'] = 'htest1';
 	 */
-	/*
-	$currentProduct = array ();
-	$currentProduct ['name'] = $product ['name'];
-	$currentProduct ['description'] = $product ['description'];
-	$currentProduct ['tags'] = $product ['tags'];
-	$currentProduct ['sku'] = $product ['sku'];
-	if ($product ['color'] != null)
-		$currentProduct ['color'] = $product ['color'];
-	if ($product ['size'] != null)
-		$currentProduct ['size'] = $product ['size'];
-	$currentProduct ['inventory'] = $product ['quantity'];
-	$currentProduct ['price'] = $product ['price'];
-	$currentProduct ['shipping'] = $product ['shipping'];
-	if ($product ['MSRP'] != null)
-		$currentProduct ['msrp'] = $product ['MSRP'];
-	$currentProduct ['shipping_time'] = $product ['shipping_time'];
-	$currentProduct ['main_image'] = $product ['main_image'];
-	$currentProduct ['parent_sku'] = $product ['parent_sku'];
-	if ($product ['brand'] != null)
-		$currentProduct ['brand'] = $product ['brand'];
-	if ($product ['landingPageURL'] != null)
-		$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
-	if ($product ['UPC'] != null)
-		$currentProduct ['upc'] = $product ['UPC'];
-	if ($product ['extra_images'] != null)
-		$currentProduct ['extra_images'] = $product ['extra_images'];
+	if ($addProduct == 0) {
+		$currentProduct = array ();
+		$currentProduct ['name'] = $product ['name'];
+		$currentProduct ['description'] = $product ['description'];
+		$currentProduct ['tags'] = $product ['tags'];
+		$currentProduct ['sku'] = $product ['sku'];
+		if ($product ['color'] != null)
+			$currentProduct ['color'] = $product ['color'];
+		if ($product ['size'] != null)
+			$currentProduct ['size'] = $product ['size'];
+		$currentProduct ['inventory'] = $product ['quantity'];
+		$currentProduct ['price'] = $product ['price'];
+		$currentProduct ['shipping'] = $product ['shipping'];
+		if ($product ['MSRP'] != null)
+			$currentProduct ['msrp'] = $product ['MSRP'];
+		$currentProduct ['shipping_time'] = $product ['shipping_time'];
+		$currentProduct ['main_image'] = $product ['main_image'];
+		$currentProduct ['parent_sku'] = $product ['parent_sku'];
+		if ($product ['brand'] != null)
+			$currentProduct ['brand'] = $product ['brand'];
+		if ($product ['landingPageURL'] != null)
+			$currentProduct ['landing_page_url'] = $product ['landingPageURL'];
+		if ($product ['UPC'] != null)
+			$currentProduct ['upc'] = $product ['UPC'];
+		if ($product ['extra_images'] != null)
+			$currentProduct ['extra_images'] = $product ['extra_images'];
+		
+		echo "product:<br/>";
+		print_r ( $product );
+		
+		try {
+			$prod_res = $client->createProduct ( $currentProduct );
+		} catch ( ServiceResponseException $e ) {
+			echo "<br/>ERROR:";
+			print_r ( $e );
+			if(stristr($e->getErrorMessage(),"You have already added SKU")){
+				$addProduct = 1;
+				echo "You have already added SKU".$e->getErrorMessage();				
+				//$dbhelper->updateScheduleError($productInfo, '222You have already added SKU '.$product ['sku']);
+			}else{
+				//$dbhelper->updateScheduleError($productInfo, 'add product faild '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
+				$addSuccess = 0;
+			}
+		}
+		
+		echo "<br/>print prod_res:<br/>";
+		print_r ( $prod_res );
+		if ($prod_res != null) {
+			echo "add product success<br/>";
+			$addProduct = 1;
+		} else {
+			echo "add product failed<br/>";
+		}
+	}else { // add product variation
+					$currentProductVar = array ();
+					$currentProductVar ['parent_sku'] = $product ['parent_sku'];
+					$currentProductVar ['sku'] = $product ['sku'];
+					if ($product ['color'] != null)
+						$currentProductVar ['color'] = $product ['color'];
+					if ($product ['size'] != null)
+						$currentProductVar ['size'] = $product ['size'];
+					$currentProductVar ['inventory'] = $product ['quantity'];
+					$currentProductVar ['price'] = $product ['price'];
+					$currentProductVar ['shipping'] = $product ['shipping'];
+					if ($product ['MSRP'] != null)
+						$currentProductVar ['msrp'] = $product ['MSRP'];
+					$currentProductVar ['shipping_time'] = $product ['shipping_time'];
+					$currentProductVar ['main_image'] = $product ['main_image'];
+					try {
+						$prod_var = $client->createProductVariation ( $currentProductVar );
+					} catch ( ServiceResponseException $e ) {
+						if(!stristr($e->getErrorMessage(),"has already been added")){
+							$dbhelper->updateScheduleError($productInfo, 'add product var failed '.$product ['sku'].':'.$e->getStatusCode().'-'.str_replace ( '"', "''", $e->getErrorMessage())."  ".date("y-m-d H:i:s",time()));
+							$addSuccess = 0;
+						}
+						$log = $log . "add product var failed<br/>";
+						$dbhelper->updateSettingMsg ( $log );
+					}
+				}
 	
-	echo "product:<br/>";
-	print_r ( $product );
 }
 
-try {
-	$prod_res = $client->createProduct ( $currentProduct );
-} catch ( ServiceResponseException $e ) {
-	print_r ( $e );
-}
-echo "<br/>print prod_res:<br/>";
-print_r ( $prod_res );
-if ($prod_res != null) {
-	echo "add product success<br/>";
-	$addProduct = 1;
-} else {
-	echo "add product failed<br/>";
-}
 
-echo "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid (); */
+
+
+echo "finish to process parent_sku:" . $parent_sku . " client account id:" . $client->getAccountid ();
