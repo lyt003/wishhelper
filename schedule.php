@@ -124,7 +124,7 @@ if ($isRunning == 1) {
 						}
 						$log = $log . $e->getErrorMessage () . " of account " . $accountid . "<br/>";
 						$dbhelper->updateSettingMsg ( $log );
-						if(stristr($e->getErrorMessage(),"You have already added SKU")){
+						if(stristr($e->getErrorMessage(),"You have already added SKU") || stristr($e->getErrorMessage(),'already exists')){
 							$addProduct = 1;
 							//$dbhelper->updateScheduleError($productInfo, '222You have already added SKU '.$product ['sku']);
 						}else{
