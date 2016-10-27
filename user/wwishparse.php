@@ -3,6 +3,7 @@ session_start ();
 include dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/mailHelper.php';
+include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\Model\WishTracker;
@@ -392,7 +393,8 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
 								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./waliparse.php">速卖通产品上传</a></li>
+								<li><a href="./waliparse.php">导入速卖通产品</a></li>
+								<li><a href="./wwishparse.php">导入Wish产品</a></li>
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
@@ -427,11 +429,11 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 	<div id="page-content" class="container-fluid  user">
 		<form id="add_product" action="./waliuploadproduct.php" method="post">
 			<input type="hidden" id="update" name="update" value="<?php echo $updateParentSKU?>"/>
-			<input type="hidden" id="importsource" name="importsource" value="<?php echo FROMALIEXPRESS;?>"/>
+			<input type="hidden" id="importsource" name="importsource" value="<?php echo FROMWISH;?>"/>
 			<div id="add-products-page" class="center">
 				<div>
 					<!-- NOTE: if you update this, make sure the add product page in onboarding flow still works -->
-					<legend><?php echo ($updateParentSKU == null)?"抓取速卖通产品信息上传":"修改产品:".$updateParentSKU?></legend>
+					<legend><?php echo ($updateParentSKU == null)?"抓取Wish产品信息上传":"修改产品:".$updateParentSKU?></legend>
 						<?php 
 	                      		if(isset($scheduleResult)){
 	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
@@ -452,13 +454,13 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 
 							<div class="control-group">
 								<label class="control-label" data-col-index="3"><span
-									class="col-name">速卖通产品地址</span></label>
+									class="col-name">Wish产品id</span></label>
 
 								<div class="controls input-append">
 									<input class="input-block-level required" id="product_url"
 										name="product_url" type="text" nValidate="{url:true}"
 										value="<?php echo $productName?>"
-										placeholder="可接受：https://www.aliexpress.com/store/product/xxxx/12323343243254.html" />
+										placeholder="5Xa1bXXXXX6744XXX624" />
 								</div>
 							</div>
 

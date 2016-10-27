@@ -124,18 +124,23 @@ function getCompressedImage($sourceURL) {
 // $accountid = null;
 $client = null;
 
-// $accountid = $_GET ['accountid'];
+$importsource = $_POST['importsource'];
 $producturl = $_POST['product_url'];
 if($producturl != null){
 	$parse = new parseutil();
-	$product = $parse->getProduct($producturl);
-	//$product->showproduct();
 	
+	if(strcmp($importsource,FROMALIEXPRESS) == 0){
+		$product = $parse->getProductFromali($producturl);
+	}else if(strcmp($importsource,FROMWISH) == 0){
+		$product = $parse->getProductFromwish($producturl,$username);
+	}
+
 	$galleryarray = explode('|',$product->galleryphotos);
 	$extraarray = explode('|',$product->extraphotos);
 	$vararray = explode('|',$product->varphotos);
 	$photoscount = count($galleryarray) + count($extraarray) + count($vararray);
 }
+
 
 /* if ($product != null) {
 	$productarray = array ();
@@ -379,7 +384,8 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
 								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./waliparse.php">速卖通产品上传</a></li>
+								<li><a href="./waliparse.php">导入速卖通产品</a></li>
+								<li><a href="./wwishparse.php">导入Wish产品</a></li>
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
