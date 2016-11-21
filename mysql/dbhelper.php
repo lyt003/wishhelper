@@ -353,12 +353,12 @@ class dbhelper {
 		return mysql_query ( $insertTracking );
 	}
 	
-	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost){
+	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost,$orderdate,$uid){
 		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
 		mysql_query($updateTracking); 
 		$result = mysql_affected_rows();
 		if(!$result){
-			$insertTracking = 'insert into tracking_data(tracking_number,destinate,weight,shippingcost,finalshippingcost) values("'.$tracking_number.'","'
+			$insertTracking = 'insert into tracking_data(userid,tracking_date,tracking_number,destinate,weight,shippingcost,finalshippingcost) values('.$uid.',"'.$orderdate.'","'.$tracking_number.'","'
 					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
 			mysql_query($insertTracking);
 			$result = mysql_affected_rows();
