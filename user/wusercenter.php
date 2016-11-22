@@ -376,6 +376,9 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
 				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
 			}
+			echo "<li>&nbsp;&nbsp;</li>";
+			echo "<li>&nbsp;&nbsp;</li>";
+			echo "<li>&nbsp;&nbsp;</li>";
 			echo "</ul></div></td>";
 			$orderCount ++;
 		}
