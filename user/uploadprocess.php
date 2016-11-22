@@ -8,6 +8,10 @@ $filename = $_FILES ['file'] ['tmp_name'];
 $name     = basename($_FILES ['file']['name']);
 $extension = pathinfo($name, PATHINFO_EXTENSION);
 
+session_start ();
+$currentUserid = $_SESSION ['userid'];
+session_commit();
+
 $accountid = $_POST['currentAccountid'];
 
 $dbhelper = new dbhelper();
@@ -91,13 +95,15 @@ if(strcasecmp($extension,'csv') == 0){
 	
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
-				$orderdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
-				if(!is_numeric($orderdata))
+				$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+				if(!is_numeric($orderdate) && !checkDatetime($orderdate))
 					continue;
 			}
 			for($column = 0;$column<=$columnMaxIndex;$column ++){
 				
 				switch ($column){
+					case 0:
+						$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue(); 
 					case 1:					
 						$trackingdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 					case 2:
@@ -111,7 +117,15 @@ if(strcasecmp($extension,'csv') == 0){
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($offprice)){
-				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $offprice*$shippingcost);
+				if(isset($orderdate)){
+					if(is_numeric($orderdate)){
+						$orderdateformat = intval(($orderdate - 25569) * 3600 * 24); //转换成1970年以来的秒数
+						$orderdate = date('Ymd',$orderdateformat);
+					}else if(checkDatetime($orderdate)){
+						$orderdate = date('Ymd',strtotime($orderdate));
+					}
+				}
+				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $offprice*$shippingcost,$orderdate,$currentUserid);
 				$result .= $row.$trackingdata."行完成;".$updateResult."  |";
 			}else{
 				$result .= $row."行没数据"; 
@@ -121,13 +135,15 @@ if(strcasecmp($extension,'csv') == 0){
 	}else if($columnMaxIndex >= 12){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
-				$orderdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
-				if(!checkDatetime($orderdata))
+				$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+				if(!checkDatetime($orderdate))
 					continue;
 			}
 			for($column = 0;$column<=$columnMaxIndex;$column ++){
 			
 				switch ($column){
+					case 0:
+						$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 					case 1:
 						$trackingdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 					case 5:
@@ -141,7 +157,10 @@ if(strcasecmp($extension,'csv') == 0){
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($finalcost)){
-				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $finalcost);
+				if(isset($orderdate)){
+					$orderdate = date('Ymd',strtotime($orderdate));
+				}
+				$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $finalcost,$orderdate,$currentUserid);
 				$result .= $row.$trackingdata."行完成;".$updateResult."  |";
 			}else{
 				$result .= $row."行没数据"; 

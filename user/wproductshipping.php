@@ -17,7 +17,7 @@ if($varsku == null){
 }
 
 
-$shippingcosts = $dbhelper->getProductShippingCost($varsku);
+$shippingcosts = $dbhelper->getProductShippingCost($varsku,$accountid);
 
 
 echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div class=\"widget-header\"><div class=\"title\">&nbsp;&nbsp;&nbsp;&nbsp;账号:&nbsp;&nbsp;" . $accountid."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下列产品  ".$varsku." 最近订单的运费数据:";

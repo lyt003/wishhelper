@@ -209,7 +209,7 @@ class dbhelper {
 									' select v.price, p.* from onlineProducts p ,onlineProductVars v where p.id = v. product_id and p.accountid =  '.$accountid.' and review_status != "rejected" and deleted is NULL'. 	
 									' ) a'. 
 									' group by id'.
-									' order by price,number_sold desc,number_saves desc';
+									' order by number_sold desc,number_saves desc limit 100';
 		}else{
 			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%" limit '.$start.','.$limit;
 		}
@@ -353,12 +353,12 @@ class dbhelper {
 		return mysql_query ( $insertTracking );
 	}
 	
-	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost){
+	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost,$orderdate,$uid){
 		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
 		mysql_query($updateTracking); 
 		$result = mysql_affected_rows();
 		if(!$result){
-			$insertTracking = 'insert into tracking_data(tracking_number,destinate,weight,shippingcost,finalshippingcost) values("'.$tracking_number.'","'
+			$insertTracking = 'insert into tracking_data(userid,tracking_date,tracking_number,destinate,weight,shippingcost,finalshippingcost) values('.$uid.',"'.$orderdate.'","'.$tracking_number.'","'
 					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
 			mysql_query($insertTracking);
 			$result = mysql_affected_rows();
@@ -647,20 +647,20 @@ class dbhelper {
 		return mysql_query($pve);
 	}
 	
-	public function getProductShippingCost($sku){
+	public function getProductShippingCost($sku,$accountid){
 
 		$psc = 'select * from ('.
 			   ' select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost from orders o,'. 
 			   ' ('.
 			   ' select distinct pv.sku,p.product_id from onlineProductVars pv,'.
-			   ' (select product_id from onlineProductVars where sku = "'.$sku.'") p'.
+			   ' (select product_id from onlineProductVars where sku = "'.$sku.'" and accountid = "'.$accountid.'") p'.
 			   ' where p.product_id = pv.product_id'.
 	           ' ) ps'.
-	    	   ' where o.sku = ps.sku'.
+	    	   ' where o.accountid = "'.$accountid.'" and o.sku = ps.sku'.
 			   ' ) a'.
 			   ' left join tracking_data t on a.tracking = t.tracking_number'.
 			   ' and t.finalshippingcost IS NOT NULL'. 
-			   ' order by t.tracking_date DESC limit 10';
+			   ' order by t.tracking_date DESC limit 50';
 		return mysql_query($psc);
 	}
 	

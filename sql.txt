@@ -314,59 +314,235 @@ DROP TABLE IF EXISTS `countrycode`;
 CREATE TABLE `countrycode`(
 	`code` varchar(30),
 	`name` varchar(50),
+	`chinesename` varchar(100),
 	primary key(`code`)
 )DEFAULT CHARSET=utf8;
-insert into countrycode(code,name) values('US','United States');
-insert into countrycode(code,name) values('GB','United Kingdom');
-insert into countrycode(code,name) values('NO','Norway');
-insert into countrycode(code,name) values('CA','Canada');
-insert into countrycode(code,name) values('AU','AUSTRALIA');
-insert into countrycode(code,name) values('FR','FRANCE');
-insert into countrycode(code,name) values('RU','RUSSIA');
-insert into countrycode(code,name) values('UA','UKRAINE');
-insert into countrycode(code,name) values('SA','KINGDOM OF SAUDI ARABIA');
-insert into countrycode(code,name) values('BR','BRAZIL');
-insert into countrycode(code,name) values('ES','SPAIN');
-insert into countrycode(code,name) values('DE','GERMANY');
-insert into countrycode(code,name) values('IE','IRELAND');
-insert into countrycode(code,name) values('FI','FINLAND');
-
-ES	SPAIN
-	
-SG	SINGAPORE
-NL	NETHERLANDS
-	
-BY	BELARUS
-DE	GERMANY
-	
-	
-NO	NORWAY
-IT	ITALY
-BE	BELGIUM
-LU	LUXEMBOURG
-IE	IRELAND
-DK	DENMARK
-GR	GREECE
-PT	PORTUGAL
-SE	SWEDEN
-FI	FINLAND
-AT	AUSTRIA
-CY	CYPRUS
-CZ	CZECH REPUBLIC
-EE	ESTONIA
-HU	HUNGARY
-LV	LATVIA
-LT	LITHUANIA
-MT	MALTA
-PL	POLAND
-SK	SLOVAKIA
-SI	SLOVENIA
-RO	ROMANIA
-BG	BULGARIA
-HR	CROATIA
-IN	INDIA
-
-
+insert into countrycode(code,name,chinesename) values('AF','Afghanistan','阿富汗');
+insert into countrycode(code,name,chinesename) values('AL','Albania','阿尔巴尼亚');
+insert into countrycode(code,name,chinesename) values('AD','Andorra','安道尔');
+insert into countrycode(code,name,chinesename) values('AO','Angola','安哥拉');
+insert into countrycode(code,name,chinesename) values('AI','Angola','安圭拉');
+insert into countrycode(code,name,chinesename) values('AQ','Antarctica','南极洲');
+insert into countrycode(code,name,chinesename) values('AG','Ntigua and Barbuda','安提瓜和巴布达');
+insert into countrycode(code,name,chinesename) values('AR','Argentina','阿根廷');
+insert into countrycode(code,name,chinesename) values('AM','Armenia','亚美尼亚');
+insert into countrycode(code,name,chinesename) values('AW','Aruba','阿鲁巴');
+insert into countrycode(code,name,chinesename) values('AU','Australia','澳大利亚');
+insert into countrycode(code,name,chinesename) values('AT','Austria','奥地利');
+insert into countrycode(code,name,chinesename) values('AZ','Azerbaijan','阿塞拜疆');
+insert into countrycode(code,name,chinesename) values('AE','United Arab Emirates','阿联酋');
+insert into countrycode(code,name,chinesename) values('BS','Bahamas','巴哈马');
+insert into countrycode(code,name,chinesename) values('BH','Bahrain','巴林');
+insert into countrycode(code,name,chinesename) values('BD','Bangladesh','孟加拉');
+insert into countrycode(code,name,chinesename) values('BB','Barbados','巴巴多斯');
+insert into countrycode(code,name,chinesename) values('BY','Belarus','白俄罗斯');
+insert into countrycode(code,name,chinesename) values('BZ','Belize','伯利兹');
+insert into countrycode(code,name,chinesename) values('BE','Belgium','比利时');
+insert into countrycode(code,name,chinesename) values('BJ','Benin','贝宁');
+insert into countrycode(code,name,chinesename) values('BM','Bermuda','百慕大');
+insert into countrycode(code,name,chinesename) values('BT','Bhutan','不丹');
+insert into countrycode(code,name,chinesename) values('BO','Bolivia','玻利维亚');
+insert into countrycode(code,name,chinesename) values('BA','Bosnia Hercegovina','波黑');
+insert into countrycode(code,name,chinesename) values('BW','Botswana','博茨瓦纳');
+insert into countrycode(code,name,chinesename) values('BV','Bouvet Island','布维岛');
+insert into countrycode(code,name,chinesename) values('BR','Brazil','巴西');
+insert into countrycode(code,name,chinesename) values('BN','Brunei Darussalam','文莱');
+insert into countrycode(code,name,chinesename) values('BG','Bulgaria','保加利亚');
+insert into countrycode(code,name,chinesename) values('BF','Burkina Faso','布其纳法索');
+insert into countrycode(code,name,chinesename) values('BI','Burundi','布隆迪');
+insert into countrycode(code,name,chinesename) values('CM','Cameroon','喀麦隆');
+insert into countrycode(code,name,chinesename) values('CA','Canada','加拿大');
+insert into countrycode(code,name,chinesename) values('CV','Cape Verde,Republic of','佛得角');
+insert into countrycode(code,name,chinesename) values('CF','The Central African Republic','中非共和国');
+insert into countrycode(code,name,chinesename) values('CL','Chile','智利');
+insert into countrycode(code,name,chinesename) values('CN','China','中国');
+insert into countrycode(code,name,chinesename) values('CX','Christmas Island','圣诞岛');
+insert into countrycode(code,name,chinesename) values('CC','COCOS Islands','可可岛');
+insert into countrycode(code,name,chinesename) values('CO','Colombia','哥伦比亚');
+insert into countrycode(code,name,chinesename) values('CH','Switzerland','瑞士');
+insert into countrycode(code,name,chinesename) values('CG','Congo','刚果');
+insert into countrycode(code,name,chinesename) values('CK','Cook Island','库克群岛');
+insert into countrycode(code,name,chinesename) values('CR','Costa rica','哥斯达黎加');
+insert into countrycode(code,name,chinesename) values('CI','Lvory Coast','象牙海岸');
+insert into countrycode(code,name,chinesename) values('CU','Cuba','古巴');
+insert into countrycode(code,name,chinesename) values('CY','Cyprus','塞浦路斯');
+insert into countrycode(code,name,chinesename) values('CZ','Czech Republic','捷克共和国');
+insert into countrycode(code,name,chinesename) values('DK','Denmark','丹麦');
+insert into countrycode(code,name,chinesename) values('DJ','Djibouti','吉布提');
+insert into countrycode(code,name,chinesename) values('DM','Gominica','多明哥');
+insert into countrycode(code,name,chinesename) values('DE','Germany','德国');
+insert into countrycode(code,name,chinesename) values('DO','Dominica','多米尼加');
+insert into countrycode(code,name,chinesename) values('DZ','Algeria','阿尔及利亚');
+insert into countrycode(code,name,chinesename) values('EC','Ecuador','厄瓜多尔');
+insert into countrycode(code,name,chinesename) values('EG','Egypt','埃及');
+insert into countrycode(code,name,chinesename) values('EH','West Sahara','西撒哈拉');
+insert into countrycode(code,name,chinesename) values('ES','Spain','西班牙');
+insert into countrycode(code,name,chinesename) values('EE','Estonia','爱沙尼亚');
+insert into countrycode(code,name,chinesename) values('ET','Ethiopia','埃塞俄比亚');
+insert into countrycode(code,name,chinesename) values('FJ','Fiji','斐济');
+insert into countrycode(code,name,chinesename) values('FK','Falkland Islands','福克兰群岛');
+insert into countrycode(code,name,chinesename) values('FI','Finland','芬兰');
+insert into countrycode(code,name,chinesename) values('FR','France','法国');
+insert into countrycode(code,name,chinesename) values('FM','Micronesia','密克罗尼西亚');
+insert into countrycode(code,name,chinesename) values('GA','Gabon','加蓬');
+insert into countrycode(code,name,chinesename) values('GQ','Equatorial Guinea','赤道几内亚');
+insert into countrycode(code,name,chinesename) values('GF','French Guiana','法属圭亚那');
+insert into countrycode(code,name,chinesename) values('GM','Gambia','冈比亚');
+insert into countrycode(code,name,chinesename) values('GE','Georgia','格鲁吉亚');
+insert into countrycode(code,name,chinesename) values('GH','Ghana','加纳');
+insert into countrycode(code,name,chinesename) values('GI','Gibraltar','直布罗陀');
+insert into countrycode(code,name,chinesename) values('GR','Greece','希腊');
+insert into countrycode(code,name,chinesename) values('GL','Greenland','格陵兰');
+insert into countrycode(code,name,chinesename) values('GB','United Kingdom','英国');
+insert into countrycode(code,name,chinesename) values('GD','Grenada','格林纳达');
+insert into countrycode(code,name,chinesename) values('GP','Guadeloupe','瓜德罗普');
+insert into countrycode(code,name,chinesename) values('GU','Guam','关岛');
+insert into countrycode(code,name,chinesename) values('GT','Guatemala','危地马拉');
+insert into countrycode(code,name,chinesename) values('GN','Guinea','几内亚');
+insert into countrycode(code,name,chinesename) values('GW','Guinea-Bissau','几内亚比绍');
+insert into countrycode(code,name,chinesename) values('GY','Guyana','圭亚那');
+insert into countrycode(code,name,chinesename) values('HR','Croatia','克罗地亚');
+insert into countrycode(code,name,chinesename) values('HT','Haiti','海地');
+insert into countrycode(code,name,chinesename) values('HN','Honduras','洪都拉斯');
+insert into countrycode(code,name,chinesename) values('HK','Hong Kong','中国香港');
+insert into countrycode(code,name,chinesename) values('HU','Hungary','匈牙利');
+insert into countrycode(code,name,chinesename) values('IS','Iceland','冰岛');
+insert into countrycode(code,name,chinesename) values('IN','India','印度');
+insert into countrycode(code,name,chinesename) values('ID','Indonesia','印度尼西亚');
+insert into countrycode(code,name,chinesename) values('IR','Iran','伊朗');
+insert into countrycode(code,name,chinesename) values('IQ','Iraq','伊拉克');
+insert into countrycode(code,name,chinesename) values('IO','British Indian Ocean Territory','英联邦的印度洋领域');
+insert into countrycode(code,name,chinesename) values('IE','Ireland','爱尔兰');
+insert into countrycode(code,name,chinesename) values('IL','Israel','以色列');
+insert into countrycode(code,name,chinesename) values('IT','Italy','意大利');
+insert into countrycode(code,name,chinesename) values('JM','Jamaica','牙买加');
+insert into countrycode(code,name,chinesename) values('JP','Japan','日本');
+insert into countrycode(code,name,chinesename) values('JO','Jordan','约旦');
+insert into countrycode(code,name,chinesename) values('KZ','Kazakstan','哈萨克斯坦');
+insert into countrycode(code,name,chinesename) values('KE','Kenya','肯尼亚');
+insert into countrycode(code,name,chinesename) values('KI','Kiribati','基里巴斯');
+insert into countrycode(code,name,chinesename) values('KP','North Korea','朝鲜');
+insert into countrycode(code,name,chinesename) values('KR','Korea','韩国');
+insert into countrycode(code,name,chinesename) values('KH','Cambodia','柬埔寨');
+insert into countrycode(code,name,chinesename) values('KM','Comoros','科摩罗');
+insert into countrycode(code,name,chinesename) values('KW','kuwait','科威特');
+insert into countrycode(code,name,chinesename) values('KG','Kyrgyzstan','吉尔吉斯斯坦');
+insert into countrycode(code,name,chinesename) values('KY','Cayman Islands','开曼群岛');
+insert into countrycode(code,name,chinesename) values('LA','Laos','老挝');
+insert into countrycode(code,name,chinesename) values('LK','Sri Lanka','斯里兰卡');
+insert into countrycode(code,name,chinesename) values('LV','Latvia','拉托维亚');
+insert into countrycode(code,name,chinesename) values('LB','Lebanon','黎巴嫩');
+insert into countrycode(code,name,chinesename) values('LS','Lesotho','莱索托');
+insert into countrycode(code,name,chinesename) values('LR','Liberia','利比里亚');
+insert into countrycode(code,name,chinesename) values('LY','Libya','利比亚');
+insert into countrycode(code,name,chinesename) values('LI','Liechtenstein','列支敦士登');
+insert into countrycode(code,name,chinesename) values('LT','Lithuania','立陶宛');
+insert into countrycode(code,name,chinesename) values('LU','Luxembourg','卢森堡');
+insert into countrycode(code,name,chinesename) values('LC','St. Lucia','圣卢西亚');
+insert into countrycode(code,name,chinesename) values('MO','Macao','中国澳门');
+insert into countrycode(code,name,chinesename) values('MG','Malagasy','马达加斯加');
+insert into countrycode(code,name,chinesename) values('MW','Malawi','马拉维');
+insert into countrycode(code,name,chinesename) values('MY','Malaysia','马来西亚');
+insert into countrycode(code,name,chinesename) values('MV','Maldives','马尔代夫');
+insert into countrycode(code,name,chinesename) values('ML','Mali','马里');
+insert into countrycode(code,name,chinesename) values('MT','Malta','马尔他');
+insert into countrycode(code,name,chinesename) values('MH','Marshall Islands','马绍尔群岛');
+insert into countrycode(code,name,chinesename) values('MQ','Mauritania','　　　');
+insert into countrycode(code,name,chinesename) values('MR','Mauritania','毛里塔尼亚');
+insert into countrycode(code,name,chinesename) values('MU','Mauritius','毛里求斯');
+insert into countrycode(code,name,chinesename) values('MX','Mexico','墨西哥');
+insert into countrycode(code,name,chinesename) values('MD','Moldova,Republic of','摩尔多瓦');
+insert into countrycode(code,name,chinesename) values('MC','Monaco','摩纳哥');
+insert into countrycode(code,name,chinesename) values('MN','Mongolia','蒙古');
+insert into countrycode(code,name,chinesename) values('MS','Montserrat','　　　');
+insert into countrycode(code,name,chinesename) values('MA','Morocco','摩洛哥');
+insert into countrycode(code,name,chinesename) values('MZ','Mozambique','莫桑比克');
+insert into countrycode(code,name,chinesename) values('MM','Burma','缅甸');
+insert into countrycode(code,name,chinesename) values('MP','Northern Nariana Islands','　　　');
+insert into countrycode(code,name,chinesename) values('NA','Namibia','纳米比亚');
+insert into countrycode(code,name,chinesename) values('NR','Naura','瑙鲁');
+insert into countrycode(code,name,chinesename) values('NP','Nepal','尼泊尔');
+insert into countrycode(code,name,chinesename) values('NL','Netherlands','荷兰');
+insert into countrycode(code,name,chinesename) values('NT','Neutral Zone','　　　');
+insert into countrycode(code,name,chinesename) values('NC','New Caledonia','新喀里多尼亚');
+insert into countrycode(code,name,chinesename) values('NZ','New Zealand','新西兰');
+insert into countrycode(code,name,chinesename) values('NI','Nicaragua','尼加拉瓜');
+insert into countrycode(code,name,chinesename) values('NE','Niger','尼日尔');
+insert into countrycode(code,name,chinesename) values('NG','Nigeria','尼日利亚');
+insert into countrycode(code,name,chinesename) values('NU','Niue','纽埃');
+insert into countrycode(code,name,chinesename) values('NF','Norfolk Island','　　　　');
+insert into countrycode(code,name,chinesename) values('NO','Norway','挪威');
+insert into countrycode(code,name,chinesename) values('OM','Oman','阿曼');
+insert into countrycode(code,name,chinesename) values('PK','Pakistan','巴基斯坦');
+insert into countrycode(code,name,chinesename) values('PF','French Polynesia','法属玻里尼西亚');
+insert into countrycode(code,name,chinesename) values('PW','Palau','帕劳');
+insert into countrycode(code,name,chinesename) values('PA','Panama','巴拿马');
+insert into countrycode(code,name,chinesename) values('PG','Papua,Territory of','巴布亚新几内亚');
+insert into countrycode(code,name,chinesename) values('PY','Paraguay','巴拉圭');
+insert into countrycode(code,name,chinesename) values('PE','Peru','秘鲁');
+insert into countrycode(code,name,chinesename) values('PH','Philippines','菲律宾');
+insert into countrycode(code,name,chinesename) values('PN','Pitcairn Islands','皮特开恩群岛');
+insert into countrycode(code,name,chinesename) values('PL','Poland','波兰');
+insert into countrycode(code,name,chinesename) values('PT','Portugal','葡萄牙');
+insert into countrycode(code,name,chinesename) values('PR','Puerto Rico','波多黎各（美）');
+insert into countrycode(code,name,chinesename) values('QA','Qatar','卡塔尔');
+insert into countrycode(code,name,chinesename) values('RO','Romania','罗马尼亚');
+insert into countrycode(code,name,chinesename) values('RU','Russia','俄罗斯联邦');
+insert into countrycode(code,name,chinesename) values('RW','Rwanda','卢旺达');
+insert into countrycode(code,name,chinesename) values('SV','El Salvador','萨尔瓦多');
+insert into countrycode(code,name,chinesename) values('SH','St.Helena','圣赫勒那');
+insert into countrycode(code,name,chinesename) values('SM','San Marino','圣马力诺');
+insert into countrycode(code,name,chinesename) values('ST','Sao Tome and Principe','圣多美与普林西比');
+insert into countrycode(code,name,chinesename) values('SA','Saudi Arabia','沙特阿拉伯');
+insert into countrycode(code,name,chinesename) values('SN','Senegal','塞内加尔');
+insert into countrycode(code,name,chinesename) values('SC','Seychelles','塞舌尔');
+insert into countrycode(code,name,chinesename) values('SL','Sierra leone','塞拉利昂');
+insert into countrycode(code,name,chinesename) values('SG','Singapore','新加坡');
+insert into countrycode(code,name,chinesename) values('SK','Slovakia','斯洛伐克');
+insert into countrycode(code,name,chinesename) values('SI','Slovene','斯洛文尼亚');
+insert into countrycode(code,name,chinesename) values('SB','Solomon Islands','所罗门群岛');
+insert into countrycode(code,name,chinesename) values('SO','Somali','索马里');
+insert into countrycode(code,name,chinesename) values('SD','Sudan','苏丹');
+insert into countrycode(code,name,chinesename) values('SR','Surinam','苏里南');
+insert into countrycode(code,name,chinesename) values('SZ','Swaziland','斯威士兰');
+insert into countrycode(code,name,chinesename) values('SE','Sweden','瑞典');
+insert into countrycode(code,name,chinesename) values('SY','Syria','叙利亚');
+insert into countrycode(code,name,chinesename) values('SU','USSR(formerly)','苏联(前)');
+insert into countrycode(code,name,chinesename) values('TD','Chad','乍得');
+insert into countrycode(code,name,chinesename) values('TF','French Southern Territoties','法属南方领土');
+insert into countrycode(code,name,chinesename) values('TW','Taiwan','中国台湾');
+insert into countrycode(code,name,chinesename) values('TJ','Tsjikistan','塔吉克斯坦');
+insert into countrycode(code,name,chinesename) values('TZ','Tanzania','坦桑尼亚');
+insert into countrycode(code,name,chinesename) values('TH','Thailand','泰国');
+insert into countrycode(code,name,chinesename) values('TG','Togo','多哥');
+insert into countrycode(code,name,chinesename) values('TK','Tokela','托克劳');
+insert into countrycode(code,name,chinesename) values('TO','Tonga','汤加');
+insert into countrycode(code,name,chinesename) values('TT','Trinidad and Tobago','特立尼达和多巴哥');
+insert into countrycode(code,name,chinesename) values('TN','Tunisia','突尼斯');
+insert into countrycode(code,name,chinesename) values('TR','Turkey','土尔其');
+insert into countrycode(code,name,chinesename) values('TP','East Timor','东帝');
+insert into countrycode(code,name,chinesename) values('TM','Turkomanstan','土库曼斯坦');
+insert into countrycode(code,name,chinesename) values('TC','Turks and Caicos Islands','　　　　');
+insert into countrycode(code,name,chinesename) values('TV','Tuvalu','图瓦卢　　　　');
+insert into countrycode(code,name,chinesename) values('UG','Uganda','乌干达');
+insert into countrycode(code,name,chinesename) values('UA','Ukiain','乌克兰');
+insert into countrycode(code,name,chinesename) values('UK','England','英国（正式代码为GB）');
+insert into countrycode(code,name,chinesename) values('US','United States','美国');
+insert into countrycode(code,name,chinesename) values('UM','　　　','美国边远小岛');
+insert into countrycode(code,name,chinesename) values('UY','uruguay','乌拉圭');
+insert into countrycode(code,name,chinesename) values('UZ','Uzbekstan','乌兹别克斯坦');
+insert into countrycode(code,name,chinesename) values('VA','Vatican','梵蒂冈（罗马教庭）');
+insert into countrycode(code,name,chinesename) values('VE','Venezuela','委内瑞拉');
+insert into countrycode(code,name,chinesename) values('VN','Vietnam','越南');
+insert into countrycode(code,name,chinesename) values('VG','Virgin Islands(British)','不列颠岛(英)');
+insert into countrycode(code,name,chinesename) values('VI','Vigin Islands(U.S.)','不列颠岛(美)');
+insert into countrycode(code,name,chinesename) values('WS','Western Samoa','西萨摩亚');
+insert into countrycode(code,name,chinesename) values('YE','Yemen','也门');
+insert into countrycode(code,name,chinesename) values('YU','Yugoslavia','南斯拉夫');
+insert into countrycode(code,name,chinesename) values('ZA','South Africa','南非');
+insert into countrycode(code,name,chinesename) values('ZR','Zaire','扎伊尔');
+insert into countrycode(code,name,chinesename) values('ZM','Zambia','赞比亚');
+insert into countrycode(code,name,chinesename) values('ZW','Zimbabwe','津巴布韦');
 
 
 

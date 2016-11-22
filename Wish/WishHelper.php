@@ -549,4 +549,13 @@ class WishHelper {
 		}
 		return $countries;
 	}
+	
+	public function getChineseCountrynames(){
+		$chcountries = array();
+		$cresult = $this->dbhelper->getCountrycode();
+		while($chcountry = mysql_fetch_array($cresult)){
+			$chcountries[$chcountry['code']] = $chcountry['chinesename'];
+		}
+		return $chcountries;
+	}
 }
