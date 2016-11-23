@@ -234,6 +234,8 @@ function getPreWeek($curtime){
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
 								<ul class="dropdown-menu">
 								<li><a href="./wuploadproduct.php">产品上传</a></li>
+								<li><a href="./waliparse.php">导入速卖通产品</a></li>
+								<li><a href="./wwishparse.php">导入Wish产品</a></li>
 								<li><a href="./wproductstatus.php">定时产品状态</a></li>
 								<li><a href="./wproductsource.php">产品源查询</a></li>
 								</ul>
