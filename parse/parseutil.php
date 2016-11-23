@@ -238,15 +238,17 @@ class parseutil{
 			
 			$product->highprice = 0;
 			$product->shippingprice = 0;
+			$tempcolors = array();
+			$tempsizes = array();
 			for($v=0;$v<count($vars);$v++){
 				$curVar = $vars[$v];
 				$curColor = $curVar->color;
 				if($curColor != null)
-					$product->colors .= $curColor."|&#xd;";
+					$tempcolors[$curColor] = $curColor;
 				
 				$curSize = $curVar->size;
 				if($curSize != null)
-					$product->sizes .= $curSize."|&#xd;";
+					$tempsizes[$curSize] = $curSize;
 				
 				$curPrice = $curVar->price;
 				$curShipping = $curVar->shipping;
@@ -257,6 +259,13 @@ class parseutil{
 					$product->shippingprice = $curShipping;
 				}
 				$product->fullprice = $curVar->retail_price;
+			}
+			
+			foreach ($tempcolors as $tk=>$tv){
+				$product->colors .= $tk."|&#xd;";
+			}
+			foreach ($tempsizes as $tsk=>$tsv){
+				$product->sizes .= $tsk."|&#xd;";
 			}
 			
 			$product->keywords = $jsonarray->keywords;
