@@ -637,7 +637,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="Shipping"
 										onchange="updateEarnings()" id="shipping" type="text"
-										value="2" placeholder="可接受：$4.00" />
+										value="<?php echo $product->shippingprice?>" placeholder="可接受：$4.00" />
 								</div>
 							</div>
 
@@ -648,7 +648,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="lowesttotalprice"
 										id="lowesttotalprice" type="text"
-										value="<?php echo $lowesttotalprice?>" placeholder="系统自动优化时，保证价格在此价格之上。默认为当前总价,可接受：$4.00" />
+										value=" " placeholder="系统自动优化时，保证价格在此价格之上。默认为当前总价,可接受：$4.00" />
 								</div>
 							</div>
 							

@@ -179,9 +179,10 @@ class parseutil{
 				$this->printarray($value);
 			}else{
 				if (is_string ($value)){
-					echo '['.$key."]=>".$value.'<br/>';
+					echo '[string'.$key."]=>".$value.'<br/>';
+					echo '<br/>******************************************************************************<br/>';
 				}else{
-					echo '['.$key."]=>".'<br/>';
+					echo '[object'.$key."]=>".'<br/>';
 					var_dump($value);
 					echo '<br/>******************************************************************************<br/>';
 				}
@@ -220,7 +221,7 @@ class parseutil{
 					$jsonstr = substr($innertextvalue,$pos,$lpos-$pos + 1);
 					$jsonarray = json_decode($jsonstr);
 					
-					$this->printarray($jsonarray);
+					//$this->printarray($jsonarray);
 					/* 
 					for($l=0;$l<count($jsonarray);$l++){
 						echo "<br/>";
@@ -231,213 +232,55 @@ class parseutil{
 			}
 			
 			$pre = substr($username,0,3);
-			$sku = $pre.$jsonarray['remarket_tag']->id.substr($jsonarray['manufacturer_id'],0,4);
+			$vars = $jsonarray->commerce_product_info->variations;
+			$SKU = $pre.$jsonarray->remarket_tag->id.substr($vars[0]->manufacturer_id,0,4);
+			$product->SKU = $SKU;
+			
+			$product->highprice = 0;
+			$product->shippingprice = 0;
+			for($v=0;$v<count($vars);$v++){
+				$curVar = $vars[$v];
+				$curColor = $curVar->color;
+				if($curColor != null)
+					$product->colors .= $curColor."|&#xd;";
 				
-			$product->keywords = $jsonarray['keywords'];
+				$curSize = $curVar->size;
+				if($curSize != null)
+					$product->sizes .= $curSize."|&#xd;";
+				
+				$curPrice = $curVar->price;
+				$curShipping = $curVar->shipping;
+				if($curPrice>$product->highprice){
+					$product->highprice = $curPrice;
+				}
+				if($curShipping>$product->shippingprice){
+					$product->shippingprice = $curShipping;
+				}
+				$product->fullprice = $curVar->retail_price;
+			}
+			
+			$product->keywords = $jsonarray->keywords;
 				
 				
-			$mainminphoto = $jsonarray['small_picture'];
+			$mainminphoto = $jsonarray->small_picture;
 			$splitpos = strrpos($mainminphoto,'-');
 			$product->mainphoto = substr($mainminphoto,0,$splitpos).'-big.jpg';
 				
-			$product->storename = $jsonarray['merchant'];
-			/* 	
-			$productpriceobj = $dom->find('span[id=j-sku-price]',0);
-			if($productpriceobj != null)
-				$product->fullprice = $productpriceobj->plaintext;
-				
-			$productactualPrice = $dom->find('span[itemprop=price]',0);
-			$productactuallowPrice = $dom->find('span[itemprop=lowPrice]',0);
-			$productactualhighPrice = $dom->find('span[itemprop=highPrice]',0);
-			if($productactualPrice != null)
-				$product->discountprice = $productactualPrice->plaintext;
-			if($productactuallowPrice != null)
-				$product->lowprice = $productactuallowPrice->plaintext;
-			if($productactualhighPrice != null)
-				$product->highprice = $productactualhighPrice->plaintext;
-				
-			$productVars = $dom->find('div[id=j-product-info-sku]',0);
-				
-			if($productVars != null){
-				$vars = $productVars->children;
-					
-				for($k=0;$k<count($vars);$k++){
-					$tempobj = $productVars->children($k);
+			$product->storename = $jsonarray->merchant;
 			
-					$tempdom = \parse\str_get_html($tempobj->innertext);
-					if(tempdom != null){
-						$temptitleobj = $tempdom->find('dt[class=p-item-title]',0);
-						$temptitle = $temptitleobj->plaintext;
-							
-						if(strcmp($temptitle,VAR_COLOR) == 0){
-							$tempvars = $tempdom->find('a[data-role=sku]');
-							for($v=0;$v<count($tempvars);$v++){
-								$vtitle = $tempvars[$v]->title;
-								if($vtitle != null && trim($vtitle) != ''){
-									$product->colors .= trim($vtitle)."|";
-								}
-							}
-						}
+			$product->description = $jsonarray->description;
 			
-						$varphotos = $tempdom->find('img');
-						if($varphotos != null){
-							for($p=0;$p<count($varphotos);$p++){
-								$bigpic = $varphotos[$p]->bigpic;
-								if($bigpic != null && trim($bigpic) != ''){
-									$product->varphotos .= trim($bigpic)."|&#xd;";
-								}
-							}
-						}
-							
-						if(strcmp($temptitle,VAR_SIZE) == 0){
-							$tempvars = $tempdom->find('a[data-role=sku]');
-							for($v=0;$v<count($tempvars);$v++){
-								$tempvalue = $tempvars[$v]->plaintext;
-								if($tempvalue != null && trim($tempvalue) != '')
-									$product->sizes .= trim($tempvalue)."|";
-							}
-						}
-							
-							
-						$tempdom->clear();
-					}else{
-						echo "<br/>tempdom is null";
-					}
-				}
+			$wishextraphotos = $jsonarray->extra_photo_urls;
+			foreach ($wishextraphotos as $photoindex=>$photourl){
+				$curpos = strrpos($photourl,'-');
+				$product->extraphotos .= substr($photourl,0,$curpos).'-big.jpg'."|&#xd;";
 			}
-				
-			$galleryphotos = $dom->find('span.img-thumb-item img');
-			
-			if($galleryphotos != null)
-				for($g=0;$g<count($galleryphotos);$g++){
-				$tempgallery = $galleryphotos[$g];
-				$tempimagesrc= $tempgallery->src;
-			
-				$product->galleryphotos .= rtrim($tempimagesrc,'_50x50.jpg').'.jpg|&#xd;';
-			}
-				
-			$scriptcode = $dom->find('script');
-			$querystring = 'window.runParams.descUrl';
-			$desurl = null;
-			if($scriptcode != null)
-				for($s=0;$s<count($scriptcode);$s++){
-				$tempscript = $scriptcode[$s];
-			
-				$pos = strpos($tempscript->innertext, $querystring);
-				if($pos > 0){
-					$innertextvalue = $tempscript->innertext;
-					$explodearray = explode(";",$innertextvalue);
-			
-					for($e=0;$e<count($explodearray);$e++){
-						$epos = strpos($explodearray[$e],$querystring);
-						if($epos>0){
-							$temp = $explodearray[$e];
-							$firstmark = strpos($temp,"\"");
-							$lastmark = strrpos($temp,"\"");
-							$desurl = substr($temp,$firstmark+3,$lastmark-strlen($temp));
-							break;
-						}
-					}
-					break;
-				}
-			}
-				
-			if($desurl != null){
-				$curl = curl_init ();
-				$options [CURLOPT_URL] = $desurl;
-				$options[CURLOPT_RETURNTRANSFER]=1;
-				curl_setopt_array ( $curl, $options );
-				$result = curl_exec ( $curl );
-				curl_close($curl);
-				$result = trim($result);
-				$deshtml = substr($result,(strpos($result,"=")+2),-2);
-					
-				$desdom = \parse\str_get_html($deshtml);
-					
-				if($desdom != null){
-					$product->description = $desdom->plaintext;
-					$product->descriptionhtml = $desdom->innertext;
-						
-					$extraimages = array();
-					foreach($desdom->find('img') as $element){
-						list ( $width, $height, $type )  = getimagesize($element->src );
-						if($width>400 && $height>400){
-							$product->extraphotos .= $element->src."|&#xd;";
-						}
-					}
-				}
-			} */
-			
 			return $product;
 			}else{
 				return null;
 			} 
-		
-		/* $scriptcode = $wishdom->find('script');
-		$querystring = 'mainContestObj';
-		$desurl = null;
-		if($scriptcode != null)
-			for($s=0;$s<count($scriptcode);$s++){
-			$tempscript = $scriptcode[$s];
-		
-			$pos = strpos($tempscript->innertext, $querystring);
-			if($pos > 0){
-				
-				$innertextvalue = $tempscript->innertext;
-				$pos = strpos($innertextvalue,'{');
-				$lpos = strrpos($innertextvalue,'}');
-				
-				$jsonstr = substr($innertextvalue,$pos,$lpos-$pos + 1);
-				$jsonarray = json_decode($jsonstr);
-				echo "<br/><br/>content:";
-				echo $jsonstr;
-				echo "<br/><br/><br/><br/><br/>JSON Array:<br/>";
-				print_r($jsonarray);
-				/*$explodearray = explode(",",$innertextvalue);
-		
-				for($e=0;$e<count($explodearray);$e++){
-					echo "CONTENT:".$explodearray[$e].'<br/>';
-					/* $epos = strpos($explodearray[$e],$querystring);
-					 if($epos>0){
-					 $temp = $explodearray[$e];
-					 $firstmark = strpos($temp,"\"");
-					 $lastmark = strrpos($temp,"\"");
-					 $desurl = substr($temp,$firstmark+3,$lastmark-strlen($temp));
-					 break;
-					 } */
-					/*}
-					 break; */
-					 /*}
-						} */
-		}
+	}
 	
-		/* 	$scriptcode = $wishdom->find('script');
-			$querystring = 'mainContestObj';
-			$desurl = null;
-			if($scriptcode != null)
-				for($s=0;$s<count($scriptcode);$s++){
-					$tempscript = $scriptcode[$s];
-				
-					$pos = strpos($tempscript->innertext, $querystring);
-					if($pos > 0){
-						$innertextvalue = $tempscript->innertext;
-						$explodearray = explode(",",$innertextvalue);
-				
-						for($e=0;$e<count($explodearray);$e++){
-							echo "CONTENT:".$explodearray[$e].'<br/>';
-							/* $epos = strpos($explodearray[$e],$querystring);
-							if($epos>0){
-								$temp = $explodearray[$e];
-								$firstmark = strpos($temp,"\"");
-								$lastmark = strrpos($temp,"\"");
-								$desurl = substr($temp,$firstmark+3,$lastmark-strlen($temp));
-								break;
-							} */
-						/*}
-						break;
-					}
-				}
-	} */
 }
 /*
 [commerce_product_info]=>
