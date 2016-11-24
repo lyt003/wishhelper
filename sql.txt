@@ -546,9 +546,16 @@ insert into countrycode(code,name,chinesename) values('ZW','Zimbabwe','津巴布
 
 
 
-
-
-
+CREATE TABLE `wishpostaccounts` (
+  `wishpostaccountid` int(11) NOT NULL AUTO_INCREMENT,
+  `accountid` int(11) NOT NULL,
+  `wishpostaccountname` varchar(100),
+  `clientid` varchar(50) NOT NULL,
+  `clientsecret` varchar(50) NOT NULL,
+  `token` varchar(50) DEFAULT NULL,
+  `refresh_token` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`wishpostaccountid`)
+)  DEFAULT CHARSET=utf8;
 
 
 

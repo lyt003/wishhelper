@@ -669,6 +669,31 @@ class dbhelper {
 		return mysql_query($cc);
 	}
 	
+	
+	public function addWishpostaccount($accountid,$wishpostaccountname,$clientid,$clientsecret){
+		$addSql = 'insert into wishpostaccounts(wishpostaccountname,accountid,clientid,clientsecret) values("'.$wishpostaccountname.'",'.$accountid.',"'.$clientid.'","'.$clientsecret.'")';
+		mysql_query($addSql);
+		return mysql_insert_id();
+	}
+	
+	public function updateWishpostToken($wishpostaccountid, $newToken, $newRefreshToken) {
+		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
+			$updateTokenSql = "update wishpostaccounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where wishpostaccountid = '" . $wishpostaccountid . "'";
+			return mysql_query ( $updateTokenSql );
+		}
+		return false;
+	}
+	
+	public function getWishpostaccounts($userid){
+		$wpsql = 'select wishpostaccountname,c.accountid,c.accountname '.
+					'from wishpostaccounts w,( '.
+					'select accountid,accountname from accounts where userid = '.$userid.
+					') c '.
+					'where w.accountid = c.accountid and w.token is not null';
+		
+		return mysql_query($wpsql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);

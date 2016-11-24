@@ -63,7 +63,19 @@ if ($username == null) { // 未登录
 
 $currentUserid = $_SESSION ['userid'];
 session_commit();
+
 // 已登录
+$wpresult = $dbhelper->getWishpostaccounts($currentUserid);
+$wpaccounts = array();
+$wpi = 0;
+while($wprow = mysql_fetch_array($wpresult)){
+	$wpaccounts['wishpostaccountname'.$wpi] = $wprow['wishpostaccountname'];
+	$wpaccounts['accountid'.$wpi] = $wprow['accountid'];
+	$wpaccounts['accountname'.$wpi] = $wprow['accountname'];
+	$wpi++;
+}
+
+
 $result = $dbhelper->getUserToken ( $username );
 $accounts = array ();
 $i = 0;
@@ -320,6 +332,17 @@ for($count = 0; $count < $i; $count ++) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
 				href="./wbindwish.php">绑定wish账号</a>
 			</li>
+			<li>已绑定的wish邮账号:
+<?php
+for($wcount = 0; $wcount < $wpi; $wcount ++) {
+	if($wpaccounts ['wishpostaccountname' . $wcount] != null)
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $wpaccounts ['wishpostaccountname' . $wcount]."(".$wpaccounts['accountname ' . $wcount].")";
+}
+?>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+				href="./wbindwishpost.php">绑定wish邮账号</a>
+			</li>
+			<br/>
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
