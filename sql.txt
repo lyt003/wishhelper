@@ -181,6 +181,8 @@ insert into express_info(express_name,express_code,parent_express_id) values('Ch
 insert into express_info(express_name,express_code,parent_express_id) values('各国E邮宝','EUB',2);
 insert into express_info(express_name,express_code,parent_express_id) values('燕邮宝平邮','141',1);
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮北京E邮宝线下','197',1,'USPS');
+insert into express_info(express_name,express_code,parent_express_id) values('Wish邮','WishPost',0);
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('Wish邮','WishPost',8,'WishPost');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
