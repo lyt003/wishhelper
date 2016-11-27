@@ -236,6 +236,10 @@ $countries = $wishHelper->getChineseCountrynames();
 		window.open("./wuploadEUBTrackings.php");
 	}
 
+	function uploadWishPost(){
+		window.open("./wuploadEUBTrackings.php?t=wp");
+	}
+
 	function productshipping(uid,sku){
 		window.open("./wproductshipping.php?uid=" + uid + "&sku=" + sku);
 	}
@@ -320,6 +324,7 @@ for($count = 0; $count < $i; $count ++) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
 				href="./wbindwish.php">绑定wish账号</a>
 			</li>
+			<li>&nbsp;&nbsp;</li>
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -334,6 +339,8 @@ for($count = 0; $count < $i; $count ++) {
 				<button class="btn btn-info" type="button" onclick="downloadEbayEUB()">下载E邮宝订单(From EBay)</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button>
 			</ul>
 
 <?php

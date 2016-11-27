@@ -137,6 +137,11 @@ class dbhelper {
 		$eubUpload = "update orders set provider='USPS',tracking='". $tracking ."'  where transactionid = '".$orderid."';";
 		return mysql_query($eubUpload);
 	}
+	
+	public function uploadWishpostTracking($transactionid,$tracking,$status){
+		$wishpostUpload = "update orders set provider='WishPost',tracking='". $tracking ."',orderstatus= ".$status." where transactionid = '".$transactionid."';";
+		return mysql_query($wishpostUpload);
+	}
 	/**
 	 *
 	 * @param
