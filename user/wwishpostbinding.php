@@ -30,7 +30,7 @@ if ($access_code != null) {
 			) 
 	) ); */
 	$url = "https://wishpost.wish.com/api/v2/oauth/access_token";
-	$data = array("client_id" => $clientid,"client_secret" => $clientsecret,"grant_type" =>"authorization_code","redirect_uri" => $redirect_uri);
+	$data = array("client_id" => $clientid,"client_secret" => $clientsecret,"code" => $access_code,"grant_type" =>"authorization_code","redirect_uri" => $redirect_uri);
 	$opts = array(
 			'http'=>array(
 					'method'=>"POST",
@@ -42,7 +42,8 @@ if ($access_code != null) {
 	$response = file_get_contents($url, TRUE, $context);
 	
 	// Send the request
-	//$response = file_get_contents ( $url, TRUE, $context );
+	echo "<br/>Request:";
+	var_dump($data);
 	echo "<br/>get the response:";
 	echo $response;
 	echo "\n";
