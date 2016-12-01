@@ -677,8 +677,10 @@ class dbhelper {
 	}
 	
 	public function updateWishpostToken($wishpostaccountid, $newToken, $newRefreshToken) {
+		echo "<br/>newtoken:".$newToken.",refreshtoken:".$newRefreshToken;
 		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
 			$updateTokenSql = "update wishpostaccounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where wishpostaccountid = '" . $wishpostaccountid . "'";
+			echo "<br/>update sql:".$updateTokenSql;
 			return mysql_query ( $updateTokenSql );
 		}
 		return false;
