@@ -336,7 +336,7 @@ for($count = 0; $count < $i; $count ++) {
 <?php
 for($wcount = 0; $wcount < $wpi; $wcount ++) {
 	if($wpaccounts ['wishpostaccountname' . $wcount] != null)
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $wpaccounts ['wishpostaccountname' . $wcount]."(".$wpaccounts['accountname ' . $wcount].")";
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $wpaccounts ['wishpostaccountname' . $wcount]."(".$wpaccounts['accountname' . $wcount].")";
 }
 ?>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a

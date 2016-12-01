@@ -677,22 +677,19 @@ class dbhelper {
 	}
 	
 	public function updateWishpostToken($wishpostaccountid, $newToken, $newRefreshToken) {
-		echo "<br/>newtoken:".$newToken.",refreshtoken:".$newRefreshToken;
 		if(strlen($newToken) > 1 && strlen($newRefreshToken) > 1){
 			$updateTokenSql = "update wishpostaccounts set token = '" . $newToken . "',refresh_token='" . $newRefreshToken . "' where wishpostaccountid = '" . $wishpostaccountid . "'";
-			echo "<br/>update sql:".$updateTokenSql;
 			return mysql_query ( $updateTokenSql );
 		}
 		return false;
 	}
 	
 	public function getWishpostaccounts($userid){
-		$wpsql = 'select wishpostaccountname,c.accountid,c.accountname '.
-					'from wishpostaccounts w,( '.
-					'select accountid,accountname from accounts where userid = '.$userid.
-					') c '.
-					'where w.accountid = c.accountid and w.token is not null';
-		
+		$wpsql = 'select wishpostaccountname,c.accountid accountid,c.accountname accountname  '.
+					' from wishpostaccounts w,( '.
+					' select accountid,accountname from accounts where userid = '.$userid.
+					' ) c '.
+					' where w.accountid = c.accountid and w.token is not null';
 		return mysql_query($wpsql);
 	}
 	
