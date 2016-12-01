@@ -248,6 +248,10 @@ $countries = $wishHelper->getChineseCountrynames();
 		window.open("./wuploadEUBTrackings.php");
 	}
 
+	function uploadWishPost(){
+		window.open("./wuploadEUBTrackings.php?t=wp");
+	}
+
 	function productshipping(uid,sku){
 		window.open("./wproductshipping.php?uid=" + uid + "&sku=" + sku);
 	}
@@ -343,6 +347,7 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 				href="./wbindwishpost.php">绑定wish邮账号</a>
 			</li>
 			<br/>
+			<li>&nbsp;&nbsp;</li>
 			<ul align="center">
 				<button class="btn btn-info" type="button" onclick="processorders()">处理订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -357,6 +362,8 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 				<button class="btn btn-info" type="button" onclick="downloadEbayEUB()">下载E邮宝订单(From EBay)</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button>
 			</ul>
 
 <?php
@@ -391,6 +398,9 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			foreach ($expressinfos  as $expressid => $expressname ) {
 				echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
 			}
+			echo "<li>&nbsp;&nbsp;</li>";
+			echo "<li>&nbsp;&nbsp;</li>";
+			echo "<li>&nbsp;&nbsp;</li>";
 			echo "</ul></div></td>";
 			
 			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";

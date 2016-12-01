@@ -21,7 +21,9 @@ if ($username == null) { // 未登录
 
 $userid = $_SESSION ['userid'];
 session_commit();
+$type = $_GET['t'];
 $trackings = $_POST['trackings'];
+$uploadtype = $_POST['uploadtype'];
 if($trackings != null){
 	$trackingdatas = array();
 	$trackingArr = explode("\r\n",$trackings);
@@ -31,7 +33,12 @@ if($trackings != null){
 			if($trackingInfo != null && count($trackingInfo)>=2){
 				if(strlen(trim($trackingInfo[0])) == 24 || strpos(trim($trackingInfo[1]),'L') == 0){
 					$trackingdatas[] = $trackingInfo;
-					$dbhelper->uploadEUBTracking(trim($trackingInfo[0]), trim($trackingInfo[1]));
+					if($uploadtype != null && strcmp($uploadtype,'wp') == 0){
+						$dbhelper->uploadWishpostTracking(trim($trackingInfo[0]), trim($trackingInfo[1]),ORDERSTATUS_DOWNLOADEDLABEL);
+					}else{
+						$dbhelper->uploadEUBTracking(trim($trackingInfo[0]), trim($trackingInfo[1]));
+					}
+					
 				}
 			}
 		}
@@ -130,6 +137,7 @@ if($trackings != null){
 	<div id="page-content" class="dashboard-wrapper">
 		<form class="form-horizontal" id="uploadEUBTrackings"
 			action="./wuploadEUBTrackings.php" method="post">
+			<input type="hidden" id="uploadtype" name="uploadtype" value="<?php echo $type?>"/>
 			<fieldset>
 				<textarea rows="10" id="trackings" name="trackings"
 					class="input-block-level">
@@ -167,6 +175,7 @@ style="border-width:0" /></a></noscript>
 <script type="text/javascript">
 	function parseData(){
 		var data = document.getElementById("trackings").value;
+		var uploadtype = document.getElementById("uploadtype").value;
 		var r2 = new RegExp("\r","g");//回车符
 		var r3 = new RegExp("\v","g");//垂直制表符
 		var r4 = new RegExp("\t","g");//水平制表符
@@ -183,11 +192,15 @@ style="border-width:0" /></a></noscript>
 						if($.trim(curdatas[l]).length == 24){
 							curdatas[0] =curdatas[l]; 
 						}
-					 if($.trim(curdatas[l]).length == 13 && $.trim(curdatas[l]).indexOf("L") ==0){
-						curdatas[1] =curdatas[l];
-						} 
+						if(uploadtype=='wp'){
+							curdatas[1] =curdatas[l];
+						}else{
+							if($.trim(curdatas[l]).length == 13 && $.trim(curdatas[l]).indexOf("L") ==0){
+								curdatas[1] =curdatas[l];
+							}
+						}
 					}
-			 	if($.trim(curdatas[0]).length== 24 && $.trim(curdatas[1]).length== 13) {
+			 	if($.trim(curdatas[0]).length== 24 && $.trim(curdatas[1]).length>0) {
 			 		verifieddata.push(curdatas);
 				 	}
 					  
