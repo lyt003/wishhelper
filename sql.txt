@@ -182,7 +182,15 @@ insert into express_info(express_name,express_code,parent_express_id) values('�
 insert into express_info(express_name,express_code,parent_express_id) values('燕邮宝平邮','141',1);
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮北京E邮宝线下','197',1,'USPS');
 insert into express_info(express_name,express_code,parent_express_id) values('Wish邮','WishPost',0);
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('Wish邮','WishPost',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮平邮','0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮挂号','1',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮DLP平邮','9-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮DLP挂号','9-1',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮DLE','10-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮E邮宝','11-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮英伦速邮小包','14-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲经济小包','200-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲标准小包','201-0',8,'WishPost');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
@@ -205,7 +213,18 @@ CREATE TABLE `express_attr_info`(
 insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'Userid','104903');
 insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'ServiceEndPoint','http://online.yw56.com.cn/service');
 insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,1,'ApiToken','MTA0OTAzOnlhbmd3dTE5ODIxMTEy');
-
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'receive_from','杨武');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'receive_province','北京');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'receive_city','北京');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'receive_addres','北京市朝阳区劲松八区807楼3门403');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'receive_phone','13401186439');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'warehouse_code','5');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'doorpickup','1');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'from','YangWu');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'sender_province','BeiJing');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'sender_city','BeiJing');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'sender_addres','ChaoYang Qu JingSong 8 Qu 807-3-403');
+insert into express_attr_info(userid,express_id,express_attr_name,express_attr_value) values(1,8,'sender_phone','13401186439');
 
 
 DROP TABLE IF EXISTS `wishcolors`;

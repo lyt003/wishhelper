@@ -4,7 +4,13 @@ namespace Wish;
 
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/wconfig.php';
+include_once dirname ( '__FILE__' ) . './model/order.php';
+include_once dirname ( '__FILE__' ) . './wishpost/Wishposthelper.php';
+include_once dirname ( '__FILE__' ) . './model/senderinfo.php';
 use mysql\dbhelper;
+use model\order;
+use wishpost\Wishposthelper;
+use model\senderinfo;
 
 class WishHelper {
 	private $dbhelper;
@@ -123,6 +129,7 @@ class WishHelper {
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
 		$yanwenExpresses = $this->getChildrenExpressinfosOF("YW");
+		$wishpostExpresses = $this->getChildrenExpressinfosOF("WishPost");
 		$expressinfos = $this->getUserExpressInfos($userid);
 		
 		$post_header = array (
@@ -130,6 +137,7 @@ class WishHelper {
 				'Content-Type: text/xml; charset=utf-8'
 		);
 		
+		$wishpostorders = array();
 		$ordersNoTracking = $this->dbhelper->getOrdersNoTracking ( $accountid );
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
 		$preTransactionid = "";
@@ -144,11 +152,16 @@ class WishHelper {
 				$expressid = explode ( "|", $curExpress )[0];
 				$expressValue = $yanwenExpresses[$expressid];
 				if($expressValue == null){
-					echo "<br/>".$orderNoTracking['sku']." use the other logistic";
+					$expressValue = $wishpostExpresses[$expressid];
+					if($expressValue == null){
+						echo "<br/>".$orderNoTracking['sku']." use the other logistic";
+					}else{
+						$orderNoTracking['expressValue'] = $expressValue;
+						$wishpostorders[] = $orderNoTracking;
+					}
 					continue;
 				}
 			}
-			
 			
 			//if (strcmp ( $orderNoTracking ['countrycode'], "US" ) != 0) {
 				$xml = simplexml_load_string ( '<?xml version="1.0" encoding="utf-8"?><ExpressType/>' );
@@ -283,11 +296,81 @@ class WishHelper {
 				}
 			//}
 		}
+		
+		
+		
+		//process wishpost orders;
+		$ordersobj = array();
+		$index = 0;
+		$countries = $this->getCountrynames();
+		
+		$preGoodsNameEn = "";
+		foreach ($wishpostorders as $curorder){
+			
+			if ($curorder ['orderNum'] != 0) {
+				$preGoodsNameEn = $preGoodsNameEn . $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'];
+			} else {
+				$orderobj = new order();
+				$orderobj->guid = $index++;
+				
+				$expressValue = explode ( "|",$curorder['expressValue']);
+				$orderobj->otype = $expressValue[0];
+				
+				$orderobj->to = $curorder ['name'];
+				$orderobj->recipient_country = 	$countries[$curorder ['countrycode']];
+				$orderobj->recipient_country_short = $curorder ['countrycode'];
+				$orderobj->recipient_province = $curorder ['state'];
+				$orderobj->recipient_city = $curorder ['city'];
+				$orderobj->recipient_address = $curorder ['streetaddress1'].' '.$curorder ['streetaddress2'];
+				$orderobj->recipient_postcode = $curorder ['zipcode'];
+				$orderobj->recipient_phone = $curorder ['phonenumber'];
+				$orderobj->type_no = 1;
+				$orderobj->from_country = "China";
+				$orderobj->content = $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				$preGoodsNameEn = "";
+				
+				$orderobj->num = $curorder ['quantity'];
+				
+				$orderTotalPrice = $curorder ['totalcost'];
+				if($orderTotalPrice>5){
+					$orderobj->weight = ($orderTotalPrice/10+1)/10;
+				}else{
+					$orderobj->weight = "0.05";
+				}
+				$orderobj->single_price = 5;
+				$orderobj->trande_no = $curorder ['transactionid'];
+				$orderobj->trade_amount = $orderTotalPrice;
+				$orderobj->user_desc = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 );
+				
+				$ordersobj[] = $orderobj;
+			}
+		}
+		
+		
+		if(count($ordersobj)>0){
+			$senderinfo = new senderinfo();
+			$senderinfo->receive_from = $expressinfo[WISHPOST_RECEIVEFROM];
+			$senderinfo->receive_province = $expressinfo[WISHPOST_RECEIVEPROVINCE];
+			$senderinfo->receive_city = $expressinfo[WISHPOST_RECEIVECITY];
+			$senderinfo->receive_addres = $expressinfo[WISHPOST_RECEIVEADDRESS];
+			$senderinfo->receive_phone = $expressinfo[WISHPOST_RECEIVEPHONE];
+			$senderinfo->warehouse_code = $expressinfo[WISHPOST_WAREHOUSECODE];
+			$senderinfo->doorpickup = $expressinfo[WISHPOST_DOORPICKER];
+			
+			$senderinfo->from = $expressinfo[WISHPOST_FROM];
+			$senderinfo->sender_province = $expressinfo[WISHPOST_SENDERPROVINCE];
+			$senderinfo->sender_city = $expressinfo[WISHPOST_SENDERCITY];
+			$senderinfo->sender_addres = $expressinfo[WISHPOST_SENDERADDRESS];
+			$senderinfo->sender_phone = $expressinfo[WISHPOST_SENDERPHONE];
+			
+			$wishposthelper = new Wishposthelper();
+			$wishposthelper->createorders($accountid, $ordersobj, $senderinfo);
+		}
 	}
 	
 	public function getExpressInfo($userid){
 		$expressInfo = array();
-		$expressResult = $this->dbhelper->getExpressInfo($userid, 1);
+		$expressResult = $this->dbhelper->getExpressInfo($userid);
 		while($expressAttr = mysql_fetch_array($expressResult)){
 			$expressInfo[$expressAttr['express_attr_name']] = $expressAttr['express_attr_value'];
 		}

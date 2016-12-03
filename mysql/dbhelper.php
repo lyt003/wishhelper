@@ -392,8 +392,8 @@ class dbhelper {
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values(' . $labelid . ',"' . $parent_sku . '",' . $userid . ')';
 		return mysql_query ( $insertpl );
 	}
-	public function getExpressInfo($userid, $expressid) {
-		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = ' . $userid . ' and express_id = ' . $expressid;
+	public function getExpressInfo($userid) {
+		$userSql = 'select express_attr_name,express_attr_value from express_attr_info where userid = ' . $userid;
 		return mysql_query ( $userSql );
 	}
 	
@@ -696,6 +696,11 @@ class dbhelper {
 					' ) c '.
 					' where w.accountid = c.accountid and w.token is not null';
 		return mysql_query($wpsql);
+	}
+	
+	public function getWPAccessToken($accountid){
+		$atsql = 'select token from wishpostaccounts where accountid = '.$accountid;
+		return mysql_query($atsql);
 	}
 	
 	public function getJaveUploadAppToken(){
