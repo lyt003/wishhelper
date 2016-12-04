@@ -301,7 +301,6 @@ class WishHelper {
 		
 		//process wishpost orders;
 		$ordersobj = array();
-		$index = 0;
 		$countries = $this->getCountrynames();
 		
 		$preGoodsNameEn = "";
@@ -311,7 +310,7 @@ class WishHelper {
 				$preGoodsNameEn = $preGoodsNameEn . $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'];
 			} else {
 				$orderobj = new order();
-				$orderobj->guid = $index++;
+				$orderobj->guid = $curorder ['transactionid'];
 				
 				$expressValue = explode ( "|",$curorder['expressValue']);
 				$orderobj->otype = $expressValue[0];
@@ -333,14 +332,14 @@ class WishHelper {
 				
 				$orderTotalPrice = $curorder ['totalcost'];
 				if($orderTotalPrice>5){
-					$orderobj->weight = ($orderTotalPrice/10+1)/10;
+					$orderobj->weight = $orderTotalPrice/100;
 				}else{
 					$orderobj->weight = "0.05";
 				}
 				$orderobj->single_price = 5;
 				$orderobj->trande_no = $curorder ['transactionid'];
 				$orderobj->trade_amount = $orderTotalPrice;
-				$orderobj->user_desc = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 );
+				$orderobj->user_desc = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
 				
 				$ordersobj[] = $orderobj;
 			}
@@ -364,7 +363,27 @@ class WishHelper {
 			$senderinfo->sender_phone = $expressinfo[WISHPOST_SENDERPHONE];
 			
 			$wishposthelper = new Wishposthelper();
-			$wishposthelper->createorders($accountid, $ordersobj, $senderinfo);
+			$ordersreult = $wishposthelper->createorders($accountid, $ordersobj, $senderinfo);
+			
+			//update order data;
+			$barcodes = $ordersreult->barcodes;
+			echo "<br/>barcodes:";
+			var_dump($barcodes);
+			foreach ($barcodes as $key=>$value){
+				echo "<br/>key:".$key."=>".$value;
+				$trackinginfo = array();
+				//$update_sql = "UPDATE orders set provider = '" . $orderarray ['provider'] . "', tracking = '" . $orderarray ['tracking'] 
+				//. "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and transactionid='" 
+				//. $orderarray ['transactionid'] . "'";
+				
+				$trackinginfo['provider'] = 'WishPost';
+				$trackinginfo['tracking'] = $value;
+				$trackinginfo['orderstatus'] = ORDERSTATUS_APPLIEDTRACKING;
+				$trackinginfo['accountid'] = $accountid;
+				$trackinginfo['transactionid'] = $key;
+				
+				$this->dbhelper->updateOrder($trackinginfo);
+			}
 		}
 	}
 	

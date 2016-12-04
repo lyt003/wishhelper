@@ -3,7 +3,9 @@ namespace wishpost;
 
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/wconfig.php';
+include_once dirname ( '__FILE__' ) . './model/ordersresult.php';
 use mysql\dbhelper;
+use model\ordersresult;
 
 class Wishposthelper{
 	
@@ -18,7 +20,56 @@ class Wishposthelper{
 		$bid = substr ( 10000 * microtime ( true ), 6, 5 );
 		$xmldata = $this->generateXML($orders, $access_token, 0, $bid, $senderinfo);
 		
-		$this->execute("https://wishpost.wish.com/api/v2/create_order", $xmldata);
+		$xmlresult = $this->execute("https://wishpost.wish.com/api/v2/create_order", $xmldata);
+		
+		$xmlresult = simplexml_load_string($xmlresult);
+		$ordersresult = new ordersresult();
+		$ordersresult->status = (string)$xmlresult->status;
+		$ordersresult->timestamp = (string)$xmlresult->timestamp;
+		$ordersresult->mark = (string)$xmlresult->mark;
+		$ordersresult->PDF_A4_EN_URL = (string)$xmlresult->PDF_A4_EN_URL;
+		$ordersresult->PDF_10_EN_URL = (string)$xmlresult->PDF_10_EN_URL;
+		$ordersresult->PDF_A4_LCL_URL = (string)$xmlresult->PDF_A4_LCL_URL;
+		$ordersresult->PDF_10_LCL_URL = (string)$xmlresult->PDF_10_LCL_URL;
+		
+		$barcodes = array();
+		foreach ($xmlresult as $key=>$value){
+			if(strcmp($key,'barcode') == 0){
+				$att = $value->attributes();
+				$guid = (string)$att[0];
+				$trackingnumber = $value;
+				$barcodes[$guid] = $trackingnumber;
+			}
+		}
+		
+		$ordersresult->barcodes = $barcodes;
+		//$PDF_15_EN_URL,$recipient_country,$recipient_country_short,$c_code,$q_code,$y_code,$user_desc;
+		$ordersresult->PDF_15_EN_URL = (string)$xmlresult->PDF_15_EN_URL;
+		$ordersresult->recipient_country = (string)$xmlresult->recipient_country;
+		$ordersresult->recipient_country_short = (string)$xmlresult->recipient_country_short;
+		$ordersresult->c_code = (string)$xmlresult->c_code;
+		$ordersresult->q_code = (string)$xmlresult->q_code;
+		$ordersresult->y_code = (string)$xmlresult->y_code;
+		$ordersresult->user_desc = (string)$xmlresult->user_desc;
+		
+		return $ordersresult;	
+		/*
+		 * <?xml version="1.0" encoding="utf-8"?>
+		 <root>
+		 <status>0</status>
+		 <timestamp>2016/12/03 23:29:36</timestamp>
+		
+		 <barcode guid="0">80398223895</barcode>
+		 <barcode guid="1">80398223918</barcode>
+		 <barcode guid="2">80398223921</barcode>
+		 <mark>0</mark>
+		 <PDF_A4_EN_URL>https://wishpost.wish.com/api/v2/download_label?access_token=50b16225937b4cdda4e5bdd317cc7f44&amp;format=A4&amp;use_local=false&amp;mark=0</PDF_A4_EN_URL>
+		 <PDF_10_EN_URL>https://wishpost.wish.com/api/v2/download_label?access_token=50b16225937b4cdda4e5bdd317cc7f44&amp;format=10&amp;use_local=false&amp;mark=0</PDF_10_EN_URL>
+		 <PDF_A4_LCL_URL>https://wishpost.wish.com/api/v2/download_label?access_token=50b16225937b4cdda4e5bdd317cc7f44&amp;format=A4&amp;use_local=true&amp;mark=0</PDF_A4_LCL_URL>
+		 <PDF_10_LCL_URL>https://wishpost.wish.com/api/v2/download_label?access_token=50b16225937b4cdda4e5bdd317cc7f44&amp;format=10&amp;use_local=true&amp;mark=0</PDF_10_LCL_URL>
+		
+		 </root>
+		 * */
 	}
 	
 	private function getWPAccessToken($accountid){
@@ -116,5 +167,6 @@ class Wishposthelper{
 	     
 		echo "<br/>get result:";
 		echo "<xmp>".$result."</xmp>";
+		return $result;
 	}
 }
