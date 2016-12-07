@@ -15,6 +15,25 @@ class Wishposthelper{
 		$this->dbhelper = new dbhelper();
 	}
 	
+	public  function getWishPostNumbersForLabel($accountid){
+		$wishnumbers = array();
+		$wishorders = $this->dbhelper->getwishorders($accountid, ORDERSTATUS_UPLOADEDTRACKING);
+		while($curorder = mysql_fetch_array($wishorders)){
+			if($curorder['tracking'] != null && $curorder['tracking']!= '')
+				echo "<br/>cur tracking:".$curorder['tracking'];
+			$wishnumbers[] =  $curorder['tracking'];
+		}
+		return $wishnumbers;
+	}
+	
+	public function getWishPostAccounts($userid){
+		$accountids = array();
+		$result = $this->dbhelper->getWishpostaccounts($userid);
+		while($wprow = mysql_fetch_array($result)){
+			$accountids[] = (string)$wprow['accountid']; 
+		}
+		return $accountids;
+	}
 	public function createorders($accountid,$orders,$senderinfo){
 		$access_token = $this->getWPAccessToken($accountid);
 		$bid = substr ( 10000 * microtime ( true ), 6, 5 );
@@ -72,6 +91,32 @@ class Wishposthelper{
 		 * */
 	}
 	
+	public function downloadlabels($accountid,$printlang,$printcode,$barcodes){
+		$downdata = $this->generateDownLabelXML($accountid, $printlang, $printcode, $barcodes);
+		$result = $this->execute("https://wishpost.wish.com/api/v2/generate_label", $downdata);
+		$xmlresult = simplexml_load_string($result);
+		$status = $xmlresult->status;
+		$PDF_URL = $xmlresult->PDF_URL;
+		return $PDF_URL;
+	}
+	
+	private function generateDownLabelXML($accountid,$printlang,$printcode,$barcodes){
+		if($barcodes != null){
+			$downlabelxml = '<?xml version="1.0" ?>';
+			$downlabelxml .= '<root>';
+			$downlabelxml .= '<access_token>'.$this->getWPAccessToken($accountid).'</access_token>';
+			$downlabelxml .= '<printlang>'.$printlang.'</printlang>';
+			$downlabelxml .= '<printcode>'.$printcode.'</printcode>';
+			$downlabelxml .= '<barcodes>';
+			foreach ($barcodes as $barcode){
+				$downlabelxml .= '<barcode>'.$barcode.'</barcode>';
+			}
+			$downlabelxml .= '</barcodes>';
+			$downlabelxml .= '</root>';
+			return $downlabelxml;
+		}
+		return null;
+	}
 	private function getWPAccessToken($accountid){
 		$result = $this->dbhelper->getWPAccessToken($accountid);
 		if($result != null){
@@ -137,8 +182,8 @@ class Wishposthelper{
 		return null;
 	}
 	private function execute($desturl,$xmldata){
-		echo "<br/>xml data:";
-		echo "<xmp>".$xmldata."</xmp>";
+		//echo "<br/>xml data:";
+		//echo "<xmp>".$xmldata."</xmp>";
 	
 		$header[] = "Content-type: text/xml";//定义content-type为xml
 		$options = array (
