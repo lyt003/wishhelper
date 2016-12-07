@@ -252,6 +252,10 @@ $countries = $wishHelper->getChineseCountrynames();
 		window.open("./wuploadEUBTrackings.php?t=wp");
 	}
 
+	function editaddress(uid,orderid){
+		window.open("./weditaddress.php?uid=" + uid + "&orderid=" + orderid);
+	}
+	
 	function productshipping(uid,sku){
 		window.open("./wproductshipping.php?uid=" + uid + "&sku=" + sku);
 	}
@@ -376,7 +380,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
 		echo "<th style=\"width:10%\">日期</th><th style=\"width:25%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:10%\" class=\"hidden-phone\">物流选择</th><th style=\"width:10%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = str_replace(' ','_',$cur_order ['sku']);
@@ -390,6 +394,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] .$countries[$cur_order ['countrycode']]. "</td>";
+			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"editaddress('".$accounts ['accountid' . $count1]."','".$cur_order ['orderid']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">编辑</span></button></td>";
 			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".$cur_order ['sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			
 			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $userExpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']] . "\" placeholder=\"选择物流方式\">";
