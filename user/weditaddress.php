@@ -210,6 +210,7 @@ if($orderid != null){
 									<input class="input-block-level required" name="state"
 										value="<?php echo $orderdetails['state']?>" id="state" type="text"
 										  />
+								<label><a target="_blank" href="https://en.wikipedia.org/wiki/<?php echo $orderdetails['city'];?>">提示</a></label>
 								</div>
 							</div>
 
