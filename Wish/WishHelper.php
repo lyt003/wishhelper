@@ -324,9 +324,19 @@ class WishHelper {
 				$orderobj->recipient_postcode = $curorder ['zipcode'];
 				$orderobj->recipient_phone = $curorder ['phonenumber'];
 				$orderobj->type_no = 1;
-				$orderobj->from_country = "China";
-				$orderobj->content = $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
-				$preGoodsNameEn = "";
+				$orderobj->from_country = "CN";
+				
+				$tempSKU = $curorder ['sku'];
+				$tempSKU = str_replace(' ','_',$tempSKU);
+				$tempSKU = str_replace('&amp;','AND',$tempSKU);
+				
+				$gsLabel = $this->getCNENLabel($labels, $tempSKU);
+				$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
+				$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] );
+						
+						
+				//$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				$orderobj->content = $gsNameEn;
 				
 				$orderobj->num = $curorder ['quantity'];
 				
@@ -339,7 +349,25 @@ class WishHelper {
 				$orderobj->single_price = 5;
 				$orderobj->trande_no = $curorder ['transactionid'];
 				$orderobj->trade_amount = $orderTotalPrice;
-				$orderobj->user_desc = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
+				/*
+				 *  WISH邮平邮=0
+					WISH邮挂号=1
+					--------------------------------------
+					DLP平邮=9-0
+					DLP挂号=9-1
+					DLE=10-0
+					E邮宝=11-0
+					英伦速邮小包=14-0
+					欧洲经济小包=200-0
+					欧洲标准小包=201-0
+				 * */
+				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
+				$orderobj->user_desc = $accountid . "_" .$gsNameCh.$gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				if(strcmp($orderobj->otype,'0')==0 || strcmp($orderobj->otype,'1') ==0){// WISH邮平邮 和 WISH邮挂号 
+					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 4, 9 );
+					$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				}
+				$preGoodsNameEn = "";
 				
 				$ordersobj[] = $orderobj;
 			}
