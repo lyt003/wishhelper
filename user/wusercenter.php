@@ -237,7 +237,7 @@ $needUpdateAddress = 0;
 	}
 
 	function downloadwishpostlabels(){
-		window.location.href="./wwishpostdownload.php";
+		window.open("./wwishpostdownload.php");
 	}
 
 	function uploadtrackings(){
@@ -380,7 +380,7 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button>
+				<!-- <button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button> -->
 			</ul>
 
 <?php

@@ -474,6 +474,10 @@ class WishHelper {
 	
 	public function updateHasDownloadLabel($numbers){
 		$trackings = explode(',',$numbers);
+		$this->updateHasDownloadLabelForArray($trackings);
+	}
+	
+	public function updateHasDownloadLabelForArray($trackings){
 		foreach ($trackings as $tracking){
 			if($tracking != null && $tracking != '')
 				$this->dbhelper->updateOrderStatus($tracking, ORDERSTATUS_DOWNLOADEDLABEL);

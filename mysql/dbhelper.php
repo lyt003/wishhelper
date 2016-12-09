@@ -197,7 +197,6 @@ class dbhelper {
 	
 	public function getwishorders($accountid, $orderstatus){
 		$woquery_sql = "SELECT transactionid,orderid,provider, tracking FROM orders WHERE provider = 'WishPost' and accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
-		echo "<br/>query:".$woquery_sql;
 		$result = mysql_query ( $woquery_sql );
 		return $result;
 	}
@@ -730,13 +729,11 @@ class dbhelper {
 	}
 	
 	public function getWishpostaccounts($userid){
-		echo "get userid";
 		$wpsql = 'select wishpostaccountname,c.accountid accountid,c.accountname accountname  '.
 					' from wishpostaccounts w,( '.
 					' select accountid,accountname from accounts where userid = '.$userid.
 					' ) c '.
 					' where w.accountid = c.accountid and w.token is not null';
-		echo "<br/>".$wpsql;
 		return mysql_query($wpsql);
 	}
 	

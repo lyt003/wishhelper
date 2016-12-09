@@ -17,11 +17,12 @@ class Wishposthelper{
 	
 	public  function getWishPostNumbersForLabel($accountid){
 		$wishnumbers = array();
-		$wishorders = $this->dbhelper->getwishorders($accountid, ORDERSTATUS_UPLOADEDTRACKING);
+		$wishorders = $this->dbhelper->getwishorders($accountid, ORDERSTATUS_APPLIEDTRACKING);
 		while($curorder = mysql_fetch_array($wishorders)){
-			if($curorder['tracking'] != null && $curorder['tracking']!= '')
+			if($curorder['tracking'] != null && $curorder['tracking']!= ''){
 				echo "<br/>cur tracking:".$curorder['tracking'];
-			$wishnumbers[] =  $curorder['tracking'];
+				$wishnumbers[] =  $curorder['tracking'];
+			}
 		}
 		return $wishnumbers;
 	}
