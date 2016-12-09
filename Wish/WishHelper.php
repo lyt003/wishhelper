@@ -128,8 +128,8 @@ class WishHelper {
 	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
-		$yanwenExpresses = $this->getChildrenExpressinfosOF("YW");
-		$wishpostExpresses = $this->getChildrenExpressinfosOF("WishPost");
+		$yanwenExpresses = $this->getChildrenExpressinfosOF(PROVIDER_YANWEN);
+		$wishpostExpresses = $this->getChildrenExpressinfosOF(PROVIDER_WISHPOST);
 		$expressinfos = $this->getUserExpressInfos($userid);
 		
 		$post_header = array (
@@ -442,12 +442,24 @@ class WishHelper {
 		return $yanwenexpresses;
 	}
 	
-	public function getTrackingNumbersForLabel($userid){
+	public function getTrackingNumbersForLabel($userid,$provider){
 		$numbers;
 		$result = $this->dbhelper->getUserOrdersForLabels($userid);
+		
+		$curExpresses = $this->getChildrenExpressinfosOF($provider);
+
+		$curExpressNames = array();
+		foreach ($curExpresses as $key=>$value){
+			$curExpressinfos = explode ( "|", $value );
+			$curExpressName = $curExpressinfos[1];
+			$curExpressNames[$curExpressName] = $curExpressName;
+		}
+		
 		while($order = mysql_fetch_array($result)){
-			if($order['tracking'] != null && $order['tracking']!= '')
-				$numbers = $numbers.$order['tracking'].',';
+			if($order['tracking'] != null && $order['tracking']!= ''){
+				if($curExpressNames[$order['provider']] != null)
+					$numbers .= $order['tracking'].',';
+			}
 		}
 		return $numbers;
 	}

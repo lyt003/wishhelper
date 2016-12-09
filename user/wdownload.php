@@ -20,7 +20,7 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl,CURLOPT_HTTPHEADER, $post_header); 
 
-$numbers = $wishHelper->getTrackingNumbersForLabel($_SESSION ['userid']);
+$numbers = $wishHelper->getTrackingNumbersForLabel($_SESSION ['userid'],PROVIDER_YANWEN);
 session_commit();
 $xmldata = '<string>' . substr ( $numbers, 0, strlen ( $numbers ) - 1 ) . '</string>';
 
