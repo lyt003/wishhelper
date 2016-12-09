@@ -128,8 +128,8 @@ class WishHelper {
 	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
-		$yanwenExpresses = $this->getChildrenExpressinfosOF("YW");
-		$wishpostExpresses = $this->getChildrenExpressinfosOF("WishPost");
+		$yanwenExpresses = $this->getChildrenExpressinfosOF(PROVIDER_YANWEN);
+		$wishpostExpresses = $this->getChildrenExpressinfosOF(PROVIDER_WISHPOST);
 		$expressinfos = $this->getUserExpressInfos($userid);
 		
 		$post_header = array (
@@ -142,7 +142,6 @@ class WishHelper {
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
-		
 			//exclude Ebay User:
 			if($accountid != 0){
 				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
@@ -305,13 +304,11 @@ class WishHelper {
 		
 		$preGoodsNameEn = "";
 		foreach ($wishpostorders as $curorder){
-			
 			if ($curorder ['orderNum'] != 0) {
 				$preGoodsNameEn = $preGoodsNameEn . $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'];
 			} else {
 				$orderobj = new order();
 				$orderobj->guid = $curorder ['transactionid'];
-				
 				$expressValue = explode ( "|",$curorder['expressValue']);
 				$orderobj->otype = $expressValue[0];
 				
@@ -324,9 +321,17 @@ class WishHelper {
 				$orderobj->recipient_postcode = $curorder ['zipcode'];
 				$orderobj->recipient_phone = $curorder ['phonenumber'];
 				$orderobj->type_no = 1;
-				$orderobj->from_country = "China";
-				$orderobj->content = $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
-				$preGoodsNameEn = "";
+				$orderobj->from_country = "CN";
+				
+				$tempSKU = $curorder ['sku'];
+				$tempSKU = str_replace(' ','_',$tempSKU);
+				$tempSKU = str_replace('&amp;','AND',$tempSKU);
+				$gsLabel = $this->getCNENLabel($labels, $tempSKU);
+				$gsNameCh = $gsLabel[0]; // *
+				$gsNameEn = $gsLabel[1];
+						
+				//$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				$orderobj->content = $gsNameEn;
 				
 				$orderobj->num = $curorder ['quantity'];
 				
@@ -339,12 +344,29 @@ class WishHelper {
 				$orderobj->single_price = 5;
 				$orderobj->trande_no = $curorder ['transactionid'];
 				$orderobj->trade_amount = $orderTotalPrice;
-				$orderobj->user_desc = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
+				/*
+				 *  WISH邮平邮=0
+					WISH邮挂号=1
+					--------------------------------------
+					DLP平邮=9-0
+					DLP挂号=9-1
+					DLE=10-0
+					E邮宝=11-0
+					英伦速邮小包=14-0
+					欧洲经济小包=200-0
+					欧洲标准小包=201-0
+				 * */
+				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
+				$orderobj->user_desc = $accountid . "_" .$gsNameCh.$gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				if(strcmp($orderobj->otype,'0')==0 || strcmp($orderobj->otype,'1') ==0){// WISH邮平邮 和 WISH邮挂号 
+					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 4, 9 );
+					$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
+				}
+				$preGoodsNameEn = "";
 				
 				$ordersobj[] = $orderobj;
 			}
 		}
-		
 		
 		if(count($ordersobj)>0){
 			$senderinfo = new senderinfo();
@@ -364,11 +386,8 @@ class WishHelper {
 			
 			$wishposthelper = new Wishposthelper();
 			$ordersreult = $wishposthelper->createorders($accountid, $ordersobj, $senderinfo);
-			
 			//update order data;
 			$barcodes = $ordersreult->barcodes;
-			echo "<br/>barcodes:";
-			var_dump($barcodes);
 			foreach ($barcodes as $key=>$value){
 				echo "<br/>key:".$key."=>".$value;
 				$trackinginfo = array();
@@ -423,12 +442,24 @@ class WishHelper {
 		return $yanwenexpresses;
 	}
 	
-	public function getTrackingNumbersForLabel($userid){
+	public function getTrackingNumbersForLabel($userid,$provider){
 		$numbers;
 		$result = $this->dbhelper->getUserOrdersForLabels($userid);
+		
+		$curExpresses = $this->getChildrenExpressinfosOF($provider);
+
+		$curExpressNames = array();
+		foreach ($curExpresses as $key=>$value){
+			$curExpressinfos = explode ( "|", $value );
+			$curExpressName = $curExpressinfos[1];
+			$curExpressNames[$curExpressName] = $curExpressName;
+		}
+		
 		while($order = mysql_fetch_array($result)){
-			if($order['tracking'] != null && $order['tracking']!= '')
-				$numbers = $numbers.$order['tracking'].',';
+			if($order['tracking'] != null && $order['tracking']!= ''){
+				if($curExpressNames[$order['provider']] != null)
+					$numbers .= $order['tracking'].',';
+			}
 		}
 		return $numbers;
 	}

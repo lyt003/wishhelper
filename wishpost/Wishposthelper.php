@@ -40,7 +40,6 @@ class Wishposthelper{
 		$xmldata = $this->generateXML($orders, $access_token, 0, $bid, $senderinfo);
 		
 		$xmlresult = $this->execute("https://wishpost.wish.com/api/v2/create_order", $xmldata);
-		
 		$xmlresult = simplexml_load_string($xmlresult);
 		$ordersresult = new ordersresult();
 		$ordersresult->status = (string)$xmlresult->status;
@@ -50,7 +49,6 @@ class Wishposthelper{
 		$ordersresult->PDF_10_EN_URL = (string)$xmlresult->PDF_10_EN_URL;
 		$ordersresult->PDF_A4_LCL_URL = (string)$xmlresult->PDF_A4_LCL_URL;
 		$ordersresult->PDF_10_LCL_URL = (string)$xmlresult->PDF_10_LCL_URL;
-		
 		$barcodes = array();
 		foreach ($xmlresult as $key=>$value){
 			if(strcmp($key,'barcode') == 0){
@@ -63,14 +61,21 @@ class Wishposthelper{
 		
 		$ordersresult->barcodes = $barcodes;
 		//$PDF_15_EN_URL,$recipient_country,$recipient_country_short,$c_code,$q_code,$y_code,$user_desc;
-		$ordersresult->PDF_15_EN_URL = (string)$xmlresult->PDF_15_EN_URL;
-		$ordersresult->recipient_country = (string)$xmlresult->recipient_country;
-		$ordersresult->recipient_country_short = (string)$xmlresult->recipient_country_short;
-		$ordersresult->c_code = (string)$xmlresult->c_code;
-		$ordersresult->q_code = (string)$xmlresult->q_code;
-		$ordersresult->y_code = (string)$xmlresult->y_code;
-		$ordersresult->user_desc = (string)$xmlresult->user_desc;
-		
+		if($xmlresult->PDF_15_EN_URL!= null)
+			$ordersresult->PDF_15_EN_URL = (string)$xmlresult->PDF_15_EN_URL;
+		if($xmlresult->recipient_country!= null)
+			$ordersresult->recipient_country = (string)$xmlresult->recipient_country;
+		if($xmlresult->recipient_country_short!= null)
+			$ordersresult->recipient_country_short = (string)$xmlresult->recipient_country_short;
+		if($xmlresult->c_code!= null)
+			$ordersresult->c_code = (string)$xmlresult->c_code;
+		if($xmlresult->q_code!= null)
+			$ordersresult->q_code = (string)$xmlresult->q_code;
+		if($xmlresult->y_code!= null)
+			$ordersresult->y_code = (string)$xmlresult->y_code;
+		if($xmlresult->user_desc!= null)
+			$ordersresult->user_desc = (string)$xmlresult->user_desc;
+		echo "<br/> return orders";
 		return $ordersresult;	
 		/*
 		 * <?xml version="1.0" encoding="utf-8"?>
@@ -182,9 +187,6 @@ class Wishposthelper{
 		return null;
 	}
 	private function execute($desturl,$xmldata){
-		//echo "<br/>xml data:";
-		//echo "<xmp>".$xmldata."</xmp>";
-	
 		$header[] = "Content-type: text/xml";//定义content-type为xml
 		$options = array (
 				CURLOPT_CONNECTTIMEOUT => 10,

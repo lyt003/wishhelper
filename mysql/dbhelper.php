@@ -84,6 +84,38 @@ class dbhelper {
 		return mysql_query ( $insert_sql );
 	}
 	
+	public function getorderdetails($accountid,$orderid){
+		$ordersql = 'select * from orders where accountid = "'.$accountid.'" and orderid = "'.$orderid.'"';
+		return mysql_query($ordersql);
+	}
+	
+	public function updateorderaddress($accountid,$orderid,$name,$streetaddress1,$streetaddress2,$city,$state,$zipcode,$phonenumber,$countrycode){
+		$updateaddress = 'update orders set ';
+		if(name == null || countrycode == null){
+			return false;
+		}
+		if($name != null)
+			$updateaddress .= 'name = "'.$name.'"  ';
+		if($streetaddress1 != null)
+			$updateaddress .= ',streetaddress1 = "'.$streetaddress1.'"  ';
+		if($streetaddress2 != null)
+			$updateaddress .= ',streetaddress2 = "'.$streetaddress2.'"  ';
+		if($city != null)
+			$updateaddress .= ',city = "'.$city.'"  ';
+		if($state != null)
+			$updateaddress .= ',state = "'.$state.'"  ';
+		if($zipcode != null)
+			$updateaddress .= ',zipcode = "'.$zipcode.'"  ';
+		if($phonenumber != null)
+			$updateaddress .= ',phonenumber = "'.$phonenumber.'"  ';
+		if($countrycode != null)
+			$updateaddress .= ',countrycode = "'.$countrycode.'"  ';
+		
+		$updateaddress .=' where accountid = "'.$accountid.'" and orderid = "'.$orderid.'"';
+		
+		return mysql_query($updateaddress);
+	}
+	
 	public function insertEbayOrder($accountid,$orderarray){
 		$orderarray[15] = str_replace('$','',$orderarray[15]);
 		$orderarray[16] = str_replace('$','',$orderarray[16]);
