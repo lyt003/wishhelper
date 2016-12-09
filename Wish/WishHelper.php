@@ -142,7 +142,6 @@ class WishHelper {
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
-		
 			//exclude Ebay User:
 			if($accountid != 0){
 				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
@@ -305,13 +304,11 @@ class WishHelper {
 		
 		$preGoodsNameEn = "";
 		foreach ($wishpostorders as $curorder){
-			
 			if ($curorder ['orderNum'] != 0) {
 				$preGoodsNameEn = $preGoodsNameEn . $curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'];
 			} else {
 				$orderobj = new order();
 				$orderobj->guid = $curorder ['transactionid'];
-				
 				$expressValue = explode ( "|",$curorder['expressValue']);
 				$orderobj->otype = $expressValue[0];
 				
@@ -329,11 +326,9 @@ class WishHelper {
 				$tempSKU = $curorder ['sku'];
 				$tempSKU = str_replace(' ','_',$tempSKU);
 				$tempSKU = str_replace('&amp;','AND',$tempSKU);
-				
 				$gsLabel = $this->getCNENLabel($labels, $tempSKU);
-				$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
-				$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] );
-						
+				$gsNameCh = $gsLabel[0]; // *
+				$gsNameEn = $gsLabel[1];
 						
 				//$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				$orderobj->content = $gsNameEn;
@@ -373,7 +368,6 @@ class WishHelper {
 			}
 		}
 		
-		
 		if(count($ordersobj)>0){
 			$senderinfo = new senderinfo();
 			$senderinfo->receive_from = $expressinfo[WISHPOST_RECEIVEFROM];
@@ -392,11 +386,8 @@ class WishHelper {
 			
 			$wishposthelper = new Wishposthelper();
 			$ordersreult = $wishposthelper->createorders($accountid, $ordersobj, $senderinfo);
-			
 			//update order data;
 			$barcodes = $ordersreult->barcodes;
-			echo "<br/>barcodes:";
-			var_dump($barcodes);
 			foreach ($barcodes as $key=>$value){
 				echo "<br/>key:".$key."=>".$value;
 				$trackinginfo = array();
