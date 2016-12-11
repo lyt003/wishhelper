@@ -217,4 +217,15 @@ class Wishposthelper{
 		echo "<xmp>".$result."</xmp>";
 		return $result;
 	}
+	
+	public function getOrdersExpressInfo($accountid,$orderstatus){
+		$ordersexpressinfo = array();
+		$result = $this->dbhelper->getordersexpressinfo($accountid, $orderstatus);
+		if($result != null){
+			while($orderexpressinfo = mysql_fetch_array($result)){
+				$ordersexpressinfo[$orderexpressinfo['tracking']] = $orderexpressinfo['express_code'].'|'.$orderexpressinfo['countrycode'].'|'.$orderexpressinfo['sku'];
+			}
+		}
+		return $ordersexpressinfo;
+	}
 }

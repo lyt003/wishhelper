@@ -201,6 +201,20 @@ class dbhelper {
 		return $result;
 	}
 	
+	public function getordersexpressinfo($accountid,$orderstatus){
+		$oesql = 'select ei.express_name,ei.express_code,peo.product_id,peo.sku,peo.countrycode,peo.provider,peo.tracking, peo.express_id'.
+					' from express_info ei,'.
+					' (select ot.product_id,ot.sku,ot.countrycode,ot.provider,ot.tracking, pe.express_id'.
+					' from product_express_info pe,'.
+					' (select opv.product_id,od.sku, od.countrycode,od.provider,od.tracking'.
+					' from onlineProductVars opv,'.
+					' (select accountid,sku,countrycode,provider,tracking from orders where accountid = '.$accountid.' and orderstatus = '.$orderstatus.') od'.
+					' where opv.accountid = od.accountid and opv.sku = od.sku) ot'.
+					' where pe.product_id = ot.product_id and pe.countrycode = ot.countrycode) peo'.
+					' where ei.express_id = peo.express_id';
+		return mysql_query($oesql);
+	}
+	
 	private function getUserOrders($userid, $orderstatus) {
 		$userOrderSql = "";
 		if (strcmp ( $orderstatus, '1' ) == 0) {

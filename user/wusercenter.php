@@ -240,6 +240,10 @@ $needUpdateAddress = 0;
 		window.open("./wwishpostdownload.php");
 	}
 
+	function downloadwishpostdatas(){
+		window.open("./wimportdatadownload.php");
+	}
+
 	function uploadtrackings(){
 		var form = document.getElementById("processorders");
 		form.action = "./wusercenter.php?add=2";
@@ -367,6 +371,9 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="downloadlabels()">下载标签</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button"
+					onclick="downloadwishpostdatas()">下载Wish邮数据导入燕文系统</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="downloadwishpostlabels()">下载Wish邮标签</button>
