@@ -362,6 +362,9 @@ class WishHelper {
 					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 4, 9 );
 					$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				}
+				if(strcmp($orderobj->otype,'200-0') == 0 || strcmp($orderobj->otype,'201-0') == 0){//欧洲经济小包和欧洲标准小包
+					$orderobj->user_desc .= $orderobj->to.$orderobj->recipient_country_short;
+				}
 				$preGoodsNameEn = "";
 				
 				$ordersobj[] = $orderobj;
