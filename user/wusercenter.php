@@ -160,13 +160,16 @@ if (strcmp ( $add, "1" ) == 0) {
 				try {
 					$fulResult = $client->fulfillOrderById ( $orderUpload ['orderid'], $tracker );
 				} catch (ServiceResponseException $e ) {
-					echo "<br/>failed to fulfillOrder" . $orderUpload ['orderid'] . $orderUpload ['tracking'] . $e->getStatusCode () . $e->getMessage ();
+					echo "<br/>failed to fulfillOrder " . $orderUpload ['orderid'] . $orderUpload ['tracking'] . $e->getStatusCode () . $e->getMessage ();
+					$fulResult =  $e->getStatusCode () . $e->getMessage ();
 				}
 				
-				if ($fulResult) {
+				if (strcmp($fulResult,'success') == 0) {
 					$orderUpload ['orderstatus'] = ORDERSTATUS_UPLOADEDTRACKING;
 					$orderUpload ['accountid'] = $accounts ['accountid' . $ut];
 					$updateResult = $dbhelper->updateOrder ( $orderUpload );
+				}else{
+					echo "<br/>failed to fulfillOrder " . $orderUpload ['orderid'] . $orderUpload ['tracking'] . "  ERROR:". $fulResult;
 				}
 			}
 		}
