@@ -19,11 +19,11 @@ class dbhelper {
 		mysql_query ( "set names 'UTF8'" );
 	}
 	public function queryUser($username, $email) {
-		$querySql = 'select userid,username,email from users where email = "' . $email . '" or username = "' . $username . '"';
+		$querySql = 'select userid,username,email from users where email = "' . mysql_real_escape_string($email) . '" or username = "' . mysql_real_escape_string($username) . '"';
 		return mysql_query ( $querySql );
 	}
 	public function createUser($username, $password, $email) {
-		$userInsert = 'insert into users(username,email,psd) values("' . $username . '","' . $email . '","' . $password . '")';
+		$userInsert = 'insert into users(username,email,psd) values("' . mysql_real_escape_string($username) . '","' . mysql_real_escape_string($email) . '","' . $password . '")';
 		mysql_query ( $userInsert );
 		return mysql_insert_id ();
 	}
@@ -31,15 +31,15 @@ class dbhelper {
 	public function userLogin($username, $password) {
 		$loginSql = 'select userid,username,email from users where psd = "' . $password . '" and ';
 		if (stripos ( $username, "@" ) != false) {
-			$loginSql = $loginSql . ' email = "' . $username . '"';
+			$loginSql = $loginSql . ' email = "' . mysql_real_escape_string($username) . '"';
 		} else {
-			$loginSql = $loginSql . ' username = "' . $username . '"';
+			$loginSql = $loginSql . ' username = "' . mysql_real_escape_string($username) . '"';
 		}
 		return mysql_query ( $loginSql );
 	}
 	
 	public function addUseraccount($userid,$accountname,$clientid,$clientsecret){
-		$addSql = 'insert into accounts(accountname,userid,clientid,clientsecret) values("'.$accountname.'",'.$userid.',"'.$clientid.'","'.$clientsecret.'")';
+		$addSql = 'insert into accounts(accountname,userid,clientid,clientsecret) values("'.mysql_real_escape_string($accountname).'",'.$userid.',"'.$clientid.'","'.$clientsecret.'")';
 		mysql_query($addSql);
 		return mysql_insert_id();
 	}
@@ -57,9 +57,9 @@ class dbhelper {
 	public function getUserToken($email) {
 		$querySql = 'select accountid,accountname, clientid,clientsecret,token,refresh_token from accounts, users where';
 		if (stripos ( $email, "@" ) != false) {
-			$querySql = $querySql . ' users.email = "' . $email . '" and users.userid = accounts.userid';
+			$querySql = $querySql . ' users.email = "' . mysql_real_escape_string($email) . '" and users.userid = accounts.userid';
 		} else {
-			$querySql = $querySql . ' users.username = "' . $email . '" and users.userid = accounts.userid';
+			$querySql = $querySql . ' users.username = "' . mysql_real_escape_string($email) . '" and users.userid = accounts.userid';
 		}
 		$result = mysql_query ( $querySql );
 		return $result;
@@ -79,7 +79,7 @@ class dbhelper {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
-		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . $orderarray ['sku'] . '","' . $orderarray ['productname'] . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
+		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . mysql_real_escape_string($orderarray ['sku']) . '","' . mysql_real_escape_string($orderarray ['productname']) . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . $orderarray ['size'] . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . $orderarray ['name'] . '","' . $orderarray ['streetaddress1'] . '","' . $orderarray ['streetaddress2'] . '","' . $orderarray ['city'] . '","' . $orderarray ['state'] . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
 		
 		return mysql_query ( $insert_sql );
 	}
