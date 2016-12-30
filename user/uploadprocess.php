@@ -84,14 +84,13 @@ if(strcasecmp($extension,'csv') == 0){
 	//$inputFileName = '../example1.xls';
 	$objPHPExcel = PHPExcel_IOFactory::load($filename);
 	
-	
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 	$sheet = $objPHPExcel->getActiveSheet();
 	$rows = $sheet->getHighestDataRow();
 	$columns = $sheet->getHighestDataColumn();
 	$columnMaxIndex = PHPExcel_Cell::columnIndexFromString($columns);
 	
-	if($columnMaxIndex <= 10){//飞宇
+	if($columnMaxIndex == 8){//飞宇
 	
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
@@ -132,6 +131,56 @@ if(strcasecmp($extension,'csv') == 0){
 			}
 		}
 		
+	}else if($columnMaxIndex == 5){//读取WishPost首页sheet
+		
+		$sheetcount = $objPHPExcel->getSheetCount();
+		
+		$result .= "current sheetcount:".$sheetcount;
+		for($index = 1;$index<$sheetcount;$index++){
+			
+			$result .= " current sheet  ".$index.":  ";
+			$activesheet = $objPHPExcel->getSheet($index);
+			
+			$rows = $activesheet->getHighestDataRow();
+			$columns = $activesheet->getHighestDataColumn();
+			$columnMaxIndex = PHPExcel_Cell::columnIndexFromString($columns);
+			
+			$orderdate = $activesheet->getCellByColumnAndRow($columnMaxIndex,0)->getValue();
+			for($row = 0;$row<=$rows;$row ++){
+				if($column == 0){
+					$curValue = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+					if(!is_numeric($curValue))
+						continue;
+				}
+				for($column = 0;$column<=$columnMaxIndex;$column ++){
+			
+					switch ($column){
+						case 2:
+							$trackingdata = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+						case 3:
+							$destinate = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+						case 4:
+							$weight = 1000 * $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+						case 5:
+							$shippingcost = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+					}
+				}
+				if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost)){
+					if(isset($orderdate)){
+						if(is_numeric($orderdate)){
+							$orderdateformat = intval(($orderdate - 25569) * 3600 * 24); //转换成1970年以来的秒数
+							$orderdate = date('Ymd',$orderdateformat);
+						}else if(checkDatetime($orderdate)){
+							$orderdate = date('Ymd',strtotime($orderdate));
+						}
+					}
+					$updateResult = $dbhelper->updateTrackingData($trackingdata, $destinate, $weight, $shippingcost, $shippingcost,$orderdate,$currentUserid);
+					$result .= $row.$trackingdata."行完成;".$updateResult."  |";
+				}else{
+					$result .= $row."行没数据";
+				}
+			}
+		}
 	}else if($columnMaxIndex >= 12){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
