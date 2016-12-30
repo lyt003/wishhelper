@@ -132,9 +132,9 @@ $client = null;
 // $accountid = $_GET ['accountid'];
 $accountid = $_POST ['currentAccountid'];
 $productName = $_POST ['Product_Name'];
-$productName = str_replace ( '"', "''", $productName );
+//$productName = str_replace ( '"', "''", $productName );
 $description = $_POST ['Description'];
-$description = str_replace ( '"', "''", $description );
+//$description = str_replace ( '"', "''", $description );
 $tags = $_POST ['Tags'];
 $uniqueID = $_POST ['Unique_Id'];
 $mainImage = $_POST ['Main_Image'];
@@ -215,6 +215,8 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	
 	$sizeArray = explode ( "|", $sizes );
 	
+	$insertResult = true;
+	
 	foreach ( $colorArray as $color ) {
 		$basePrice = $price;
 		$sizeCount = 0;
@@ -242,11 +244,10 @@ if ($productName != null && $description != null && $mainImage != null && $price
 					$productarray ['price'] = $price;
 				}
 			}
-			$insertResult = $dbhelper->insertProduct ( $productarray );
-			if ($insertResult != '1') {
+			$insertResult = $insertResult && $dbhelper->insertProduct ( $productarray );
+			if ($insertResult != '1' || !$insertResult) {
 				echo "insert failed" . "<br/>";
 			}
-			
 			$productarray ['sku'] = null;
 			$productarray ['color'] = null;
 			$productarray ['size'] = null;
@@ -265,7 +266,11 @@ if ($productName != null && $description != null && $mainImage != null && $price
 	$productarray ['accountid'] = $accountid;
 	$productarray ['scheduledate'] = $scheduleDate;
 	
-	$scheduleResult = $dbhelper->insertScheduleProduct ( $productarray );
+	if($insertResult){
+		$scheduleResult = $dbhelper->insertScheduleProduct ( $productarray );
+	}else{
+		echo "<br/>新增产品失败，请联系管理员 admin@wishconsole.com，";
+	}
 }
 
 
