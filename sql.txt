@@ -136,7 +136,7 @@ Alter table `setting` add `pid` varchar(50) after `schedule_running`;
 DROP TABLE IF EXISTS `tracking_data`;
 CREATE TABLE `tracking_data`(
 	`userid` int(11),
-	`tracking_number` varchar(20),
+	`tracking_number` varchar(50),
 	`device_id` varchar(50),
 	`tracking_date` varchar(10),
 	`destinate` varchar(50),
@@ -191,6 +191,7 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮英伦速邮小包','14-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲经济小包','200-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲标准小包','201-0',8,'WishPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'YanWen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
