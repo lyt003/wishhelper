@@ -242,7 +242,12 @@ class WishHelper {
 					
 					$gsLabel = $this->getCNENLabel($labels, $tempSKU);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
-					$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
+					$tempEn = $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					if(strlen($tempEn)>=50){
+						$tempEn = substr($tempEn,0,45).'...';
+					}
+					$gsNameEn = $Goods->addChild ( "NameEn", $tempEn); // *
+					//$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
 		
 					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity. ";" . $preGoodsNameEn );
 					

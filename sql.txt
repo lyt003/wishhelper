@@ -192,6 +192,8 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲经济小包','200-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲标准小包','201-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政挂号小包(上海)','214',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政平邮小包(上海)','215',1,'YanWen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
