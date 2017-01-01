@@ -752,7 +752,7 @@ class dbhelper {
 	}
 	
 	public function getWPAccessToken($accountid){
-		$atsql = 'select token from wishpostaccounts where accountid = '.$accountid;
+		$atsql = 'select * from wishpostaccounts where accountid = '.$accountid;
 		return mysql_query($atsql);
 	}
 	

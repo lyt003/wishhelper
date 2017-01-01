@@ -36,14 +36,42 @@ class Wishposthelper{
 		return $accountids;
 	}
 	public function createorders($accountid,$orders,$senderinfo){
-		$access_token = $this->getWPAccessToken($accountid);
+		$tokeninfo = $this->getWPAccessToken($accountid);
+		$access_token = $tokeninfo['token'];
 		$bid = substr ( 10000 * microtime ( true ), 6, 5 );
 		$xmldata = $this->generateXML($orders, $access_token, 0, $bid, $senderinfo);
 		
 		$xmlresult = $this->execute("https://wishpost.wish.com/api/v2/create_order", $xmldata);
 		$xmlresult = simplexml_load_string($xmlresult);
+		
+		$resultstatus = (string)$xmlresult->status;
+		/*
+		 * <?xml version="1.0" encoding="utf-8"?>
+			<root>
+			<status>1007</status>
+			<timestamp>2017/01/01 21:30:52</timestamp>
+			<error_message>Your access token has expired.</error_message>
+			</root>
+		 **/
+		if(strcmp($resultstatus,'1007') == 0){
+			$wishpostaccountid = $tokeninfo['wishpostaccountid'];
+			$refreshTokenXmlData = $this->generateRefreshXML($tokeninfo['clientid'],$tokeninfo['clientsecret'],$tokeninfo['refresh_token']);
+			echo "<br/>refreshtoken:";
+			echo "<xmp>".$refreshTokenXmlData."</xmp>";
+			$refreshResult = $this->execute("https://wishpost.wish.com/api/v2/oauth/refresh_token", $refreshTokenXmlData);
+			$refreshResult = simplexml_load_string($refreshResult);
+			$newtoken = (string)$refreshResult->access_token;
+			$newrefreshtoken = (string)$refreshResult->refresh_token;
+			echo "<br/>new token:".$newtoken.",refresh token:".$newrefreshtoken;
+			if(!$this->dbhelper->updateWishpostToken($wishpostaccountid, $newtoken, $newrefreshtoken)){
+				echo "<br/> refresh token failed";
+			}else{
+				return $this->createorders($accountid, $orders, $senderinfo);
+			}
+		}
+		
 		$ordersresult = new ordersresult();
-		$ordersresult->status = (string)$xmlresult->status;
+		$ordersresult->status = $resultstatus;
 		$ordersresult->timestamp = (string)$xmlresult->timestamp;
 		$ordersresult->mark = (string)$xmlresult->mark;
 		$ordersresult->PDF_A4_EN_URL = (string)$xmlresult->PDF_A4_EN_URL;
@@ -127,11 +155,25 @@ class Wishposthelper{
 		$result = $this->dbhelper->getWPAccessToken($accountid);
 		if($result != null){
 			if($curtoken = mysql_fetch_array($result)){
-				return $curtoken['token'];
+				//return $curtoken['token'];
+				return $curtoken;
 			}
 		}
 		return null;
 	}
+	
+	private function generateRefreshXML($clientid,$clientsecret,$refreshtoken){
+		$refreshxml = "<?xml version=\"1.0\" ?>";
+		$refreshxml .= "<root>";
+		$refreshxml .= "<client_id>".$clientid."</client_id>";
+		$refreshxml .= "<client_secret>".$clientsecret."</client_secret>";
+		$refreshxml .= "<refresh_token>".$refreshtoken."</refresh_token>";
+		$refreshxml .= "<grant_type>refresh_token</grant_type>";
+		$refreshxml .= "</root>";
+		return $refreshxml;
+	}
+	
+	
 	private function generateXML($orders,$access_token,$mark,$bid,$senderinfo){
 		if($orders != null){
 			$destxml = "<?xml version=\"1.0\" ?>";
