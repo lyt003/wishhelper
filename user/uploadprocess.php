@@ -218,6 +218,11 @@ if(strcasecmp($extension,'csv') == 0){
 	}
 	
 	$objPHPExcel->disconnectWorksheets();
+	
+	$length = strlen($result);
+	if($length>2048){
+		$result = substr($result,0,2048).'...';
+	}
 	header ( "Location:./csvupload.php?msg=".$result);
 	exit ();
 }
