@@ -136,9 +136,10 @@ class Wishposthelper{
 	
 	private function generateDownLabelXML($accountid,$printlang,$printcode,$barcodes){
 		if($barcodes != null){
+			$tokeninfo = $this->getWPAccessToken($accountid);
 			$downlabelxml = '<?xml version="1.0" ?>';
 			$downlabelxml .= '<root>';
-			$downlabelxml .= '<access_token>'.$this->getWPAccessToken($accountid).'</access_token>';
+			$downlabelxml .= '<access_token>'.$tokeninfo['token'].'</access_token>';
 			$downlabelxml .= '<printlang>'.$printlang.'</printlang>';
 			$downlabelxml .= '<printcode>'.$printcode.'</printcode>';
 			$downlabelxml .= '<barcodes>';
