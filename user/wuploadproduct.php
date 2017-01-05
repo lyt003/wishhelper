@@ -307,7 +307,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 		}
 		
 		$currentColorArray[$currentProduct ['color']] = $currentProduct ['color'];
-		$currentSizeArray[$currentProduct ['size']] = $currentProduct ['size'];
+		$currentSizeArray[md5($currentProduct ['size'])] = $currentProduct ['size'];
 		$price = $currentProduct ['price'];
 		if($previousPrice != 0 && $price != $previousPrice){
 			$incrementPrice = $price - $previousPrice;
@@ -333,6 +333,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 		$sizes = rtrim($sizes,"|");
 	}
 	
+
 	while ($currentSource = mysql_fetch_array($productSource)){
 		if(strcmp($currentSource['parent_sku'],$updateParentSKU) == 0){
 			$productSourceURL = $currentSource ['source_url'];
@@ -340,7 +341,8 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 		}
 	}
 }
-	 
+
+$uisizes = str_replace('"','&quot;',$sizes);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -597,7 +599,7 @@ if($updateAccountID !=  null && $updateParentSKU != null){
 								<div class="controls input-append">
 									<input class="input-block-level required" name="sizes"
 										onchange="showIncrementPrice(this.value)" id="sizes"
-										type="text" value="<?php echo $sizes?>"
+										type="text" value="<?php echo $uisizes;?>"
 										placeholder="可接受：size|size|size" /><br/>
 									<label>请用"|"分割多个尺码值，尺码取值可参考：<a href="http://www.merchant.wish.com/documentation/size-charts" target="_blank">wish尺码说明</a></label>
 								</div>

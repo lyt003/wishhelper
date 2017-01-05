@@ -232,23 +232,23 @@ class dbhelper {
 		return mysql_query ( $EUBOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
-		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url,lowesttotalprice) values (' . $accountid . ',"' . $productarray ['parent_sku'] . '","' . $productarray ['productSourceURL'] . '","'.$productarray['lowesttotalprice'].'")';
+		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url,lowesttotalprice) values (' . $accountid . ',"' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . $productarray ['productSourceURL'] . '","'.$productarray['lowesttotalprice'].'")';
 		return mysql_query ( $insertSourceSQL );
 	}
 	
 	public function updateProductSource($accountid, $productarray){
-		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '", lowesttotalprice="'.$productarray['lowesttotalprice'].'"  where accountid = '.$accountid.' and parent_sku="'.$productarray ['parent_sku'].'"';
+		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '", lowesttotalprice="'.$productarray['lowesttotalprice'].'"  where accountid = '.$accountid.' and parent_sku="'.mysql_real_escape_string($productarray ['parent_sku']).'"';
 		return mysql_query ( $updateSourceSQL );
 	}
 	
 	
 	public function insertProduct($productarray) {
 		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
-					values("' . $productarray ['parent_sku'] . '","' . $productarray ['sku'] . '","' . mysql_real_escape_string($productarray ['name']) . '","' . mysql_real_escape_string($productarray ['description']) . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['size'] . '","' . mysql_real_escape_string($productarray ['tags']) . '","' . $productarray ['UPC'] . '")';
+					values("' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['sku']) . '","' . mysql_real_escape_string($productarray ['name']) . '","' . mysql_real_escape_string($productarray ['description']) . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . mysql_real_escape_string($productarray ['size']) . '","' . mysql_real_escape_string($productarray ['tags']) . '","' . $productarray ['UPC'] . '")';
 		return mysql_query ( $insert_sql );
 	}
 	public function removeProduct($parentSKU){
-		$removeSql = 'delete from products where parent_sku="'.$parentSKU.'"';
+		$removeSql = 'delete from products where parent_sku="'.mysql_real_escape_string($parentSKU).'"';
 		return mysql_query($removeSql);
 	}
 	
