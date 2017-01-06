@@ -176,6 +176,7 @@ CREATE TABLE `express_info`(
 Alter table `express_info` add `provider_name` varchar(50);
 insert into express_info(express_name,express_code,parent_express_id) values('燕文物流','YW',0);
 insert into express_info(express_name,express_code,parent_express_id) values('E邮宝','EUB',0);
+insert into express_info(express_name,express_code,parent_express_id) values('海外仓','wishexpress',0);
 insert into express_info(express_name,express_code,parent_express_id) values('YanWen','105',1);
 insert into express_info(express_name,express_code,parent_express_id) values('ChinaAirPost','154',1);
 insert into express_info(express_name,express_code,parent_express_id) values('各国E邮宝','EUB',2);
@@ -194,6 +195,7 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政挂号小包(上海)','214',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政平邮小包(上海)','215',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('海邑海外仓','hiyes',31,'USPS');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
