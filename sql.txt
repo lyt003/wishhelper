@@ -633,4 +633,13 @@ CREATE TABLE `refundrecords`(
 	`WishExpressDeliveryDeadline` varchar(20),
 	 PRIMARY KEY (`OrderID`)
 )	DEFAULT CHARSET=utf8;
+Alter table `refundrecords` add `md5code` varchar(50);
 
+update refundrecords set md5code = md5(ShippingAddress);
+
+select left(RefundDate,6) refundm,count(*) from refundrecords where refundamount > 0 group by refundm order by refundm DESC
+select ShippingAddress, count(*) number from refundrecords  where refundamount > 0 group by ShippingAddress order by number DESC
+select TransactionID, ShippingAddress, count(*) number from refundrecords  where refundamount > 0 group by ShippingAddress,TransactionID order by number DESC 
+select distinct ShippingAddress from refundrecords
+
+select md5code, count(*) number from refundrecords  where refundamount > 0 group by md5code order by number DESC
