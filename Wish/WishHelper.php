@@ -44,7 +44,7 @@ class WishHelper {
 			
 			$orderarray ['orderstate'] = $cur_order->state;
 			$orderarray ['sku'] = $cur_order->sku;
-			$orderarray ['productname'] = str_replace ( '"', "''", $cur_order->product_name ); // use '' replace the " in the sql;
+			$orderarray ['productname'] = $cur_order->product_name;
 			$orderarray ['productimage'] = $cur_order->product_image_url;
 			if (! empty ( $cur_order->color )) {
 				$orderarray ['color'] = $cur_order->color;
@@ -67,9 +67,9 @@ class WishHelper {
 			$orderarray ['provider'] = '';
 			$orderarray ['tracking'] = '';
 			$orderarray ['name'] = $shippingDetail->name;
-			$orderarray ['streetaddress1'] = str_replace ( '"', "''", $shippingDetail->street_address1 );
+			$orderarray ['streetaddress1'] = $shippingDetail->street_address1;
 			if (! empty ( $shippingDetail->street_address2 )) {
-				$orderarray ['streetaddress2'] = str_replace ( '"', "''", $shippingDetail->street_address2 );
+				$orderarray ['streetaddress2'] = $shippingDetail->street_address2;
 			} else {
 				$orderarray ['streetaddress2'] = "";
 			}

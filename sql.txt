@@ -635,7 +635,7 @@ CREATE TABLE `refundrecords`(
 )	DEFAULT CHARSET=utf8;
 Alter table `refundrecords` add `md5code` varchar(50);
 
-update refundrecords set md5code = md5(ShippingAddress);
+update refundrecords set md5code = md5(Name+StreetAddress1+StreetAddress2+City+State+Zipcode+PhoneNumber+Countrycode);
 
 select left(RefundDate,6) refundm,count(*) from refundrecords where refundamount > 0 group by refundm order by refundm DESC
 select ShippingAddress, count(*) number from refundrecords  where refundamount > 0 group by ShippingAddress order by number DESC
