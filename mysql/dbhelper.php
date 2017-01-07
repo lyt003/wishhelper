@@ -756,6 +756,14 @@ class dbhelper {
 		return mysql_query($atsql);
 	}
 	
+	public function insertRefundRecord($refundrecord){
+		$insertrrsql = 'insert into refundrecords(accountid,TransactionDate,OrderID,TransactionID,OrderState,SKU,Product,ProductID,ProductLink,ProductImageURL,Size,Color,Price,Cost,Shipping,ShippingCost,Quantity,TotalCost,DaystoFulfill,HourstoFulfill,ShippedDate,ConfirmedDelivery,Provider,Tracking,TrackingConfirmed,TrackingConfirmedDate,ShippingAddress,Name,FirstName,LastName,StreetAddress1,StreetAddress2,City,State,Zipcode,Country,LastUpdated,PhoneNumber,Countrycode,RefundResponsibility,RefundAmount,RefundDate,RefundReason,IsWishExpress,WishExpressDeliveryDeadline) values('.
+						$refundrecord['accountid'].',"'.$refundrecord['TransactionDate'].'","'.$refundrecord['OrderID'].'","'.$refundrecord['TransactionID'].'","'.$refundrecord['OrderState'].'","'.mysql_real_escape_string($refundrecord['SKU']).'","'.mysql_real_escape_string($refundrecord['Product']).'","'.$refundrecord['ProductID'].'","'.mysql_real_escape_string($refundrecord['ProductLink']).'","'.mysql_real_escape_string($refundrecord['ProductImageURL']).'","'.mysql_real_escape_string($refundrecord['Size']).'","'.$refundrecord['Color'].'","'.$refundrecord['Price'].'","'.$refundrecord['Cost'].'","'.$refundrecord['Shipping'].'","'.$refundrecord['ShippingCost'].'","'.
+						$refundrecord['Quantity'].'","'.$refundrecord['TotalCost'].'","'.$refundrecord['DaystoFulfill'].'","'.$refundrecord['HourstoFulfill'].'","'.$refundrecord['ShippedDate'].'","'.$refundrecord['ConfirmedDelivery'].'","'.$refundrecord['Provider'].'","'.$refundrecord['Tracking'].'","'.$refundrecord['TrackingConfirmed'].'","'.$refundrecord['TrackingConfirmedDate'].'","'.mysql_real_escape_string($refundrecord['ShippingAddress']).'","'.mysql_real_escape_string($refundrecord['Name']).'","'.mysql_real_escape_string($refundrecord['FirstName']).'","'.mysql_real_escape_string($refundrecord['LastName']).'","'.mysql_real_escape_string($refundrecord['StreetAddress1']).'","'.mysql_real_escape_string($refundrecord['StreetAddress2']).'","'.
+						mysql_real_escape_string($refundrecord['City']).'","'.mysql_real_escape_string($refundrecord['State']).'","'.$refundrecord['Zipcode'].'","'.$refundrecord['Country'].'","'.$refundrecord['LastUpdated'].'","'.$refundrecord['PhoneNumber'].'","'.$refundrecord['Countrycode'].'","'.$refundrecord['RefundResponsibility'].'","'.$refundrecord['RefundAmount'].'","'.$refundrecord['RefundDate'].'","'.$refundrecord['RefundReason'].'","'.$refundrecord['IsWishExpress'].'","'.$refundrecord['WishExpressDeliveryDeadline'].'")';
+		return mysql_query($insertrrsql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);

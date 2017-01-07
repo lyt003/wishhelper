@@ -75,21 +75,34 @@ if(strcasecmp($extension,'csv') == 0){
 	fclose($csvfile);
 	header ( "Location:./csvupload.php?msg=".$result);
 	exit ();
-}else if(strcasecmp($extension,'xls') == 0){
-	$result = "process xls:";
+}else if(strcasecmp($extension,'xls') == 0 || strcasecmp($extension,'xlsx') == 0){
+	$result = $name;
 	/** PHPExcel_IOFactory */
 	include_once dirname ( '__FILE__' ) . './PHPExcel/Classes/PHPExcel/IOFactory.php';
+	include_once dirname ( '__FILE__' ) . './PHPExcel/Classes/PHPExcel/Exception.php';
 	
 	
-	//$inputFileName = '../example1.xls';
-	$objPHPExcel = PHPExcel_IOFactory::load($filename);
+	if(strcasecmp($extension,'xlsx') == 0){
+		$reader = PHPExcel_IOFactory::createReader('Excel2007');
+		$objPHPExcel = $reader->load($filename);
+	}else{
+		$objPHPExcel = PHPExcel_IOFactory::load($filename);
+	}
+	try {
+		$scount = $objPHPExcel->getSheetCount();
+		if($scount <=0){
+			$result .= "ERROR: no sheet, parse xls faild, you can save this file as xls 2003 and try it again";
+		}else{ 
+			$sheet = $objPHPExcel->getActiveSheet();
+			$rows = $sheet->getHighestDataRow();
+			$columns = $sheet->getHighestDataColumn();
+			$columnMaxIndex = PHPExcel_Cell::columnIndexFromString($columns);
+		}
+	} catch (PHPExcel_Exception $e) {
+		$result .= "<br/> ERROR:".$e;;
+	}
 	
-	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-	$sheet = $objPHPExcel->getActiveSheet();
-	$rows = $sheet->getHighestDataRow();
-	$columns = $sheet->getHighestDataColumn();
-	$columnMaxIndex = PHPExcel_Cell::columnIndexFromString($columns);
-	
+	$result .= " max column index:".$columnMaxIndex.',rows:'.$rows.' columns:'.$columns;
 	if($columnMaxIndex == 8){//飞宇
 	
 		for($row = 0;$row<=$rows;$row ++){
@@ -103,16 +116,22 @@ if(strcasecmp($extension,'csv') == 0){
 				switch ($column){
 					case 0:
 						$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue(); 
+						break;
 					case 1:					
 						$trackingdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 2:
 						$destinate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 3:
 						$weight = 1000 * $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 4:
 						$shippingcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 5:
 						$offprice = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($offprice)){
@@ -157,12 +176,16 @@ if(strcasecmp($extension,'csv') == 0){
 					switch ($column){
 						case 2:
 							$trackingdata = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+							break;
 						case 3:
 							$destinate = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+							break;
 						case 4:
 							$weight = 1000 * $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+							break;
 						case 5:
 							$shippingcost = $activesheet->getCellByColumnAndRow($column,$row)->getValue();
+							break;
 					}
 				}
 				if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost)){
@@ -181,7 +204,7 @@ if(strcasecmp($extension,'csv') == 0){
 				}
 			}
 		}
-	}else if($columnMaxIndex >= 12){//Yanwen
+	}else if($columnMaxIndex >= 12 && $columnMaxIndex<=15){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
 			if($column == 0){
 				$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
@@ -193,16 +216,22 @@ if(strcasecmp($extension,'csv') == 0){
 				switch ($column){
 					case 0:
 						$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 1:
 						$trackingdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 5:
 						$destinate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 6:
 						$weight = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 9:
 						$shippingcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 					case 12:
 						$finalcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
 				}
 			}
 			if(isset($trackingdata) && isset($destinate) && isset($weight) && isset($shippingcost) && isset($finalcost)){
@@ -214,6 +243,166 @@ if(strcasecmp($extension,'csv') == 0){
 			}else{
 				$result .= $row."行没数据"; 
 			}	
+		}
+	}else if($columnMaxIndex == 44){//refund orders xls.
+		$result .= " process refund orders ";
+		for($row = 0;$row<=$rows;$row ++){
+			
+			$refundorder = array();
+			$refundorder['accountid'] = $accountid;
+			for($column = 0;$column<=$columnMaxIndex;$column ++){
+				switch ($column){
+					case 0:
+						$refundorder['TransactionDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 1:
+						$refundorder['OrderID'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 2:
+						$refundorder['TransactionID'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 3:
+						$refundorder['OrderState'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 4:
+						$refundorder['SKU'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 5:
+						$refundorder['Product'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();		
+						break;
+					case 6:
+						$refundorder['ProductID'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 7:
+						$refundorder['ProductLink'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 8:
+						$refundorder['ProductImageURL'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 9:
+						$refundorder['Size'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 10:
+						$refundorder['Color'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 11:
+						$refundorder['Price'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 12:
+						$refundorder['Cost'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 13:
+						$refundorder['Shipping'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 14:
+						$refundorder['ShippingCost'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 15:
+						$refundorder['Quantity'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 16:
+						$refundorder['TotalCost'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 17:
+						$refundorder['DaystoFulfill'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 18:
+						$refundorder['HourstoFulfill'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 19:
+						$refundorder['ShippedDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 20:
+						$refundorder['ConfirmedDelivery'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 21:
+						$refundorder['Provider'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 22:
+						$refundorder['Tracking'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 23:
+						$refundorder['TrackingConfirmed'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 24:
+						$refundorder['TrackingConfirmedDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 25:
+						$refundorder['ShippingAddress'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 26:
+						$refundorder['Name'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 27:
+						$refundorder['FirstName'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 28:
+						$refundorder['LastName'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 29:
+						$refundorder['StreetAddress1'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 30:
+						$refundorder['StreetAddress2'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 31:
+						$refundorder['City'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 32:
+						$refundorder['State'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 33:
+						$refundorder['Zipcode'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 34:
+						$refundorder['Country'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 35:
+						$refundorder['LastUpdated'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 36:
+						$refundorder['PhoneNumber'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 37:
+						$refundorder['Countrycode'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 38:
+						$refundorder['RefundResponsibility'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 39:
+						$refundorder['RefundAmount'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 40:
+						$refundorder['RefundDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 41:
+						$refundorder['RefundReason'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 42:
+						$refundorder['IsWishExpress'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 43:
+						$refundorder['WishExpressDeliveryDeadline'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+				}
+			}
+			if($refundorder['accountid'] != null && $refundorder['OrderID']!= null && strlen($refundorder['OrderID'])>10){
+				
+				if($refundorder['TransactionDate'] != null)
+					$refundorder['TransactionDate'] = exchangeTimeFormat($refundorder['TransactionDate']);
+				if($refundorder['ShippedDate'] != null)
+					$refundorder['ShippedDate'] = exchangeTimeFormat($refundorder['ShippedDate']);
+				if($refundorder['TrackingConfirmedDate'] != null)
+					$refundorder['TrackingConfirmedDate'] = exchangeTimeFormat($refundorder['TrackingConfirmedDate']);
+				if($refundorder['LastUpdated'] != null)
+					$refundorder['LastUpdated'] = exchangeTimeFormat($refundorder['LastUpdated']);
+				if($refundorder['RefundDate'] != null)
+					$refundorder['RefundDate'] = exchangeTimeFormat($refundorder['RefundDate']);
+				$insertResult = $dbhelper->insertRefundRecord($refundorder);
+				$result .= $row."行完成;".$insertResult."  |";
+			}else{
+				$result .= $row."行没数据";
+			}
 		}
 	}
 	
@@ -227,6 +416,13 @@ if(strcasecmp($extension,'csv') == 0){
 	exit ();
 }
 
+// curdate format: 12-28-2014
+function exchangeTimeFormat($curdate){
+	$tempY = substr($curdate,6);
+	$tempM = substr($curdate,0,2);
+	$tempD = substr($curdate,3,2);
+	return $tempY.$tempM.$tempD;
+}
 function excelTime($date, $time = false) {
 	if(function_exists('GregorianToJD')){
 		if (is_numeric( $date )) {

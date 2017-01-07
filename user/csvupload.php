@@ -142,7 +142,7 @@ $msg = $_GET['msg'];
 	                      			echo "<div class=\"alert alert-block alert-success fade in\">";
 	                      			echo "<h4 class=\"alert-heading\">";
 	                      			if($msg){
-	                      				echo $msg." 上传成功";
+	                      				echo $msg." 上传完成";
 	                      			}else{
 	                      				echo $msg." 上传失败，请联系管理员 admin@wishconsole.com";
 	                      			}
