@@ -96,25 +96,29 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		} catch (ServiceResponseException $e) {
 			echo "<br/>get orders faild of ".$accounts['accountname'.$i].", the error info:".$e->getStatusCode().$e->getMessage().$e->getErrorMessage();
 			if ($e->getStatusCode () == 1015 || $e->getStatusCode() == 1016) {
-				$response = $client->refreshToken ( $accounts ['clientid' . $i], $accounts ['clientsecret' . $i], $accounts ['refresh_token' . $i] );
-				echo "<br/>Message:" . $response->getMessage ();
-				$values = $response->getResponse ()->{'data'};
-				$newToken = '0';
-				$newRefresh_token = '0';
-				foreach ( $values as $k => $v ) {
-					echo 'key  ' . $k . '  value:' . $v;
-					if ($k == 'access_token') {
-						$newToken = $v;
+				try{
+					$response = $client->refreshToken ( $accounts ['clientid' . $i], $accounts ['clientsecret' . $i], $accounts ['refresh_token' . $i] );
+					echo "<br/>Message:" . $response->getMessage ();
+					$values = $response->getResponse ()->{'data'};
+					$newToken = '0';
+					$newRefresh_token = '0';
+					foreach ( $values as $k => $v ) {
+						echo 'key  ' . $k . '  value:' . $v;
+						if ($k == 'access_token') {
+							$newToken = $v;
+						}
+						if ($k == 'refresh_token') {
+							$newRefresh_token = $v;
+						}
 					}
-					if ($k == 'refresh_token') {
-						$newRefresh_token = $v;
-					}
+					$dbhelper->updateUserToken ( $accounts ['accountid' . $i], $newToken, $newRefresh_token );
+					
+					$client = new WishClient ( $newToken, 'prod' );
+					$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
+					$wishHelper->saveOrders ( $unfulfilled_orders, $accounts ['accountid' . $i] );
+				}catch(Exception $re){
+					echo "<br/>refresh token failed";
 				}
-				$dbhelper->updateUserToken ( $accounts ['accountid' . $i], $newToken, $newRefresh_token );
-				
-				$client = new WishClient ( $newToken, 'prod' );
-				$unfulfilled_orders = $client->getAllUnfulfilledOrdersSince ( '2010-01-20' );
-				$wishHelper->saveOrders ( $unfulfilled_orders, $accounts ['accountid' . $i] );
 			}
 		}		
 		$i ++;
