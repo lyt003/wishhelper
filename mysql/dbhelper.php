@@ -267,9 +267,9 @@ class dbhelper {
 									' select v.price, p.* from onlineProducts p ,onlineProductVars v where p.id = v. product_id and p.accountid =  '.$accountid.' and review_status != "rejected" and deleted is NULL'. 	
 									' ) a'. 
 									' group by id'.
-									' order by number_sold desc,number_saves desc limit 100';
+									' order by number_sold desc,number_saves desc limit '.$start.','.$limit;
 		}else{
-			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%" limit '.$start.','.$limit;
+			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%"';// limit '.$start.','.$limit;
 		}
 		return mysql_query($queryonlineProducts);
 	}

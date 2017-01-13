@@ -195,6 +195,9 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政挂号小包(上海)','214',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政平邮小包(上海)','215',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('英邮微包平邮','278',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政平邮小包(不含电)','182',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政挂号小包(不含电)','174',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('海邑海外仓','hiyes',31,'USPS');
 
 DROP TABLE IF EXISTS `product_express_info`;
