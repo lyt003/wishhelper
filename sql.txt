@@ -62,6 +62,8 @@ CREATE TABLE `orders` (
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE `orders` CHANGE `countrycode` `countrycode` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
+ALTER TABLE orders MODIFY COLUMN name varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS  `products`;
 CREATE TABLE `products` (
 	`parent_sku` varchar(50) NOT NULL,
