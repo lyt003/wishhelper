@@ -292,6 +292,81 @@ if($pid != null){
 	$dbhelper->registerPID($currentPID);
 }
 
+//
+$accountid = 1;
+$client = null;
+$accountAccess = $dbhelper->getAccountToken($accountid);
+if ($rows = mysql_fetch_array ( $accountAccess )) {
+		$token = $rows ['token'];
+		$client = new WishClient ( $token, 'prod' );
+		$client->setAccountid ( $accountid );
+		$clientid = $rows ['clientid'];
+		$clientsecret = $rows ['clientsecret'];
+		$refresh_token = $rows ['refresh_token'];
+		echo "client account id:".$client->getAccountid()."<br/>";
+}
+$productid = '585e1fe835a76d23bd338cdd';
+if($client != null){
+	//$product = $client->getProducts(1,5);
+	$product = $client->getProductById($productid);
+	echo "<br/> *****************print product:******************<br/>";
+	var_dump($product);
+	echo "<br/> *****************print product end******************<br/>";
+	
+	$tempProduct = array();
+	
+	$vars = get_object_vars($product);
+	foreach ($vars as $key=>$val){
+		$tempProduct[$key] = $val;
+	}
+	
+	/* echo "<br/>WE Countrycode:";
+	$tempWE = "";
+	//var_dump($tempProduct['wish_express_country_codes']);
+	if($tempProduct['wish_express_country_codes']!= null){
+		foreach ($tempProduct['wish_express_country_codes'] as $weObj){
+			//var_dump($weObj);
+			$tempWE .= $weObj.",";
+		}
+		echo "we:".$tempWE;		
+	} */
+	
+	$tempTags = "";
+	foreach ($tempProduct['tags'] as $tagObj){
+		$tempTags = $tempTags.$tagObj->Tag->name.",";
+	}
+	$tempTags = rtrim($tempTags,",");
+	$tempProduct['tags'] = $tempTags;
+	
+	if($tempProduct['wish_express_country_codes']!= null){
+		foreach ($tempProduct['wish_express_country_codes'] as $weObj){
+			$tempWE .= $weObj.",";
+		}
+		$tempProduct['wecountrycodes'] = $tempWE;
+		echo "<br/>WE:".$tempWE;
+	}
+	
+	$tempProduct['accountid'] = $accountid ;
+	$uploaded = $tempProduct['date_uploaded'];
+	$tempdate = explode("-",trim($uploaded));
+	$tempProduct['date_uploaded'] = $tempdate[2]."-".$tempdate[0]."-".$tempdate[1];
+	$tempProduct['date_updated'] = $tempProduct['date_uploaded'];
+	
+	$result = $dbhelper->isProductExist($productid);
+	if($curproduct = mysql_fetch_array($result)){
+		if($curproduct['id'] != null){
+			echo "<br/>update:";
+			$dbhelper->updateOnlineProduct($tempProduct);
+		}else{
+			echo "<br/>insert:";
+			$dbhelper->insertOnlineProduct($tempProduct);
+		}
+	}else{
+		echo "<br/>insert:";
+		$dbhelper->insertOnlineProduct($tempProduct);		
+	}
+}
+
 
 /*  $dbhelper = new dbhelper ();
 

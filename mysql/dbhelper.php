@@ -558,17 +558,17 @@ class dbhelper {
 	}
 	
 	public function insertOnlineProduct($productarray) {
-		$insert_sql = 'insert into onlineProducts (accountid, id, parent_sku,name,description,original_image_url,main_image,extra_images,is_promoted,tags,review_status,number_saves,number_sold,date_uploaded,date_updated)
-					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['parent_sku'] . '","' . $productarray ['name'] 
-							. '","' . $productarray ['description'] . '","' . $productarray ['original_image_url'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['is_promoted'] . '","' 
-							. $productarray ['tags'] . '","' . $productarray ['review_status'] . '",' . $productarray ['number_saves'] . ',' . $productarray ['number_sold'] . ',DATE_FORMAT("' . $productarray ['date_uploaded'] . '","%Y-%m-%d"),DATE_FORMAT("' . $productarray ['date_updated'] . '","%Y-%m-%d"))';
+		$insert_sql = 'insert into onlineProducts (accountid, id, parent_sku,name,description,original_image_url,main_image,extra_images,is_promoted,tags,review_status,number_saves,number_sold,date_uploaded,wecountrycodes,date_updated)
+					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['name']) 
+							. '","' . mysql_real_escape_string($productarray ['description']) . '","' . $productarray ['original_image_url'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['is_promoted'] . '","' 
+							. $productarray ['tags'] . '","' . $productarray ['review_status'] . '",' . $productarray ['number_saves'] . ',' . $productarray ['number_sold'] . ',"' . $productarray ['wecountrycodes'] .'",DATE_FORMAT("' . $productarray ['date_uploaded'] . '","%Y-%m-%d"),DATE_FORMAT("' . $productarray ['date_updated'] . '","%Y-%m-%d"))';
 		return mysql_query ( $insert_sql );
 	}
 	
 	public function updateOnlineProduct($productarray){
-		$update_sql = 'update onlineProducts set name="'.$productarray ['name'] . '", description = "'.$productarray ['description'] . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
+		$update_sql = 'update onlineProducts set name="'.mysql_real_escape_string($productarray ['name']) . '", description = "'.mysql_real_escape_string($productarray ['description']) . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
 		. '",is_promoted = "'.$productarray ['is_promoted'] . '",tags = "'.$productarray ['tags'] . '",review_status = "'.$productarray ['review_status'] 
-		. '",number_saves = '.$productarray ['number_saves'] . ',number_sold = '.$productarray ['number_sold'] . ' where id = "'.$productarray['id'].'"';
+		. '",number_saves = '.$productarray ['number_saves'] . ',number_sold = '.$productarray ['number_sold'] .',wecountrycodes = "'.$productarray ['wecountrycodes'] . '" where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	

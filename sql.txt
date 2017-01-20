@@ -272,6 +272,7 @@ CREATE TABLE `onlineProducts`(
  	 PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 Alter table `onlineProducts` add `deleted` int(1);
+Alter table `onlineProducts` add `wecountrycodes` varchar(100);
 
 DROP TABLE IF EXISTS `onlineProductVars`;
 CREATE TABLE `onlineProductVars`(
