@@ -695,6 +695,11 @@ class dbhelper {
 		return mysql_query($dpl);
 	}
 	
+	public function getNeedDisableProducts($accountid){
+		$ndsql = 'SELECT * FROM onlineProducts where accountid = "'.$accountid.'" and is_promoted = false and number_sold = 0 and wecountrycodes = "" and deleted is NULL and review_status != "rejected" order by review_status';
+		return  mysql_query($ndsql);
+	}
+	
 	public function deleteProduct($accountid,$productid){
 		$dp = 'update onlineProducts set deleted = 1 where accountid = "'.$accountid.'" and id = "'.$productid.'"';
 		return mysql_query($dp);

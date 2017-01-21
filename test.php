@@ -31,6 +31,16 @@ if($ttresult){
 	echo "<br/>time false";
 }
 
+$t1 = false;
+$t2 = "True";
+$t3 = "False";
+
+$tf = $t1||(strcmp($t2,'True') == 0);
+$tf1 = $t1||(strcmp($t3,'True') == 0);
+
+echo "<br/> tf:".$tf;
+echo "<br/> tf1:".$tf1;
+
 
 echo "<br>Start key value express:";
 //"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. 

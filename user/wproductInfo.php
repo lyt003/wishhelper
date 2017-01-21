@@ -162,7 +162,32 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	$newProducts = $dbhelper->getNewProductImpressionsInfo($accountid, $startDate, $endDate);
 }else if($command != null && strcmp($command,'disabledProductslist') == 0){
 	$disabledProductslist = $dbhelper->getDisabledProducts($accountid);
+}else if($command != null && strcmp($command,'disableproducts') == 0){
+	echo "<br/><br/><br/><br/> 下架产品id列表:";
+	$needdisableProducts = $dbhelper->getNeedDisableProducts($accountid);
+	//$needdisableProducts = $dbheper->get
+	$disableProductIDS = array();
+	while ( $tempproduct = mysql_fetch_array ( $needdisableProducts) ) {
+		$tempproductid = $tempproduct['id'];
+		$tempVars = $dbhelper->getProductVars($tempproductid);
+		
+		$isEnabled = false;
+		while($tempvar = mysql_fetch_array($tempVars)){
+			$isEnabled = $isEnabled || (strcmp($tempvar['enabled'],'True') == 0);
+		}
+		if($isEnabled){
+			$disableProductIDS[] = $tempproductid;
+ 		}
+	}
+	
+	echo "<br/>共下架产品数:".count($disableProductIDS);
+	$startdate = date('Y-m-d',strtotime("+1 day"));
+	foreach ($disableProductIDS as $pid){
+		echo "<br/>".$pid;
+		$dbhelper->insertOptimizeJob($accountid, DISABLEPRODUCT, $pid, $startdate);
+	}
 }
+
 
 
 function getPreWeek($curtime){
@@ -381,6 +406,10 @@ for($count = 0; $count < $i; $count ++) {
 					<button class="btn btn-info" type="button" onclick="newproducts()">新上产品扫描</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<button class="btn btn-info" type="button" onclick="disabledProductslist()">已下架产品列表</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</ul>
+					<ul align="center">
+					<button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 								</div>
@@ -757,6 +786,11 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			form.submit();
 		}
 
+		function disableproducts(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("disableproducts");
+			form.submit();
+		}
 		function disabledProductslist(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("disabledProductslist");
