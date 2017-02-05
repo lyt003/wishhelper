@@ -64,6 +64,10 @@ ALTER TABLE `orders` CHANGE `countrycode` `countrycode` VARCHAR(50) CHARACTER SE
 
 ALTER TABLE orders MODIFY COLUMN name varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+alter table orders change city city varchar(100);
+alter table orders change state state varchar(100);
+alter table orders change name name varchar(100);
+
 DROP TABLE IF EXISTS  `products`;
 CREATE TABLE `products` (
 	`parent_sku` varchar(50) NOT NULL,
