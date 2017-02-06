@@ -9,6 +9,7 @@ use mysql\dbhelper;
 use Wish\WishHelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
+use mysql;
 header ( "Content-Type: text/html;charset=utf-8" );
 set_time_limit ( 0 );
 $dbhelper = new dbhelper ();
@@ -163,9 +164,10 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 }else if($command != null && strcmp($command,'disabledProductslist') == 0){
 	$disabledProductslist = $dbhelper->getDisabledProducts($accountid);
 }else if($command != null && strcmp($command,'disableproducts') == 0){
-	echo "<br/><br/><br/><br/> 下架产品id列表:";
+	/*
+    春节下架所有未加钻零销量非海外仓的产品
+    echo "<br/><br/><br/><br/> 下架产品id列表:";
 	$needdisableProducts = $dbhelper->getNeedDisableProducts($accountid);
-	//$needdisableProducts = $dbheper->get
 	$disableProductIDS = array();
 	while ( $tempproduct = mysql_fetch_array ( $needdisableProducts) ) {
 		$tempproductid = $tempproduct['id'];
@@ -185,6 +187,17 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	foreach ($disableProductIDS as $pid){
 		echo "<br/>".$pid;
 		$dbhelper->insertOptimizeJob($accountid, DISABLEPRODUCT, $pid, $startdate);
+	} */
+	
+	//春节后上架假期中下架的产品;
+	echo "<br/><br/><br/><br/> 上架产品";
+	$startDate = '2017-01-20';
+	$endDate = '2017-01-24';
+	$pidlistresult = $dbhelper->getVacationProducts($accountid, $startDate, $endDate);
+	while($tempvalue = mysql_fetch_array($pidlistresult)){
+		$temppid = $tempvalue['productid'];
+		$result = $client->enableProductById($temppid);
+		echo "<br/>enable product id:".$temppid.'  '.$result;
 	}
 }
 
@@ -409,7 +422,8 @@ for($count = 0; $count < $i; $count ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 					<ul align="center">
-					<button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button>
+					<!-- button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button -->
+					<!-- <button class="btn btn-info" type="button" onclick="disableproducts()">春节后上架假期中下架的产品,即时生效</button> -->
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 								</div>

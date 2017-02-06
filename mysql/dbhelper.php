@@ -775,6 +775,13 @@ class dbhelper {
 		return mysql_query($rcsql);
 	}
 	
+	
+	public function getVacationProducts($accountid,$startdate,$enddate){
+		$vpsql = ' SELECT distinct productid FROM optimizejobs WHERE operator = "DISABLEPRODUCT" and startdate > "'.$startdate.'"  and startdate < "'.$enddate.'" and accountid = "'.$accountid.'"';
+		echo "<br/><br/><br/>,query sql:".$vpsql;
+		return mysql_query($vpsql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);

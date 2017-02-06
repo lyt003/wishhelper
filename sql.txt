@@ -653,3 +653,12 @@ select TransactionID, ShippingAddress, count(*) number from refundrecords  where
 select distinct ShippingAddress from refundrecords
 
 select md5code, count(*) number from refundrecords  where refundamount > 0 group by md5code order by number DESC
+
+
+
+
+
+select tp.productid,op.parent_sku from (
+SELECT distinct productid FROM `optimizejobs` WHERE operator = 'DISABLEPRODUCT' and startdate > '2017-01-20'  and startdate < '2017-01-24' and accountid = '1'
+) tp left outer join onlineProducts op on tp.productid = op.id 
+
