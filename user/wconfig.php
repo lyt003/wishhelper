@@ -24,7 +24,7 @@ define('ORDERSTATUS_APPLIEDTRACKING',1);
 define('ORDERSTATUS_DOWNLOADEDLABEL',2);
 define('ORDERSTATUS_UPLOADEDTRACKING',3);
 
-define('NOTETOCUSTOMERS','Thanks for buying,welcome next time!');
+define('NOTETOCUSTOMERS','Thanks for buying,i will be very happy if you would help me to confirm the order when you received the item. thanks and have a nice day, welcome next time!');
 
 
 define('DISABLEPRODUCT','DISABLEPRODUCT');
