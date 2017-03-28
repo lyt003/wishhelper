@@ -207,10 +207,11 @@ $needUpdateAddress = 0;
 <script type="text/javascript">
 	function processorders(){
 		var needupdateaddress = $('#needUpdateAddress').val();
+		/* 暂时取消地址验证，加快订单处理的速度 
 		if(needupdateaddress == 1){
 			alert("还有客户地址中没有包含州信息，请先编辑地址，补全完整");
 			return;
-		}
+		} */
 		var a=$('input[name^="label"]').map(function(){return {value:this.value,name:this.name}}).get();
 		for(var i=0;i<a.length;i++){
 			if(a[i].value == null || a[i].value == ""){
