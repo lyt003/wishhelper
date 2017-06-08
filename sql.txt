@@ -118,6 +118,180 @@ INSERT INTO `productinfo` (`parent_sku`, `accountid`, `source_url`) VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 
 
+DROP TABLE IF EXISTS  `productskuinfo`;
+CREATE TABLE `productskuinfo` (
+	`parentsku` varchar(50) NOT NULL,
+	`sku` varchar(50) NOT NULL,
+	`accountid` int(11),
+    `cost` varchar(500)
+)  DEFAULT CHARSET=utf8;
+ALTER TABLE `productskuinfo`
+  ADD PRIMARY KEY (`sku`,`accountid`);
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('lovelypiranhaearring','lovelypiranhaearring',1,'5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome2',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome3',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome4',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome5',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome6',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome7',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-1',1,'11.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-3',1,'11.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('catwearring3','catwearring3-1',1,'6');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('catwearring3','catwearring3-2',1,'6');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('lovelysharkearring','lovelysharkearring',1,'6');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('nk9506','nk9506',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-1',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-2',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-3',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-4',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-6',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sbn','sbn-7',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-1',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-2',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-3',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-4',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-5',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-6',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-7',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-8',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-9',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-10',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-11',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-12',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-13',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-14',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-15',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-16',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-17',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-18',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-19',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-20',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-21',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-22',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-23',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-24',1,'13.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink2','yunfeink2-25',1,'13.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-1',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-2',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-3',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-4',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-5',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-6',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-7',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-8',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-9',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-10',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-11',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-12',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-13',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-14',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-15',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-16',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-17',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-18',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-19',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-20',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-21',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-22',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-23',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-24',1,'5.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfeink1','yunfeink1-25',1,'5.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-1',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-2',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-3',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-4',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-5',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-6',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-7',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-8',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-9',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-10',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-11',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('xdwyunku','xdwyunku-12',1,'25');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('wristband','wristband',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('8675','8675',1,'26');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('9701','9701',1,'31');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('sharkwearring','sharkwearring',1,'6');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('flag','flag',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('flag','flag_XS',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('flag','flag_S',1,'8');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_bulldog','H_bulldog_Black',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_bulldog','H_bulldog_White',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_bulldog','H_bulldog_Brown',1,'28');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('3308','3308_3-4 Years',1,'40');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('3308','3308_5-6 Years',1,'40');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('3308','3308_7-8 Years',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('3308','3308_9-10 Years',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('3308','3308_11-12 Years',1,'45');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('matdwsunflower','matdwsunflower',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('K135_9048','K135_9048',1,'4');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('eraser','eraser',1,'1.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Blue_M',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Blue_L',1,'9');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Blue_XL',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Blue_XXL',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Wine Red_M',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Wine Red_L',1,'9');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Wine Red_XL',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Wine Red_XXL',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Red_M',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Red_L',1,'9');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Red_XL',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ogbagflower','H_ogbagflower_Red_XXL',1,'11');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_G',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_B',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_P',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_BK',1,'11');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_O',1,'11');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FP-DWRY1067','H_FP-DWRY1067_Black',1,'18');
+
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
@@ -666,4 +840,22 @@ select md5code, count(*) number from refundrecords  where refundamount > 0 group
 select tp.productid,op.parent_sku from (
 SELECT distinct productid FROM `optimizejobs` WHERE operator = 'DISABLEPRODUCT' and startdate > '2017-01-20'  and startdate < '2017-01-24' and accountid = '1'
 ) tp left outer join onlineProducts op on tp.productid = op.id 
+
+
+
+select * from 
+(select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost,o.quantity from orders o,
+( select distinct pv.sku,p.product_id from onlineProductVars pv,
+(select product_id from onlineProductVars where sku = "lovelypiranhaearring" and accountid = "1") p 
+where p.product_id = pv.product_id ) ps 
+where o.accountid = "1" and o.sku = ps.sku ) a
+ left join tracking_data t on a.tracking = t.tracking_number
+ and t.finalshippingcost IS NOT NULL  order by t.tracking_date DESC limit 50;
+ 
+ select * from (
+select distinct pv.sku sku,p.product_id from onlineProductVars pv,
+(select product_id from onlineProductVars where sku = "greenhome16" and accountid = "1") p 
+where p.product_id = pv.product_id
+) a 
+left join productskuinfo on a.sku = productskuinfo.sku  order by a.sku DESC
 

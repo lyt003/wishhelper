@@ -703,4 +703,13 @@ class WishHelper {
 		}
 		return $chcountries;
 	}
+	
+	public function getProductSKUCost($productsku,$accountid) {
+		$productscost = array();
+		$costresult = $this->dbhelper->getProductSKUCost($productsku, $accountid);
+		while($productcostarr = mysql_fetch_array($costresult)){
+			$productscost[$productcostarr['sku']] = $productcostarr['cost']; 
+		}
+		return $productscost;
+	}
 }

@@ -346,6 +346,16 @@ class dbhelper {
 	}
 	
 	
+	public function getProductSKUCost($productsku,$accountid){
+		$costsql = 'select p.sku,p.cost from ('.
+				   ' select distinct pv.sku sku,p.product_id from onlineProductVars pv,'.
+				   ' (select product_id from onlineProductVars where sku = "'.$productsku.'" and accountid = "'.$accountid.'") p'. 
+				   ' where p.product_id = pv.product_id'.
+				   ' ) a'. 
+				   ' left join productskuinfo p on a.sku = p.sku  order by a.sku DESC';
+		return mysql_query($costsql);
+	}
+	
 	public function isScheduleRunning() {
 		$sql = "select schedule_running from setting";
 		$result = mysql_query ( $sql );
@@ -713,7 +723,7 @@ class dbhelper {
 	public function getProductShippingCost($sku,$accountid){
 
 		$psc = 'select * from ('.
-			   ' select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost from orders o,'. 
+			   ' select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost,o.quantity from orders o,'. 
 			   ' ('.
 			   ' select distinct pv.sku,p.product_id from onlineProductVars pv,'.
 			   ' (select product_id from onlineProductVars where sku = "'.$sku.'" and accountid = "'.$accountid.'") p'.
