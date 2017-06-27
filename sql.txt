@@ -291,6 +291,19 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Bru
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Brush_holder','H_Brush_holder_O',1,'11');
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FP-DWRY1067','H_FP-DWRY1067_Black',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('thebeatles','thebeatles-1',1,'35');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ml0682','ml0682',1,'12');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_White_2-3 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_White_3-4 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_White_4-5 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_White_6-7 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_White_8-9 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_2-3 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_3-4 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_4-5 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_6-7 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_8-9 Years',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('grid','grid',1,'8');
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
