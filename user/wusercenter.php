@@ -244,6 +244,9 @@ $needUpdateAddress = 0;
 		window.location.href="./wdownload.php";
 	}
 
+	function downloadproductslist(){
+		window.open("./wdownloadproductslist.php");
+	}
 	function downloadwishpostlabels(){
 		window.open("./wwishpostdownload.php");
 	}
@@ -381,20 +384,23 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 					onclick="downloadlabels()">下载标签</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
+					onclick="downloadproductslist()">下载配货单</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <button class="btn btn-info" type="button"
 					onclick="downloadwishpostdatas()">下载Wish邮数据导入燕文系统</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button"
 					onclick="downloadwishpostlabels()">下载Wish邮标签</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				<button class="btn btn-info" type="button"
 					onclick="uploadtrackings()">上传单号</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-info" type="button" onclick="downloadEUB()">下载E邮宝订单</button>
+				<!-- <button class="btn btn-info" type="button" onclick="downloadEUB()">下载E邮宝订单</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="downloadEbayEUB()">下载E邮宝订单(From EBay)</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				<!-- <button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button> -->
 			</ul>
 

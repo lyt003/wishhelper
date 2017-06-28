@@ -183,7 +183,8 @@ class dbhelper {
 	private function getOrders($accountid, $orderstatus) {
 		$query_sql;
 		if (strcmp ( $orderstatus, '1' ) == 0 || strcmp ( $orderstatus, ORDERSTATUS_DOWNLOADEDLABEL) == 0) {
-			$query_sql = "SELECT transactionid,orderid,provider, tracking FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "'";
+			$query_sql = "SELECT transactionid,orderid,provider, tracking,sku,color,size,quantity FROM orders WHERE accountid = '" 
+					. $accountid . "' and orderstatus = '" . $orderstatus . "' order by sku,color,size";
 		} else if (strcmp ( $orderstatus, '0' ) == 0) {
 			$query_sql = "SELECT orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
