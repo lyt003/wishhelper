@@ -39,3 +39,6 @@ define('FROMWISH','wish');
 define('PROVIDER_YANWEN','YW');
 define('PROVIDER_WISHPOST','WishPost');
 define('PROVIDER_EUB','EUB');
+
+define('INVENTORY_OUT',0);
+define('INVENTORY_IN',1);

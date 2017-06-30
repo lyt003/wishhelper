@@ -712,4 +712,72 @@ class WishHelper {
 		}
 		return $productscost;
 	}
+	
+	public function getInventories($userid,$parentsku= null){
+		$productsinventory = array();
+		
+		$inventoryresult = $this->dbhelper->getProductsInventory($userid,$parentsku);
+		while($currinventory = mysql_fetch_array($inventoryresult)){
+			$key = md5($currinventory['parentSKU']);
+			
+			$inventoryvalues = $productsinventory[$key];
+			if($inventoryvalues == null){
+				$inventoryvalues = array();
+			}
+			$inventoryvalues['PSKU'] = $currinventory['parentSKU'];
+			$inventoryvalues['NOTE'] = $currinventory['note'];
+			
+			$skuinventorys = $inventoryvalues['SKUInventory'];
+			if($skuinventorys == null){
+				$skuinventorys = array();
+			}
+			$skuinventorys[$currinventory['SKU']] = $currinventory['inventory'];	
+			$inventoryvalues['SKUInventory'] = $skuinventorys;
+			
+			
+			$productsinventory[$key] = $inventoryvalues;
+		}
+		
+		return $productsinventory;
+	}
+	
+	public function getProductSKUs($userid,$parentSKU){
+		$SKUs = array();
+		$SKUsResult = $this->dbhelper->getProductSKUs($accountid, $parentsku);
+		while($curSKU = mysql_fetch_array($SKUsResult)){
+			$SKUs[] = $curSKU['sku'];
+		}
+		return $SKUs;
+	}
+	
+	/*
+	 * $operator:   0-出库； 1-入库.
+	 * */
+	public function updateproductInventory($accountid,$SKU,$quantity,$operator,$note){
+		$parentSKU = null;
+		$presult = $this->dbhelper->getProductIDByVSKU($accountid, $SKU); 
+		if($pidresult = mysql_fetch_array($presult)){
+			$pid = $pidresult['product_id'];
+			if($pid != null){
+				$pskuresult = $this->dbhelper->getProductSKUByID($pid);
+				if($psku = mysql_fetch_array($pskuresult)){
+					$parentSKU = $psku['parent_sku'];
+				}
+			}
+		}
+		if($parentSKU != null){
+			$uidresult = $this->dbhelper->getUserid($accountid);
+			if($useridresult = mysql_fetch_array($uidresult)){
+				$userid = $useridresult['userid'];
+				if($userid != null){
+					$this->dbhelper->updateinventory($userid, $parentSKU, $SKU, $operator, $quantity);
+					$this->dbhelper->inventoryoperaterecord($userid, $parentSKU, $SKU, $operator, $quantity, $note);
+				}else{
+					echo "*************failed to get userid of account:".$accountid.'"*****************';
+				}
+			}
+		}else{
+			echo "*************failed to get ParentSKU of SKU:".$SKU.'"*****************';
+		}
+	}
 }

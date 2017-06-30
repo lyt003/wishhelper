@@ -848,27 +848,50 @@ select md5code, count(*) number from refundrecords  where refundamount > 0 group
 
 
 
+DROP TABLE IF EXISTS `productsinventory`;
+CREATE TABLE `productsinventory`(
+	`userid` int(11) NOT NULL,
+	`parentSKU` varchar(50),
+	`SKU` varchar(50),
+	`note` varchar(100),
+	`inventory` int(5),
+	PRIMARY KEY(`parentSKU`,`SKU`)
+) 	DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `inventoryoperate`;
+CREATE TABLE `inventoryoperate`(
+	`operatoruserid` int(11) NOT NULL,
+	`operatetime` varchar(20) NOT NULL,
+	`parentSKU` varchar(50),
+	`SKU` varchar(50),
+	`operator` int(1),
+	`quantity` int(5),
+	`note` varchar(100)
+) 	DEFAULT CHARSET=utf8;
 
 
-select tp.productid,op.parent_sku from (
-SELECT distinct productid FROM `optimizejobs` WHERE operator = 'DISABLEPRODUCT' and startdate > '2017-01-20'  and startdate < '2017-01-24' and accountid = '1'
-) tp left outer join onlineProducts op on tp.productid = op.id 
-
-
-
-select * from 
-(select ps.product_id,o.sku,o.tracking,o.ordertime,o.totalcost,o.quantity from orders o,
-( select distinct pv.sku,p.product_id from onlineProductVars pv,
-(select product_id from onlineProductVars where sku = "lovelypiranhaearring" and accountid = "1") p 
-where p.product_id = pv.product_id ) ps 
-where o.accountid = "1" and o.sku = ps.sku ) a
- left join tracking_data t on a.tracking = t.tracking_number
- and t.finalshippingcost IS NOT NULL  order by t.tracking_date DESC limit 50;
- 
- select * from (
-select distinct pv.sku sku,p.product_id from onlineProductVars pv,
-(select product_id from onlineProductVars where sku = "greenhome16" and accountid = "1") p 
-where p.product_id = pv.product_id
-) a 
-left join productskuinfo on a.sku = productskuinfo.sku  order by a.sku DESC
-
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-1','blue M',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-2','pink M',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-3','nude M',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-4','Champagne M',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-5','blue L',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-6','pink L',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-7','nude L',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-8','Champagne L',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-9','blue XL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-10','pink XL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-11','nude XL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-12','Champagne XL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-13','blue XXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-14','pink XXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-15','nude XXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-16','Champagne XXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-17','pink XXXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-18','blue XXXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-19','Champagne XXXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-20','nude XXXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-21','green M',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-22','green L',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-23','green XL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-24','green XXL',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-25','green XXXL',0);

@@ -3,10 +3,14 @@ header("Content-Type: text/html;charset=utf-8");
 session_start ();
 include_once dirname ( '__FILE__' ) . '/wconfig.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
+include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 use mysql\dbhelper;
+use Wish\WishHelper;
 
 $dbhelper = new dbhelper ();
+$wishhelper = new WishHelper();
 $username = $_SESSION ['username'];
+$userid = $_SESSION ['userid'];
 session_commit();
 
 $result = $dbhelper->getUserToken ( $username );
@@ -35,12 +39,14 @@ for($ut = 0; $ut < $i; $ut ++) {
 		$currproduct['quantity'] += $orderUpload['quantity'];
 		
 		$productslist[$key] = $currproduct;
+		
+		$wishhelper->updateproductInventory($accounts ['accountid' . $ut], $orderUpload['sku'], $orderUpload['quantity'], INVENTORY_OUT, $orderUpload['orderid']);
 	}
 }
 
 if(count($productslist) > 0){
 	foreach ($productslist as $productkey=>$productvalue){
-		echo $productvalue['sku']."  :  ".$productvalue['quantity'].';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo $productvalue['sku']."  :  ".$productvalue['quantity'].';<br/>';
 	}	
 }else {
 	echo "暂无需要处理的订单";

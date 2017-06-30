@@ -307,6 +307,11 @@ class dbhelper {
 		return mysql_query($pvs);
 	}
 	
+	public function getProductSKUByID($productid){
+		$psisql = 'select parent_sku from onlineProducts where id = "'.$productid.'"';
+		return mysql_query($psisql);
+	}
+	
 	public function getHotProducts($accountid,$startdate,$enddate){
 		$hotsql = 'select productid from productssummary where accountid = '.$accountid.' and startdate = "'.$startdate.'" and enddate = "'.$enddate.'" and productid != "0" and orders > 0 order by orders desc';
 		return mysql_query($hotsql);
@@ -791,6 +796,50 @@ class dbhelper {
 		$vpsql = ' SELECT distinct productid FROM optimizejobs WHERE operator = "DISABLEPRODUCT" and startdate > "'.$startdate.'"  and startdate < "'.$enddate.'" and accountid = "'.$accountid.'"';
 		echo "<br/><br/><br/>,query sql:".$vpsql;
 		return mysql_query($vpsql);
+	}
+	
+	
+	public function getProductsInventory($userid,$parentsku = null){
+		if($parentsku == null){
+			$pisql = 'select * from productsinventory where userid = "'.$userid.'" order by parentSKU,SKU';	
+		}else{
+			$pisql = 'select * from productsinventory where userid = "'.$userid.'" and parentSKU like "%'.$parentsku.'%" order by parentSKU,SKU';
+		}
+		echo "<br/> get inventory sql :".$pisql;
+		return mysql_query($pisql);
+	}
+	
+	public function getProductSKUs($accountid,$parentsku){
+		$pssql = 'select p.id,p.parent_sku,pv.sku from onlineProducts p,onlineProductVars pv where p.accountid = '.$accountid.' and p.parent_sku = "'.$parentsku.'" and p.id = pv.product_id';
+		return mysql_query($pssql);
+	}
+	
+	public function getUserid($accountid){
+		$aidsql = 'select userid from accounts where accountid = '.$accountid;
+		return mysql_query($aidsql);
+	}
+	
+	public function updateinventory($userid,$parentsku,$SKU,$operator,$quantity){
+		$upitsql = 'update productsinventory set inventory = inventory ';
+		if($operator == 0 ){
+			$upitsql .= '-';
+		}else if($operator == 1){
+			$upitsql .= '+';
+		}else{
+			echo "<br/>update inventory, operator code invalid of userid:".$userid.", SKU:".$SKU;
+			return;
+		}
+		
+		$upitsql .= $quantity. ' where userid = '.$userid.' and parentSKU = "'.$parentsku.'" and SKU = "'.$SKU.'"';
+		//echo "<br/> inventory update sql:".$upitsql;
+		return mysql_query($upitsql);
+	}
+	
+	public function inventoryoperaterecord($userid,$parentsku,$SKU,$operator,$quantity,$note){
+		$itosql = 'insert into inventoryoperate(operatoruserid,operatetime,parentSKU,SKU,operator,quantity,note) values('.$userid.',"'.date('Y-m-d H:i').'","'.mysql_real_escape_string($parentsku).'","'.
+					mysql_real_escape_string($SKU).'",'.$operator.','.$quantity.',"'.$note.'")';
+		//echo "insert inventory operator sql:".$itosql;
+		return mysql_query($itosql);
 	}
 	
 	public function getJaveUploadAppToken(){
