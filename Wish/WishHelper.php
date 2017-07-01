@@ -5,12 +5,15 @@ namespace Wish;
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/wconfig.php';
 include_once dirname ( '__FILE__' ) . './model/order.php';
+include_once dirname ( '__FILE__' ) . './model/productinventory.php';
 include_once dirname ( '__FILE__' ) . './wishpost/Wishposthelper.php';
 include_once dirname ( '__FILE__' ) . './model/senderinfo.php';
+
 use mysql\dbhelper;
 use model\order;
 use wishpost\Wishposthelper;
 use model\senderinfo;
+use model\productinventory;
 
 class WishHelper {
 	private $dbhelper;
@@ -724,15 +727,28 @@ class WishHelper {
 			if($inventoryvalues == null){
 				$inventoryvalues = array();
 			}
-			$inventoryvalues['PSKU'] = $currinventory['parentSKU'];
-			$inventoryvalues['NOTE'] = $currinventory['note'];
 			
+			$currProductinventory = new productinventory();
+			$currProductinventory->parentsku = $currinventory['parentSKU'];
+			$currProductinventory->sku = $currinventory['SKU'];
+			$currProductinventory->note = $currinventory['note'];
+			$currProductinventory->inventory = $currinventory['inventory'];
+			
+			$inventoryvalues[] = $currProductinventory;
+			/* 
 			$skuinventorys = $inventoryvalues['SKUInventory'];
 			if($skuinventorys == null){
 				$skuinventorys = array();
 			}
-			$skuinventorys[$currinventory['SKU']] = $currinventory['inventory'];	
-			$inventoryvalues['SKUInventory'] = $skuinventorys;
+			
+			$SKUValue = array();
+			$SKUValue['SKU'] = $currinventory['SKU'];
+			$SKUValue['INVENTORY'] = $currinventory['inventory'];
+			$SKUValue['NOTE'] = $currinventory['note'];
+			
+			//$skuinventorys[$currinventory['SKU']] = $currinventory['inventory'];
+			$skuinventorys[md5($currinventory['SKU'])] = $SKUValue;
+			$inventoryvalues['SKUInventory'] = $skuinventorys; */
 			
 			
 			$productsinventory[$key] = $inventoryvalues;

@@ -895,3 +895,12 @@ insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yun
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-23','green XL',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-24','green XXL',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-25','green XXXL',0);
+
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-1','Black M',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-2','Black L',8);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-3','Black XL',8);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-7','Dark Blue M',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-8','Dark Blue L',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-9','Dark Blue XL',2);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-10','Black S',5);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-12','Dark Blue S',4);

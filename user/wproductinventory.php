@@ -73,27 +73,7 @@ $parent_sku = $_GET['query_parent_sku'];
 				<div class="pull-left">
 					<div class="navbar-inner">
 						<div class="container">
-						
-						<ul class="nav">
-							<!-- <li><a href="./wusercenter.php"> 订单处理 </a></li> -->
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
-								<ul class="dropdown-menu">
-								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./wproductstatus.php">定时产品状态</a></li>
-								<li><a href="./wproductsource.php">产品源查询</a></li>
-								</ul>
-							</li>  
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">店铺优化<b class="caret"></b> </a>
-								<ul class="dropdown-menu">
-								<li><a href="./csvupload.php">CSV文档上传</a></li>
-								<li><a href="./wproductlist.php">店铺产品同步</a></li>
-								<li><a href="./wproductInfo.php">产品优化</a></li>
-								</ul>
-							</li>
-							<li> <a href="./whelper.php">帮助文档</a></li>
-						</ul>
+						<?php include("./menu.php");?>
 						</div>
 					</div>
 					<!-- /navbar-inner -->
@@ -145,23 +125,24 @@ for($count = 0; $count < $i; $count ++) {
 
 	$inventoryarray = $wishHelper->getInventories($userid);
 	$count = 0;
-	foreach ($inventoryarray as $key=>$inventoryvalue){
-		$parent_sku = $inventoryvalue['PSKU'];
-		$skuvalues = $inventoryvalue['SKUInventory'];
-		$skunote = $inventoryvalue['NOTE'];
-		$skucount = count($skuvalues);
-		
-		foreach ($skuvalues as $currsku=>$currinventory){
+	foreach ($inventoryarray as $key=>$inventoryvalues){
+		$skucount = count($inventoryvalues);
+		$count = 0;
+		foreach ($inventoryvalues as $currinventory){
 			if ($count % 2 == 0) {
 				echo "<tr>";
 			} else {
 				echo "<tr class=\"gradeA success\">";
 			}
 			if($count == 0)
-				echo "<td rowspan=".$skucount." style=\"width:20%;vertical-align:middle;\">" . $parent_sku."</td>";
-			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li>".$currsku ."</li></ul></td>";
-			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li>".$skunote ."</li></ul></td>";
-			echo "<td style=\"width:20%;vertical-align:middle;\">" . $currinventory ."</td>";
+				echo "<td rowspan=".$skucount." style=\"width:20%;vertical-align:middle;\">" . $currinventory->parentsku."</td>";
+			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li>".$currinventory->sku ."</li></ul></td>";
+			echo "<td style=\"width:20%;vertical-align:middle;\"><ul><li>".$currinventory->note ."</li></ul></td>";
+			if($currinventory->inventory<5){
+				echo "<td style=\"width:20%;vertical-align:middle;color:red\">" . $currinventory->inventory ."</td>";
+			}else{
+				echo "<td style=\"width:20%;vertical-align:middle;\">" . $currinventory->inventory ."</td>";
+			}
 			echo "<td style=\"width:20%;vertical-align:middle;\">出库  入库</td>";
 			echo "</tr>";
 			$count ++;
