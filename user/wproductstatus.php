@@ -90,27 +90,7 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 				<div class="pull-left">
 					<div class="navbar-inner">
 						<div class="container">
-						
-						<ul class="nav">
-							<!-- <li><a href="./wusercenter.php"> 订单处理 </a></li> -->
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">产品<b class="caret"></b> </a>
-								<ul class="dropdown-menu">
-								<li><a href="./wuploadproduct.php">产品上传</a></li>
-								<li><a href="./wproductstatus.php">定时产品状态</a></li>
-								<li><a href="./wproductsource.php">产品源查询</a></li>
-								</ul>
-							</li>  
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">店铺优化<b class="caret"></b> </a>
-								<ul class="dropdown-menu">
-								<li><a href="./csvupload.php">CSV文档上传</a></li>
-								<li><a href="./wproductlist.php">店铺产品同步</a></li>
-								<li><a href="./wproductInfo.php">产品优化</a></li>
-								</ul>
-							</li>
-							<li> <a href="./whelper.php">帮助文档</a></li>
-						</ul>
+						<?php include("./menu.php");?>
 						</div>
 					</div>
 					<!-- /navbar-inner -->
