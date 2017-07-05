@@ -304,6 +304,19 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdres
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_6-7 Years',1,'27');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('gdress3882','gdress3882_Pink_8-9 Years',1,'27');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('grid','grid',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_sharkbag','H_sharkbag_Black',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_sharkbag','H_sharkbag_Blue',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_sharkbag','H_sharkbag_Red',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_sharkbag','H_sharkbag_Rose Red',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_sharkbag','H_sharkbag_Gray',1,'16');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('firebeerdispenser','firebeerdispenser',1,'41');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('72oilypencils','72oilypencils',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_M',1,'7.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_L',1,'7.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XL',1,'7.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XXL',1,'7.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XXXL',1,'7.5');
+
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -895,3 +908,22 @@ insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yun
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-23','green XL',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-24','green XXL',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink2','yunfeink2-25','green XXXL',0);
+
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-1','Black M',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-2','Black L',8);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-3','Black XL',8);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-7','Dark Blue M',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-8','Dark Blue L',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-9','Dark Blue XL',2);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-10','Black S',5);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'xdwyunku','xdwyunku-12','Dark Blue S',4);
+
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfei','yunfei-1','Black',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfei','yunfei-3','Nude',0);
+
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-1','Pink',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-2','Blue',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-3','White',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-4','Black',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-6','Orange',0);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-7','Red',0);
