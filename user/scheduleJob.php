@@ -54,7 +54,7 @@ class scheduleJob {
 				$this->dbhelper->updateJobFinished ($accountid,  "1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' ) . "   :  " . $response->getMessage());
 				$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 			} else if (strcmp ( $operator, LOWERSHIPPING ) == 0 || strcmp ( $operator, ADDINVENTORY ) == 0) {
-				
+			/* 	 暂停降价和库存增加功能；
 				$vars = $this->dbhelper->getProductVars ( $jobproductid );
 				$varsResponse = "V0618";
 				while ( $var = mysql_fetch_array ( $vars ) ) {
@@ -105,7 +105,7 @@ class scheduleJob {
 					}
 				}
 				$this->dbhelper->updateJobFinished ($accountid,  "1", $jobproductid, $date, date ( 'Y-m-d  H:i:s' ) . "   :  " . $varsResponse );
-				$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
+				$this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date ); */
 			} else if(strcmp ( $operator, SYNCHRONIZEDSTORE ) == 0){
 
 				$curtime = date('Y-m-d  H:i:s');

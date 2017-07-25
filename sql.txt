@@ -316,7 +316,21 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XL',1,'7.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XXL',1,'7.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_alk','H_alk_XXXL',1,'7.5');
-
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlackM',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlackL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlackXL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306RedM',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306RedL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306RedXL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306YellowM',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306YellowL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306YellowXL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306WhiteM',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306WhiteL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306WhiteXL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlueM',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlueL',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlueXL',1,'20');
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -410,6 +424,9 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮wish北京仓平邮','396',1,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮北京跟踪小包','390',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('英国YODEL专线(不含电小包)','32',1,'YODEL');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮济南E邮宝线下','198',1,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津挂号小包','170',1,'ChinaAirPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津平邮小包','199',1,'ChinaAirPost');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
