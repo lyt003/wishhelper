@@ -244,7 +244,7 @@ if(strcasecmp($extension,'csv') == 0){
 				$result .= $row."行没数据"; 
 			}	
 		}
-	}else if($columnMaxIndex == 44){//refund orders xls.
+	}else if($columnMaxIndex == 46){//refund orders xls.
 		$result .= " process refund orders ";
 		for($row = 0;$row<=$rows;$row ++){
 			
@@ -383,6 +383,8 @@ if(strcasecmp($extension,'csv') == 0){
 						break;
 					case 43:
 						$refundorder['WishExpressDeliveryDeadline'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 44://Requires Delivery Confirmation
 						break;
 				}
 			}
