@@ -249,6 +249,12 @@ class WishHelper {
 					if(strlen($tempEn)>=50){
 						$tempEn = substr($tempEn,0,45).'...';
 					}
+					
+					$tempEn = str_replace('&amp;','AND',$tempEn);
+					$tempEn = str_replace(' ','_',$tempEn);
+					$tempEn = str_replace('&','AND',$tempEn);
+					
+					echo "<br/>current English Name:".$tempEn;
 					$gsNameEn = $Goods->addChild ( "NameEn", $tempEn); // *
 					//$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
 		
