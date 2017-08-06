@@ -44,6 +44,7 @@ for($ut = 0; $ut < $i; $ut ++) {
 	}
 }
 
+echo "Date:".date("Y/m/d H:m:s")."<br/>";
 if(count($productslist) > 0){
 	foreach ($productslist as $productkey=>$productvalue){
 		echo $productvalue['sku']."  :  ".$productvalue['quantity'].';<br/>';
