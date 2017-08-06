@@ -332,6 +332,32 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK30
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlueL',1,'20');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('JQK306','JQK306BlueXL',1,'20');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_White',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_Blue',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_Red',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_Rose Red',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_Pink',1,'10');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('pendanthh','pendanthh_Purple',1,'10');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('MLY608','MLY608_Blue_S',1,'44');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('MLY608','MLY608_Blue_M',1,'44');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('MLY608','MLY608_Blue_L',1,'44');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('MLY608','MLY608_Blue_XL',1,'44');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_SpinShot','H_SpinShot',1,'8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_SpinShot','H_SpinShotBlue',1,'8');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Black_M',1,'55');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Brown_M',1,'55');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Purple_M',1,'55');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Rose Red_M',1,'55');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Army Green_M',1,'55');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Black_L',1,'67');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Brown_L',1,'67');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Purple_L',1,'67');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Rose Red_L',1,'67');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Army Green_L',1,'67');
+
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
