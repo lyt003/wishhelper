@@ -405,7 +405,8 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = str_replace(' ','_',$cur_order ['sku']);
-			$tempsku = str_replace('&amp;','AND',$tempsku);//WishHelper.applyTrackingsForOrders时需要替换回来；
+			$tempsku = str_replace('.','_',$tempsku);
+			$tempsku = str_replace('&amp;','AND',$tempsku);//WishHelper.applyTrackingsForOrders时同步替换；
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {

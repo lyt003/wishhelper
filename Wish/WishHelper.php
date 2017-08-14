@@ -241,6 +241,7 @@ class WishHelper {
 		
 					$tempSKU = $orderNoTracking ['sku'];
 					$tempSKU = str_replace(' ','_',$tempSKU);
+					$tempSKU = str_replace('.','_',$tempSKU);
 					$tempSKU = str_replace('&amp;','AND',$tempSKU);
 					
 					$gsLabel = $this->getCNENLabel($labels, $tempSKU);

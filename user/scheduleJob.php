@@ -117,7 +117,7 @@ class scheduleJob {
 					
 					
 					//添加本次黄钻产品优化记录:
-					$promotedProducts = $this->dbhelper->getPromotedProducts($accountid);
+					/* $promotedProducts = $this->dbhelper->getPromotedProducts($accountid);
 					$ordersProducts = $this->dbhelper->getProductsHasOrder($accountid);
 					
 				    $hasOrderProductids = array();
@@ -133,7 +133,7 @@ class scheduleJob {
 				    	}else{
 				    		$this->dbhelper->insertOptimizeJob($accountid, LOWERSHIPPING, $curProductID, $date);
 				    	}
-				    }
+				    } */
 				    
 				    $this->dbhelper->updateSettingMsg ( "finished process product:" . $jobproductid . " of " . $date );
 				}

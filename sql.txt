@@ -128,6 +128,38 @@ CREATE TABLE `productskuinfo` (
 ALTER TABLE `productskuinfo`
   ADD PRIMARY KEY (`sku`,`accountid`);
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('lovelypiranhaearring','lovelypiranhaearring',1,'5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-p-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-o-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-b-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-black-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-g-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-rose-s',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-1',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-2',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-3',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-4',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-5',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-6',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-7',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-8',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-9',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-10',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-11',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-12',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-13',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-14',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-15',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-16',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-17',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-18',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-19',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-20',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-21',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-22',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-23',1,'18');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhome','greenhome-24',1,'18');
+
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome1',1,'18');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome2',1,'18');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('greenhomeyop','greenhome3',1,'18');
@@ -438,21 +470,22 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮英伦速邮小包','14-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲经济小包','200-0',8,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('WISH邮欧洲标准小包','201-0',8,'WishPost');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'YanWen');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政挂号小包(上海)','214',1,'YanWen');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政平邮小包(上海)','215',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政平邮小包','14',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政挂号小包(上海)','214',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('德国邮政平邮小包(上海)','215',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('英邮微包平邮','278',1,'YanWen');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政平邮小包(不含电)','182',1,'YanWen');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政挂号小包(不含电)','174',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政平邮小包(不含电)','182',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('荷兰邮政挂号小包(不含电)','174',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('海邑海外仓','hiyes',31,'USPS');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('土耳其邮政挂号小包(不含电)','237',1,'YanWen');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('土耳其邮政平邮小包(不含电)','238',1,'YanWen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('土耳其邮政挂号小包(不含电)','237',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('土耳其邮政平邮小包(不含电)','238',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮wish北京仓平邮','396',1,'WishPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮北京跟踪小包','390',1,'YanWen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('英国YODEL专线(不含电小包)','32',1,'YODEL');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮济南E邮宝线下','198',1,'USPS');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津挂号小包','170',1,'ChinaAirPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津平邮小包','199',1,'ChinaAirPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中印GATI专线(不含电)','365',1,'Yanwen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
