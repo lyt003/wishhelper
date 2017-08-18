@@ -178,6 +178,8 @@ class WishHelper {
 				if ($orderNoTracking ['orderNum'] != 0) {
 					$preGoodsNameEn = $preGoodsNameEn . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity;
 					$preTransactionid = $orderNoTracking ['transactionid'];
+					$preOrderQuantity = $preOrderQuantity + $orderQuantity;
+					$prePrice = $prePrice + $intPrice;
 				} else {
 					/* if (strcmp ( $preGoodsNameEn, "" ) != 0 && strcmp ( $orderNoTracking ['transactionid'], $preTransactionid ) == 0) {
 						$channel = $xml->addChild ( "Channel", "154" ); // *
@@ -262,7 +264,19 @@ class WishHelper {
 					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity. ";" . $preGoodsNameEn );
 					
 					$preGoodsNameEn = "";
-					$gsWeight = $Goods->addChild ( "Weight", "100" ); // *
+					
+					$combinedPrice = $intPrice + $prePrice;
+					$combinedQuantity = $orderQuantity + $preOrderQuantity;
+					if($combinedPrice >40){
+						$combinedWeight = 500 * $combinedQuantity;
+					}else{
+						$combinedWeight = 100 * $combinedQuantity;
+					}
+					
+					$gsWeight = $Goods->addChild ( "Weight", $combinedWeight ); // *
+					$prePrice = 0;
+					$preOrderQuantity = 0;
+					
 					$gsDeclaredValue = $Goods->addChild ( "DeclaredValue", "4" ); // *
 					$gsDeclaredCurrency = $Goods->addChild ( "DeclaredCurrency", "USD" ); // *
 					$GsHsCode = $Goods->addChild ( "HsCode" );

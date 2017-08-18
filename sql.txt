@@ -390,6 +390,8 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Tro
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Rose Red_L',1,'67');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Army Green_L',1,'67');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('8232','8232',1,'10');
+
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
@@ -486,6 +488,14 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津挂号小包','170',1,'ChinaAirPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮天津平邮小包','199',1,'ChinaAirPost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中印GATI专线(不含电)','365',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕特快不含电','158',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('北京EMS','3',1,'EMS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港DHL','45',1,'DHLExpress');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港UPS快捷','398',1,'UPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港UPS速快','6',1,'UPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文澳洲专线','36',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文美国专线','30',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文欧洲专线','25',1,'Yanwen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
@@ -1003,3 +1013,30 @@ insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-4','Black',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-6','Orange',0);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'sbn','sbn-7','Red',0);
+
+
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-12','blue L',6);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-11','blue M',7);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-13','blue XL',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-14','blue XXL',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-15','blue XXXL',6);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-7','Green L',2);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-6','Green M',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-8','Green XL',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-9','Green XXL',7);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-10','Green XXXL',2);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-17','Light Yellow L',5);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-16','Light Yellow M',6);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-18','Light Yellow XL',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-19','Light Yellow XXL',5);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-20','Light Yellow XXXL',7);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-22','Nude L',6);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-21','Nude M',5);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-23','Nude XL',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-24','Nude XXL',6);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-25','Nude XXXL',10);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-2','Pink L',3);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-1','Pink M',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-3','Pink XL',4);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-4','Pink XXL',2);
+insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-5','Pink XXXL',3);
