@@ -389,8 +389,12 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Tro
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Purple_L',1,'67');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Rose Red_L',1,'67');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Trolleybag','H_Trolleybag_Army Green_L',1,'67');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_MTVenus','H_MTVenus_Bronze',1,'20');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_MTVenus','H_MTVenus_White',1,'20');
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('8232','8232',1,'10');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ml6640','ml6640',1,'12');
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -496,6 +500,7 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文澳洲专线','36',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文美国专线','30',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文欧洲专线','25',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('DHL经济小包(上海)','414',1,'Yanwen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
