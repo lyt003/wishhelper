@@ -20,6 +20,7 @@ if($varsku == null){
 }
 
 
+$rate = 6.2;
 $shippingcosts = $dbhelper->getProductShippingCost($varsku,$accountid);
 $productcosts = $wishhelper->getProductSKUCost($varsku, $accountid);
 
@@ -43,7 +44,7 @@ while($shippingcost = mysql_fetch_array($shippingcosts)){
 		$trackings[$shippingcost ['tracking_number']] = 1;
 	}
 		
-	$totalprice = $shippingcost ['totalcost']*6.8;
+	$totalprice = $shippingcost ['totalcost']*$rate;
 	$totalcost = $productcosts [$shippingcost['sku']]*$shippingcost ['quantity'];
 	if($shippingcost ['finalshippingcost'] != null && $shippingcost ['finalshippingcost']>0 && $productcosts [$shippingcost['sku']] != null && $productcosts [$shippingcost['sku']] >0){
 		$profit = $totalprice - $currshippingcost - $totalcost;
@@ -64,7 +65,7 @@ while($shippingcost = mysql_fetch_array($shippingcosts)){
 	echo "<td style=\"width:5%;vertical-align:middle;\">" . $shippingcost ['weight']."</td>";
 	echo "<td style=\"width:20%;vertical-align:middle;\">" . $shippingcost ['tracking_number']."</td>";
 	echo "<td style=\"width:7%;vertical-align:middle;\">" . $currshippingcost."</td>";
-	echo "<td style=\"width:15%;vertical-align:middle;\">6.8 x " . $shippingcost ['totalcost']."=".$totalprice."</td>";
+	echo "<td style=\"width:15%;vertical-align:middle;\">".$rate." x " . $shippingcost ['totalcost']."=".$totalprice."</td>";
 	echo "<td style=\"width:5%;vertical-align:middle;\">" . $totalcost."</td>";
 	echo "<td style=\"width:8%;vertical-align:middle;\">" . $profit."</td>";
 	echo "</tr>";

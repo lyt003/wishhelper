@@ -396,6 +396,17 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('8232'
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ml6640','ml6640',1,'12');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_12dogs','H_12dogs',1,'20');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_mlgage','H_mlgage_Blue',1,'120');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_mlgage','H_mlgage_Pink',1,'120');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_mlgage','H_mlgage_Red',1,'120');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_mlgage','H_mlgage_Beige',1,'120');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Silver',1,'205');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_golden',1,'205');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Gray',1,'205');
+
+
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
@@ -501,6 +512,8 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文美国专线','30',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文欧洲专线','25',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('DHL经济小包(上海)','414',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文全球特快专递','361',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕邮宝挂号','140',1,'Yanwen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
@@ -1045,3 +1058,12 @@ insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yun
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-3','Pink XL',4);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-4','Pink XXL',2);
 insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yunfeink1','yunfeink1-5','Pink XXXL',3);
+
+
+
+
+get count orders of SKU group by countries:
+select countrycode, count(distinct orderid) countnumber from orders where sku = 'lovelypiranhaearring' group by countrycode order by countnumber DESC;
+
+get refund orders of SKU group by countries:
+select Country,count(distinct OrderID) countnumber from refundrecords where SKU ='lovelypiranhaearring' group by Country order by countnumber DESC
