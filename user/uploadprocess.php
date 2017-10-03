@@ -206,7 +206,7 @@ if(strcasecmp($extension,'csv') == 0){
 		}
 	}else if($columnMaxIndex >= 12 && $columnMaxIndex<=15){//Yanwen
 		for($row = 0;$row<=$rows;$row ++){
-			if($column == 0){
+			if($column == 2){
 				$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 				if(!checkDatetime($orderdate))
 					continue;
@@ -214,22 +214,22 @@ if(strcasecmp($extension,'csv') == 0){
 			for($column = 0;$column<=$columnMaxIndex;$column ++){
 			
 				switch ($column){
-					case 0:
+					case 2:
 						$orderdate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 1:
+					case 3:
 						$trackingdata = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 5:
+					case 7:
 						$destinate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 6:
-						$weight = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+					case 8:
+						$weight = 1000*($sheet->getCellByColumnAndRow($column,$row)->getValue());
 						break;
-					case 9:
+					case 10:
 						$shippingcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 12:
+					case 13:
 						$finalcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
 				}
