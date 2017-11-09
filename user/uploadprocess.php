@@ -224,7 +224,7 @@ if(strcasecmp($extension,'csv') == 0){
 						$destinate = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
 					case 8:
-						$weight = 1000*($sheet->getCellByColumnAndRow($column,$row)->getValue());
+						$weight = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
 					case 10:
 						$shippingcost = $sheet->getCellByColumnAndRow($column,$row)->getValue();

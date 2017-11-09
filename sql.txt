@@ -514,6 +514,8 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('DHL经济小包(上海)','414',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文全球特快专递','361',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕邮宝挂号','140',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政挂号小包','106',1,'SingaporePost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港邮政挂号小包','107',1,'HongKongPost');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(

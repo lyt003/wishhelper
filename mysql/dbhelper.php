@@ -166,7 +166,7 @@ class dbhelper {
 	}
 	
 	public function uploadEUBTracking($orderid,$tracking){
-		$eubUpload = "update orders set provider='USPS',tracking='". $tracking ."'  where transactionid = '".$orderid."';";
+		$eubUpload = "update orders set provider='EPacket',tracking='". $tracking ."'  where transactionid = '".$orderid."';";
 		return mysql_query($eubUpload);
 	}
 	
