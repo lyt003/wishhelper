@@ -440,6 +440,19 @@ class dbhelper {
 		return $result;
 	}
 	
+	public function updatePBKeyword($pbkeyword,$searchfactor,$competitivefactor,$highbidding){
+		$updatePBKeyword = 'update PBKeywords set searchfactor="'.$searchfactor.'", competitivefactor="'.$competitivefactor.'",highbidding="'.$highbidding.'"  where PBkeyword="'.$pbkeyword.'"';
+		mysql_query($updatePBKeyword);
+		$result = mysql_affected_rows();
+		if(!$result){
+			$insertPBKeyword = 'insert into PBKeywords(PBkeyword,searchfactor,competitivefactor,highbidding) values("'.$pbkeyword.'","'.$searchfactor.'","'.$competitivefactor.'","'
+					.$highbidding.'")';
+			mysql_query($insertPBKeyword);
+			$result = mysql_affected_rows();
+		}
+		return $result;
+	}
+	
 	public function getUserLabels($userid) {
 		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.label_id = l.id";
 		return mysql_query ( $querylabels );

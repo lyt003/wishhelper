@@ -406,6 +406,32 @@ if(strcasecmp($extension,'csv') == 0){
 				$result .= $row."行没数据";
 			}
 		}
+	}else if($columnMaxIndex == 4){// process PB Keywords.
+		for($row = 0;$row<=$rows;$row ++){
+			for($column = 0;$column<=$columnMaxIndex;$column ++){
+					
+				switch ($column){
+					case 0:
+						$pbkeyword = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 1:
+						$searchfactor = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 2:
+						$competitivefactor = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+					case 3:
+						$highbidding = $sheet->getCellByColumnAndRow($column,$row)->getValue();
+						break;
+				}
+			}
+			if(isset($pbkeyword) && isset($searchfactor) && isset($competitivefactor) && isset($highbidding)){
+				$updateResult = $dbhelper->updatePBKeyword($pbkeyword, $searchfactor, $competitivefactor, $highbidding);
+				$result .= $row.$trackingdata."行完成;".$updateResult."  |";
+			}else{
+				$result .= $row."行没数据";
+			}
+		}
 	}
 	
 	$objPHPExcel->disconnectWorksheets();

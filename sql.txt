@@ -1063,6 +1063,15 @@ insert into productsinventory(userid,parentSKU,SKU,note,inventory) values(1,'yun
 
 
 
+DROP TABLE IF EXISTS `PBKeywords`;
+CREATE TABLE `PBKeywords`(
+	`PBkeyword` varchar(50) NOT NULL,
+	`searchfactor` varchar(10) NOT NULL,
+	`competitivefactor` varchar(10) NOT NULL,
+	`highbidding` varchar(10) NOT NULL
+) 	DEFAULT CHARSET=utf8;
+
+
 
 get count orders of SKU group by countries:
 select countrycode, count(distinct orderid) countnumber from orders where sku = 'lovelypiranhaearring' group by countrycode order by countnumber DESC;
