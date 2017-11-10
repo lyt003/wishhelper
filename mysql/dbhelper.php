@@ -441,15 +441,16 @@ class dbhelper {
 	}
 	
 	public function updatePBKeyword($pbkeyword,$searchfactor,$competitivefactor,$highbidding){
-		$updatePBKeyword = 'update PBKeywords set searchfactor="'.$searchfactor.'", competitivefactor="'.$competitivefactor.'",highbidding="'.$highbidding.'"  where PBkeyword="'.$pbkeyword.'"';
-		mysql_query($updatePBKeyword);
-		$result = mysql_affected_rows();
-		if(!$result){
-			$insertPBKeyword = 'insert into PBKeywords(PBkeyword,searchfactor,competitivefactor,highbidding) values("'.$pbkeyword.'","'.$searchfactor.'","'.$competitivefactor.'","'
-					.$highbidding.'")';
-			mysql_query($insertPBKeyword);
-			$result = mysql_affected_rows();
+		$queryPBKeyword = 'select * from PBKeywords where PBkeyword="'.$pbkeyword.'"';
+		$queryresult = mysql_query($queryPBKeyword);
+		
+		if(mysql_fetch_array($queryresult)){
+			$processPBKeyword = 'update PBKeywords set searchfactor="'.$searchfactor.'", competitivefactor="'.$competitivefactor.'",highbidding="'.$highbidding.'"  where PBkeyword="'.$pbkeyword.'"';
+		}else{
+			$processPBKeyword = 'insert into PBKeywords(PBkeyword,searchfactor,competitivefactor,highbidding) values("'.$pbkeyword.'","'.$searchfactor.'","'.$competitivefactor.'","'.$highbidding.'")';
 		}
+		mysql_query($processPBKeyword);
+		$result = mysql_affected_rows();
 		return $result;
 	}
 	
