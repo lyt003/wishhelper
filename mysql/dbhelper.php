@@ -95,21 +95,21 @@ class dbhelper {
 			return false;
 		}
 		if($name != null)
-			$updateaddress .= 'name = "'.$name.'"  ';
+			$updateaddress .= 'name = "'.mysql_real_escape_string($name).'"  ';
 		if($streetaddress1 != null)
-			$updateaddress .= ',streetaddress1 = "'.$streetaddress1.'"  ';
+			$updateaddress .= ',streetaddress1 = "'.mysql_real_escape_string($streetaddress1).'"  ';
 		if($streetaddress2 != null)
-			$updateaddress .= ',streetaddress2 = "'.$streetaddress2.'"  ';
+			$updateaddress .= ',streetaddress2 = "'.mysql_real_escape_string($streetaddress2).'"  ';
 		if($city != null)
-			$updateaddress .= ',city = "'.$city.'"  ';
+			$updateaddress .= ',city = "'.mysql_real_escape_string($city).'"  ';
 		if($state != null)
-			$updateaddress .= ',state = "'.$state.'"  ';
+			$updateaddress .= ',state = "'.mysql_real_escape_string($state).'"  ';
 		if($zipcode != null)
-			$updateaddress .= ',zipcode = "'.$zipcode.'"  ';
+			$updateaddress .= ',zipcode = "'.mysql_real_escape_string($zipcode).'"  ';
 		if($phonenumber != null)
-			$updateaddress .= ',phonenumber = "'.$phonenumber.'"  ';
+			$updateaddress .= ',phonenumber = "'.mysql_real_escape_string($phonenumber).'"  ';
 		if($countrycode != null)
-			$updateaddress .= ',countrycode = "'.$countrycode.'"  ';
+			$updateaddress .= ',countrycode = "'.mysql_real_escape_string($countrycode).'"  ';
 		
 		$updateaddress .=' where accountid = "'.$accountid.'" and orderid = "'.$orderid.'"';
 		
@@ -130,7 +130,7 @@ class dbhelper {
 	}
 	
 	public function updateOrder($orderarray) {
-		$update_sql = "UPDATE orders set provider = '" . $orderarray ['provider'] . "', tracking = '" . $orderarray ['tracking'] . "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and transactionid='" . $orderarray ['transactionid'] . "'";
+		$update_sql = "UPDATE orders set provider = '" . mysql_real_escape_string($orderarray ['provider']) . "', tracking = '" . mysql_real_escape_string($orderarray ['tracking']) . "', orderstatus = '" . $orderarray ['orderstatus'] . "' where accountid = '" . $orderarray ['accountid'] . "' and transactionid='" . $orderarray ['transactionid'] . "'";
 		return mysql_query ( $update_sql );
 	}
 	public function getOrdersNotUploadTracking($accountid) {
@@ -156,7 +156,7 @@ class dbhelper {
 		return $this->getOrders ( $accountid, '0' );
 	}
 	public function updateOrderStatus($tracking, $status) {
-		$updateSql = "UPDATE orders set orderstatus = " . $status . " WHERE tracking = '" . $tracking . "'";
+		$updateSql = "UPDATE orders set orderstatus = " . $status . " WHERE tracking = '" . mysql_real_escape_string($tracking) . "'";
 		return mysql_query ( $updateSql );
 	}
 	
@@ -166,12 +166,12 @@ class dbhelper {
 	}
 	
 	public function uploadEUBTracking($orderid,$tracking){
-		$eubUpload = "update orders set provider='EPacket',tracking='". $tracking ."'  where transactionid = '".$orderid."';";
+		$eubUpload = "update orders set provider='EPacket',tracking='". mysql_real_escape_string($tracking) ."'  where transactionid = '".$orderid."';";
 		return mysql_query($eubUpload);
 	}
 	
 	public function uploadWishpostTracking($transactionid,$tracking,$status){
-		$wishpostUpload = "update orders set provider='WishPost',tracking='". $tracking ."',orderstatus= ".$status." where transactionid = '".$transactionid."';";
+		$wishpostUpload = "update orders set provider='WishPost',tracking='". mysql_real_escape_string($tracking) ."',orderstatus= ".$status." where transactionid = '".$transactionid."';";
 		return mysql_query($wishpostUpload);
 	}
 	/**
@@ -233,19 +233,19 @@ class dbhelper {
 		return mysql_query ( $EUBOrderSql );
 	}
 	public function insertProductSource($accountid, $productarray) {
-		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url,lowesttotalprice) values (' . $accountid . ',"' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . $productarray ['productSourceURL'] . '","'.$productarray['lowesttotalprice'].'")';
+		$insertSourceSQL = 'insert into productinfo(accountid, parent_sku,source_url,lowesttotalprice) values (' . $accountid . ',"' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['productSourceURL']) . '","'.mysql_real_escape_string($productarray['lowesttotalprice']).'")';
 		return mysql_query ( $insertSourceSQL );
 	}
 	
 	public function updateProductSource($accountid, $productarray){
-		$updateSourceSQL = 'update productinfo set source_url="'. $productarray ['productSourceURL'] . '", lowesttotalprice="'.$productarray['lowesttotalprice'].'"  where accountid = '.$accountid.' and parent_sku="'.mysql_real_escape_string($productarray ['parent_sku']).'"';
+		$updateSourceSQL = 'update productinfo set source_url="'. mysql_real_escape_string($productarray ['productSourceURL']) . '", lowesttotalprice="'.mysql_real_escape_string($productarray['lowesttotalprice']).'"  where accountid = '.$accountid.' and parent_sku="'.mysql_real_escape_string($productarray ['parent_sku']).'"';
 		return mysql_query ( $updateSourceSQL );
 	}
 	
 	
 	public function insertProduct($productarray) {
 		$insert_sql = 'insert into products (parent_sku,sku,name,description,brand,color,main_image,extra_images,landingPageURL,MSRP,price,quantity,shipping,shipping_time,size,tags,UPC) 
-					values("' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['sku']) . '","' . mysql_real_escape_string($productarray ['name']) . '","' . mysql_real_escape_string($productarray ['description']) . '","' . $productarray ['brand'] . '","' . $productarray ['color'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['landingPageURL'] . '","' . $productarray ['MSRP'] . '","' . $productarray ['price'] . '","' . $productarray ['quantity'] . '","' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . mysql_real_escape_string($productarray ['size']) . '","' . mysql_real_escape_string($productarray ['tags']) . '","' . $productarray ['UPC'] . '")';
+					values("' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['sku']) . '","' . mysql_real_escape_string($productarray ['name']) . '","' . mysql_real_escape_string($productarray ['description']) . '","' . mysql_real_escape_string($productarray ['brand']) . '","' . mysql_real_escape_string($productarray ['color']) . '","' . mysql_real_escape_string($productarray ['main_image']) . '","' . mysql_real_escape_string($productarray ['extra_images']) . '","' . $productarray ['landingPageURL'] . '","' . mysql_real_escape_string($productarray ['MSRP']) . '","' . mysql_real_escape_string($productarray ['price']) . '","' . mysql_real_escape_string($productarray ['quantity']) . '","' . mysql_real_escape_string($productarray ['shipping']) . '","' . mysql_real_escape_string($productarray ['shipping_time']) . '","' . mysql_real_escape_string($productarray ['size']) . '","' . mysql_real_escape_string($productarray ['tags']) . '","' . mysql_real_escape_string($productarray ['UPC']) . '")';
 		return mysql_query ( $insert_sql );
 	}
 	public function removeProduct($parentSKU){
@@ -270,7 +270,7 @@ class dbhelper {
 									' group by id'.
 									' order by number_sold desc,number_saves desc limit '.$start.','.$limit;
 		}else{
-			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.$queryParentSKU.'%"';// limit '.$start.','.$limit;
+			$queryonlineProducts = 'select * from onlineProducts where accountid = '.$accountid.' and parent_sku like "%'.mysql_real_escape_string($queryParentSKU).'%"';// limit '.$start.','.$limit;
 		}
 		return mysql_query($queryonlineProducts);
 	}
@@ -287,7 +287,7 @@ class dbhelper {
 	}
 	
 	public function getProducts($parentSKU) {
-		$productsSQL = 'select * from products where parent_sku = "' . $parentSKU . '"';
+		$productsSQL = 'select * from products where parent_sku = "' . mysql_real_escape_string($parentSKU) . '"';
 		return mysql_query ( $productsSQL );
 	}
 	
@@ -299,10 +299,12 @@ class dbhelper {
 	public function getProductIDByVSKU($accountid,$subsku){
 		$tempsku = str_replace('_','%',$subsku);
 		$tempsku = str_replace('AND','%',$tempsku);
-		if(strpos($tempsku,'%') === false){
-			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.$tempsku.'"';
+		$tempsku = str_replace('"','%',$tempsku);
+		
+		if(strpos($subsku,'%') === false){
+			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.mysql_real_escape_string($tempsku).'"';
 		}else{
-			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.$tempsku.'"';
+			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.mysql_real_escape_string($tempsku).'"';
 		}
 		return mysql_query($pvs);
 	}
@@ -355,7 +357,7 @@ class dbhelper {
 	public function getProductSKUCost($productsku,$accountid){
 		$costsql = 'select p.sku,p.cost from ('.
 				   ' select distinct pv.sku sku,p.product_id from onlineProductVars pv,'.
-				   ' (select product_id from onlineProductVars where sku = "'.$productsku.'" and accountid = "'.$accountid.'") p'. 
+				   ' (select product_id from onlineProductVars where sku = "'.mysql_real_escape_string($productsku).'" and accountid = "'.$accountid.'") p'. 
 				   ' where p.product_id = pv.product_id'.
 				   ' ) a'. 
 				   ' left join productskuinfo p on a.sku = p.sku  order by a.sku DESC';
@@ -397,12 +399,12 @@ class dbhelper {
 		return mysql_query ( $scheduleSql );
 	}
 	public function updateScheduleFinished($productInfo) {
-		$updateFinished = 'update schedule_product set isfinished = 1,errormessage= now() where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		$updateFinished = 'update schedule_product set isfinished = 1,errormessage= now() where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . mysql_real_escape_string($productInfo ['parent_sku']) . '"';
 		return mysql_query ( $updateFinished );
 	}
 	
 	public function updateScheduleError($productInfo,$errorInfo) {
-		$updateErrorFinished = 'update schedule_product set isfinished = -1, errormessage = "'.$errorInfo.'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . $productInfo ['parent_sku'] . '"';
+		$updateErrorFinished = 'update schedule_product set isfinished = -1, errormessage = "'.mysql_real_escape_string($errorInfo).'" where accountid = ' . $productInfo ['accountid'] . ' and parent_sku="' . mysql_real_escape_string($productInfo ['parent_sku']) . '"';
 		return mysql_query ( $updateErrorFinished );
 	}
 	
@@ -423,17 +425,17 @@ class dbhelper {
 		return mysql_query ( $getDuringTimeSql );
 	}
 	public function insertTrackingData($trackingData) {
-		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . $trackingData ['tracking_number'] . '","' . $trackingData ['device_id'] . '","' . $trackingData ['tracking_date'] . '")';
+		$insertTracking = 'insert into tracking_data(userid,tracking_number,device_id,tracking_date) values(' . $trackingData ['user_id'] . ',"' . mysql_real_escape_string($trackingData ['tracking_number']) . '","' . $trackingData ['device_id'] . '","' . mysql_real_escape_string($trackingData ['tracking_date']) . '")';
 		return mysql_query ( $insertTracking );
 	}
 	
 	public function updateTrackingData($tracking_number,$destinate,$weight,$shippingcost,$finalcost,$orderdate,$uid){
-		$updateTracking = 'update tracking_data set destinate="'.$destinate.'", weight="'.$weight.'",shippingcost="'.$shippingcost.'",finalshippingcost="'.$finalcost.'"  where tracking_number="'.$tracking_number.'"';
+		$updateTracking = 'update tracking_data set destinate="'.mysql_real_escape_string($destinate).'", weight="'.mysql_real_escape_string($weight).'",shippingcost="'.mysql_real_escape_string($shippingcost).'",finalshippingcost="'.mysql_real_escape_string($finalcost).'"  where tracking_number="'.mysql_real_escape_string($tracking_number).'"';
 		mysql_query($updateTracking); 
 		$result = mysql_affected_rows();
 		if(!$result){
-			$insertTracking = 'insert into tracking_data(userid,tracking_date,tracking_number,destinate,weight,shippingcost,finalshippingcost) values('.$uid.',"'.$orderdate.'","'.$tracking_number.'","'
-					.$destinate.'",'.$weight.',"'.$shippingcost.'","'.$finalcost.'")';
+			$insertTracking = 'insert into tracking_data(userid,tracking_date,tracking_number,destinate,weight,shippingcost,finalshippingcost) values('.$uid.',"'.mysql_real_escape_string($orderdate).'","'.mysql_real_escape_string($tracking_number).'","'
+					.mysql_real_escape_string($destinate).'",'.mysql_real_escape_string($weight).',"'.mysql_real_escape_string($shippingcost).'","'.mysql_real_escape_string($finalcost).'")';
 			mysql_query($insertTracking);
 			$result = mysql_affected_rows();
 		}
@@ -441,13 +443,13 @@ class dbhelper {
 	}
 	
 	public function updatePBKeyword($pbkeyword,$searchfactor,$competitivefactor,$highbidding){
-		$queryPBKeyword = 'select * from PBKeywords where PBkeyword="'.$pbkeyword.'"';
+		$queryPBKeyword = 'select * from PBKeywords where PBkeyword="'.mysql_real_escape_string($pbkeyword).'"';
 		$queryresult = mysql_query($queryPBKeyword);
 		
 		if(mysql_fetch_array($queryresult)){
-			$processPBKeyword = 'update PBKeywords set searchfactor="'.$searchfactor.'", competitivefactor="'.$competitivefactor.'",highbidding="'.$highbidding.'"  where PBkeyword="'.$pbkeyword.'"';
+			$processPBKeyword = 'update PBKeywords set searchfactor="'.mysql_real_escape_string($searchfactor).'", competitivefactor="'.mysql_real_escape_string($competitivefactor).'",highbidding="'.mysql_real_escape_string($highbidding).'"  where PBkeyword="'.mysql_real_escape_string($pbkeyword).'"';
 		}else{
-			$processPBKeyword = 'insert into PBKeywords(PBkeyword,searchfactor,competitivefactor,highbidding) values("'.$pbkeyword.'","'.$searchfactor.'","'.$competitivefactor.'","'.$highbidding.'")';
+			$processPBKeyword = 'insert into PBKeywords(PBkeyword,searchfactor,competitivefactor,highbidding) values("'.mysql_real_escape_string($pbkeyword).'","'.mysql_real_escape_string($searchfactor).'","'.mysql_real_escape_string($competitivefactor).'","'.mysql_real_escape_string($highbidding).'")';
 		}
 		mysql_query($processPBKeyword);
 		$result = mysql_affected_rows();
@@ -460,19 +462,19 @@ class dbhelper {
 	}
 	
 	public function insertLabel($cn_name, $en_name) {
-		$sqllabel = 'select id from labels where CN_Name = "' . $cn_name . '" and EN_Name = "' . $en_name . '"';
+		$sqllabel = 'select id from labels where CN_Name = "' . mysql_real_escape_string($cn_name) . '" and EN_Name = "' . mysql_real_escape_string($en_name) . '"';
 		$result = mysql_query ( $sqllabel );
 		$row = mysql_fetch_array ( $result );
 		if ($row) {
 			return $row ['id'];
 		} else {
-			$insertlabel = 'insert into labels(CN_Name,EN_Name) values("' . $cn_name . '","' . $en_name . '")';
+			$insertlabel = 'insert into labels(CN_Name,EN_Name) values("' . mysql_real_escape_string($cn_name) . '","' . mysql_real_escape_string($en_name) . '")';
 			mysql_query ( $insertlabel );
 			return mysql_insert_id ();
 		}
 	}
 	public function insertproductLabel($userid, $parent_sku, $labelid) {
-		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values(' . $labelid . ',"' . $parent_sku . '",' . $userid . ')';
+		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ')';
 		return mysql_query ( $insertpl );
 	}
 	public function getExpressInfo($userid) {
@@ -499,9 +501,9 @@ class dbhelper {
 	}
 	
 	public function insertProductExpress($userid,$productid,$expressid,$countrycode){
-		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and  countrycode = "'.$countrycode.'"';
+		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and  countrycode = "'.mysql_real_escape_string($countrycode).'"';
 		$del = mysql_query($delsql);
-		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode) values('.$userid.',"'.$productid.'",'.$expressid.',"'.$countrycode.'")';
+		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'")';
 		$result = mysql_query($ipe);
 		return mysql_affected_rows();
 	}
@@ -509,7 +511,7 @@ class dbhelper {
 	public function  getProductSource($accountid,$parent_sku = null){
 		$psource = "SELECT distinct p.parent_sku,p.name,p.main_image,i.source_url,i.lowesttotalprice FROM `products` p, `productinfo` i WHERE p.parent_sku = i.parent_sku and i.accountid = ".$accountid;
 		if($parent_sku != null){
-			$psource .= " and i.parent_sku like '%".$parent_sku."%'";
+			$psource .= " and i.parent_sku like '%".mysql_real_escape_string($parent_sku)."%'";
 		}
 		$psource .= " limit 50";
 		return mysql_query($psource);
@@ -540,7 +542,7 @@ class dbhelper {
 	}
 	
 	public function queryResetpsdUser($token){
-		$queryToken = "select userid from resetpassword where token = '".$token."'";
+		$queryToken = "select userid from resetpassword where token = '".mysql_real_escape_string($token)."'";
 		$result = mysql_query($queryToken);
 		while( $useridarray = mysql_fetch_array ( $result )){
 			return $useridarray['userid'];
@@ -549,7 +551,7 @@ class dbhelper {
 	}
 	
 	public function updatepsd($userid,$newpassword){
-		$psdupdate = "update users set psd = '".$newpassword."' where userid = ".$userid;
+		$psdupdate = "update users set psd = '".mysql_real_escape_string($newpassword)."' where userid = ".$userid;
 		return mysql_query($psdupdate);
 		/* if($result){
 			echo "success<br/>";
@@ -590,15 +592,15 @@ class dbhelper {
 	public function insertOnlineProduct($productarray) {
 		$insert_sql = 'insert into onlineProducts (accountid, id, parent_sku,name,description,original_image_url,main_image,extra_images,is_promoted,tags,review_status,number_saves,number_sold,date_uploaded,wecountrycodes,date_updated)
 					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . mysql_real_escape_string($productarray ['parent_sku']) . '","' . mysql_real_escape_string($productarray ['name']) 
-							. '","' . mysql_real_escape_string($productarray ['description']) . '","' . $productarray ['original_image_url'] . '","' . $productarray ['main_image'] . '","' . $productarray ['extra_images'] . '","' . $productarray ['is_promoted'] . '","' 
-							. $productarray ['tags'] . '","' . $productarray ['review_status'] . '",' . $productarray ['number_saves'] . ',' . $productarray ['number_sold'] . ',"' . $productarray ['wecountrycodes'] .'",DATE_FORMAT("' . $productarray ['date_uploaded'] . '","%Y-%m-%d"),DATE_FORMAT("' . $productarray ['date_updated'] . '","%Y-%m-%d"))';
+							. '","' . mysql_real_escape_string($productarray ['description']) . '","' . mysql_real_escape_string($productarray ['original_image_url']) . '","' . mysql_real_escape_string($productarray ['main_image']) . '","' . mysql_real_escape_string($productarray ['extra_images']) . '","' . mysql_real_escape_string($productarray ['is_promoted']) . '","' 
+							. mysql_real_escape_string($productarray ['tags']) . '","' . mysql_real_escape_string($productarray ['review_status']) . '",' . mysql_real_escape_string($productarray ['number_saves']) . ',' . mysql_real_escape_string($productarray ['number_sold']) . ',"' . mysql_real_escape_string($productarray ['wecountrycodes']) .'",DATE_FORMAT("' . mysql_real_escape_string($productarray ['date_uploaded']) . '","%Y-%m-%d"),DATE_FORMAT("' . mysql_real_escape_string($productarray ['date_updated']) . '","%Y-%m-%d"))';
 		return mysql_query ( $insert_sql );
 	}
 	
 	public function updateOnlineProduct($productarray){
-		$update_sql = 'update onlineProducts set name="'.mysql_real_escape_string($productarray ['name']) . '", description = "'.mysql_real_escape_string($productarray ['description']) . '",main_image="'.$productarray ['main_image'] . '",extra_images = "'.$productarray ['extra_images'] 
-		. '",is_promoted = "'.$productarray ['is_promoted'] . '",tags = "'.$productarray ['tags'] . '",review_status = "'.$productarray ['review_status'] 
-		. '",number_saves = '.$productarray ['number_saves'] . ',number_sold = '.$productarray ['number_sold'] .',wecountrycodes = "'.$productarray ['wecountrycodes'] . '" where id = "'.$productarray['id'].'"';
+		$update_sql = 'update onlineProducts set name="'.mysql_real_escape_string($productarray ['name']) . '", description = "'.mysql_real_escape_string($productarray ['description']) . '",main_image="'.mysql_real_escape_string($productarray ['main_image']) . '",extra_images = "'.mysql_real_escape_string($productarray ['extra_images']) 
+		. '",is_promoted = "'.mysql_real_escape_string($productarray ['is_promoted']) . '",tags = "'.mysql_real_escape_string($productarray ['tags']) . '",review_status = "'.mysql_real_escape_string($productarray ['review_status']) 
+		. '",number_saves = '.mysql_real_escape_string($productarray ['number_saves']) . ',number_sold = '.mysql_real_escape_string($productarray ['number_sold']) .',wecountrycodes = "'.mysql_real_escape_string($productarray ['wecountrycodes']) . '" where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	
@@ -609,16 +611,16 @@ class dbhelper {
 	
 	public function insertOnlineProductVar($productarray) {
 		$insertvar_sql = 'insert into onlineProductVars (accountid, id, product_id,sku,color,size,enabled,price,all_images,inventory,shipping,shipping_time,MSRP)
-					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['product_id'] . '","' . $productarray ['sku']
-						. '","' . $productarray ['color'] . '","' . $productarray ['size'] . '","' . $productarray ['enabled'] . '","' . $productarray ['price'] . '","' . $productarray ['all_images'] . '",'
-								. $productarray ['inventory'] . ',"' . $productarray ['shipping'] . '","' . $productarray ['shipping_time'] . '","' . $productarray ['MSRP'] . '")';
+					values(' . $productarray ['accountid'] . ',"'.$productarray['id'].'","' . $productarray ['product_id'] . '","' . mysql_real_escape_string($productarray ['sku'])
+						. '","' . mysql_real_escape_string($productarray ['color']) . '","' . mysql_real_escape_string($productarray ['size']) . '","' . mysql_real_escape_string($productarray ['enabled']) . '","' . mysql_real_escape_string($productarray ['price']) . '","' . mysql_real_escape_string($productarray ['all_images']) . '",'
+								. mysql_real_escape_string($productarray ['inventory']) . ',"' . mysql_real_escape_string($productarray ['shipping']) . '","' . mysql_real_escape_string($productarray ['shipping_time']) . '","' . mysql_real_escape_string($productarray ['MSRP']) . '")';
 		return mysql_query ( $insertvar_sql );
 	}
 	
 	public function updateOnlineProductVar($productarray){
-		$update_sql = 'update onlineProductVars set color = "'.$productarray ['color'] . '",size = "'.$productarray ['size'] . '",enabled = "'
-				.$productarray ['enabled'] . '",price = "'.$productarray ['price'] . '",all_images="'.$productarray ['all_images'] . '",inventory='.$productarray ['inventory'] 
-				. ',shipping = "'.$productarray ['shipping'] . '",shipping_time="'.$productarray ['shipping_time'] . '",MSRP="'.$productarray ['MSRP'] .'" where id = "'.$productarray['id'].'"';
+		$update_sql = 'update onlineProductVars set color = "'.mysql_real_escape_string($productarray ['color']) . '",size = "'.mysql_real_escape_string($productarray ['size']) . '",enabled = "'
+				.mysql_real_escape_string($productarray ['enabled']) . '",price = "'.mysql_real_escape_string($productarray ['price']) . '",all_images="'.mysql_real_escape_string($productarray ['all_images']) . '",inventory='.mysql_real_escape_string($productarray ['inventory']) 
+				. ',shipping = "'.mysql_real_escape_string($productarray ['shipping']) . '",shipping_time="'.mysql_real_escape_string($productarray ['shipping_time']) . '",MSRP="'.mysql_real_escape_string($productarray ['MSRP']) .'" where id = "'.$productarray['id'].'"';
 		return mysql_query ( $update_sql );
 	}
 	
@@ -817,14 +819,14 @@ class dbhelper {
 		if($parentsku == null){
 			$pisql = 'select * from productsinventory where userid = "'.$userid.'" order by parentSKU,SKU';	
 		}else{
-			$pisql = 'select * from productsinventory where userid = "'.$userid.'" and parentSKU like "%'.$parentsku.'%" order by parentSKU,SKU';
+			$pisql = 'select * from productsinventory where userid = "'.$userid.'" and parentSKU like "%'.mysql_real_escape_string($parentsku).'%" order by parentSKU,SKU';
 		}
 		echo "<br/> get inventory sql :".$pisql;
 		return mysql_query($pisql);
 	}
 	
 	public function getProductSKUs($accountid,$parentsku){
-		$pssql = 'select p.id,p.parent_sku,pv.sku from onlineProducts p,onlineProductVars pv where p.accountid = '.$accountid.' and p.parent_sku = "'.$parentsku.'" and p.id = pv.product_id';
+		$pssql = 'select p.id,p.parent_sku,pv.sku from onlineProducts p,onlineProductVars pv where p.accountid = '.$accountid.' and p.parent_sku = "'.mysql_real_escape_string($parentsku).'" and p.id = pv.product_id';
 		return mysql_query($pssql);
 	}
 	
@@ -844,7 +846,7 @@ class dbhelper {
 			return;
 		}
 		
-		$upitsql .= $quantity. ' where userid = '.$userid.' and parentSKU = "'.$parentsku.'" and SKU = "'.$SKU.'"';
+		$upitsql .= $quantity. ' where userid = '.$userid.' and parentSKU = "'.mysql_real_escape_string($parentsku).'" and SKU = "'.mysql_real_escape_string($SKU).'"';
 		//echo "<br/> inventory update sql:".$upitsql;
 		return mysql_query($upitsql);
 	}

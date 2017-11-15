@@ -404,9 +404,10 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
-			$tempsku = str_replace(' ','_',$cur_order ['sku']);
-			$tempsku = str_replace('.','_',$tempsku);
-			$tempsku = str_replace('&amp;','AND',$tempsku);//WishHelper.applyTrackingsForOrders时同步替换；
+			$tempsku = str_replace(' ','',$cur_order ['sku']);
+			$tempsku = str_replace('.','',$tempsku);
+			$tempsku = str_replace('&amp;','',$tempsku);
+			$tempsku = str_replace('&quot;','',$tempsku);//WishHelper.applyTrackingsForOrders时同步替换；
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {

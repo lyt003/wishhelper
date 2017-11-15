@@ -148,6 +148,7 @@ class WishHelper {
 			//exclude Ebay User:
 			if($accountid != 0){
 				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
+				echo "<br/>***********CURR:".$curProductid;
 				$curCountrycode = $orderNoTracking['countrycode'];
 					
 				$curExpress = $expressinfos[$curProductid.'|'.$curCountrycode];
@@ -242,22 +243,28 @@ class WishHelper {
 					$gsUserid = $Goods->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 		
 					$tempSKU = $orderNoTracking ['sku'];
-					$tempSKU = str_replace(' ','_',$tempSKU);
-					$tempSKU = str_replace('.','_',$tempSKU);
-					$tempSKU = str_replace('&amp;','AND',$tempSKU);
+					
+					$tempSKU = str_replace(' ','',$tempSKU);
+					$tempSKU = str_replace('.','',$tempSKU);
+					$tempSKU = str_replace('&amp;','',$tempSKU);
+					$tempSKU = str_replace('&quot;','',$tempSKU);
+					
+					/* $tempSKU = str_replace('&amp;','AND',$tempSKU);
+					
+					$tempsku = str_replace('&amp;','',$cur_order ['sku']);
+					$tempsku = str_replace('&quot;','',$tempsku); */
 					
 					$gsLabel = $this->getCNENLabel($labels, $tempSKU);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
-					$tempEn = $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					if(strlen($tempEn)>=50){
 						$tempEn = substr($tempEn,0,45).'...';
 					}
 					
-					$tempEn = str_replace('&amp;','AND',$tempEn);
+				/* 	$tempEn = str_replace('&amp;','AND',$tempEn);
 					$tempEn = str_replace(' ','_',$tempEn);
 					$tempEn = str_replace('&','AND',$tempEn);
-					
-					echo "<br/>current English Name:".$tempEn;
+					 */
 					$gsNameEn = $Goods->addChild ( "NameEn", $tempEn); // *
 					//$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
 		
@@ -353,8 +360,8 @@ class WishHelper {
 				$orderobj->from_country = "CN";
 				
 				$tempSKU = $curorder ['sku'];
-				$tempSKU = str_replace(' ','_',$tempSKU);
-				$tempSKU = str_replace('&amp;','AND',$tempSKU);
+				/* $tempSKU = str_replace(' ','_',$tempSKU);
+				$tempSKU = str_replace('&amp;','AND',$tempSKU); */
 				$gsLabel = $this->getCNENLabel($labels, $tempSKU);
 				$gsNameCh = $gsLabel[0]; // *
 				$gsNameEn = $gsLabel[1];
