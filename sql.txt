@@ -405,6 +405,7 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_mlg
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Silver',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_golden',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Gray',1,'205');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_DIYClock','H_DIYClock_Black',1,'32');
 
 
 DROP TABLE IF EXISTS `schedule_product`;
