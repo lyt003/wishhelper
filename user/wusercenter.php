@@ -414,7 +414,12 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 				echo "<tr class=\"gradeA success\">";
 			}
 			echo "<td style=\"width:5%;vertical-align:middle;\"><input type=\"checkbox\" class=\"no-margin\" /></td><td style=\"width:10%;vertical-align:middle;\">" . substr ( $cur_order ['ordertime'], 0, 10 ) . "</td>";
-			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li><ul></td>";
+			echo "<td style=\"width:25%;vertical-align:middle;\" class=\"hidden-phone\"><ul><li><img width=50 height=50 style=\"vertical-align:middle;\" src=\"" . $cur_order ['productimage'] . "\">" . $cur_order ['sku'] . ":(" . $cur_order ['color'] . " - " . $cur_order ['size'] . " * " . $cur_order ['quantity'] . ")</li>";
+			if(strcmp($cur_order['iswishexpress'],'True') == 0 )
+				echo "<li style=\"background-color:D9EDF7;color:3798B9\">WishExpress</li>";
+			if(strcmp($cur_order['requiredeliveryconfirmation'],'True') == 0 )
+				echo "<li style=\"background-color:FCF8E3;color:C09853\">DeliveryConfirmation</li>";
+			echo "<ul></td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] .$countries[$cur_order ['countrycode']];
 		

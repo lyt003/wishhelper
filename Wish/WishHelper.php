@@ -26,7 +26,7 @@ class WishHelper {
 	public function saveOrders($unfulfilled_orders, $accountid) {
 		$preTransactionid = "";
 		$preOrderNum = 0;
-		
+		var_dump($unfulfilled_orders);
 		foreach ( $unfulfilled_orders as $cur_order ) {
 			$shippingDetail = $cur_order->ShippingDetail;
 			$orderarray = array ();
@@ -89,6 +89,9 @@ class WishHelper {
 			
 			$orderarray ['orderstatus'] = '0'; // 0: new order; 1: applied tracking number; 2: has download label; 3: has uploaded tracking number;
 			
+			
+			$orderarray['isWishExpress'] = $cur_order->is_wish_express;
+			$orderarray['requireDeliveryConfirmation'] = $cur_order->requires_delivery_confirmation;
 			$insertResult = $this->dbhelper->insertOrder ( $orderarray );
 		}
 	}

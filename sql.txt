@@ -67,6 +67,8 @@ ALTER TABLE orders MODIFY COLUMN name varchar(50) CHARACTER SET utf8mb4 COLLATE 
 alter table orders change city city varchar(100);
 alter table orders change state state varchar(100);
 alter table orders change name name varchar(100);
+ALTER TABLE `orders` add iswishexpress varchar(10) default 'False';
+ALTER TABLE `orders` add requiredeliveryconfirmation varchar(10) default 'False';
 
 DROP TABLE IF EXISTS  `products`;
 CREATE TABLE `products` (

@@ -79,7 +79,16 @@ class dbhelper {
 		$insert_sql = 'insert into orders (orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
-		city,state,zipcode,phonenumber,countrycode,orderstatus) values("' . $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' . $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . mysql_real_escape_string($orderarray ['sku']) . '","' . mysql_real_escape_string($orderarray ['productname']) . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' . mysql_real_escape_string($orderarray ['size']) . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' . $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' . $orderarray ['tracking'] . '","' . mysql_real_escape_string($orderarray ['name']) . '","' . mysql_real_escape_string($orderarray ['streetaddress1']) . '","' . mysql_real_escape_string($orderarray ['streetaddress2']) . '","' . mysql_real_escape_string($orderarray ['city']) . '","' . mysql_real_escape_string($orderarray ['state']) . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' . $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '")';
+		city,state,zipcode,phonenumber,countrycode,orderstatus,iswishexpress,requiredeliveryconfirmation) values("' 
+		. $orderarray ['orderid'] . '",' . $orderarray ['orderNum'] . ',"' . $orderarray ['accountid'] . '","' . $orderarray ['ordertime'] . '","' 
+		. $orderarray ['transactionid'] . '","' . $orderarray ['orderstate'] . '","' . mysql_real_escape_string($orderarray ['sku']) . '","' 
+		. mysql_real_escape_string($orderarray ['productname']) . '","' . $orderarray ['productimage'] . '","' . $orderarray ['color'] . '","' 
+		. mysql_real_escape_string($orderarray ['size']) . '","' . $orderarray ['price'] . '","' . $orderarray ['cost'] . '","' . $orderarray ['shipping'] . '","' 
+		. $orderarray ['shippingcost'] . '","' . $orderarray ['quantity'] . '","' . $orderarray ['totalcost'] . '","' . $orderarray ['provider'] . '","' 
+		. $orderarray ['tracking'] . '","' . mysql_real_escape_string($orderarray ['name']) . '","' . mysql_real_escape_string($orderarray ['streetaddress1']) . '","' 
+		. mysql_real_escape_string($orderarray ['streetaddress2']) . '","' . mysql_real_escape_string($orderarray ['city']) . '","' 
+		. mysql_real_escape_string($orderarray ['state']) . '","' . $orderarray ['zipcode'] . '","' . $orderarray ['phonenumber'] . '","' 
+		. $orderarray ['countrycode'] . '","' . $orderarray ['orderstatus'] . '","'.$orderarray['isWishExpress'].'","'.$orderarray['requireDeliveryConfirmation'].'")';
 		
 		return mysql_query ( $insert_sql );
 	}
@@ -189,7 +198,7 @@ class dbhelper {
 			$query_sql = "SELECT orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
 		totalcost,provider,tracking,name,streetaddress1,streetaddress2,
-		city,state,zipcode,phonenumber,countrycode,orderstatus FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "' order by transactionid, orderNum desc";
+		city,state,zipcode,phonenumber,countrycode,orderstatus,iswishexpress,requiredeliveryconfirmation FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "' order by transactionid, orderNum desc";
 		}
 		
 		$result = mysql_query ( $query_sql );
