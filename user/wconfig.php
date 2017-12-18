@@ -39,6 +39,11 @@ define('FROMWISH','wish');
 define('PROVIDER_YANWEN','YW');
 define('PROVIDER_WISHPOST','WishPost');
 define('PROVIDER_EUB','EUB');
+define('PROVIDER_WEEXPRESS','wishexpress');
 
 define('INVENTORY_OUT',0);
 define('INVENTORY_IN',1);
+
+define('CPWSUSERTOKEN','8f6ef3079a08219fdba69a989721f280');
+define('CPWSUSERKEY','c0035f0759b7f9c4f130988bec099247');
+define('CPWSURL','http://cpws.ems.com.cn/default/svc/wsdl');

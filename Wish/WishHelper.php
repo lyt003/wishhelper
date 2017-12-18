@@ -466,9 +466,14 @@ class WishHelper {
 		return $ExpressInfos;
 	}
 	
-	public  function getSubExpressInfos(){
+	public  function getSubExpressInfos($parentExpressCode){
 		$expressInfos = array();
-		$expressInfosResult = $this->dbhelper->getSubExpressInfo();
+		if($parentExpressCode == null){
+			$expressInfosResult = $this->dbhelper->getSubExpressInfo();
+		}else{
+			$expressInfosResult = $this->dbhelper->getYanWenExpresses($parentExpressCode);
+		}
+			
 		while($result = mysql_fetch_array($expressInfosResult)){
 			$expressInfos[$result['express_id']] = $result['express_id'].'|'.$result['express_name'];
 		}

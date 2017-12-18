@@ -182,7 +182,11 @@ if (strcmp ( $add, "1" ) == 0) {
 
 if(!isset($labels))
 	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
-$expressinfos = $wishHelper->getSubExpressInfos();
+//$expressinfos = $wishHelper->getSubExpressInfos();
+
+$WEExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_WEEXPRESS);
+$YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
+
 $userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
 
 $countries = $wishHelper->getChineseCountrynames();
@@ -443,6 +447,12 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $userExpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']] . "\" placeholder=\"选择物流方式\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
+			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
+				$expressinfos = $WEExpressinfos;
+			}else{
+				$expressinfos = $YWExpressinfos;
+			}
+				
 			foreach ($expressinfos  as $expressid => $expressname ) {
 				echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
 			}

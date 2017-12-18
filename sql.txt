@@ -519,6 +519,10 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕邮宝挂号','140',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政挂号小包','106',1,'SingaporePost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港邮政挂号小包','107',1,'HongKongPost');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS小包','USEAUSPSFIRSTCLASS',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS大包','USEAUSPSPRIORITY',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','USEAFEDEXSM',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','USEAFEDEXLP',31,'Fedex');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
