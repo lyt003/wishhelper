@@ -105,6 +105,15 @@ class WishHelper {
 		return $labels;
 	}
 	
+	public function getWEUserLabelsArray($userid){
+		$labels = array();
+		$welabels = $this->dbhelper->getWEUserLabels($userid);
+		while($curlabel = mysql_fetch_array($welabels)){
+			$labels[$curlabel['parent_sku']] = $curlabel['label_id'];
+		}
+		return $labels;
+	}
+	
 	public function getPidBySKU($accountid,$subsku){
 		$productid = '';
 		$pr = $this->dbhelper->getProductIDByVSKU($accountid, $subsku);
@@ -132,6 +141,10 @@ class WishHelper {
 		return $cnenlabel;
 	}
 	
+	public function processWEOrder($currentorder){
+		
+	}
+	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
 		$yanwenExpresses = $this->getChildrenExpressinfosOF(PROVIDER_YANWEN);
@@ -148,6 +161,13 @@ class WishHelper {
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
+			
+			//process we order firstly;
+			if(strcmp($ordersNoTracking['iswishexpress'],'True') == 0 ){
+				$this->processWEOrder($orderNoTracking);
+				continue;
+			}
+			
 			//exclude Ebay User:
 			if($accountid != 0){
 				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);

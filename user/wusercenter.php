@@ -4,11 +4,15 @@ include dirname ( '__FILE__' ) . './Wish/WishClient.php';
 include_once dirname ( '__FILE__' ) . './Wish/WishHelper.php';
 include_once dirname ( '__FILE__' ) . './mysql/dbhelper.php';
 include_once dirname ( '__FILE__' ) . './user/wconfig.php';
+include_once dirname ( '__FILE__' ) . './cpws/CPWSManager.php';
+
 use Wish\WishClient;
 use mysql\dbhelper;
 use Wish\WishHelper;
 use Wish\Model\WishTracker;
 use Wish\Exception\ServiceResponseException;
+use cpws\CPWSManager;
+
 header ( "Content-Type: text/html;charset=utf-8" );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
@@ -133,13 +137,25 @@ if (strcmp ( $add, "1" ) == 0) {
 		if (preg_match ( "/^label/", $key )) {
 			$sku = explode ( "|", $key )[1];
 			$names = explode ( "|", $value );
-			$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
+			if(count($names) >2 ){
+				echo "<br/> insert WE";
+				$dbhelper->insertproductLabel ( $currentUserid, $sku, $names[0],1);
+			}else{
+				echo "<br/> insert normal";
+				$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
+			}
 		}
 		
 		if (preg_match ( "/^express/", $key )) {
 			$keyvalues = explode("|",$key);
 			$expressValue = explode("|",$value);
-			$dbhelper->insertProductExpress($currentUserid, $wishHelper->getPidBySKU($keyvalues[3], $keyvalues[1]), $expressValue[0], $keyvalues[2]);
+			
+			if(count($expressValue)>2){
+				$iswe = 1;
+			}else{
+				$iswe = 0;
+			}
+			$dbhelper->insertProductExpress($currentUserid, $wishHelper->getPidBySKU($keyvalues[3], $keyvalues[1]), $expressValue[0], $keyvalues[2],$iswe);
 		}
 	}
 	
@@ -182,10 +198,22 @@ if (strcmp ( $add, "1" ) == 0) {
 
 if(!isset($labels))
 	$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
+	
+if(!isset($welabels))
+	$welabels = $wishHelper->getWEUserLabelsArray($currentUserid);
+	
 //$expressinfos = $wishHelper->getSubExpressInfos();
 
 $WEExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_WEEXPRESS);
 $YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
+
+$cpwsManager = new CPWSManager();
+$weproducts = $cpwsManager->getProducts();
+foreach ($weproducts as $curproduct){
+	echo "****************************************product:<br/>";
+	print_r($curproduct);
+	echo "****************************************<br/>";
+}
 
 $userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
 
@@ -405,7 +433,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
 		echo "<th style=\"width:10%\">日期</th><th style=\"width:25%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名</th></tr></thead>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名|海外仓产品对应</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = str_replace(' ','',$cur_order ['sku']);
@@ -449,23 +477,46 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$expressinfos = $WEExpressinfos;
+				foreach ($expressinfos  as $expressid => $expressname ) {
+					$expressname = $expressname."|WE";
+					echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
+				}
 			}else{
 				$expressinfos = $YWExpressinfos;
+				foreach ($expressinfos  as $expressid => $expressname ) {
+					echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
+				}
 			}
-				
-			foreach ($expressinfos  as $expressid => $expressname ) {
-				echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
-			}
+			
 			echo "<li>&nbsp;&nbsp;</li>";
 			echo "<li>&nbsp;&nbsp;</li>";
 			echo "<li>&nbsp;&nbsp;</li>";
 			echo "</ul></div></td>";
 			
-			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
+			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
+				$tempwepid = $welabels [$tempsku];
+				foreach ($weproducts as $weproduct){
+					if($weproduct['product_id'] == $tempwepid){
+						$tempproductvalue = $weproduct['product_id'] ."|".$weproduct['product_sku'] . "|WE";
+						break;
+					}
+				}
+				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $tempproductvalue . "\" placeholder=\"中文|英文\">";
+			}else{
+				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
+			}
+			
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
-			foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
-				echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
+			
+			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
+				foreach ($weproducts as $weproduct){
+					echo "<li><a onclick=setValue(\"" . $weproduct['product_id'] ."|".$weproduct['product_sku'] . "|WE" . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $weproduct['product_id']."|".$weproduct['product_sku'] . "|WE" . "</a></li>";
+				}
+			}else{
+				foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
+					echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
+				}	
 			}
 			echo "<li>&nbsp;&nbsp;</li>";
 			echo "<li>&nbsp;&nbsp;</li>";

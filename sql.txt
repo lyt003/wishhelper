@@ -461,6 +461,8 @@ CREATE TABLE `product_label`(
 	`label_id` int(11),
 	PRIMARY KEY (`parent_sku`,`userid`)
 ) DEFAULT CHARSET=utf8;
+Alter table `product_label` add `iswe` int(1) default 0;
+Alter table `product_label` DROP PRIMARY KEY, add PRIMARY KEY(`userid`,`parent_sku`,`iswe`);
 
 
 DROP TABLE IF EXISTS `express_info`;
@@ -532,6 +534,9 @@ CREATE TABLE `product_express_info`(
 	`express_id`  int(11),
  	 PRIMARY KEY (`userid`,`product_id`,`countrycode`,`express_id`)
 ) DEFAULT CHARSET=utf8;
+ALTER TABLE `product_express_info`
+	ADD `iswe` int(1) default 0;
+Alter table `product_express_info` DROP PRIMARY KEY, add PRIMARY KEY (`userid`,`product_id`,`countrycode`,`express_id`,`iswe`);	
 
 DROP TABLE IF EXISTS `express_attr_info`;
 CREATE TABLE `express_attr_info`(
@@ -1085,3 +1090,12 @@ select countrycode, count(distinct orderid) countnumber from orders where sku = 
 
 get refund orders of SKU group by countries:
 select Country,count(distinct OrderID) countnumber from refundrecords where SKU ='lovelypiranhaearring' group by Country order by countnumber DESC
+
+
+DROP TABLE IF EXISTS `product_wematch`;
+CREATE TABLE `product_wematch`(
+	`userid` int(11),
+	`product_sku` varchar(50) NOT NULL,
+	`weproductid` int(11),
+	PRIMARY KEY (`product_sku`,`userid`)
+) DEFAULT CHARSET=utf8;

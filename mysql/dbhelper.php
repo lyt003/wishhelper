@@ -466,11 +466,21 @@ class dbhelper {
 	}
 	
 	public function getUserLabels($userid) {
-		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.label_id = l.id";
+		$querylabels = "SELECT l.id id,p.parent_sku parentsku,l.CN_Name cn_name,l.EN_Name en_name FROM labels l, product_label p WHERE p.userid = " . $userid . " and p.iswe=0 and p.label_id = l.id";
 		return mysql_query ( $querylabels );
 	}
 	
+	public function getWEUserLabels($userid){
+		$welabels = 'select parent_sku, label_id from product_label where userid = '.$userid.' and iswe=1';
+		echo "<br/>get we userlabels:".$welabels;
+		return mysql_query($welabels);
+	}
+	
 	public function insertLabel($cn_name, $en_name) {
+		// when is WishExpress, just return the WE productid directly;
+		if($en_name == null)
+			return $cn_name;
+		
 		$sqllabel = 'select id from labels where CN_Name = "' . mysql_real_escape_string($cn_name) . '" and EN_Name = "' . mysql_real_escape_string($en_name) . '"';
 		$result = mysql_query ( $sqllabel );
 		$row = mysql_fetch_array ( $result );
@@ -482,8 +492,9 @@ class dbhelper {
 			return mysql_insert_id ();
 		}
 	}
-	public function insertproductLabel($userid, $parent_sku, $labelid) {
-		$insertpl = 'insert into product_label(label_id,parent_sku,userid) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ')';
+	public function insertproductLabel($userid, $parent_sku, $labelid, $iswe=0) {
+		$insertpl = 'insert into product_label(label_id,parent_sku,userid,iswe) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ",". $iswe.')';
+		echo "<br/> insert label:".$insertpl;
 		return mysql_query ( $insertpl );
 	}
 	public function getExpressInfo($userid) {
@@ -509,10 +520,10 @@ class dbhelper {
 		return mysql_query($uei);
 	}
 	
-	public function insertProductExpress($userid,$productid,$expressid,$countrycode){
-		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and  countrycode = "'.mysql_real_escape_string($countrycode).'"';
+	public function insertProductExpress($userid,$productid,$expressid,$countrycode,$iswe=0){
+		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and iswe='.$iswe.' and  countrycode = "'.mysql_real_escape_string($countrycode).'"';
 		$del = mysql_query($delsql);
-		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'")';
+		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode,iswe) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'",'.$iswe.')';
 		$result = mysql_query($ipe);
 		return mysql_affected_rows();
 	}
