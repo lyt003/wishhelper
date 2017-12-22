@@ -8,18 +8,22 @@ include_once dirname ( '__FILE__' ) . './model/order.php';
 include_once dirname ( '__FILE__' ) . './model/productinventory.php';
 include_once dirname ( '__FILE__' ) . './wishpost/Wishposthelper.php';
 include_once dirname ( '__FILE__' ) . './model/senderinfo.php';
+include_once dirname ( '__FILE__' ) . './cpws/CPWSManager';
 
 use mysql\dbhelper;
 use model\order;
 use wishpost\Wishposthelper;
 use model\senderinfo;
 use model\productinventory;
+use cpws\CPWSManager;
 
 class WishHelper {
 	private $dbhelper;
+	private $cpwsmanager;
 	
 	public function __construct(){
 		$this->dbhelper = new dbhelper();
+		$this->cpwsmanager = new CPWSManager();
 	}
 	
 	// save the unfulfilled orders into db;
@@ -143,6 +147,7 @@ class WishHelper {
 	
 	public function processWEOrder($currentorder){
 		
+		$this->cpwsmanager->processorder($currentorder);
 	}
 	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){

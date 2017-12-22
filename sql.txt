@@ -521,10 +521,10 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕邮宝挂号','140',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('新加坡邮政挂号小包','106',1,'SingaporePost');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('香港邮政挂号小包','107',1,'HongKongPost');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS小包','USEAUSPSFIRSTCLASS',31,'USPS');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS大包','USEAUSPSPRIORITY',31,'USPS');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','USEAFEDEXSM',31,'Fedex');
-insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','USEAFEDEXLP',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS小包','USPS-FIRST-CLASS',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS大包','USPS-PRIORITY',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','FEDEX-SM',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','FEDEX-LP',31,'Fedex');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
@@ -1098,4 +1098,11 @@ CREATE TABLE `product_wematch`(
 	`product_sku` varchar(50) NOT NULL,
 	`weproductid` int(11),
 	PRIMARY KEY (`product_sku`,`userid`)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `weproducts`;
+CREATE TABLE `weproducts`(
+	`weproductid` int(11),
+	`weproductsku` varchar(50),
+	PRIMARY KEY(`weproductid`)
 ) DEFAULT CHARSET=utf8;

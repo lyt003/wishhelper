@@ -878,6 +878,17 @@ class dbhelper {
 		return mysql_query($itosql);
 	}
 	
+	
+	public function addWEProduct($weproductid,$weproductsku){
+		$weaddsql = 'insert into weproducts(weproductid,weproductsku) values('.$weproductid.',"'.mysql_real_escape_string($weproductsku).'")';
+		return mysql_query($weaddsql);
+	}
+	
+	public function getWEProducts(){
+		$getwesql = 'select weproductid,weproductsku from weproducts';
+		return mysql_query($getwesql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);
