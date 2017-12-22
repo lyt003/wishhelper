@@ -516,7 +516,7 @@ class dbhelper {
 	}
 	
 	public function getExpressInfos($userid){
-		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.express_id = e.express_id';
+		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.iswe=0 and pe.express_id = e.express_id';
 		return mysql_query($uei);
 	}
 	
