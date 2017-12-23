@@ -12,8 +12,6 @@ class CPWSManager{
 	public function getProducts(){
 		
 		$products = array();
-		echo "***getProducts";
-		echo "start client";
 		$wsdl = 'http://cpws.ems.com.cn/default/svc/wsdl?wsdl';
 		
 		$options = array(
@@ -23,9 +21,7 @@ class CPWSManager{
 		);
 		
 		$client = new SoapClient($wsdl, $options);
-		var_dump($client);
 		
-		echo "finish client";
 		$page = 1;
 		while(true){
 			$params = array(
@@ -34,23 +30,15 @@ class CPWSManager{
 					'product_sku' => '',
 					'product_sku_arr' => array()
 			);
-			echo "<br/>start1";
 			$svc = new Common_SvcCall();
-			echo "<br/>start2";
 			$rs = $svc->getProductList($params);
-			echo "<br/>start3";
-			print_r($rs);
 			$productsData = $rs['data'];
 			$products = array_merge($products,$productsData);
-			//print_r($productsData);
-			echo '<br/>*******next page:'.$rs['nextPage'];
 			if($rs['nextPage'] != 'true'){
 				break;
 			}
 			$page ++;
-			//break;
 		}
-		echo "FINISHED";
 		return $products;
 	}
 	

@@ -145,16 +145,42 @@ class WishHelper {
 		return $cnenlabel;
 	}
 	
-	public function processWEOrder($currentorder){
+	public function processWEOrder($accountid, $currentorder){
 		
-		$this->cpwsmanager->processorder($currentorder);
+		echo "<br/>***********START TO PROCESS WE ORDER".$currentorder['sku']."*************";
+		//get shippingmethod and WEProductSKU. 
+		$productid = $this->getPidBySKU($accountid, $currentorder['sku']);
+		echo "<br/>************productid:".$productid."*************";
+		$shippingmethodresult = $this->dbhelper->getWEShippingMethod($productid, $currentorder['countrycode']);
+		if($shippingmethod = mysql_fetch_array($shippingmethodresult)){
+			$expresscode = $shippingmethod['express_code'];
+			$currentorder['shippingmethod'] = $expresscode;
+			echo "<br/>get expresscode:".$expresscode;
+		}
+		
+		$weproductidresult = $this->dbhelper->getWEProductID($accountid, $currentorder['sku']);
+		if($weproductid = mysql_fetch_array($weproductidresult)){
+			$weproductidvalue = $weproductid['label_id'];
+			$weproductskuresult = $this->dbhelper->getWEProductSKUBYID($weproductidvalue);
+			if($weproductsku = mysql_fetch_array($weproductskuresult)){
+				$weproductskuvalue = $weproductsku['weproductsku'];
+				$currentorder['WEProductSKU'] =$weproductskuvalue; 
+				echo "<br/>get weproductSKU:".$weproductskuvalue;
+			}
+		}
+		if(isset($currentorder['shippingmethod']) && isset($currentorder['WEProductSKU'])){
+			$this->cpwsmanager->processorder($currentorder);
+		}else{
+			echo "<br/>****************ERROR, didn't get WEProductSKU or shippingmethod of order id ".$currentorder['orderid'].".**********************";
+		}
+	
 	}
 	
 	public function applyTrackingsForOrders($userid,$accountid,$labels,$expressinfo){
 		
 		$yanwenExpresses = $this->getChildrenExpressinfosOF(PROVIDER_YANWEN);
 		$wishpostExpresses = $this->getChildrenExpressinfosOF(PROVIDER_WISHPOST);
-		$expressinfos = $this->getUserExpressInfos($userid);
+		$expressinfos = $this->getUserExpressInfos($userid,0);
 		
 		$post_header = array (
 				'Authorization: basic '.$expressinfo[YANWEN_API_TOKEN],
@@ -166,10 +192,10 @@ class WishHelper {
 		echo "get ordersNoTracking:" . mysql_num_rows ( $ordersNoTracking ) . "<br/>";
 		$preTransactionid = "";
 		while ( $orderNoTracking = mysql_fetch_array ( $ordersNoTracking ) ) {
-			
+			echo "<br/>********get is wishexpress".$orderNoTracking['iswishexpress']."*********";
 			//process we order firstly;
-			if(strcmp($ordersNoTracking['iswishexpress'],'True') == 0 ){
-				$this->processWEOrder($orderNoTracking);
+			if(strcmp($orderNoTracking['iswishexpress'],'True') == 0 ){
+				$this->processWEOrder($accountid,$orderNoTracking);
 				continue;
 			}
 			
@@ -482,9 +508,9 @@ class WishHelper {
 		return $expressInfo;
 	}
 	
-	public function getUserExpressInfos($userid){
+	public function getUserExpressInfos($userid,$iswe=0){
 		$ExpressInfos = array();
-		$userExpressInfos = $this->dbhelper->getExpressInfos($userid);
+		$userExpressInfos = $this->dbhelper->getExpressInfos($userid,$iswe);
 		while($elabel = mysql_fetch_array($userExpressInfos)){
 			$ExpressInfos[$elabel['product_id'].'|'.$elabel['countrycode']] = $elabel['express_id'].'|'.$elabel['express_name'];
 		}

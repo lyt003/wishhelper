@@ -201,6 +201,7 @@ class dbhelper {
 		city,state,zipcode,phonenumber,countrycode,orderstatus,iswishexpress,requiredeliveryconfirmation FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "' order by transactionid, orderNum desc";
 		}
 		
+		echo "<br/>*******getorders:".$query_sql."***********";
 		$result = mysql_query ( $query_sql );
 		return $result;
 	}
@@ -515,8 +516,9 @@ class dbhelper {
 		return mysql_query($ywe);
 	}
 	
-	public function getExpressInfos($userid){
-		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.iswe=0 and pe.express_id = e.express_id';
+	public function getExpressInfos($userid,$iswe){
+		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.iswe='.$iswe.' and pe.express_id = e.express_id';
+		echo "<br/>************getExpressinfo:".$uei."************";
 		return mysql_query($uei);
 	}
 	
@@ -524,6 +526,7 @@ class dbhelper {
 		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and iswe='.$iswe.' and  countrycode = "'.mysql_real_escape_string($countrycode).'"';
 		$del = mysql_query($delsql);
 		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode,iswe) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'",'.$iswe.')';
+		echo "<br/>********insert product express:".$ipe."**********";
 		$result = mysql_query($ipe);
 		return mysql_affected_rows();
 	}
@@ -887,6 +890,23 @@ class dbhelper {
 	public function getWEProducts(){
 		$getwesql = 'select weproductid,weproductsku from weproducts';
 		return mysql_query($getwesql);
+	}
+	
+	public function getWEProductSKUBYID($weproductid){
+		$getwepsku = 'select weproductsku from weproducts where weproductid = '.$weproductid;
+		return mysql_query($getwepsku);
+	}
+	
+	public function getWEShippingMethod($weproductid,$wecountrycode){
+		$getweshippingsql = 'select e.express_code  from express_info e, product_express_info pe where pe.iswe = 1 and pe.product_id ="'.$weproductid.'"  and pe.countrycode = "'.$wecountrycode.'" and pe.express_id = e.express_id';
+		echo "<br/> get weshipping:".$getweshippingsql;
+		return mysql_query($getweshippingsql);
+	}
+	
+	public function getWEProductID($accountid, $weproductsku){
+		$getwepid = 'select label_id from product_label pl,accounts a where a.userid = pl.userid and a.accountid = '.$accountid.' and pl.iswe = 1 and pl.parent_sku = "'.mysql_real_escape_string($weproductsku).'"';
+		echo "<br/> ***************getwepid*********".$getwepid;
+		return mysql_query($getwepid);
 	}
 	
 	public function getJaveUploadAppToken(){

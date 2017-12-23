@@ -209,13 +209,9 @@ $YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
 
 $cpwsManager = new CPWSManager();
 $weproducts = $cpwsManager->getProducts();
-foreach ($weproducts as $curproduct){
-	echo "****************************************product:<br/>";
-	print_r($curproduct);
-	echo "****************************************<br/>";
-}
 
-$userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid);
+$userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid,0);
+$userWEExpressinfos = $wishHelper->getUserExpressInfos($currentUserid,1);
 
 $countries = $wishHelper->getChineseCountrynames();
 $needUpdateAddress = 0;
@@ -472,14 +468,22 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "<span class=\"label label-info\">编辑</span></button></td>";
 			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".$cur_order ['sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			
-			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $userExpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']] . "\" placeholder=\"选择物流方式\">";
+			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
+				$curuserexpressinfos = $userWEExpressinfos;
+				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']].'|WE'; 
+			}else{
+				$curuserexpressinfos = $userExpressinfos;
+				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
+			}
+			
+			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $curexpressvalue . "\" placeholder=\"选择物流方式\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$expressinfos = $WEExpressinfos;
 				foreach ($expressinfos  as $expressid => $expressname ) {
-					$expressname = $expressname."|WE";
-					echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
+					$newexpressname = $expressname."|WE";
+					echo "<li><a onclick=setValue(\"" . $newexpressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $newexpressname . "</a></li>";
 				}
 			}else{
 				$expressinfos = $YWExpressinfos;
