@@ -23,7 +23,6 @@ class WishHelper {
 	
 	public function __construct(){
 		$this->dbhelper = new dbhelper();
-		$this->cpwsmanager = new CPWSManager();
 	}
 	
 	// save the unfulfilled orders into db;
@@ -169,7 +168,9 @@ class WishHelper {
 			}
 		}
 		if(isset($currentorder['shippingmethod']) && isset($currentorder['WEProductSKU'])){
-			$this->cpwsmanager->processorder($currentorder);
+			if(!isset($this->cpwsmanager))
+				$this->cpwsmanager = new CPWSManager();
+			//$this->cpwsmanager->processorder($currentorder);
 		}else{
 			echo "<br/>****************ERROR, didn't get WEProductSKU or shippingmethod of order id ".$currentorder['orderid'].".**********************";
 		}
