@@ -56,9 +56,7 @@ class Common_SvcCall
             "encoding" => "utf-8"
         );
         
-        echo "<br/>create soapclient";
         $client = new SoapClient($wsdl, $options);
-        echo "<br/>create soapclient finished";
         $this->_client = $client;
     }
 
@@ -346,9 +344,7 @@ class Common_SvcCall
                 'service' => 'getProductList',
                 'paramsJson' => json_encode($params)
             );
-            echo "<br/> start call service";
             $return = $this->callService($req);
-            echo "<br/> end call service";
         }catch(Exception $e){
             $return['message'] = $e->getMessage();
         }
@@ -441,7 +437,6 @@ class Common_SvcCall
     	}catch(Exception $e){
     		$return['message'] = $e->getMessage();
     	}
-    	print_r($return);
     	return $return;
     }
     

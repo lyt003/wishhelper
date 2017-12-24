@@ -201,7 +201,6 @@ class dbhelper {
 		city,state,zipcode,phonenumber,countrycode,orderstatus,iswishexpress,requiredeliveryconfirmation FROM orders WHERE accountid = '" . $accountid . "' and orderstatus = '" . $orderstatus . "' order by transactionid, orderNum desc";
 		}
 		
-		echo "<br/>*******getorders:".$query_sql."***********";
 		$result = mysql_query ( $query_sql );
 		return $result;
 	}
@@ -473,7 +472,6 @@ class dbhelper {
 	
 	public function getWEUserLabels($userid){
 		$welabels = 'select parent_sku, label_id from product_label where userid = '.$userid.' and iswe=1';
-		echo "<br/>get we userlabels:".$welabels;
 		return mysql_query($welabels);
 	}
 	
@@ -495,7 +493,6 @@ class dbhelper {
 	}
 	public function insertproductLabel($userid, $parent_sku, $labelid, $iswe=0) {
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid,iswe) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ",". $iswe.')';
-		echo "<br/> insert label:".$insertpl;
 		return mysql_query ( $insertpl );
 	}
 	public function getExpressInfo($userid) {
@@ -518,7 +515,6 @@ class dbhelper {
 	
 	public function getExpressInfos($userid,$iswe){
 		$uei = 'SELECT pe.product_id,pe.countrycode,pe.express_id,e.express_name,e.express_code,e.provider_name FROM product_express_info pe,express_info e WHERE pe.userid='.$userid.'  and pe.iswe='.$iswe.' and pe.express_id = e.express_id';
-		echo "<br/>************getExpressinfo:".$uei."************";
 		return mysql_query($uei);
 	}
 	
@@ -526,7 +522,6 @@ class dbhelper {
 		$delsql = 'delete from product_express_info where userid ='.$userid.' and product_id = "'.$productid.'" and iswe='.$iswe.' and  countrycode = "'.mysql_real_escape_string($countrycode).'"';
 		$del = mysql_query($delsql);
 		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode,iswe) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'",'.$iswe.')';
-		echo "<br/>********insert product express:".$ipe."**********";
 		$result = mysql_query($ipe);
 		return mysql_affected_rows();
 	}
@@ -899,13 +894,11 @@ class dbhelper {
 	
 	public function getWEShippingMethod($weproductid,$wecountrycode){
 		$getweshippingsql = 'select e.express_code,e.provider_name from express_info e, product_express_info pe where pe.iswe = 1 and pe.product_id ="'.$weproductid.'"  and pe.countrycode = "'.$wecountrycode.'" and pe.express_id = e.express_id';
-		echo "<br/> get weshipping:".$getweshippingsql;
 		return mysql_query($getweshippingsql);
 	}
 	
 	public function getWEProductID($accountid, $weproductsku){
 		$getwepid = 'select label_id from product_label pl,accounts a where a.userid = pl.userid and a.accountid = '.$accountid.' and pl.iswe = 1 and pl.parent_sku = "'.mysql_real_escape_string($weproductsku).'"';
-		echo "<br/> ***************getwepid*********".$getwepid;
 		return mysql_query($getwepid);
 	}
 	
@@ -924,7 +917,6 @@ class dbhelper {
 	public function updateweorderinfo($weorderinfo){
 		$updatewesql = 'update weorders set weorderstatus ="'.$weorderinfo['order_status'].'", wetrackingno="'.$weorderinfo['tracking_no'].'", wetotalfee="'.$weorderinfo['totalFee'].'",weshippingfee="'.
 						$weorderinfo['SHIPPING'].'",weoptfee="'.$weorderinfo['OPF'].'" where weordercode="'.$weorderinfo['order_code'].'"';
-		echo "<br/>************update we order sql:".$updatewesql."*********";
 		return mysql_query($updatewesql);
 	}
 	

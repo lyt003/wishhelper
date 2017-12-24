@@ -29,7 +29,6 @@ class WishHelper {
 	public function saveOrders($unfulfilled_orders, $accountid) {
 		$preTransactionid = "";
 		$preOrderNum = 0;
-		var_dump($unfulfilled_orders);
 		foreach ( $unfulfilled_orders as $cur_order ) {
 			$shippingDetail = $cur_order->ShippingDetail;
 			$orderarray = array ();

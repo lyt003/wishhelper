@@ -141,10 +141,8 @@ if (strcmp ( $add, "1" ) == 0) {
 			$sku = explode ( "|", $key )[1];
 			$names = explode ( "|", $value );
 			if(count($names) >2 ){
-				echo "<br/> insert WE";
 				$dbhelper->insertproductLabel ( $currentUserid, $sku, $names[0],1);
 			}else{
-				echo "<br/> insert normal";
 				$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
 			}
 		}
@@ -202,14 +200,10 @@ if (strcmp ( $add, "1" ) == 0) {
 			$continue = false;
 			$weorderscount = 0;
 			$weordersNotUpload = $dbhelper->getOrdersForUploadTracking ( $accounts ['accountid' . $ut] );
-			echo "<br/>******FINISH get weordersnot uploaded******";
 			while ($weorderUpload = mysql_fetch_array($weordersNotUpload)){
 				$weorderscount ++;
-				echo "<br/> tracking:".$weorderUpload ['tracking']."******iswishexpress:".$weorderUpload['iswishexpress'];
 				if($weorderUpload ['tracking'] == null && strcmp($weorderUpload['iswishexpress'],'True') == 0){
 					$weordercode = $wishHelper->getWEOrdercode($weorderUpload['orderid']);
-					echo "<br/>getweordercode:".$weordercode;
-					var_dump($cpwsManager);
 					$weorderinfo = $cpwsManager->queryorder($weordercode);
 					$dbhelper->updateweorderinfo($weorderinfo);
 			
@@ -250,8 +244,6 @@ if(!isset($labels))
 if(!isset($welabels))
 	$welabels = $wishHelper->getWEUserLabelsArray($currentUserid);
 	
-//$expressinfos = $wishHelper->getSubExpressInfos();
-
 $WEExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_WEEXPRESS);
 $YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
 
