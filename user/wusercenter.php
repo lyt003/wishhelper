@@ -247,7 +247,8 @@ if(!isset($welabels))
 $WEExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_WEEXPRESS);
 $YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
 
-$weproducts = $cpwsManager->getProducts();
+//$weproducts = $cpwsManager->getProducts();
+$weproducts = $wishHelper->getWEProducts();
 
 $userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid,0);
 $userWEExpressinfos = $wishHelper->getUserExpressInfos($currentUserid,1);

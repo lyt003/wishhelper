@@ -883,7 +883,7 @@ class dbhelper {
 	}
 	
 	public function getWEProducts(){
-		$getwesql = 'select weproductid,weproductsku from weproducts';
+		$getwesql = 'select weproductid product_id,weproductsku product_sku from weproducts';
 		return mysql_query($getwesql);
 	}
 	

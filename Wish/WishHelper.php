@@ -912,4 +912,13 @@ class WishHelper {
 		}
 		return null;
 	}
+	
+	public function getWEProducts(){
+		$weproducts = array();
+		$prs = $this->dbhelper->getWEProducts();
+		while($curp = mysql_fetch_array($prs)){
+			$weproducts[] = $curp;
+		}
+		return $weproducts;
+	}
 }
