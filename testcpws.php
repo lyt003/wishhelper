@@ -14,12 +14,18 @@ echo "<br/>**********START PROCESS WEProduct********<br/>";
 
 $dbMain = new dbhelper();
 var_dump($dbMain);
-//add WE products into mysql;
-foreach ($products as $curproduct){
-	//print_r($curproduct);
+
+/**
+ * add WE products into mysql;
+ * */
+/* foreach ($products as $curproduct){
 	$dbMain->addWEProduct($curproduct['product_id'], $curproduct['product_sku']);
 }
 echo "<br/>**********FINISH ADD WEProduct********";
+ */
+ 
+
+ /* 
 $shipping = $cpwsMain->getShippingMethod();
 print_r($shipping);
 
@@ -28,3 +34,6 @@ $weproductresult = $dbMain->getWEProducts();
 while($curresult = mysql_fetch_array($weproductresult)){
 	echo "<br/>".$curresult['weproductid'].$curresult['weproductsku'];
 }
+ */
+ 
+$cpwsMain->queryorder("1630-171223-0001");

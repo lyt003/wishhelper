@@ -192,8 +192,8 @@ class dbhelper {
 	private function getOrders($accountid, $orderstatus) {
 		$query_sql;
 		if (strcmp ( $orderstatus, '1' ) == 0 || strcmp ( $orderstatus, ORDERSTATUS_DOWNLOADEDLABEL) == 0) {
-			$query_sql = "SELECT transactionid,orderid,provider, tracking,sku,color,size,quantity FROM orders WHERE accountid = '" 
-					. $accountid . "' and orderstatus = '" . $orderstatus . "' order by sku,color,size";
+			$query_sql = "SELECT transactionid,orderid,provider, tracking,sku,color,size,quantity,iswishexpress,requiredeliveryconfirmation FROM orders WHERE accountid = '" 
+					. $accountid . "' and orderstatus = '" . $orderstatus . "' order by iswishexpress,sku,color,size";
 		} else if (strcmp ( $orderstatus, '0' ) == 0) {
 			$query_sql = "SELECT orderid,orderNum,accountid,ordertime,transactionid,orderstate,
 		sku,productname,productimage,color,size,price,cost,shipping,shippingcost,quantity,
@@ -898,7 +898,7 @@ class dbhelper {
 	}
 	
 	public function getWEShippingMethod($weproductid,$wecountrycode){
-		$getweshippingsql = 'select e.express_code  from express_info e, product_express_info pe where pe.iswe = 1 and pe.product_id ="'.$weproductid.'"  and pe.countrycode = "'.$wecountrycode.'" and pe.express_id = e.express_id';
+		$getweshippingsql = 'select e.express_code,e.provider_name from express_info e, product_express_info pe where pe.iswe = 1 and pe.product_id ="'.$weproductid.'"  and pe.countrycode = "'.$wecountrycode.'" and pe.express_id = e.express_id';
 		echo "<br/> get weshipping:".$getweshippingsql;
 		return mysql_query($getweshippingsql);
 	}
@@ -907,6 +907,25 @@ class dbhelper {
 		$getwepid = 'select label_id from product_label pl,accounts a where a.userid = pl.userid and a.accountid = '.$accountid.' and pl.iswe = 1 and pl.parent_sku = "'.mysql_real_escape_string($weproductsku).'"';
 		echo "<br/> ***************getwepid*********".$getwepid;
 		return mysql_query($getwepid);
+	}
+	
+	public function addweorderinfo($orderinfo){
+		$addweordersql = 'insert into weorders(orderid,weordercode,weorderstatus,wetrackingno,wetotalfee,weshippingfee,weoptfee) values("'.$orderinfo['orderid'].'","'.
+						$orderinfo['weordercode'].'","'.$orderinfo['weorderstatus'].'","'.$orderinfo['wetrackingno'].'","'.$orderinfo['wetotalfee'].'","'.
+						$orderinfo['weshippingfee'].'","'.$orderinfo['weoptfee'].'")';
+		return mysql_query($addweordersql);
+	}
+	
+	public function getweordercodebyid($orderid){
+		$getcodesql = 'select weordercode from weorders where orderid = "'.$orderid.'"';
+		return mysql_query($getcodesql);
+	}
+	
+	public function updateweorderinfo($weorderinfo){
+		$updatewesql = 'update weorders set weorderstatus ="'.$weorderinfo['order_status'].'", wetrackingno="'.$weorderinfo['tracking_no'].'", wetotalfee="'.$weorderinfo['totalFee'].'",weshippingfee="'.
+						$weorderinfo['SHIPPING'].'",weoptfee="'.$weorderinfo['OPF'].'" where weordercode="'.$weorderinfo['order_code'].'"';
+		echo "<br/>************update we order sql:".$updatewesql."*********";
+		return mysql_query($updatewesql);
 	}
 	
 	public function getJaveUploadAppToken(){

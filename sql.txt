@@ -1106,3 +1106,15 @@ CREATE TABLE `weproducts`(
 	`weproductsku` varchar(50),
 	PRIMARY KEY(`weproductid`)
 ) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `weorders`;
+CREATE TABLE `weorders`(
+	`orderid` varchar(40) NOT NULL,
+	`weordercode` varchar(40),
+	`weorderstatus` varchar(5),
+	`wetrackingno`  varchar(40),
+	`wetotalfee`  varchar(10),
+	`weshippingfee` varchar(10),
+	`weoptfee` varchar(10),
+	PRIMARY KEY(`orderid`)
+) DEFAULT CHARSET=utf8;

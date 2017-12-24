@@ -153,8 +153,11 @@ class WishHelper {
 		$shippingmethodresult = $this->dbhelper->getWEShippingMethod($productid, $currentorder['countrycode']);
 		if($shippingmethod = mysql_fetch_array($shippingmethodresult)){
 			$expresscode = $shippingmethod['express_code'];
+			$providername = $shippingmethod['provider_name'];
+			
 			$currentorder['shippingmethod'] = $expresscode;
-			echo "<br/>get expresscode:".$expresscode;
+			$currentorder['provider'] = $providername;
+			echo "<br/>get expresscode:".$expresscode.", provider:".$providername;
 		}
 		
 		$weproductidresult = $this->dbhelper->getWEProductID($accountid, $currentorder['sku']);
@@ -167,10 +170,27 @@ class WishHelper {
 				echo "<br/>get weproductSKU:".$weproductskuvalue;
 			}
 		}
+		
 		if(isset($currentorder['shippingmethod']) && isset($currentorder['WEProductSKU'])){
 			if(!isset($this->cpwsmanager))
 				$this->cpwsmanager = new CPWSManager();
-			//$this->cpwsmanager->processorder($currentorder);
+			$rs = $this->cpwsmanager->processorder($currentorder);
+			
+			if(strcmp($rs['ask'],'Success') == 0){
+				// get ordercode and insertinto weorders.
+				$orderinfo = array(
+						'orderid' => $currentorder['orderid'],
+						'weordercode' => $rs['order_code']
+				);
+				$this->dbhelper->addweorderinfo($orderinfo);
+					
+				// update orders.orderstatus to 2;
+				$currentorder ['orderstatus'] = ORDERSTATUS_DOWNLOADEDLABEL;
+				$this->dbhelper->updateOrder ( $currentorder );
+			}else{
+				echo "<br/>****************ERROR, failed to create cpws order because of " . $rs['message']."  of order id ".$currentorder['orderid'].".**********************";
+			}
+			
 		}else{
 			echo "<br/>****************ERROR, didn't get WEProductSKU or shippingmethod of order id ".$currentorder['orderid'].".**********************";
 		}
@@ -883,5 +903,14 @@ class WishHelper {
 		}else{
 			echo "*************failed to get ParentSKU of SKU:".$SKU.'"*****************';
 		}
+	}
+	
+	public function getWEOrdercode($orderid){
+		$rs = $this->dbhelper->getweordercodebyid($orderid);
+		if($rsvalue = mysql_fetch_array($rs)){
+			$ordercode = $rsvalue['weordercode'];
+			return $ordercode;
+		}
+		return null;
 	}
 }

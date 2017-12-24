@@ -9,10 +9,16 @@ use \SoapClient;
 
 class CPWSManager{
 	
+	private $commonsvc;
+	
+	public function __construct(){
+		$this->commonsvc = new Common_SvcCall();
+	}
+	
 	public function getProducts(){
 		
 		$products = array();
-		$wsdl = 'http://cpws.ems.com.cn/default/svc/wsdl?wsdl';
+		/* $wsdl = 'http://cpws.ems.com.cn/default/svc/wsdl?wsdl';
 		
 		$options = array(
 				"trace" => true,
@@ -21,7 +27,7 @@ class CPWSManager{
 		);
 		
 		$client = new SoapClient($wsdl, $options);
-		
+		 */
 		$page = 1;
 		while(true){
 			$params = array(
@@ -30,8 +36,8 @@ class CPWSManager{
 					'product_sku' => '',
 					'product_sku_arr' => array()
 			);
-			$svc = new Common_SvcCall();
-			$rs = $svc->getProductList($params);
+			
+			$rs = $this->commonsvc->getProductList($params);
 			$productsData = $rs['data'];
 			$products = array_merge($products,$productsData);
 			if($rs['nextPage'] != 'true'){
@@ -48,7 +54,7 @@ class CPWSManager{
 				'warehouse_code' => 'USEA',
 				'shipping_method' => $currentorder['shippingmethod'],
 				'reference_no' => 'ref_' . time(),
-				'order_desc' => '订单描述',
+				'order_desc' => '',
 				'country_code' => $currentorder['countrycode'],
 				'province' => $currentorder['state'],
 				'city' => $currentorder['city'],
@@ -70,9 +76,41 @@ class CPWSManager{
 		);
 		$orderInfo['items'] = $items;
 		
-		$svc = new Common_SvcCall();
-		$rs = $svc->createOrder($orderInfo);
+		$rs = $this->commonsvc->createOrder($orderInfo);
 		print_r($rs);
+		return $rs;
+	}
+	
+	public function queryorder($ordercode){
+		$return = array(
+				'ask' => 'Failure',
+				'message' => ''
+		);
+		
+		$queryinfo=array(
+			'order_code' => $ordercode
+		);
+		echo "<br/> queryorder,ordercode:".$ordercode;
+		var_dump($this->commonsvc);
+		$rs = $this->commonsvc->getorderbycode($queryinfo);
+		print_r($rs);
+		$ask = $rs['ask'];
+		if(strcmp($ask,'Success') == 0){
+			
+			$returndata = $rs['data'];
+			$returnfee = $returndata['fee_details'];
+			
+			$return = array_merge($returndata,$returnfee);
+			
+			$return['ask'] = $rs['ask'];
+		}else{
+			$return['message'] = $rs['message'];
+		}
+		
+		echo "<br/>************queryorder result:************";
+		print_r($return);
+		echo "<br/>************queryorder finish************";
+		return $return;
 	}
 	
 	function getWarehouse()

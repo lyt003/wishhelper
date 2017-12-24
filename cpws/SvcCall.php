@@ -427,6 +427,24 @@ class Common_SvcCall
         return $return;
     }
 
+    public function getorderbycode($params){
+    	$return = array(
+    			'ask' => 'Failure',
+    			'message' => ''
+    	);
+    	try{
+    		$req = array(
+    				'service' => 'getOrderByCode',
+    				'paramsJson' => json_encode($params)
+    		);
+    		$return = $this->callService($req);
+    	}catch(Exception $e){
+    		$return['message'] = $e->getMessage();
+    	}
+    	print_r($return);
+    	return $return;
+    }
+    
     public function getOrderList($params)
     {
         $return = array(

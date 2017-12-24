@@ -14,8 +14,11 @@ use Wish\Exception\ServiceResponseException;
 use cpws\CPWSManager;
 
 header ( "Content-Type: text/html;charset=utf-8" );
+ignore_user_abort ();
+set_time_limit ( 0 );
 $dbhelper = new dbhelper ();
 $wishHelper = new WishHelper ();
+$cpwsManager = new CPWSManager();
 
 $username = $_SESSION ['username'];
 if ($username == null) { // 未登录
@@ -171,6 +174,7 @@ if (strcmp ( $add, "1" ) == 0) {
 	for($ut = 0; $ut < $i; $ut ++) {
 		$ordersNotUpload = $dbhelper->getOrdersForUploadTracking ( $accounts ['accountid' . $ut] );
 		while ( $orderUpload = mysql_fetch_array ( $ordersNotUpload ) ) {
+			
 			if ($orderUpload ['provider'] != null && $orderUpload ['tracking'] != null) {
 				$tracker = new WishTracker ( $orderUpload ['provider'], $orderUpload ['tracking'], NOTETOCUSTOMERS );
 				if ($client == null || $accounts ['accountid' . $ut] != $client->getAccountid ()) {
@@ -193,6 +197,50 @@ if (strcmp ( $add, "1" ) == 0) {
 				}
 			}
 		}
+		
+		do{
+			$continue = false;
+			$weorderscount = 0;
+			$weordersNotUpload = $dbhelper->getOrdersForUploadTracking ( $accounts ['accountid' . $ut] );
+			echo "<br/>******FINISH get weordersnot uploaded******";
+			while ($weorderUpload = mysql_fetch_array($weordersNotUpload)){
+				$weorderscount ++;
+				echo "<br/> tracking:".$weorderUpload ['tracking']."******iswishexpress:".$weorderUpload['iswishexpress'];
+				if($weorderUpload ['tracking'] == null && strcmp($weorderUpload['iswishexpress'],'True') == 0){
+					$weordercode = $wishHelper->getWEOrdercode($weorderUpload['orderid']);
+					echo "<br/>getweordercode:".$weordercode;
+					var_dump($cpwsManager);
+					$weorderinfo = $cpwsManager->queryorder($weordercode);
+					$dbhelper->updateweorderinfo($weorderinfo);
+			
+					if($weorderinfo['tracking_no'] != null){
+						$weorderscount --;
+						$weorderUpload['tracking'] =  $weorderinfo['tracking_no'];
+						$wetracker = new WishTracker ( $weorderUpload ['provider'], $weorderUpload ['tracking'], NOTETOCUSTOMERS );
+			
+						try {
+							$wefulResult = $client->fulfillOrderById ( $weorderUpload ['orderid'], $wetracker );
+						} catch (ServiceResponseException $e ) {
+							echo "<br/>failed to fulfillOrder " . $weorderUpload ['orderid'] . $weorderUpload ['tracking'] . $e->getStatusCode () . $e->getMessage ();
+							$wefulResult =  $e->getStatusCode () . $e->getMessage ();
+						}
+			
+						if (strcmp($wefulResult,'success') == 0) {
+							$weorderUpload ['orderstatus'] = ORDERSTATUS_UPLOADEDTRACKING;
+							$weorderUpload ['accountid'] = $accounts ['accountid' . $ut];
+							$weupdateResult = $dbhelper->updateOrder ( $weorderUpload );
+						}else{
+							echo "<br/>failed to fulfillOrder " . $weorderUpload ['orderid'] . $weorderUpload ['tracking'] . "  ERROR:". $wefulResult;
+						}
+					}
+				}
+			}
+				
+			if($weorderscount > 0){
+				$continue = true;
+				sleep(120);
+			}
+		}while($continue);
 	}
 }
 
@@ -207,7 +255,6 @@ if(!isset($welabels))
 $WEExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_WEEXPRESS);
 $YWExpressinfos = $wishHelper->getSubExpressInfos(PROVIDER_YANWEN);
 
-$cpwsManager = new CPWSManager();
 $weproducts = $cpwsManager->getProducts();
 
 $userExpressinfos = $wishHelper->getUserExpressInfos($currentUserid,0);
@@ -470,7 +517,12 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$curuserexpressinfos = $userWEExpressinfos;
-				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']].'|WE'; 
+				$curexpress = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
+				if($curexpress == null){
+					$curexpressvalue = '';
+				}else{
+					$curexpressvalue = $curexpress.'|WE';
+				}
 			}else{
 				$curuserexpressinfos = $userExpressinfos;
 				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
