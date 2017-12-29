@@ -408,6 +408,14 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autod
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_golden',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Gray',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_DIYClock','H_DIYClock_Black',1,'32');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Khaki',1,'53');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Gray',1,'53');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Black',1,'53');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_Black',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDogWhite',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDogYellow',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_White',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_Brown',1,'28');
 
 
 DROP TABLE IF EXISTS `schedule_product`;
