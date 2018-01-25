@@ -306,11 +306,12 @@ class dbhelper {
 	}
 	
 	public function getProductIDByVSKU($accountid,$subsku){
-		$tempsku = str_replace('_','%',$subsku);
+		$tempsku = str_replace(' ','_',$subsku);
+		$tempsku = str_replace('_','%',$tempsku);
 		$tempsku = str_replace('AND','%',$tempsku);
 		$tempsku = str_replace('"','%',$tempsku);
 		
-		if(strpos($subsku,'%') === false){
+		if(strpos($tempsku,'%') === false){
 			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.mysql_real_escape_string($tempsku).'"';
 		}else{
 			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.mysql_real_escape_string($tempsku).'"';
