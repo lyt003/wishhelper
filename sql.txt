@@ -417,6 +417,14 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Fre
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_White',1,'28');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_Brown',1,'28');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-2',1,'11.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-4',1,'11.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_M',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_L',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XL',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXL',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXXL',1,'27');
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
