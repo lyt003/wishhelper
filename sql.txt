@@ -1134,3 +1134,85 @@ CREATE TABLE `weorders`(
 	`weoptfee` varchar(10),
 	PRIMARY KEY(`orderid`)
 ) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `countrydays`;
+CREATE TABLE `countrydays`(
+ 	`countrycode`  varchar(5)   NOT NULL,
+ 	`days` int(3),
+ 	PRIMARY KEY(`countrycode`)
+) DEFAULT CHARSET=utf8;
+
+insert into countrydays(countrycode,days) values('US',15);
+insert into countrydays(countrycode,days) values('FR',16);
+insert into countrydays(countrycode,days) values('CA',18);
+insert into countrydays(countrycode,days) values('ES',21);
+insert into countrydays(countrycode,days) values('CH',17);
+insert into countrydays(countrycode,days) values('IT',21);
+insert into countrydays(countrycode,days) values('JP',13);
+insert into countrydays(countrycode,days) values('DK',16);
+insert into countrydays(countrycode,days) values('BE',16);
+insert into countrydays(countrycode,days) values('GB',12);
+insert into countrydays(countrycode,days) values('SE',20);
+insert into countrydays(countrycode,days) values('NO',18);
+insert into countrydays(countrycode,days) values('IE',23);
+insert into countrydays(countrycode,days) values('BR',29);
+insert into countrydays(countrycode,days) values('PL',18);
+insert into countrydays(countrycode,days) values('FI',17);
+insert into countrydays(countrycode,days) values('SG',16);
+insert into countrydays(countrycode,days) values('PT',19);
+insert into countrydays(countrycode,days) values('AU',14);
+insert into countrydays(countrycode,days) values('CZ',17);
+insert into countrydays(countrycode,days) values('DE',16);
+insert into countrydays(countrycode,days) values('MY',20);
+insert into countrydays(countrycode,days) values('HR',15);
+insert into countrydays(countrycode,days) values('PR',13);
+insert into countrydays(countrycode,days) values('MX',22);
+insert into countrydays(countrycode,days) values('GR',23);
+insert into countrydays(countrycode,days) values('NL',15);
+insert into countrydays(countrycode,days) values('NZ',14);
+insert into countrydays(countrycode,days) values('KR',12);
+insert into countrydays(countrycode,days) values('RU',23);
+insert into countrydays(countrycode,days) values('IL',23);
+insert into countrydays(countrycode,days) values('AT',15);
+insert into countrydays(countrycode,days) values('AR',33);
+insert into countrydays(countrycode,days) values('AE',24);
+insert into countrydays(countrycode,days) values('SK',17);
+insert into countrydays(countrycode,days) values('HU',17);
+insert into countrydays(countrycode,days) values('CL',20);
+insert into countrydays(countrycode,days) values('IN',26);
+insert into countrydays(countrycode,days) values('CR',33);
+insert into countrydays(countrycode,days) values('SA',33);
+insert into countrydays(countrycode,days) values('CO',31);
+insert into countrydays(countrycode,days) values('KW',30);
+insert into countrydays(countrycode,days) values('ZA',37);
+insert into countrydays(countrycode,days) values('PE',31);
+insert into countrydays(countrycode,days) values('EC',33);
+insert into countrydays(countrycode,days) values('AL',23);
+insert into countrydays(countrycode,days) values('BB',44);
+insert into countrydays(countrycode,days) values('BG',26);
+insert into countrydays(countrycode,days) values('BY',33);
+insert into countrydays(countrycode,days) values('DO',44);
+insert into countrydays(countrycode,days) values('EE',19);
+insert into countrydays(countrycode,days) values('EG',43);
+insert into countrydays(countrycode,days) values('HK',5);
+insert into countrydays(countrycode,days) values('ID',26);
+insert into countrydays(countrycode,days) values('JM',34);
+insert into countrydays(countrycode,days) values('LI',20);
+insert into countrydays(countrycode,days) values('LT',26);
+insert into countrydays(countrycode,days) values('LU',21);
+insert into countrydays(countrycode,days) values('LV',25);
+insert into countrydays(countrycode,days) values('MA',45);
+insert into countrydays(countrycode,days) values('MC',20);
+insert into countrydays(countrycode,days) values('MD',26);
+insert into countrydays(countrycode,days) values('PH',30);
+insert into countrydays(countrycode,days) values('PK',22);
+insert into countrydays(countrycode,days) values('RO',31);
+insert into countrydays(countrycode,days) values('RS',23);
+insert into countrydays(countrycode,days) values('SI',27);
+insert into countrydays(countrycode,days) values('TH',13);
+insert into countrydays(countrycode,days) values('TW',9);
+insert into countrydays(countrycode,days) values('TR',18);
+insert into countrydays(countrycode,days) values('UA',22);
+insert into countrydays(countrycode,days) values('VE',35);
+insert into countrydays(countrycode,days) values('VI',23);
+insert into countrydays(countrycode,days) values('VN',20);
