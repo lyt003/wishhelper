@@ -28,7 +28,7 @@ echo "<div class=\"row-fluid\"><div class=\"span12\"><div class=\"widget\"><div 
 echo "</div><span class=\"tools\"></div>";
 echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\" border=\"1px\" cellspacing=\"0px\"><thead><tr>";
 echo "<th style=\"width:10%\">SKU</th>";
-echo "<th style=\"width:10%\">日期</th><th style=\"width:10%\">目的国</th><th style=\"width:5%\">重量(g)</th><th style=\"width:20%\">物流跟踪号</th><th style=\"width:7%\">物流费用</th><th style=\"width:15%\">总价</th><th style=\"width:5%\">成本</th><th style=\"width:8%\">利润</th></tr>";
+echo "<th style=\"width:10%\">日期</th><th style=\"width:7%\">目的国</th><th style=\"width:5%\">重量(g)</th><th style=\"width:15%\">物流跟踪号</th><th style=\"width:8%\">妥投天数</th><th style=\"width:7%\">物流费用</th><th style=\"width:15%\">总价</th><th style=\"width:5%\">成本</th><th style=\"width:8%\">利润</th></tr>";
 echo "<tbody>";
 $orderCount = 0;
 $countprofit = 0;
@@ -61,9 +61,10 @@ while($shippingcost = mysql_fetch_array($shippingcosts)){
 		
 	echo "<td style=\"width:10%;vertical-align:middle;\">" . $shippingcost['sku']."</td>";
 	echo "<td style=\"width:10%;vertical-align:middle;\">" . $shippingcost ['tracking_date']."</td>";
-	echo "<td style=\"width:10%;vertical-align:middle;\">" . $shippingcost ['destinate']."</td>";
+	echo "<td style=\"width:7%;vertical-align:middle;\">" . $shippingcost ['destinate']."</td>";
 	echo "<td style=\"width:5%;vertical-align:middle;\">" . $shippingcost ['weight']."</td>";
-	echo "<td style=\"width:20%;vertical-align:middle;\">" . $shippingcost ['tracking_number']."</td>";
+	echo "<td style=\"width:15%;vertical-align:middle;\">" . $shippingcost ['tracking_number']."</td>";
+	echo "<td style=\"width:8%;vertical-align:middle;\">" . $shippingcost ['shippingdays']."</td>";
 	echo "<td style=\"width:7%;vertical-align:middle;\">" . $currshippingcost."</td>";
 	echo "<td style=\"width:15%;vertical-align:middle;\">".$rate." x " . $shippingcost ['totalcost']."=".$totalprice."</td>";
 	echo "<td style=\"width:5%;vertical-align:middle;\">" . $totalcost."</td>";
@@ -73,7 +74,7 @@ while($shippingcost = mysql_fetch_array($shippingcosts)){
 		
 }
 echo "<tr>";
-echo "<td colspan=\"7\" style=\"width:20% text-align:right\"> </td>";
+echo "<td colspan=\"8\" style=\"width:20% text-align:right\"> </td>";
 echo "<td colspan=\"2\" style=\"width:20% text-align:right\">总利润为：".$countprofit." 元</td>";
 echo "</tr>";
 echo "</tbody></table></div></div></div></div>";

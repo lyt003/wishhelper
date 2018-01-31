@@ -774,7 +774,7 @@ class dbhelper {
 			   ' ) a'.
 			   ' left join tracking_data t on a.tracking = t.tracking_number'.
 			   ' and t.finalshippingcost IS NOT NULL'. 
-			   ' order by t.tracking_date DESC limit 50';
+			   ' order by t.tracking_date DESC limit 400';
 		return mysql_query($psc);
 	}
 	
