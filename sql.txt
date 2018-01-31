@@ -460,6 +460,8 @@ CREATE TABLE `tracking_data`(
 	PRIMARY KEY (`tracking_number`)
 ) DEFAULT CHARSET=utf8;
 Alter table `tracking_data` add `destinate` varchar(50),`weight` int(6),`shippingcost` varchar(10),`finalshippingcost` varchar(10) after `tracking_date`;
+Alter table `tracking_data` add `delivery_date` varchar(10);
+Alter table `tracking_data` add `shippingdays` int(3);
 
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels`(
@@ -1216,3 +1218,20 @@ insert into countrydays(countrycode,days) values('UA',22);
 insert into countrydays(countrycode,days) values('VE',35);
 insert into countrydays(countrycode,days) values('VI',23);
 insert into countrydays(countrycode,days) values('VN',20);
+
+
+
+select o.ordertime,o.tracking from orders o left join (select * from tracking_data where shippingdays is NULL) t  on o.tracking = t.tracking_number where  1=1 and UNIX_TIMESTAMP(o.ordertime)>UNIX_TIMESTAMP('2017-11-25') order by o.ordertime ASC limit 40;
+
+select o.ordertime,o.tracking 
+from orders o 
+left join 
+tracking_data t
+on o.tracking = t.tracking_number 
+where UNIX_TIMESTAMP(o.ordertime)>UNIX_TIMESTAMP("20171128") and t.tracking_number is not NULL and t.shippingdays is NULL order by o.ordertime ASC limit 40 
+
+
+select o.ordertime,o.tracking 
+from orders o, tracking_data t 
+where o.tracking = t.tracking_number 
+and t.shippingdays is NULL and UNIX_TIMESTAMP(o.ordertime)>UNIX_TIMESTAMP("20171128") order by o.ordertime ASC limit 40   

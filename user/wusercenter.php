@@ -341,6 +341,10 @@ $needUpdateAddress = 0;
 		window.open("./wuploadEUBTrackings.php");
 	}
 
+	function uploadDeliverydays(){
+		window.open("./wuploadDeliverydays.php");
+	}
+
 	function uploadWishPost(){
 		window.open("./wuploadEUBTrackings.php?t=wp");
 	}
@@ -455,6 +459,8 @@ for($wcount = 0; $wcount < $wpi; $wcount ++) {
 				<button class="btn btn-info" type="button" onclick="downloadEbayEUB()">下载E邮宝订单(From EBay)</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="btn btn-info" type="button" onclick="uploadEUB()">上传E邮宝单号</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-info" type="button" onclick="uploadDeliverydays()">手动更新妥投日期</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<!-- <button class="btn btn-info" type="button" onclick="uploadWishPost()">上传Wish邮单号</button> -->
 			</ul>

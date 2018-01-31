@@ -921,4 +921,13 @@ class WishHelper {
 		}
 		return $weproducts;
 	}
+	
+	public function getTrackingsFromDay($sinceday){
+		$trackings = array();
+		$trs = $this->dbhelper->getTrackingsFromDay($sinceday);
+		while($curs = mysql_fetch_array($trs)){
+			$trackings[] = $curs['tracking'];
+		}
+		return $trackings;
+	}
 }

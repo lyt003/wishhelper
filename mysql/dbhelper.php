@@ -921,6 +921,16 @@ class dbhelper {
 		return mysql_query($updatewesql);
 	}
 	
+	public function getTrackingsFromDay($sinceday){
+		$gettrackingssql = 'select o.ordertime,o.tracking from orders o left join tracking_data t  on o.tracking = t.tracking_number where UNIX_TIMESTAMP(o.ordertime)>UNIX_TIMESTAMP("'.$sinceday.'")  and t.tracking_number is not NULL and  t.shippingdays is NULL order by o.ordertime ASC limit 40';
+		return mysql_query($gettrackingssql);
+	}
+	
+	public function updateDeliveryData($tracking,$deliverydate,$days){
+		$updatetksql = 'update tracking_data set delivery_date="'.$deliverydate.'" , shippingdays='.$days.'  where tracking_number="'.$tracking.'"';
+		return mysql_query($updatetksql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);
