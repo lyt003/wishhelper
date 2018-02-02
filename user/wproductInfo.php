@@ -164,8 +164,8 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 }else if($command != null && strcmp($command,'disabledProductslist') == 0){
 	$disabledProductslist = $dbhelper->getDisabledProducts($accountid);
 }else if($command != null && strcmp($command,'disableproducts') == 0){
-	/*
-    春节下架所有未加钻零销量非海外仓的产品
+	
+  	//春节下架所有未加钻零销量非海外仓的产品
     echo "<br/><br/><br/><br/> 下架产品id列表:";
 	$needdisableProducts = $dbhelper->getNeedDisableProducts($accountid);
 	$disableProductIDS = array();
@@ -187,10 +187,10 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 	foreach ($disableProductIDS as $pid){
 		echo "<br/>".$pid;
 		$dbhelper->insertOptimizeJob($accountid, DISABLEPRODUCT, $pid, $startdate);
-	} */
+	}
 	
 	//春节后上架假期中下架的产品;
-	echo "<br/><br/><br/><br/> 上架产品";
+	/* echo "<br/><br/><br/><br/> 上架产品";
 	$startDate = '2017-01-20';
 	$endDate = '2017-01-24';
 	$pidlistresult = $dbhelper->getVacationProducts($accountid, $startDate, $endDate);
@@ -198,7 +198,7 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 		$temppid = $tempvalue['productid'];
 		$result = $client->enableProductById($temppid);
 		echo "<br/>enable product id:".$temppid.'  '.$result;
-	}
+	} */
 }
 
 
@@ -399,7 +399,7 @@ for($count = 0; $count < $i; $count ++) {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 					<ul align="center">
-					<!-- button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button -->
+					<button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button>
 					<!-- <button class="btn btn-info" type="button" onclick="disableproducts()">春节后上架假期中下架的产品,即时生效</button> -->
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
