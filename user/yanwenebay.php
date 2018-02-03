@@ -16,7 +16,7 @@ if($result != null){
 	if(strcmp($result,'success') ==0){
 		$labels = $wishHelper->getUserLabelsArray ( $currentUserid );
 		$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
-		$wishHelper->applyTrackingsForOrders ($userid, $accountid, $labels, $expressinfo );
+		$wishHelper->applyTrackingsForOrders ($userid, $accountid);
 	}else if(strcmp($result,'label') ==0){
 		$dbhelper->insertproductLabel ( $currentUserid, "underwear", 5);
 		$dbhelper->insertproductLabel ( $currentUserid, "pants",6);

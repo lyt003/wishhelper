@@ -125,6 +125,15 @@ class WishHelper {
 		return $productid;
 	}
 	
+	public function getPVaridBySKU($accountid,$subsku){
+		$productvarid = '';
+		$pr = $this->dbhelper->getProductVarIDByVSKU($accountid, $subsku);
+		if($pvalue = mysql_fetch_array($pr)){
+			$productvarid = $pvalue['id'];
+		}
+		return $productvarid;
+	}
+	
 	public function getLabelsArray($userLabels){
 		$labelsarray = array();
 		foreach ($userLabels as $lKey=>$lValue){
@@ -147,9 +156,9 @@ class WishHelper {
 		
 		echo "<br/>***********START TO PROCESS WE ORDER".$currentorder['sku']."*************";
 		//get shippingmethod and WEProductSKU. 
-		$productid = $this->getPidBySKU($accountid, $currentorder['sku']);
-		echo "<br/>************productid:".$productid."*************";
-		$shippingmethodresult = $this->dbhelper->getWEShippingMethod($productid, $currentorder['countrycode']);
+		$pvroductid = $this->getPVaridBySKU($accountid, $currentorder['sku']);
+		echo "<br/>************productid:".$pvroductid."*************";
+		$shippingmethodresult = $this->dbhelper->getWEShippingMethod($pvroductid, $currentorder['countrycode']);
 		if($shippingmethod = mysql_fetch_array($shippingmethodresult)){
 			$expresscode = $shippingmethod['express_code'];
 			$providername = $shippingmethod['provider_name'];
@@ -159,7 +168,7 @@ class WishHelper {
 			echo "<br/>get expresscode:".$expresscode.", provider:".$providername;
 		}
 		
-		$weproductidresult = $this->dbhelper->getWEProductID($accountid, $currentorder['sku']);
+		$weproductidresult = $this->dbhelper->getWEProductID($accountid, $pvroductid);
 		if($weproductid = mysql_fetch_array($weproductidresult)){
 			$weproductidvalue = $weproductid['label_id'];
 			$weproductskuresult = $this->dbhelper->getWEProductSKUBYID($weproductidvalue);
@@ -202,6 +211,10 @@ class WishHelper {
 		$wishpostExpresses = $this->getChildrenExpressinfosOF(PROVIDER_WISHPOST);
 		$expressinfos = $this->getUserExpressInfos($userid,0);
 		
+		$labels = $this->getUserLabelsArray ( $userid );
+		$expressinfo = $this->getExpressInfo ( $userid );
+		
+		
 		$post_header = array (
 				'Authorization: basic '.$expressinfo[YANWEN_API_TOKEN],
 				'Content-Type: text/xml; charset=utf-8'
@@ -221,7 +234,7 @@ class WishHelper {
 			
 			//exclude Ebay User:
 			if($accountid != 0){
-				$curProductid = $this->getPidBySKU($accountid, $orderNoTracking['sku']);
+				$curProductid = $this->getPVaridBySKU($accountid, $orderNoTracking['sku']);
 				echo "<br/>***********CURR:".$curProductid;
 				$curCountrycode = $orderNoTracking['countrycode'];
 					
@@ -318,19 +331,21 @@ class WishHelper {
 		
 					$tempSKU = $orderNoTracking ['sku'];
 					
-					$tempSKU = str_replace(' ','',$tempSKU);
+					/* $tempSKU = str_replace(' ','',$tempSKU);
 					$tempSKU = str_replace('.','',$tempSKU);
 					$tempSKU = str_replace('&amp;','',$tempSKU);
-					$tempSKU = str_replace('&quot;','',$tempSKU);
+					$tempSKU = str_replace('&quot;','',$tempSKU); */
 					
 					/* $tempSKU = str_replace('&amp;','AND',$tempSKU);
 					
 					$tempsku = str_replace('&amp;','',$cur_order ['sku']);
 					$tempsku = str_replace('&quot;','',$tempsku); */
 					
-					$gsLabel = $this->getCNENLabel($labels, $tempSKU);
+					$temppid = $this->getPVaridBySKU($accountid, $tempSKU);
+					$gsLabel = $this->getCNENLabel($labels, $temppid);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					$tempEn = str_replace('&quot;','',$tempEn);//英文品名不能保护特殊字符，因此替换掉。
 					if(strlen($tempEn)>=50){
 						$tempEn = substr($tempEn,0,45).'...';
 					}
@@ -339,6 +354,7 @@ class WishHelper {
 					$tempEn = str_replace(' ','_',$tempEn);
 					$tempEn = str_replace('&','AND',$tempEn);
 					 */
+					echo "<br/>English Name:".$tempEn;
 					$gsNameEn = $Goods->addChild ( "NameEn", $tempEn); // *
 					//$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
 		
@@ -436,7 +452,8 @@ class WishHelper {
 				$tempSKU = $curorder ['sku'];
 				/* $tempSKU = str_replace(' ','_',$tempSKU);
 				$tempSKU = str_replace('&amp;','AND',$tempSKU); */
-				$gsLabel = $this->getCNENLabel($labels, $tempSKU);
+				$temppid = $this->getPVaridBySKU($accountid, $tempSKU);
+				$gsLabel = $this->getCNENLabel($labels, $temppid);
 				$gsNameCh = $gsLabel[0]; // *
 				$gsNameEn = $gsLabel[1];
 						

@@ -306,17 +306,22 @@ class dbhelper {
 	}
 	
 	public function getProductIDByVSKU($accountid,$subsku){
-		$tempsku = str_replace(' ','_',$subsku);
-		$tempsku = str_replace('_','%',$tempsku);
-		$tempsku = str_replace('AND','%',$tempsku);
-		$tempsku = str_replace('"','%',$tempsku);
+		//$tempsku = str_replace(' ','_',$subsku);
+		//$tempsku = str_replace('_','%',$tempsku);
+		//$tempsku = str_replace('AND','%',$tempsku);
+		//$tempsku = str_replace('"','&quot;',$tempsku);
 		
-		if(strpos($tempsku,'%') === false){
-			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.mysql_real_escape_string($tempsku).'"';
-		}else{
-			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.mysql_real_escape_string($tempsku).'"';
-		}
+		//if(strpos($tempsku,'%') === false){
+			$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku = "'.mysql_real_escape_string($subsku).'"';
+		//}else{
+		//	$pvs = 'select product_id from onlineProductVars where accountid = '.$accountid.' and sku like "'.mysql_real_escape_string($tempsku).'"';
+		//}
 		return mysql_query($pvs);
+	}
+	
+	public function getProductVarIDByVSKU($accountid,$subsku){
+		$opvs = 'select id from onlineProductVars where accountid = '.$accountid.' and sku = "'.mysql_real_escape_string($subsku).'"';
+		return mysql_query($opvs);
 	}
 	
 	public function getProductSKUByID($productid){
@@ -494,6 +499,7 @@ class dbhelper {
 	}
 	public function insertproductLabel($userid, $parent_sku, $labelid, $iswe=0) {
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid,iswe) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ",". $iswe.')';
+		echo "<br/>insertpl:".$insertpl;
 		return mysql_query ( $insertpl );
 	}
 	public function getExpressInfo($userid) {
@@ -524,6 +530,7 @@ class dbhelper {
 		$del = mysql_query($delsql);
 		$ipe = 'insert into product_express_info(userid,product_id,express_id,countrycode,iswe) values('.$userid.',"'.$productid.'",'.$expressid.',"'.mysql_real_escape_string($countrycode).'",'.$iswe.')';
 		$result = mysql_query($ipe);
+		echo "<br/>ipe:".$ipe;
 		return mysql_affected_rows();
 	}
 	
@@ -900,6 +907,7 @@ class dbhelper {
 	
 	public function getWEProductID($accountid, $weproductsku){
 		$getwepid = 'select label_id from product_label pl,accounts a where a.userid = pl.userid and a.accountid = '.$accountid.' and pl.iswe = 1 and pl.parent_sku = "'.mysql_real_escape_string($weproductsku).'"';
+		echo "<br/>get wepid:".$getwepid;
 		return mysql_query($getwepid);
 	}
 	

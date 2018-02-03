@@ -140,7 +140,7 @@ if (strcmp ( $add, "1" ) == 0) {
 		if (preg_match ( "/^label/", $key )) {
 			$sku = explode ( "|", $key )[1];
 			$names = explode ( "|", $value );
-			if(count($names) >2 ){
+			if(count($names) >2 ){//处理海外仓
 				$dbhelper->insertproductLabel ( $currentUserid, $sku, $names[0],1);
 			}else{
 				$dbhelper->insertproductLabel ( $currentUserid, $sku, $dbhelper->insertLabel ( $names [0], $names [1] ) );
@@ -150,13 +150,13 @@ if (strcmp ( $add, "1" ) == 0) {
 		if (preg_match ( "/^express/", $key )) {
 			$keyvalues = explode("|",$key);
 			$expressValue = explode("|",$value);
-			
+
 			if(count($expressValue)>2){
 				$iswe = 1;
 			}else{
 				$iswe = 0;
 			}
-			$dbhelper->insertProductExpress($currentUserid, $wishHelper->getPidBySKU($keyvalues[3], $keyvalues[1]), $expressValue[0], $keyvalues[2],$iswe);
+			$dbhelper->insertProductExpress($currentUserid, $keyvalues[1], $expressValue[0], $keyvalues[2],$iswe);
 		}
 	}
 	
@@ -166,7 +166,7 @@ if (strcmp ( $add, "1" ) == 0) {
 	$expressinfo = $wishHelper->getExpressInfo ( $currentUserid );
 	
 	for($ct = 0; $ct < $i; $ct ++) {
-		$wishHelper->applyTrackingsForOrders ($currentUserid, $accounts ['accountid' . $ct], $labels, $expressinfo );
+		$wishHelper->applyTrackingsForOrders ($currentUserid, $accounts ['accountid' . $ct]);
 	}
 } else if (strcmp ( $add, "2" ) == 0) {
 	for($ut = 0; $ut < $i; $ut ++) {
@@ -478,10 +478,14 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名|海外仓产品对应</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
-			$tempsku = str_replace(' ','',$cur_order ['sku']);
+			$tempsku = $cur_order ['sku'];
+			/* $tempsku = str_replace(' ','',$cur_order ['sku']);
 			$tempsku = str_replace('.','',$tempsku);
 			$tempsku = str_replace('&amp;','',$tempsku);
-			$tempsku = str_replace('&quot;','',$tempsku);//WishHelper.applyTrackingsForOrders时同步替换；
+			$tempsku = str_replace('&quot;','',$tempsku); *///WishHelper.applyTrackingsForOrders时同步替换；
+			
+			$pvid = $wishHelper->getPVaridBySKU($accountid, $tempsku);
+			
 			if ($orderCount % 2 == 0) {
 				echo "<tr>";
 			} else {
@@ -516,7 +520,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$curuserexpressinfos = $userWEExpressinfos;
-				$curexpress = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
+				$curexpress = $curuserexpressinfos [$wishHelper->getPVaridBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
 				if($curexpress == null){
 					$curexpressvalue = '';
 				}else{
@@ -524,22 +528,22 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 				}
 			}else{
 				$curuserexpressinfos = $userExpressinfos;
-				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPidBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
+				$curexpressvalue = $curuserexpressinfos [$wishHelper->getPVaridBySKU($accountid, $tempsku)."|".$cur_order ['countrycode']];
 			}
 			
-			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $curexpressvalue . "\" placeholder=\"选择物流方式\">";
+			echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"express|" . $pvid ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\" name=\"express|" . $pvid ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount . "\" value=\"" . $curexpressvalue . "\" placeholder=\"选择物流方式\">";
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
 			echo "<ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">";
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$expressinfos = $WEExpressinfos;
 				foreach ($expressinfos  as $expressid => $expressname ) {
 					$newexpressname = $expressname."|WE";
-					echo "<li><a onclick=setValue(\"" . $newexpressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $newexpressname . "</a></li>";
+					echo "<li><a onclick=setValue(\"" . $newexpressname . "\",\"express|" . $pvid ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $newexpressname . "</a></li>";
 				}
 			}else{
 				$expressinfos = $YWExpressinfos;
 				foreach ($expressinfos  as $expressid => $expressname ) {
-					echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $tempsku ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
+					echo "<li><a onclick=setValue(\"" . $expressname . "\",\"express|" . $pvid ."|".$cur_order ['countrycode'] . "|" .$accountid."|". $orderCount. "\")>" . $expressname . "</a></li>";
 				}
 			}
 			
@@ -549,16 +553,16 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			echo "</ul></div></td>";
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
-				$tempwepid = $welabels [$tempsku];
+				$tempwepid = $welabels [$pvid];
 				foreach ($weproducts as $weproduct){
 					if($weproduct['product_id'] == $tempwepid){
 						$tempproductvalue = $weproduct['product_id'] ."|".$weproduct['product_sku'] . "|WE";
 						break;
 					}
 				}
-				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $tempproductvalue . "\" placeholder=\"中文|英文\">";
+				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $pvid . "|" . $orderCount . "\" name=\"label|" . $pvid . "|" . $orderCount . "\" value=\"" . $tempproductvalue . "\" placeholder=\"中文|英文\">";
 			}else{
-				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $tempsku . "|" . $orderCount . "\" name=\"label|" . $tempsku . "|" . $orderCount . "\" value=\"" . $labels [$tempsku] . "\" placeholder=\"中文|英文\">";
+				echo "<td style=\"width:10%;vertical-align:middle;\" class=\"hidden-phone\"><div class=\"input-group\"><input type=\"text\" id=\"label|" . $pvid . "|" . $orderCount . "\" name=\"label|" . $pvid . "|" . $orderCount . "\" value=\"" . $labels [$pvid] . "\" placeholder=\"中文|英文\">";
 			}
 			
 			echo "<div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">选择 <span class=\"caret\"></span></button>";
@@ -566,11 +570,11 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				foreach ($weproducts as $weproduct){
-					echo "<li><a onclick=setValue(\"" . $weproduct['product_id'] ."|".$weproduct['product_sku'] . "|WE" . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $weproduct['product_id']."|".$weproduct['product_sku'] . "|WE" . "</a></li>";
+					echo "<li><a onclick=setValue(\"" . $weproduct['product_id'] ."|".$weproduct['product_sku'] . "|WE" . "\",\"label|" . $pvid . "|" . $orderCount . "\")>" . $weproduct['product_id']."|".$weproduct['product_sku'] . "|WE" . "</a></li>";
 				}
 			}else{
 				foreach ( array_unique ( $labels ) as $labelkey => $labelvalue ) {
-					echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $tempsku . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
+					echo "<li><a onclick=setValue(\"" . $labelvalue . "\",\"label|" . $pvid . "|" . $orderCount . "\")>" . $labelvalue . "</a></li>";
 				}	
 			}
 			echo "<li>&nbsp;&nbsp;</li>";
