@@ -1235,3 +1235,25 @@ select o.ordertime,o.tracking
 from orders o, tracking_data t 
 where o.tracking = t.tracking_number 
 and t.shippingdays is NULL and UNIX_TIMESTAMP(o.ordertime)>UNIX_TIMESTAMP("20171128") order by o.ordertime ASC limit 40   
+
+
+
+
+查询指定时间段指定国家的每项SKU订单数:
+select sku, count(*) totalorders, totalcost
+ from (
+select * from orders where UNIX_TIMESTAMP(ordertime)>UNIX_TIMESTAMP("20171204") and UNIX_TIMESTAMP(ordertime)<UNIX_TIMESTAMP("20180204") and countrycode = 'US'
+) A group by sku order by totalorders DESC
+
+查询运费大于60元的订单信息：
+select o.sku,o.productname,o.quantity,o.tracking,t.finalshippingcost,o.ordertime  from orders o, tracking_data t  where o.tracking = t.tracking_number and o.tracking !='' and t.finalshippingcost >60 order by o.ordertime DESC;
+
+
+
+select op.parent_sku, 'Apparel | Intimates | Underwear' as ptcategory, op.name,op.description,'New' as ptconditon, '' as ptbrand, '' as ptmaterial, opv.sku,opv.size,opv.color,
+'200' as ptquantity, '1' as startbid, opv.price,2*opv.price as retailprice, opv.price, '5' as shippingprice, 'China' as shippingfrom, '' as ptweight,'1' as processday, 
+'15' as deliverydays, '' as expdprice, '' as expddime, '' as buyonegetone, '' as accessprice,'' as accessdesc, op.main_image,op.extra_images 
+from onlineProducts op, onlineProductVars opv 
+where op.accountid =1 and opv.accountid = 1 and opv.product_id = op.id and op.review_status = 'approved' and opv.enabled='True' order by opv.sku     
+  
+ 

@@ -498,8 +498,9 @@ class dbhelper {
 		}
 	}
 	public function insertproductLabel($userid, $parent_sku, $labelid, $iswe=0) {
+		$delsql = 'delete from product_label where userid = '.$userid.' and parent_sku = "'.$parent_sku.'" and iswe='.$iswe.';';
 		$insertpl = 'insert into product_label(label_id,parent_sku,userid,iswe) values(' . $labelid . ',"' . mysql_real_escape_string($parent_sku) . '",' . $userid . ",". $iswe.')';
-		echo "<br/>insertpl:".$insertpl;
+		mysql_query($delsql);
 		return mysql_query ( $insertpl );
 	}
 	public function getExpressInfo($userid) {

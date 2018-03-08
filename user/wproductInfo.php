@@ -199,6 +199,18 @@ if($command != null && strcmp($command,'updateInventory') == 0){
 		$result = $client->enableProductById($temppid);
 		echo "<br/>enable product id:".$temppid.'  '.$result;
 	} */
+}else if($command != null && strcmp($command,'enableproducts') == 0){
+	
+	//春节后上架假期中下架的产品;
+	echo "<br/><br/><br/><br/> 上架产品";
+	$startDate = '2018-02-02';
+	$endDate = '2018-02-04';
+	$pidlistresult = $dbhelper->getVacationProducts($accountid, $startDate, $endDate);
+	while($tempvalue = mysql_fetch_array($pidlistresult)){
+		$temppid = $tempvalue['productid'];
+		$result = $client->enableProductById($temppid);
+		echo "<br/>enable product id:".$temppid.'  '.$result;
+	}
 }
 
 
@@ -400,7 +412,7 @@ for($count = 0; $count < $i; $count ++) {
 					</ul>
 					<ul align="center">
 					<button class="btn btn-info" type="button" onclick="disableproducts()">春节下架所有未加钻零销量非海外仓的产品,即时生效</button>
-					<!-- <button class="btn btn-info" type="button" onclick="disableproducts()">春节后上架假期中下架的产品,即时生效</button> -->
+					<button class="btn btn-info" type="button" onclick="enableproducts()">春节后上架假期中下架的产品,即时生效</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</ul>
 								</div>
@@ -782,6 +794,13 @@ if($command != null && strcmp($command,'salesOptimize') == 0){
 			$('#command').val("disableproducts");
 			form.submit();
 		}
+
+		function enableproducts(){
+			var form = document.getElementById("optimizeproduct");
+			$('#command').val("enableproducts");
+			form.submit();
+		}
+		
 		function disabledProductslist(){
 			var form = document.getElementById("optimizeproduct");
 			$('#command').val("disabledProductslist");

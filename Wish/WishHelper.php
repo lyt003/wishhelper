@@ -305,9 +305,14 @@ class WishHelper {
 						echo "<br/>currentorder ".$orderNoTracking['sku']." use the logistic:".$expressValue[0].$expressValue[1];
 					}
 		
+					
+					$combinedPrice = $intPrice + $prePrice;
+					$combinedQuantity = $orderQuantity + $preOrderQuantity;
+					
+					
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
-					$quantity = $xml->addChild ( "Quantity", $orderQuantity ); // *
+					$quantity = $xml->addChild ( "Quantity", $combinedQuantity ); // *
 					$packageno = $xml->addChild ( "PackageNo" );
 					$insure = $xml->addChild ( "Insure" );
 					$memo = $xml->addChild ( "Memo" );
@@ -362,8 +367,6 @@ class WishHelper {
 					
 					$preGoodsNameEn = "";
 					
-					$combinedPrice = $intPrice + $prePrice;
-					$combinedQuantity = $orderQuantity + $preOrderQuantity;
 					if($combinedPrice >40){
 						$combinedWeight = 500 * $combinedQuantity;
 					}else{
