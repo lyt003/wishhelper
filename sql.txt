@@ -1259,4 +1259,10 @@ select op.parent_sku, 'Apparel | Intimates | Underwear' as ptcategory, op.name,o
 from onlineProducts op, onlineProductVars opv 
 where op.accountid =1 and opv.accountid = 1 and opv.product_id = op.id and op.review_status = 'approved' and opv.enabled='True' order by opv.sku     
   
+//按月份统计退款订单数量
+select substring(TransactionDate,1,6) tm,count(distinct orderID) from refundrecords group by tm order by tm DESC 
+
+//按退款原因统计退款订单数量
+select substring(TransactionDate,1,6) tm, RefundReason,count(distinct orderID) from refundrecords group by tm,RefundReason order by tm DESC
+  
  
