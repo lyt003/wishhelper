@@ -426,6 +426,11 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pd
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXL',1,'27');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXXL',1,'27');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('flag2','flag2',1,'28');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('HCatClimb','HCatClimb _Rose red',1,'21');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('HCatClimb','HCatClimb _Coffee',1,'21');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Chkbbqrack','H_Chkbbqrack',1,'8.5');
+
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
 	`accountid` int(11) NOT NULL,
