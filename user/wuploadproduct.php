@@ -537,7 +537,7 @@ $uisizes = str_replace('"','&quot;',$sizes);
 									class="col-name">额外图片</span></label>
 
 								<div class="controls input-append">
-									<textarea rows="5" class="form-control" id="extra_images"
+									<textarea rows="8" class="form-control" id="extra_images"
 										name="Extra_Images" id="extra_images" type="text"
 										placeholder="可接受：imageurl|imageurl|imageurl"><?php echo $extraImages?></textarea>
 									<input type="file" name="file2" id="local_extra_image" />
@@ -554,6 +554,14 @@ $uisizes = str_replace('"','&quot;',$sizes);
 									<img id="extra_img_view3" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
 									<img id="extra_img_view4" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
 									<img id="extra_img_view5" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+								</div>
+								<div class="controls input-append">
+									<img id="extra_img_view6" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view7" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view8" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view9" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view10" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
+									<img id="extra_img_view11" style="display: none;" width=100 height=100 class="img-thumbnail"src="" alt="photos" />
 								</div>
 							</div>
 
@@ -819,7 +827,7 @@ style="border-width:0" /></a></noscript>
 				$('#'+ imgid).attr("src",url);
 			});
 
-			for(var i =0; i<6; i++){
+			for(var i =0; i<12; i++){
 				var imgid = "extra_img_view" + i;
 				if(imagearray[i] != null && imagearray[i] != ""){
 					$('#'+ imgid).show();
