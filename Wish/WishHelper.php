@@ -350,7 +350,10 @@ class WishHelper {
 					$gsLabel = $this->getCNENLabel($labels, $temppid);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
-					$tempEn = str_replace('&quot;','',$tempEn);//英文品名不能保护特殊字符，因此替换掉。
+					$tempEn = str_replace('&quot;','',$tempEn);//英文品名不能包含特殊字符，因此替换掉。
+					$tempEn = str_replace('&amp;','',$tempEn);//英文品名不能包含空格，因此替换掉。
+					$tempEn = str_replace(' ','',$tempEn);//英文品名不能包含空格，因此替换掉。
+					$tempEn = str_replace('"','',$tempEn);//英文品名不能包含空格，因此替换掉。
 					if(strlen($tempEn)>=50){
 						$tempEn = substr($tempEn,0,45).'...';
 					}
@@ -363,7 +366,8 @@ class WishHelper {
 					$gsNameEn = $Goods->addChild ( "NameEn", $tempEn); // *
 					//$gsNameEn = $Goods->addChild ( "NameEn", $gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn ); // *
 		
-					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity. ";" . $preGoodsNameEn );
+					//$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1] ." :". $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity. ";" . $preGoodsNameEn );
+					$gsMoreGoodsName = $Goods->addChild ( "MoreGoodsName",$gsLabel[1]);
 					
 					$preGoodsNameEn = "";
 					
@@ -383,7 +387,7 @@ class WishHelper {
 		
 					$XMLString = $xml->asXML ();
 					echo "<br/>XMLString:";
-					var_dump($XMLString);
+					print_r($XMLString);
 					$curl = curl_init ();
 					$url = $expressinfo[YANWEN_SERVICE_URL] . "/Users/" . $expressinfo[YANWEN_USER_ATTR] . "/Expresses";
 					curl_setopt ( $curl, CURLOPT_URL, $url );
