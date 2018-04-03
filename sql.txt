@@ -394,6 +394,8 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Tro
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_MTVenus','H_MTVenus_Bronze',1,'20');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_MTVenus','H_MTVenus_White',1,'20');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_venus','H_venus',1,'20');
+
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('8232','8232',1,'10');
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ml6640','ml6640',1,'12');
@@ -408,6 +410,8 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autod
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_golden',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('autodecanter','autodecanter_Gray',1,'205');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_DIYClock','H_DIYClock_Black',1,'32');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_DIYClock','H_DIYClock_Silver',1,'32');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_DIYClock','H_DIYClock_Gold',1,'32');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Khaki',1,'53');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Gray',1,'53');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_crdgbasket','H_crdgbasket_Black',1,'53');
@@ -416,6 +420,8 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Fre
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDogYellow',1,'28');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_White',1,'28');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FrenchDog','H_FrenchDog_Brown',1,'28');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_3BLDogs','H_3BLDogs',1,'84');
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-2',1,'11.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('yunfei','yunfei-4',1,'11.5');
@@ -426,10 +432,31 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pd
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXL',1,'27');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4pdalk','H_4pdalk_XXXL',1,'27');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4PCSALK','H_4PCSALK_M',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4PCSALK','H_4PCSALK_L',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4PCSALK','H_4PCSALK_XL',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4PCSALK','H_4PCSALK_XXL',1,'27');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_4PCSALK','H_4PCSALK_XXXL',1,'27');
+
+
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('flag2','flag2',1,'28');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('HCatClimb','HCatClimb _Rose red',1,'21');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('HCatClimb','HCatClimb _Coffee',1,'21');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Chkbbqrack','H_Chkbbqrack',1,'8.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TSRing','H_TSRing',1,'3');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_black_S',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_black_M',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_black_L',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_black_XL',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_black_XXL',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_S',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_M',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_L',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_XL',1,'14');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_XXL',1,'14');
+
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -548,6 +575,7 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS大包','USPS-PRIORITY',31,'USPS');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','FEDEX-SM',31,'Fedex');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','FEDEX-LP',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('比利时平邮小包(上海)','406',1,'BPostInternational');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
