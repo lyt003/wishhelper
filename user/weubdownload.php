@@ -21,7 +21,7 @@ $curTransactionid = null;
 $accountid = $_GET['accountid'];//if $accountid = 0, the orders from EBay.
 while ( $rows = mysql_fetch_array ( $result ) ) {
 	
-	if(strcmp($accountid,"0") != 0 ){
+	/* if(strcmp($accountid,"0") != 0 ){
 		$curSKU = $rows['sku'];
 		$curCountrycode = $rows['countrycode'];
 		$curAccountid = $rows['accountid'];
@@ -31,11 +31,14 @@ while ( $rows = mysql_fetch_array ( $result ) ) {
 		
 		$expressid = explode ( "|", $curExpress )[0];
 		
+		//if(strcmp($expressid,'197') != 0){
+		//	continue;
+		//}
 		$expressValue = $EUBExpress[$expressid];
 		if($expressValue == null){
 			continue;
 		}	
-	}
+	} */
 	
 	$curTransactionid = $rows ['transactionid'];
 	if (strcmp ( $preTransactionid, $curTransactionid ) == 0) {
