@@ -310,7 +310,7 @@ class WishHelper {
 					$combinedQuantity = $orderQuantity + $preOrderQuantity;
 					
 					
-					//$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
+					//$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 8, 6 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 					$quantity = $xml->addChild ( "Quantity", $combinedQuantity ); // *
 					$packageno = $xml->addChild ( "PackageNo" );
@@ -363,12 +363,12 @@ class WishHelper {
 					
 					//订单单号只允许使用字母、数字和'-'、'_'字符
 					$orderinfo = str_replace(':','_',$orderinfo);//订单单号不能包含:，因此替换掉。
-					$orderinfo = str_replace('*','Num_',$orderinfo);//订单单号不能包含*，因此替换掉。
+					$orderinfo = str_replace('*','N',$orderinfo);//订单单号不能包含*，因此替换掉。
 					$orderinfo = str_replace(';','',$orderinfo);//订单单号不能包含;，因此替换掉。
 					if(strlen($orderinfo)>=40){
-						$orderNum = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 5 ). substr($orderinfo,0,40);
+						$orderNum = $accountid . substr ( 10000 * microtime ( true ), 8, 6 ). substr($orderinfo,0,40);
 					}else{
-						$orderNum = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 5 ). $orderinfo;
+						$orderNum = $accountid . substr ( 10000 * microtime ( true ), 8, 6 ). $orderinfo;
 					}
 					echo "<br/> order info:".$orderNum;
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $orderNum);
@@ -506,10 +506,10 @@ class WishHelper {
 					欧洲经济小包=200-0
 					欧洲标准小包=201-0
 				 * */
-				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 4, 9 ).$orderobj->content;
+				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 8, 6 ).$orderobj->content;
 				$orderobj->user_desc = $accountid . "_" .$gsNameCh.$gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				if(strcmp($orderobj->otype,'0')==0 || strcmp($orderobj->otype,'1') ==0){// WISH邮平邮 和 WISH邮挂号 
-					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 4, 9 );
+					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 8, 6 );
 					$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				}
 				if(strcmp($orderobj->otype,'200-0') == 0 || strcmp($orderobj->otype,'201-0') == 0){//欧洲经济小包和欧洲标准小包
