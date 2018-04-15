@@ -310,7 +310,7 @@ class WishHelper {
 					$combinedQuantity = $orderQuantity + $preOrderQuantity;
 					
 					
-					$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
+					//$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 9 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 					$quantity = $xml->addChild ( "Quantity", $combinedQuantity ); // *
 					$packageno = $xml->addChild ( "PackageNo" );
@@ -349,14 +349,30 @@ class WishHelper {
 					$temppid = $this->getPVaridBySKU($accountid, $tempSKU);
 					$gsLabel = $this->getCNENLabel($labels, $temppid);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
-					$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
-					$tempEn = str_replace('&quot;','',$tempEn);//英文品名不能包含特殊字符，因此替换掉。
-					$tempEn = str_replace('&amp;','',$tempEn);//英文品名不能包含空格，因此替换掉。
-					$tempEn = str_replace(' ','',$tempEn);//英文品名不能包含空格，因此替换掉。
-					$tempEn = str_replace('"','',$tempEn);//英文品名不能包含空格，因此替换掉。
+					
+					$orderinfo = $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					//$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					$orderinfo = str_replace('&quot;','',$orderinfo);//英文品名不能包含特殊字符，因此替换掉。
+					$orderinfo = str_replace('&amp;','',$orderinfo);//英文品名不能包含空格，因此替换掉。
+					$orderinfo = str_replace(' ','',$orderinfo);//英文品名不能包含空格，因此替换掉。
+					$orderinfo = str_replace('"','',$orderinfo);//英文品名不能包含空格，因此替换掉。
+					$tempEn = $gsLabel[1] ." :".$orderinfo;
 					if(strlen($tempEn)>=50){
 						$tempEn = substr($tempEn,0,45).'...';
 					}
+					
+					//订单单号只允许使用字母、数字和'-'、'_'字符
+					$orderinfo = str_replace(':','_',$orderinfo);//订单单号不能包含:，因此替换掉。
+					$orderinfo = str_replace('*','Num_',$orderinfo);//订单单号不能包含*，因此替换掉。
+					$orderinfo = str_replace(';','',$orderinfo);//订单单号不能包含;，因此替换掉。
+					if(strlen($orderinfo)>=40){
+						$orderNum = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 5 ). substr($orderinfo,0,40);
+					}else{
+						$orderNum = $accountid . "_" . substr ( 10000 * microtime ( true ), 4, 5 ). $orderinfo;
+					}
+					echo "<br/> order info:".$orderNum;
+					$userOrderNum = $xml->addChild ( "UserOrderNumber", $orderNum);
+					
 					
 				/* 	$tempEn = str_replace('&amp;','AND',$tempEn);
 					$tempEn = str_replace(' ','_',$tempEn);
