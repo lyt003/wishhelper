@@ -457,6 +457,39 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws447
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_XL',1,'14');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('ws4476','ws4476_purple_XXL',1,'14');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ccdecanter','H_ccdecanter',1,'22');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewstobok','H_jewstobok_Black',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewstobok','H_jewstobok_Pink',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewstobok','H_jewstobok_Rose Red',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewstobok','H_jewstobok_Blue',1,'25');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewstobok','H_jewstobok_White',1,'25');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewcrownbox','H_jewcrownbox_White',1,'26');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_jewcrownbox','H_jewcrownbox_Green',1,'26');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_10Wristband','H_10Wristband',1,'2');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_34',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_36',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_38',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_40',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_42',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_44',1,'73');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Lethpants','H_Lethpants_46',1,'73');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_longtraildress','H_longtraildress_Black',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_longtraildress','H_longtraildress_Red',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_longtraildress','H_longtraildress_Khaki',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_longtraildress','H_longtraildress_Pink',1,'46');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_S',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_M',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_L',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_XL',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_XXL',1,'45');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Holepants','H_Holepants_XXXL',1,'45');
+
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -576,6 +609,11 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','FEDEX-SM',31,'Fedex');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','FEDEX-LP',31,'Fedex');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('比利时平邮小包(上海)','406',1,'BPostInternational');
+
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文航空挂号小包(普货)','437',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文航空经济小包(普货)','438',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文航空易派小包(上海)','444',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文航空专线追踪小包-普货','481',1,'Yanwen');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(
@@ -1299,3 +1337,6 @@ select substring(TransactionDate,1,6) tm,count(distinct orderID) from refundreco
 select substring(TransactionDate,1,6) tm, RefundReason,count(distinct orderID) from refundrecords group by tm,RefundReason order by tm DESC
   
  
+ 
+ 查询某个产品的每周销售表现
+ select * from productssummary where productid = '595cb43f9b5d247ad9e72610' order by startdate DESC
