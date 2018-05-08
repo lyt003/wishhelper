@@ -134,6 +134,17 @@ class WishHelper {
 		return $productvarid;
 	}
 	
+	public function getParentSKUBySKU($accountid,$subsku){
+		$productid = $this->getPidBySKU($accountid, $subsku);
+		
+		$pidresult = $this->dbhelper->getProductSKUByID($productid);
+		if($psku = mysql_fetch_array($pidresult)){
+			$parentSKU = $psku['parent_sku'];
+			return $parentSKU;
+		}
+		return NULL;
+	}
+	
 	public function getLabelsArray($userLabels){
 		$labelsarray = array();
 		foreach ($userLabels as $lKey=>$lValue){
@@ -263,8 +274,15 @@ class WishHelper {
 				$orderQuantity = $orderNoTracking ['quantity'];
 				$intPrice = intval ( $orderTotalPrice );
 					
+				$tempSKU = $orderNoTracking ['sku'];
+				$parentSKU = $this->getParentSKUBySKU($accountid, $tempSKU);
+				if($parentSKU == null){
+					echo "Failed to get parentsku of sku:".$tempSKU."<br/>";
+					continue;
+				}
+				
 				if ($orderNoTracking ['orderNum'] != 0) {
-					$preGoodsNameEn = $preGoodsNameEn . $orderNoTracking ['sku'] . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity;
+					$preGoodsNameEn = $preGoodsNameEn . $parentSKU . $orderNoTracking ['color'] . $orderNoTracking ['size'] . "*" . $orderQuantity;
 					$preTransactionid = $orderNoTracking ['transactionid'];
 					$preOrderQuantity = $preOrderQuantity + $orderQuantity;
 					$prePrice = $prePrice + $intPrice;
@@ -310,7 +328,7 @@ class WishHelper {
 					$combinedQuantity = $orderQuantity + $preOrderQuantity;
 					
 					
-					//$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 8, 6 ) );
+					//$userOrderNum = $xml->addChild ( "UserOrderNumber", $accountid . "_" . substr ( 10000 * microtime ( true ), 10, 4 ) );
 					$sendDate = $xml->addChild ( "SendDate", date ( 'Y-m-d  H:i:s' ) ); // *
 					$quantity = $xml->addChild ( "Quantity", $combinedQuantity ); // *
 					$packageno = $xml->addChild ( "PackageNo" );
@@ -334,8 +352,6 @@ class WishHelper {
 					$Goods = $xml->addChild ( "GoodsName" );
 					$gsUserid = $Goods->addChild ( "Userid", $expressinfo[YANWEN_USER_ATTR] ); // *
 		
-					$tempSKU = $orderNoTracking ['sku'];
-					
 					/* $tempSKU = str_replace(' ','',$tempSKU);
 					$tempSKU = str_replace('.','',$tempSKU);
 					$tempSKU = str_replace('&amp;','',$tempSKU);
@@ -350,7 +366,8 @@ class WishHelper {
 					$gsLabel = $this->getCNENLabel($labels, $temppid);
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					
-					$orderinfo = $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					
+					$orderinfo = $parentSKU . $orderNoTracking ['color'] . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					//$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					$orderinfo = str_replace('&quot;','',$orderinfo);//英文品名不能包含特殊字符，因此替换掉。
 					$orderinfo = str_replace('&amp;','',$orderinfo);//英文品名不能包含空格，因此替换掉。
@@ -362,13 +379,79 @@ class WishHelper {
 					}
 					
 					//订单单号只允许使用字母、数字和'-'、'_'字符
-					$orderinfo = str_replace(':','_',$orderinfo);//订单单号不能包含:，因此替换掉。
-					$orderinfo = str_replace('*','N',$orderinfo);//订单单号不能包含*，因此替换掉。
+					$orderinfo = str_replace(':','',$orderinfo);//订单单号不能包含:，因此替换掉。
+					$orderinfo = str_replace('*','_',$orderinfo);//订单单号不能包含*，因此替换掉。
 					$orderinfo = str_replace(';','',$orderinfo);//订单单号不能包含;，因此替换掉。
+					$orderinfo = str_replace('H_4PCSALK','4AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HSRingT2','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_FrenchDog','FrDg',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_6PCSALK','6AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('matdwsunflower','matsun',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('nk8023-blue','NK8023',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_2350_10pcs_M','10_2350',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_SDiceT2','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('lovelypiranhaearring','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_GdiceT1','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_bulldog','FrDg',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_4pdalk','4AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_5GSStraw','5strw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_ChatRingT4','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_LtsRingT3','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DrinkingStrawM4','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DiceFp4','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_10Wristband','10wrst',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_TSTStrawM2','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_GStrawM1','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_WstbandT2','10wrst',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_PtEarringT1','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_GftEarringT4','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_alk','alk',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_TGSStrawM3','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HFT4','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HFSolidT2','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HFPureT1','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('K141_AY893','AY893',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('Y_wstkZY1025','ZY1025',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DZ','DZ',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DrinkingStrawM4','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_CyEarringT2','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_SnowEarT1','SnowEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_NKDT1','NKD',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_ShoesA16','Shoe',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('Y_CtALK','ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_10ALK','10ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_FxPant2','FxPant',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_SyPant3','FxPant',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DIYClock','Clok',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('Y_HmALK','ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HFD87T3','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_KeyRingT2','Key',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_KeyScrewDv','Key',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					
+					
+					$orderinfo = str_replace('L(28-32)','L',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('XL(30-34)','XL',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('XXL(32-36)','2X',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('M(26-30)','M',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('XXXL(34-38)','3X',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('ChineseSize8XL(40-45)','8X',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('XXXL','3X',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('3XL','3X',$orderinfo);//太长的尺码替换
+					
+					$orderinfo = str_replace('lightyellow','ylw',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('yellow','ylw',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('brown','brw',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('blue','blu',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('purple','pup',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('black','bk',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('nude','nud',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('Army Green','Grn',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('Silver','sil',$orderinfo);//太长的颜色替换;
+					
 					if(strlen($orderinfo)>=40){
-						$orderNum = $accountid . substr ( 10000 * microtime ( true ), 8, 6 ). substr($orderinfo,0,40);
+						$orderNum = substr ( 10000 * microtime ( true ), 10, 4 ). '_'. substr($orderinfo,0,40);
 					}else{
-						$orderNum = $accountid . substr ( 10000 * microtime ( true ), 8, 6 ). $orderinfo;
+						$orderNum = substr ( 10000 * microtime ( true ), 10, 4 ). '_'. $orderinfo;
 					}
 					echo "<br/> order info:".$orderNum;
 					$userOrderNum = $xml->addChild ( "UserOrderNumber", $orderNum);
@@ -506,10 +589,10 @@ class WishHelper {
 					欧洲经济小包=200-0
 					欧洲标准小包=201-0
 				 * */
-				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 8, 6 ).$orderobj->content;
+				//$orderobj->user_desc = $accountid . "_" .$gsNameEn.$gsNameCh.substr ( 10000 * microtime ( true ), 10, 4 ).$orderobj->content;
 				$orderobj->user_desc = $accountid . "_" .$gsNameCh.$gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				if(strcmp($orderobj->otype,'0')==0 || strcmp($orderobj->otype,'1') ==0){// WISH邮平邮 和 WISH邮挂号 
-					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 8, 6 );
+					$orderobj->user_desc = $accountid .substr ( 10000 * microtime ( true ), 10, 4 );
 					$orderobj->content = $gsNameEn.":".$curorder ['sku'] . "-" . $curorder ['color'] . "-" . $curorder ['size'] . "*" . $curorder ['quantity'].";" . $preGoodsNameEn;
 				}
 				if(strcmp($orderobj->otype,'200-0') == 0 || strcmp($orderobj->otype,'201-0') == 0){//欧洲经济小包和欧洲标准小包

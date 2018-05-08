@@ -244,8 +244,9 @@ if(strcasecmp($extension,'csv') == 0){
 				$result .= $row."行没数据"; 
 			}	
 		}
-	}else if($columnMaxIndex == 46){//refund orders xls.
+	}else if($columnMaxIndex == 49){//refund orders xls.
 		$result .= " process refund orders ";
+		echo "<br/> process refund orders ";
 		for($row = 0;$row<=$rows;$row ++){
 			
 			$refundorder = array();
@@ -270,6 +271,7 @@ Shipping (each)
 Shipping Cost (each)
 Quantity
 Total Cost
+SE Cashback Amount
 Days to Fulfill
 Hours to Fulfill
 Shipped on
@@ -299,6 +301,8 @@ Refund Reason
 Is Wish Express
 Wish Express Delivery Deadline
 Requires Delivery Confirmation
+Is Combined Order
+Late Confirmed Fulfillment Fine Amount
 */
 				switch ($column){
 					case 0:
@@ -352,91 +356,91 @@ Requires Delivery Confirmation
 					case 16:
 						$refundorder['TotalCost'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 17:
+					case 18:
 						$refundorder['DaystoFulfill'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 18:
+					case 19:
 						$refundorder['HourstoFulfill'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 19:
+					case 20:
 						$refundorder['ShippedDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 20:
+					case 21:
 						$refundorder['ConfirmedDelivery'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 21:
+					case 22:
 						$refundorder['ConfirmedDeliveryDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 22:
+					case 23:
 						$refundorder['Provider'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 23:
+					case 24:
 						$refundorder['Tracking'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 24:
+					case 25:
 						$refundorder['TrackingConfirmed'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 25:
+					case 26:
 						$refundorder['TrackingConfirmedDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 26:
+					case 27:
 						$refundorder['ShippingAddress'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 27:
+					case 28:
 						$refundorder['Name'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 28:
+					case 29:
 						$refundorder['FirstName'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 29:
+					case 30:
 						$refundorder['LastName'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 30:
+					case 31:
 						$refundorder['StreetAddress1'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 31:
+					case 32:
 						$refundorder['StreetAddress2'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 32:
+					case 33:
 						$refundorder['City'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 33:
+					case 34:
 						$refundorder['State'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 34:
+					case 35:
 						$refundorder['Zipcode'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 35:
+					case 36:
 						$refundorder['Country'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 36:
+					case 37:
 						$refundorder['LastUpdated'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 37:
+					case 38:
 						$refundorder['PhoneNumber'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 38:
+					case 39:
 						$refundorder['Countrycode'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 39:
+					case 40:
 						$refundorder['RefundResponsibility'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 40:
+					case 41:
 						$refundorder['RefundAmount'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 41:
+					case 42:
 						$refundorder['RefundDate'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 42:
+					case 43:
 						$refundorder['RefundReason'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 43:
+					case 44:
 						$refundorder['IsWishExpress'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 44:
+					case 45:
 						$refundorder['WishExpressDeliveryDeadline'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
-					case 45:
+					case 46:
 						$refundorder['IsRequireDelivery'] = $sheet->getCellByColumnAndRow($column,$row)->getValue();
 						break;
 				}
