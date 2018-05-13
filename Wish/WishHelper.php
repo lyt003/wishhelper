@@ -367,7 +367,23 @@ class WishHelper {
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					
 					
-					$orderinfo = $parentSKU . $orderNoTracking ['color'] . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
+					$tempParSKU;$tempSize;
+					
+					$spindex = strpos($parentSKU,'(');
+					if($spindex === false){
+						$tempParSKU = $parentSKU;
+					}else{
+						$tempParSKU = substr_replace($parentSKU,'',$spindex);
+					}
+					
+					$ssindex = strpos($orderNoTracking ['size'],'(');
+					if($ssindex === false){
+						$tempSize = $orderNoTracking ['size'];
+					}else{
+						$tempSize = substr_replace($orderNoTracking ['size'],'',$ssindex);
+					}
+					
+					$orderinfo = $accountid.'_'.$tempParSKU . $orderNoTracking ['color'] . $tempSize . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					//$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					$orderinfo = str_replace('&quot;','',$orderinfo);//英文品名不能包含特殊字符，因此替换掉。
 					$orderinfo = str_replace('&amp;','',$orderinfo);//英文品名不能包含空格，因此替换掉。
@@ -382,21 +398,21 @@ class WishHelper {
 					$orderinfo = str_replace(':','',$orderinfo);//订单单号不能包含:，因此替换掉。
 					$orderinfo = str_replace('*','_',$orderinfo);//订单单号不能包含*，因此替换掉。
 					$orderinfo = str_replace(';','',$orderinfo);//订单单号不能包含;，因此替换掉。
-					$orderinfo = str_replace('H_4PCSALK','4AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_HSRingT2','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_FrenchDog','FrDg',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_6PCSALK','6AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_4PCSALK','4ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HSRingT2','Ring',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_FrenchDog','FrDog',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_6PCSALK','6ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('matdwsunflower','matsun',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('nk8023-blue','NK8023',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_2350_10pcs_M','10_2350',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_SDiceT2','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('lovelypiranhaearring','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_GdiceT1','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_bulldog','FrDg',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_4pdalk','4AK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_bulldog','FrDog',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_4pdalk','4ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_5GSStraw','5strw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_ChatRingT4','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_LtsRingT3','Rig',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_ChatRingT4','Ring',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_LtsRingT3','Ring',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_DrinkingStrawM4','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_DiceFp4','dice',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_10Wristband','10wrst',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
@@ -405,7 +421,7 @@ class WishHelper {
 					$orderinfo = str_replace('H_WstbandT2','10wrst',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_PtEarringT1','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_GftEarringT4','flwEar',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
-					$orderinfo = str_replace('H_alk','alk',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_alk','ALK',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_TGSStrawM3','straw',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_HFT4','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_HFSolidT2','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
@@ -429,12 +445,19 @@ class WishHelper {
 					$orderinfo = str_replace('H_KeyScrewDv','Key',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					
 					
-					$orderinfo = str_replace('L(28-32)','L',$orderinfo);//太长的尺码替换
+					/* $sindex = strpos($orderinfo,'(');
+					if($sindex === false){
+					}else{
+						$orderinfo = substr_replace($orderinfo,'',$sindex);
+					} */
+					/* $orderinfo = str_replace('L(28-32)','L',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('XL(30-34)','XL',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('XXL(32-36)','2X',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('M(26-30)','M',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('XXXL(34-38)','3X',$orderinfo);//太长的尺码替换
-					$orderinfo = str_replace('ChineseSize8XL(40-45)','8X',$orderinfo);//太长的尺码替换
+					$orderinfo = str_replace('8XL(40-45)','8X',$orderinfo);//太长的尺码替换
+					 */
+					$orderinfo = str_replace('ChineseSize8XL','8X',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('XXXL','3X',$orderinfo);//太长的尺码替换
 					$orderinfo = str_replace('3XL','3X',$orderinfo);//太长的尺码替换
 					
@@ -443,7 +466,7 @@ class WishHelper {
 					$orderinfo = str_replace('brown','brw',$orderinfo);//太长的颜色替换;
 					$orderinfo = str_replace('blue','blu',$orderinfo);//太长的颜色替换;
 					$orderinfo = str_replace('purple','pup',$orderinfo);//太长的颜色替换;
-					$orderinfo = str_replace('black','bk',$orderinfo);//太长的颜色替换;
+					$orderinfo = str_replace('black','bak',$orderinfo);//太长的颜色替换;
 					$orderinfo = str_replace('nude','nud',$orderinfo);//太长的颜色替换;
 					$orderinfo = str_replace('Army Green','Grn',$orderinfo);//太长的颜色替换;
 					$orderinfo = str_replace('Silver','sil',$orderinfo);//太长的颜色替换;
