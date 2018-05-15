@@ -98,6 +98,11 @@ class dbhelper {
 		return mysql_query($ordersql);
 	}
 	
+	public function getstatesByCityCode($city,$countrycode){
+		$getstatesql = 'SELECT state,zipcode from orders WHERE city = "'.$city.'" and countrycode = "'.$countrycode.'"  order by state DESC,zipcode DESC';
+		return mysql_query($getstatesql);
+	}
+	
 	public function updateorderaddress($accountid,$orderid,$name,$streetaddress1,$streetaddress2,$city,$state,$zipcode,$phonenumber,$countrycode){
 		$updateaddress = 'update orders set ';
 		if(name == null || countrycode == null){

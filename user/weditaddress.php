@@ -12,6 +12,24 @@ if($orderid != null){
 	$orderdetailsresult = $dbhelper->getorderdetails($accountid, $orderid);
 	if($orderdetailsresult != null){
 		$orderdetails = mysql_fetch_array($orderdetailsresult);
+		
+		$tempstate = $orderdetails['state'];
+		if($tempstate == null){
+			$stateresult = $dbhelper->getstatesByCityCode($orderdetails['city'], $orderdetails['countrycode']);
+			if($stateresult != null){
+				while($statedetails = mysql_fetch_array($stateresult)){
+					$currentstate = $statedetails['state'];
+					$currentzipcode = $statedetails['zipcode'];
+					if($currentstate != null && trim($currentstate != '')){
+						$tempstate = $currentstate;
+					}
+					
+					if(strcmp($currentzipcode,$orderdetails['zipcode']) == 0){
+						break;
+					}
+				}
+			}
+		}
 	}
 }else{
 	$accountid = $_POST['accountid'];
@@ -185,7 +203,7 @@ if($orderid != null){
 
 								<div class="controls input-append">
 									<input class="input-block-level required" name="state"
-										value="<?php echo $orderdetails['state']?>" id="state" type="text"
+										value="<?php echo $tempstate?>" id="state" type="text"
 										  />
 								<label><a target="_blank" href="https://en.wikipedia.org/wiki/<?php echo $orderdetails['city'];?>">提示</a></label>
 								</div>
