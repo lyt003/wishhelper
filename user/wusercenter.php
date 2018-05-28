@@ -516,7 +516,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 				$needUpdateAddress = 1;
 			}
 			echo "<span class=\"label label-info\">编辑</span></button></td>";
-			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".$cur_order ['sku']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".urlencode($cur_order ['sku'])."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$curuserexpressinfos = $userWEExpressinfos;

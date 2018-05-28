@@ -548,6 +548,26 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FxP
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FxPant2','H_FxPant2_Silver_M',1,'4.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FxPant2','H_FxPant2_Acid Blue_M',1,'4.5');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_White',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Black',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Red',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Gray',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Green',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Blue',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Purple',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Rose Gold',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Gold',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Silver',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BrgPant4','H_BrgPant4_Acid Blue',1,'4.5');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ChatRingT4','H_ChatRingT4',1,'3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_LtsRingT3','H_LtsRingT3',1,'3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_HSRingT2','H_HSRingT2',1,'3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BdRingT1','H_BdRingT1',1,'3');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_KeyScrewDv','H_KeyScrewDv_Black',1,'3.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_KeyScrewDv','H_KeyScrewDv_Silver',1,'3.5');
+
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (

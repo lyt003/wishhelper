@@ -443,6 +443,9 @@ class WishHelper {
 					$orderinfo = str_replace('H_HFD87T3','HF87',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_KeyRingT2','Key',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_KeyScrewDv','Key',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_TInsoleT1','TShoepad',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_HeelInsoleT1','Silconpad',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_10Hairope','10Hairope',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					
 					
 					/* $sindex = strpos($orderinfo,'(');

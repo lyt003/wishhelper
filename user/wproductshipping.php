@@ -7,7 +7,7 @@ header ( "Content-Type: text/html;charset=utf-8" );
 
 $accountid = $_GET['uid'];
 $productid = $_GET['pid'];
-$varsku = $_GET['sku'];
+$varsku = urldecode($_GET['sku']);
 
 $dbhelper = new dbhelper();
 $wishhelper = new WishHelper();
@@ -36,7 +36,6 @@ $countprofit = 0;
 $trackings = array();
 $currshippingcost = 0;
 while($shippingcost = mysql_fetch_array($shippingcosts)){
-	
 	if($trackings[$shippingcost ['tracking_number']] == 1){
 		$currshippingcost = 0;
 	}else{
