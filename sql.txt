@@ -567,6 +567,30 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BdR
 
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_KeyScrewDv','H_KeyScrewDv_Black',1,'3.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_KeyScrewDv','H_KeyScrewDv_Silver',1,'3.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_1',1,'2.3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_2',1,'2.3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_3',1,'2.3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_4',1,'2.3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_5',1,'2.3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_toltStkT1','H_toltStkT1_6',1,'2.3');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_HorsewstkT1','H_HorsewstkT1',1,'6');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_PtyT1','H_PtyT1_Blue&Purple',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_PtyT1','H_PtyT1_Yellow&Red',1,'46');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_PtyT1','H_PtyT1_GreBlu',1,'46');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_PhWalRackT2','H_PhWalRackT2',1,'0.7');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TInsoleT1','H_TInsoleT1_Black',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TInsoleT1','H_TInsoleT1_Blue',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TInsoleT1','H_TInsoleT1_Beige',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TInsoleT1','H_TInsoleT1_Pink',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TInsoleT1','H_TInsoleT1_Brown',1,'2');
+
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ShoesPdT3','H_ShoesPdT3',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ShoesPdT3','H_SliconPdT2',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ShoesPdT3','H_HeelInsoleT1',1,'1.5');
+
 
 
 DROP TABLE IF EXISTS `schedule_product`;
