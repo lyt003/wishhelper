@@ -945,6 +945,11 @@ class dbhelper {
 		return mysql_query($updatetksql);
 	}
 	
+	public function getRefundOrders($accountid,$productid,$countrycode){
+		$refundsql = 'select * from refundrecords where productid = "'.$productid.'" and Countrycode = "'.$countrycode.'" order by TransactionDate DESC';
+		return mysql_query($refundsql);
+	}
+	
 	public function getJaveUploadAppToken(){
 		$querySql = "select apptoken from apptoken";
 		$result = mysql_query($querySql);

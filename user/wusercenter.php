@@ -356,6 +356,9 @@ $needUpdateAddress = 0;
 	function productshipping(uid,sku){
 		window.open("./wproductshipping.php?uid=" + uid + "&sku=" + sku);
 	}
+	function refundordersinfo(uid,sku,countrycode){
+		window.open("./wrefundorders.php?uid=" + uid + "&sku=" + sku + "&countrycode=" + countrycode);
+	}
 </script>
 <body>
 	<!-- HEADER -->
@@ -475,7 +478,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 		echo "</div><span class=\"tools\"><a class=\"fs1\" aria-hidden=\"true\" data-icon=\"&#xe090;\"></a></span></div>";
 		echo "<div class=\"widget-body\"><table class=\"table table-condensed table-striped table-bordered table-hover no-margin\"><thead><tr><th style=\"width:5%\"><input type=\"checkbox\" class=\"no-margin\" /></th>";
 		echo "<th style=\"width:10%\">日期</th><th style=\"width:25%\" class=\"hidden-phone\">产品 (SKU)参数|数量</th>";
-		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:20%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名|海外仓产品对应</th></tr></thead>";
+		echo "<th style=\"width:20%\" class=\"hidden-phone\">总价(价格+运费)($)</th><th style=\"width:15%\" class=\"hidden-phone\">客户名称|国家</th><th style=\"width:5%\" class=\"hidden-phone\">地址</th><th style=\"width:5%\" class=\"hidden-phone\">历史订单</th><th style=\"width:5%\" class=\"hidden-phone\">退款记录</th><th style=\"width:8%\" class=\"hidden-phone\">物流选择</th><th style=\"width:7%\" class=\"hidden-phone\">中英文品名|海外仓产品对应</th></tr></thead>";
 		echo "<tbody>";
 		while ( $cur_order = mysql_fetch_array ( $orders ) ) {
 			$tempsku = $cur_order ['sku'];
@@ -499,7 +502,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 				echo "<li style=\"background-color:FCF8E3;color:C09853\">DeliveryConfirmation</li>";
 			echo "<ul></td>";
 			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['quantity'] . " * (" . $cur_order ['cost'] . " + " . $cur_order ['shippingcost'] . ")=" . $cur_order ['totalcost'] . "</td>";
-			echo "<td style=\"width:20%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] .$countries[$cur_order ['countrycode']];
+			echo "<td style=\"width:15%;vertical-align:middle;\" class=\"hidden-phone\">" . $cur_order ['name'] . "&nbsp;|&nbsp;" . $cur_order ['countrycode'] .$countries[$cur_order ['countrycode']];
 		
 			$shippingaddress = $cur_order['name'].$cur_order['streetaddress1'].$cur_order['streetaddress2'].$cur_order['city'].$cur_order['state'].$cur_order['zipcode'].$cur_order['phonenumber'].$cur_order['countrycode'];
 			$refundresult = $dbhelper->getrefundorder(md5($shippingaddress));
@@ -517,6 +520,7 @@ for($count1 = 0; $count1 < $i; $count1 ++) {
 			}
 			echo "<span class=\"label label-info\">编辑</span></button></td>";
 			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"productshipping('".$accounts ['accountid' . $count1]."','".urlencode($cur_order ['sku'])."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
+			echo "<td style=\"width:5%;vertical-align:middle;\" class=\"hidden-phone\"><button type=\"button\" onclick=\"refundordersinfo('".$accounts ['accountid' . $count1]."','".urlencode($cur_order ['sku'])."','".$cur_order['countrycode']."')\" class=\"btn btn-mini\"><span class=\"label label-info\">查看</span></button></td>";
 			
 			if(strcmp($cur_order['iswishexpress'],'True') == 0 ){
 				$curuserexpressinfos = $userWEExpressinfos;
