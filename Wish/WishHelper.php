@@ -282,7 +282,7 @@ class WishHelper {
 				}
 				
 				if ($orderNoTracking ['orderNum'] != 0) {
-					$preGoodsNameEn = $preGoodsNameEn . $parentSKU . $orderNoTracking ['color'] . $orderNoTracking ['size'] . "*" . $orderQuantity;
+					$preGoodsNameEn = $preGoodsNameEn . $this->getTempSKU($parentSKU) . $orderNoTracking ['color'] . $this->getTempsize($orderNoTracking ['size']) . "*" . $orderQuantity;
 					$preTransactionid = $orderNoTracking ['transactionid'];
 					$preOrderQuantity = $preOrderQuantity + $orderQuantity;
 					$prePrice = $prePrice + $intPrice;
@@ -367,21 +367,8 @@ class WishHelper {
 					$gsNameCh = $Goods->addChild ( "NameCh", $gsLabel[0] ); // *
 					
 					
-					$tempParSKU;$tempSize;
-					
-					$spindex = strpos($parentSKU,'(');
-					if($spindex === false){
-						$tempParSKU = $parentSKU;
-					}else{
-						$tempParSKU = substr_replace($parentSKU,'',$spindex);
-					}
-					
-					$ssindex = strpos($orderNoTracking ['size'],'(');
-					if($ssindex === false){
-						$tempSize = $orderNoTracking ['size'];
-					}else{
-						$tempSize = substr_replace($orderNoTracking ['size'],'',$ssindex);
-					}
+					$tempParSKU = $this->getTempSKU($parentSKU);
+					$tempSize = $this->getTempsize($orderNoTracking ['size']);
 					
 					$orderinfo = $accountid.'_'.$tempParSKU . $orderNoTracking ['color'] . $tempSize . "*" . $orderQuantity.";" . $preGoodsNameEn;
 					//$tempEn = $gsLabel[1] ." :". $tempSKU . "-" . $orderNoTracking ['color'] . "-" . $orderNoTracking ['size'] . "*" . $orderQuantity.";" . $preGoodsNameEn;
@@ -446,6 +433,9 @@ class WishHelper {
 					$orderinfo = str_replace('H_TInsoleT1','TShoepad',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_HeelInsoleT1','Silconpad',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					$orderinfo = str_replace('H_10Hairope','10Hairope',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_toltStkT1','ToiletStk',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_RoomStkT1','Doorlabel',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
+					$orderinfo = str_replace('H_DoorStkT2','Doorlabel',$orderinfo);//太长的SKU名称替换为简短的SKU代码;
 					
 					
 					/* $sindex = strpos($orderinfo,'(');
@@ -1078,5 +1068,28 @@ class WishHelper {
 			$trackings[] = $curs['tracking'];
 		}
 		return $trackings;
+	}
+	
+	private function getTempSKU($parentSKU){
+		$tempParSKU = "";
+		$spindex = strpos($parentSKU,'(');
+		if($spindex === false){
+			$tempParSKU = $parentSKU;
+		}else{
+			$tempParSKU = substr_replace($parentSKU,'',$spindex);
+		}
+		
+		return $tempParSKU;
+	}
+	
+	private function getTempsize($currentsize){
+		$tempSize = "";
+		$ssindex = strpos($currentsize,'(');
+		if($ssindex === false){
+			$tempSize = $currentsize;
+		}else{
+			$tempSize = substr_replace($currentsize,'',$ssindex);
+		}
+		return $tempSize;
 	}
 }

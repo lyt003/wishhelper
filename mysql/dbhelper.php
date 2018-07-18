@@ -233,7 +233,7 @@ class dbhelper {
 	private function getUserOrders($userid, $orderstatus) {
 		$userOrderSql = "";
 		if (strcmp ( $orderstatus, '1' ) == 0) {
-			$userOrderSql = "SELECT o.transactionid,o.orderid,o.provider,o.tracking FROM orders o,accounts a WHERE a.userid = " . $userid . " and a.accountid = o.accountid and o.orderstatus = " . $orderstatus;
+			$userOrderSql = "SELECT o.transactionid,o.orderid,o.provider,o.tracking,o.sku FROM orders o,accounts a WHERE a.userid = " . $userid . " and a.accountid = o.accountid and o.orderstatus = " . $orderstatus."  order by o.sku";
 		}
 		return mysql_query ( $userOrderSql );
 	}
