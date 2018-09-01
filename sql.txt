@@ -591,7 +591,43 @@ insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Sho
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ShoesPdT3','H_SliconPdT2',1,'1.5');
 insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_ShoesPdT3','H_HeelInsoleT1',1,'1.5');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('9541','9541',1,'26');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FotCareT1','H_FotCareT1',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_hooksT1','H_hooksT1',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FaucetET','H_FaucetET',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_HeadMasger','H_HeadMasger',1,'2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_Shoepolish','H_Shoepolish',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_MotoCushion','H_MotoCushion',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Orange',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Yellow',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Beige',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_White',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Pink',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Light Green',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Gray',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Burlywood',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Green',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Sky Blue',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Purple',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Red',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Brown',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CornerBarT2','H_CornerBarT2_Black',1,'4.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FootRuler','H_FootRuler_Yellow',1,'2.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FootRuler','H_FootRuler_Red',1,'2.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FootRuler','H_FootRuler_Green',1,'2.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_FootRuler','H_FootRuler_Blue',1,'2.2');
 
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CarvBallSpoonT3','H_CarvBallSpoonT3_Yellow',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CarvBallSpoonT3','H_CarvBallSpoonT3_Orange',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CarvBallSpoonT3','H_CarvBallSpoonT3_Green',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CarvBallSpoonT3','H_CarvBallSpoonT3_Red',1,'1.2');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_BotBrush','H_BotBrush',1,'0.8');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_TrashRack','H_TrashRack',1,'3');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_GapBrushT1','H_GapBrushT1_Blue',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_GapBrushT1','H_GapBrushT1_Green',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_GapBrushT1','H_GapBrushT1_Pink',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_GapBrushT1','H_GapBrushT1_Beige',1,'1.5');
+insert into `productskuinfo`(`parentsku`,`sku`,`accountid`,`cost`) values('H_CmbSlicerT2','H_CmbSlicerT2',1,'2.5');
 
 DROP TABLE IF EXISTS `schedule_product`;
 CREATE TABLE `schedule_product` (
@@ -711,6 +747,10 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东USPS大包','USPS-PRIORITY',31,'USPS');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX小包','FEDEX-SM',31,'Fedex');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美东FEDEX大包','FEDEX-LP',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美西USPS小包','USWE_USPS-FIRST-CLASS',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美西USPS大包','USWE_USPS-PRIORITY',31,'USPS');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美西FEDEX小包','USWE_FEDEX-SM',31,'Fedex');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('美西FEDEX大包','USWE_FEDEX-LP',31,'Fedex');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('比利时平邮小包(上海)','406',1,'BPostInternational');
 
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('燕文航空挂号小包(普货)','437',1,'Yanwen');
@@ -722,6 +762,7 @@ insert into express_info(express_name,express_code,parent_express_id,provider_na
 
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('瑞士邮政一等平邮小包(不含电)','150',1,'Yanwen');
 insert into express_info(express_name,express_code,parent_express_id,provider_name) values('瑞士邮政挂号小包(不含电)','149',1,'Yanwen');
+insert into express_info(express_name,express_code,parent_express_id,provider_name) values('中邮wish北京仓挂号','630',1,'WishPost');
 
 DROP TABLE IF EXISTS `product_express_info`;
 CREATE TABLE `product_express_info`(

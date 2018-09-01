@@ -174,7 +174,11 @@ class WishHelper {
 			$expresscode = $shippingmethod['express_code'];
 			$providername = $shippingmethod['provider_name'];
 			
-			$currentorder['shippingmethod'] = $expresscode;
+			if(!empty($expresscode)){
+				$currentorder['warehouse_code'] = substr($expresscode,0,4);
+				$currentorder['shippingmethod'] =substr($expresscode,5);
+				echo "<br/>warehousecode:".$currentorder['warehouse_code'].",shippingmethod:".$currentorder['shippingmethod'];
+			}
 			$currentorder['provider'] = $providername;
 			echo "<br/>get expresscode:".$expresscode.", provider:".$providername;
 		}
@@ -193,6 +197,7 @@ class WishHelper {
 		if(isset($currentorder['shippingmethod']) && isset($currentorder['WEProductSKU'])){
 			if(!isset($this->cpwsmanager))
 				$this->cpwsmanager = new CPWSManager();
+			
 			$rs = $this->cpwsmanager->processorder($currentorder);
 			
 			if(strcmp($rs['ask'],'Success') == 0){

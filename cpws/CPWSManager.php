@@ -51,7 +51,7 @@ class CPWSManager{
 	public function processorder($currentorder){
 		$orderInfo = array(
 				'platform' => 'WISH',
-				'warehouse_code' => 'USEA',
+				'warehouse_code' => $currentorder['warehouse_code'],
 				'shipping_method' => $currentorder['shippingmethod'],
 				'reference_no' => 'ref_' . time(),
 				'order_desc' => '',
