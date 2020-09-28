@@ -22,7 +22,7 @@ curl_setopt($curl,CURLOPT_HTTPHEADER, $post_header);
 $numbers = $_POST ['labels'];
 $xmldata = '<string>' . substr ( $numbers, 0, strlen ( $numbers ) - 1 ) . '</string>';
 
-curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $xmldata);asdf asdfsadfasdf
 
 $result = curl_exec($curl);
 $error = curl_error($curl);
